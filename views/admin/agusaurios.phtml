@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<div class="card text-center">
+      <div class="card-body">
+        <h4 class="card-title">Title</h4>
+        <p class="card-text">Pagina para registrar usuarios sean fundaciones, etc..</p>
+        <form action="<?= BASE_URL;?>admin/registraUsuario" method="post">
+        <label for="">Cedula</label>
+        <input type="text" name="cedula" required >
+        <label for="">Nombre</label>
+        <input type="text" name="nombre"required><br>
+        <label for="">Rol</label>
+        <select name="rol" id="">
+          <!--=============================================
+            Este es el rol a asignar al nuevo usuario
+            los valores se sacan de la BD gracias al metodo
+            ConsultaRoles() que esta en AdminModel y se pasa por 
+            el cargar esta vista de agregaUsuarios(), con el 
+            nombre dataRoles
+          ==============================================-->
+        <?php 
+          foreach ($dataRoles as $key) {?>
+          <option value="<?= $key['id_rol']; ?>"><?= $key['nombre']; ?></option>
+          <?php
+          }
+        ?>
+        </select>
+        <!--no hay internet para buscar como nombrar un combobox-->
+        <label for="">Direccion</label>
+        <input type="text" name="direccion" required><br><!--textarea-->
+        <label for="">Contraseña</label>
+        <input type="text" name="contrasenia" required>
+        <br>
+        <label for="">Telefono</label>
+        <input type="tel" name="telefono" required>
+        <br>
+        <button>Aceptar</button>
+        </form>
+      </div>
+    </div>
+</body>
+</html>

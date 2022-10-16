@@ -1,0 +1,18 @@
+Estado de usuario 1 = activo 0 = bloqueado/baneado
+
+/
+Estado de peticion de adopcion de animal 1 = en proceso, 2= adoptado, 0 = Cancelada
+/
+
+Estado de albergue 1= activo, 0 = cancelado o cerrado
+Visibilidad de Animal 1= si 0=no aunque no se si quieras cambiar esto aunque servira para cuando
+una fundacion quiera "eliminar" un animal solo se haria invisible
+Estado de tienda 1 = visible 0 = no visible
+Estado veterinario 1 = visible 0 = no visible
+
+Roles 1 = admin
+Roles 2 = usuario 
+Roles 3 = fundacion
+supongo:
+Roles 4 = vendedor
+(esto puede cambiar a futuro)

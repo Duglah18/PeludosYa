@@ -1,7 +1,5 @@
 <?php
 
-require_once ("config/GeneralController.php");
-
 class MenuController extends GeneralController{//aqui basicamente se llaman a las vistas y modelos
 
     public function index(){

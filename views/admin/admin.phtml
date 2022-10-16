@@ -1,0 +1,20 @@
+<?php
+
+ echo "estoy en admin.phtml";
+
+ getHeader($titulo ,"headerAdmin"); ?><!--Nav de Admin-->
+    <div class="card text-center">
+      <div class="card-body">
+        <h4 class="card-title">Title</h4>
+        <p class="card-text">Pagina de logueo de admin sin css o nada pq funcionalidad</p>
+        <form action="<?= BASE_URL;?>admin/consultaData" method="post">
+        <input type="text" name="username">
+        <input type="password" name="password">
+        <br>
+        <button>Aceptar</button>
+        </form>
+      </div>
+    </div>
+    
+
+<?php getFooter("footerAdmin"); ?><!--El pie de Admin donde se puede agregar los links a js y eso-->

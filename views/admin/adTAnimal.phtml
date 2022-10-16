@@ -1,0 +1,49 @@
+<?php
+
+    getHeader($titulo, "headerAdmin");
+    getNav("navAdmin");
+?>
+    <table class="table table-dark table-striped w-20 text-center">
+        <!--
+            print_r($dataAdmin);
+        aca se reciben los datos de la consulta de admin 
+        por la var que se creo en Admincontroller(consultaData)
+        la del array $data['dataAdmin']
+        se pasa por su nombre gracias a que al generar la vista en el metodo
+        loadview lo pasamos por alli por la variable $$key
+        esta en el general controller se puede mostrar de manera de tabla asi:
+        -->
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Nombre</th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php 
+        
+        $tamanio = count($dataTipos);
+        for ($i = 0; $i < $tamanio; $i++){
+            echo "<tr>" . 
+            "<td>" . $dataTipos[$i]['id_tipo'] . "</td>" .
+            "<td>" . $dataTipos[$i]['nombre'] . "</td>" .
+            "</tr>"; 
+            // como el parametro de si esta activo el usuario o bloqueado es un numero
+            //se comprueba con codigo si es esta activo (1) o si esta bloqueado (0 o en este caso cualquier cosa)
+        }
+        ?>
+        </tbody>
+    </table>
+    <div class="card text-center">
+    <form action="<?= BASE_URL?>admin/agregaTipoanimal" method="POST">
+        <label for="">Este es el formulario para registrar tipos de animal</label>
+        <br>
+        <label for="">ID (si se va a modificar aca se enviara el id a mod a futuro)</label>
+        <br>
+        <label for="">Nombre</label>
+        <input type="text" name="nombreTipo">
+        <br>
+        <button>Aceptar</button>
+    </form>
+    </div>
+<?php getFooter("footerAdmin"); ?>

@@ -1,0 +1,48 @@
+Aca solo se registraria un usuario normal
+pq los vendedores o fundaciones se lo pedirian al
+Admin principal.
+
+<?php 
+    getHeader($titulo,"headerUsuarios"); 
+    getNav("navUsuarios");
+?>
+  <div class="page-header">
+  <div class="position-absolute fixed-top ms-auto w-50 h-100 rounded-3 z-index-0 d-none d-sm-none d-md-block me-n4" style="background-image: url(<?= URL_ASSETS;?>img/examples/blog2.jpg); background-size: contain, cover; background-repeat: no-repeat;">
+  </div>
+  <div class="container py-7">
+    <div class="row">
+      <div class="col-lg-7 d-flex justify-content-center flex-column">
+        <div class="card card-body d-flex justify-content-center shadow-lg p-7 blur align-items-center">
+          <h3 class="text-center">Registrate</h3>
+          <form role="form" id="contact-form" method="post" autocomplete="off" >
+            <div class="card-body">
+              <div class="row">
+                <div class="mb-4">
+                  <div class="input-group input-group-static mb-4">
+                    <label>Cedula</label>
+                    <input class="form-control" placeholder="ej. 26456789" aria-label="First Name..." type="text">
+                  </div>
+                </div>
+                <div class="mb-4">
+                  <div class="input-group input-group-static mb-4">
+                    <label>Contraseña</label>
+                    <input type="password" class="form-control" placeholder="•••••••••••••" aria-label="Last Name...">
+                  </div>
+                </div>
+              </div>
+                <div class="col-md-12">
+                  <button type="button" class="btn bg-gradient-dark w-100 me-2">Enviar</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+
+<?php getFooter("footerUsuarios"); ?>

@@ -1,7 +1,5 @@
 <?php 
 
-require_once ("config/ConexionBD.php");
-
 class MenuModel extends ConexionBD{
     //y esto dependiendo como se llame el archivo va a realizar una accion en
     //los controladores donde se llamen igual para mas ejemplos vaya a MenuController 
@@ -21,4 +19,5 @@ class MenuModel extends ConexionBD{
     public function listar(){
         return $this->obtenData("SELECT * FROM mb_menu");
     }
+    
 }
