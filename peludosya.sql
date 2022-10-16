@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 16-10-2022 a las 23:09:53
+-- Tiempo de generación: 17-10-2022 a las 00:51:46
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 8.1.6
 
@@ -250,7 +250,7 @@ CREATE TABLE `usuarios` (
   `nombre` varchar(40) NOT NULL,
   `rol_id` int(11) NOT NULL,
   `direccion` varchar(255) NOT NULL,
-  `contrasenia` varchar(20) NOT NULL,
+  `contrasenia` varchar(1000) NOT NULL,
   `activo` int(1) NOT NULL,
   `telefono` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
