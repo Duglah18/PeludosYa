@@ -4,9 +4,13 @@ class AdminController extends GeneralController{
     #Region Views
     public function index(){
         echo "estoy en Admin controller en el metodo index()<br>";
-        $data['bandera'] = 4;
-        $data['programacion'] = 43;
-        $this->loadView("admin/admin.phtml","Login Administrador", $data);
+        if (isset($_SESSION['usuario'])){
+            session_destroy();
+            header("refresh:". 0);
+            $this->loadView("admin/admin.phtml","Login Administrador");
+        } else {
+        $this->loadView("admin/admin.phtml","Login Administrador");
+        }
     }
     
     //Vista Agregar usuarios Admin
@@ -50,9 +54,18 @@ class AdminController extends GeneralController{
             if ($dataAdmin != true){
                 die("NO COINCIDE");
             }
+            $_SESSION['usuario'] = $dataAdmin[0]['nombre'];
             $data['dataAdmin'] = $objAdmin->listar();
             $this->loadView("admin/adIndex.phtml","Administrador Logueado",$data);
     }
+
+    // public function Closesession(){
+    //     if (isset($_SESSION)){
+    //         session_destroy();
+    //     }
+    //     $this->index();
+    // }
+
     //aca se registran los usuarios por el Admin
     public function registraUsuario(){//falta telefono 
         $cedula = $_POST['cedula'];

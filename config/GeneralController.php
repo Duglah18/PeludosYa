@@ -1,7 +1,7 @@
 <?php 
 /*Controlador general de las vistas*/
 class GeneralController {
-
+    
     public function loadModel($nombremodelo){//carga el modelo colocando el nombre del modelo 
         require_once 'models/' . $nombremodelo . '.php';
         return new $nombremodelo();

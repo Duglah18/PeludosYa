@@ -1,9 +1,10 @@
 <?php
+session_start();
 include_once("helpers/helpers.php");
 
 require_once "config/autoload.php";
 
-define("URL_ASSETS", "http://" . $_SERVER['HTTP_HOST'] . "/proyecto_con_isra/PeludosYa/assets/");
+define("URL_ASSETS", "http://" . $_SERVER['HTTP_HOST'] . "/proyecto_con_isra/PeludosYa/assets");
 //Este es la URL base para los links que no requieran assets.
 define("URL_BASE", "http://" . $_SERVER['HTTP_HOST'] . "/proyecto_con_isra/PeludosYa/");
 define("BASE_URL", "http://" . $_SERVER['HTTP_HOST'] . "/proyecto_con_isra/PeludosYa/index.php/");

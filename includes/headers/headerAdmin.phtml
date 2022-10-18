@@ -1,3 +1,10 @@
+<?php
+if(isset($_SESSION['usuario'])){
+  $username = $_SESSION['usuario'];
+  echo $username;
+  echo "<a href='". BASE_URL ."admin/index'>Cerrar Sesion</a>";
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
