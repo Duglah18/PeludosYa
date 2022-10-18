@@ -37,6 +37,13 @@
                             <li><a class="dropdown-item" href="#">JAJA ESTO NO ESTA HECHO</a></li>
                         </ul>
                     </li>
+                    <?php
+                        if(isset($_SESSION['usuario'])){
+                            $username = $_SESSION['usuario'];
+                            echo "<label>" .$username . "</label>";
+                            echo "<a href='". BASE_URL ."admin/index'>Cerrar Sesion</a>";
+                        }
+                    ?>
                 </ul>
             </div>
         </div>

@@ -1,9 +1,35 @@
-<?php
-if(isset($_SESSION['usuario'])){
-  $username = $_SESSION['usuario'];
-  echo $username;
-  echo "<a href='". BASE_URL ."admin/index'>Cerrar Sesion</a>";
-}
+<?php 
+  if(!isset($_SESSION['usuario'])){
+    header("location:" . BASE_URL ."admin/index");
+  } elseif (isset($_SESSION['rol'])){
+    if ($_SESSION['rol'] != 1){
+      //aca podria enviarse unn mensaje de error para ver si no eres usuario
+      header("location:" . BASE_URL ."admin/index");
+    }
+  
+  }
+  //ejemplo:
+  // session_start();
+  //   if (!isset($_SESSION['user'])) {
+  //     header("location:../index.php");
+  //   }else{
+  //     if ($_SESSION['user']=="ok") {
+  //       $username = $_SESSION['usuario'];
+  //     }
+  //   }
+//otro ej:
+  // session_start();
+  // if($_POST){
+  //     if (($_POST['usuario']=="Douglas")&&($_POST['contrasenia']=="libros")) {
+          
+  //         $_SESSION['user']="ok";
+  //         $_SESSION['usuario']="Douglas";
+          
+  //         header('location:inicial.php'); 
+  //     }else{
+  //         $mensaje="Error: Usuario o Contraseña incorrectos";
+  //     }
+  // }
 ?>
 <!DOCTYPE html>
 <html lang="en">

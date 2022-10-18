@@ -6,7 +6,6 @@ class AdminController extends GeneralController{
         echo "estoy en Admin controller en el metodo index()<br>";
         if (isset($_SESSION['usuario'])){
             session_destroy();
-            header("refresh:". 0);
             $this->loadView("admin/admin.phtml","Login Administrador");
         } else {
         $this->loadView("admin/admin.phtml","Login Administrador");
@@ -55,6 +54,7 @@ class AdminController extends GeneralController{
                 die("NO COINCIDE");
             }
             $_SESSION['usuario'] = $dataAdmin[0]['nombre'];
+            $_SESSION['rol'] = $dataAdmin[0]['rol_id'];
             $data['dataAdmin'] = $objAdmin->listar();
             $this->loadView("admin/adIndex.phtml","Administrador Logueado",$data);
     }
