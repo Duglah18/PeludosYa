@@ -13,7 +13,7 @@ class GeneralController {
         foreach (array_keys($parametros) as $key) {
             $$key = $parametros[$key];
         }
-        require_once 'views/EstanadarView.phtml';
+        require_once 'views/EstandarView.phtml';
     }
 
     // public function imgs($procedimiento, $img = SQLT_BLOB, $imgname, $direcc){//total no se pudo
