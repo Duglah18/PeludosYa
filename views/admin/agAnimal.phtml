@@ -1,0 +1,95 @@
+<div class="card text-center">
+<label for="">Tipo animal</label>
+<form action="<?= BASE_URL?>fundacion/agregaAnimal" method="POST">
+        <select name="tipoanimal" id="tipo_animal">
+          <option value="0">Selecciona</option>
+          <!--=============================================
+            Este es el usuario de fundacion al que se le 
+            añadira el albergue nuevo
+          ==============================================-->
+        <?php 
+          foreach ($tipoanimal as $key) {?>
+          <option value="<?= $key['id_tipo']; ?>"><?= $key['nombre']; ?></option>
+          <?php
+          }
+        ?>
+        </select>
+        <button>Seleccionar Animal</button>
+        </form>
+        </div>
+<div class="card text-center">
+      <div class="card-body">
+        <h4 class="card-title">Title</h4>
+        <p class="card-text">
+          Pagina para registrar animales Desde Admin.
+          Estos inputs se mantendran debido a que el admin no tiene albergue
+        </p>
+        <form action="<?=BASE_URL;?>fundacion/registraAnimal" method="post" enctype="multipart/form-data">
+        <label for="">Nombre Animal</label>
+        <input type="text" name="nombre" >
+        <label for="">Año de nacimiento</label>
+        <input type="text" name="fecha"><br>
+        <label for="">Imagen</label>
+        <input type="file" name="img"><br>
+        <label for="">Descripcion</label>
+        <input type="text" name="descrip" >
+        
+        <br>
+        <?php if(isset($raza)){ ?>
+        <label for="">Raza</label>
+        <label for="">Usted Selecciono (aca escribir que animal seleccionaste)</label>
+        <select name="raza" id="">
+          <option value="0">Selecciona</option>
+          <!--=============================================
+            Este es el usuario de fundacion al que se le 
+            añadira el albergue nuevo
+          ==============================================-->
+        <?php 
+          foreach ($raza as $key) {?>
+          <option value="<?= $key['id_raza']; ?>"><?= $key['nombre']; ?></option>
+          <?php
+          }
+        ?>
+        </select>
+        <?php } else {
+          echo "
+          <select name='raza'>
+            <option value='0'>Seleccione un Animal</option>
+          </select>";
+          }?>
+        <br>
+        <label for="">Tamaño</label>
+        <select name="tamano" id="">
+          <option value="0">Selecciona</option>
+          <!--=============================================
+            Este es el usuario de fundacion al que se le 
+            añadira el albergue nuevo
+          ==============================================-->
+        <?php 
+          foreach ($tamano as $key) {?>
+          <option value="<?= $key['id_tamanio']; ?>"><?= $key['nombre']; ?></option>
+          <?php
+          }
+        ?>
+        </select>
+        <br>
+        <label for="">Albergue</label>
+        <select name="albergue" id="">
+          <option value="0">Selecciona</option>
+          <!--=============================================
+            Este es el usuario de fundacion al que se le 
+            añadira el albergue nuevo
+          ==============================================-->
+        <?php 
+          foreach ($albergues as $key) {
+           ?>
+          <option value="<?= $key['id_albergue']; ?>"><?= $key['nombre']; ?></option>
+          <?php
+
+          }
+        ?>
+        </select>
+        <button>Aceptar</button>
+        </form>
+      </div>
+    </div>

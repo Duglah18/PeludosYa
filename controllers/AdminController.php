@@ -11,6 +11,21 @@ class AdminController extends GeneralController{
         $this->loadView("admin/admin.phtml","Login Administrador");
         }
     }
+
+    //Vista Agregar animales Admin
+    //aun sin acabar por favor cambialo asi que cammbialo
+    //agarra y copia el modelo y demas
+    public function agregaAnimales(){
+        $objAdmin = $this->loadModel("FundacionModel");
+        $data['tipoanimal'] = $objAdmin->consultaTipoAnimal();
+        if(isset($_POST['tipoanimal'])){
+            $busqueda_animal= $_POST['tipoanimal'];
+        $data['raza'] = $objAdmin->consultaRazaAnimal($busqueda_animal);
+        }
+        $data['tamano'] = $objAdmin->consultaTamanoAnimal();
+        $data['albergues'] = $objAdmin->consultaAlbergue();
+        $this->loadView("admin/agAnimal.phtml","Agregar Animal Desde Admin",$data);
+    }
     
     //Vista Agregar usuarios Admin
     public function agregaUsuarios(){

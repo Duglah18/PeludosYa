@@ -1,0 +1,43 @@
+<h1>Pag donde saldran los animales</h1>
+<?php
+echo "Array q se trae cuando vienes para aca";
+print_r($animales);
+
+?>
+
+<table>
+        <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Año Nacimiento</th>
+                    <th>img</th>
+                    <th>Descripcion</th>
+                    <th>Fecha ingreso</th>
+                    <th>Nom Raza</th>
+                    <th>Tamaño</th>
+                    <th>Albergue</th>
+                </tr>
+        </thead>
+       <tbody>
+        <?php foreach($animales as $animal){ ?>
+            <tr>
+                    <td><?= $animal['id_animal']; ?></td>
+                    <td><?= $animal['nombre']; ?></td>
+                    <td><?= $animal['anio_nac']; ?></td>
+
+                    <td>
+                        <img src="<?=URL_BASE;?>img/animales/<?= $animal['img']?>"  width="50" alt="">
+                    </td>
+
+                    <td><?= $animal['descripcion']; ?></td>
+                    <td><?= $animal['fecha_ingreso']; ?></td>
+                    <td><?= $animal['nomRaza']; ?></td>
+                    <td><?= $animal['tamanio']; ?></td>
+                    <td><?= $animal['albergue']; ?></td>
+                    
+                    </td>
+            </tr>
+        <?php } ?>
+       </tbody>
+</table>

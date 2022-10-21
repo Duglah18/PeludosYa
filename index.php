@@ -3,16 +3,16 @@ session_start();
 
 require_once "config/autoload.php";
 
-define("URL_ASSETS", "http://" . $_SERVER['HTTP_HOST'] . "/peludos/assets");
+define("URL_ASSETS", "http://" . $_SERVER['HTTP_HOST'] . "/proyecto_con_isra/PeludosYa/assets");
 //Este es la URL base para los links que no requieran assets.
-define("URL_BASE", "http://" . $_SERVER['HTTP_HOST'] . "peludos/");
-define("BASE_URL", "http://" . $_SERVER['HTTP_HOST'] . "/peludos/index.php/");
+define("URL_BASE", "http://" . $_SERVER['HTTP_HOST'] . "/proyecto_con_isra/PeludosYa/");
+define("BASE_URL", "http://" . $_SERVER['HTTP_HOST'] . "/proyecto_con_isra/PeludosYa/index.php/");
 
 $__url = explode("/", $_SERVER['REQUEST_URI']);
 
-if (isset($__url[3 /*aca el 3*/ ]) && isset($__url[4 /*aca el 4*/ ])) {
-    $__controlador = ucwords($__url[3 /*aca el 3*/ ]) . "Controller";
-    $__metodo = explode("?", $__url[4 /*aca el 4*/ ])[0];
+if (isset($__url[4 /*aca el 3*/ ]) && isset($__url[5 /*aca el 4*/ ])) {
+    $__controlador = ucwords($__url[4 /*aca el 3*/ ]) . "Controller";
+    $__metodo = explode("?", $__url[5 /*aca el 4*/ ])[0];
 } else {
     $__controlador = "HomeController";
     $__metodo = "home";

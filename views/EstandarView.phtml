@@ -1,3 +1,9 @@
+<?php
+if (isset($_SESSION)){
+  $role = (isset($_SESSION['rol']))?$_SESSION['rol']:"";
+  //sin esto lo demas explota xD
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <meta charset="UTF-8">
@@ -18,13 +24,15 @@
     <div class="container nav-wrapper">
       <a href="<?= BASE_URL; ?>" class="brand-logo">Polipropeludos</a>
       <ul id="nav-mobile" class="right hide-on-med-and-down">
-
+      <li><a class='btn' href='<?= BASE_URL; ?>'>Inicio</a></li>
+      <li><a class='btn' href='<?= BASE_URL; ?>session/catalogoAnimales'>Catalogo (Ver animales)</a></li>
         <!-- Botones NavBar-->
-        <li><a class='dropdown-trigger btn' href='#' data-target='dropdown1'>Admin</a></li>
-        <li><a class='dropdown-trigger btn' href='#' data-target='dropdown2'>Fundacion</a></li>
-        <li><a class='dropdown-trigger btn' href='#' data-target='dropdown3'>Tienda</a></li>
-        <li><a class='dropdown-trigger btn' href='#' data-target='dropdown4'>Usuario</a></li>
-
+        <?php if (isset($_SESSION)){ ?>
+          <?php if($role == "1"){ echo "<li><a class='dropdown-trigger btn' href='#' data-target='dropdown1'>Admin</a></li>"; } ?>
+          <?php if($role == "3"){ ?> <li><a class='dropdown-trigger btn' href='#' data-target='dropdown2'>Fundacion</a></li> <?php } ?>
+          <li><a class='dropdown-trigger btn' href='#' data-target='dropdown3'>Tienda</a></li>
+          <li><a class='dropdown-trigger btn' href='#' data-target='dropdown4'>Usuario</a></li>
+        <?php } ?>
         <!-- Estado de Sesion -->
         <?php
           if(isset($_SESSION['usuario'])){
@@ -51,6 +59,7 @@
           <li><a href="<?= BASE_URL;?>admin/tipoAnimal">Agregar Tipo Animal</a></li>
           <li><a href="<?= BASE_URL;?>admin/razasAnimal">Agrega Razas</a></li>
           <li><a href="<?= BASE_URL;?>admin/agregaUsuarios">Agrega Usuarios</a></li>
+          <li><a href="<?= BASE_URL;?>admin/agregaAnimales">Agrega Animales</a></li>
         </ul>
 
         <ul id='dropdown2' class='dropdown-content'>

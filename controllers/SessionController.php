@@ -11,6 +11,12 @@ class SessionController extends GeneralController{
         $this->loadView("session/register.phtml","Register");
     }
     
+    public function catalogoAnimales(){
+        $objSess = $this->loadModel("SessionModel");
+        $data['animales'] =$objSess->obtenAnimales();
+        $this->loadView("catalogo.phtml", "Ver Animales",$data);
+    }
+
     public function redirectLogin($vista, $params = array()){//ir a la vista dependiendo de rol
         //params pasa los datos del usuario logeandose
         switch ($vista){

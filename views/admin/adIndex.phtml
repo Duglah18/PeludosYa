@@ -20,7 +20,8 @@
                 <th scope="col">direcc</th>
                 <th scope="col">Contraseña</th>
                 <th scope="col">Telefono</th>
-                <th scopte="col">Activo</th>
+                <th scope="col">Activo</th>
+                <th scope="col">Botones</th>
             </tr>
         </thead>
         <tbody>
@@ -36,6 +37,7 @@
             "<td>" . $dataAdmin[$i]['contrasenia'] . "</td>" .
             "<td>" . $dataAdmin[$i]['telefono'] . "</td>" .
             "<td>" . $activado = ($dataAdmin[$i]['activo'] != 1)? "Bloqueado":"Activo" . "</td>" .
+            "<td>" . "BtnEliminar/BtnModificar" . "</td>" .
             "</tr>"; 
             // como el parametro de si esta activo el usuario o bloqueado es un numero
             //se comprueba con codigo si es esta activo (1) o si esta bloqueado (0 o en este caso cualquier cosa)

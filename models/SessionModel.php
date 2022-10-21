@@ -20,6 +20,21 @@ class SessionModel extends ConexionBD{
         $data['contrasenia'] = $contra; //contraseña del usuario a registrar
         $data['activo'] = 1;
     }
+
+    public function obtenAnimales(){
+        $result = $this->obtenData("SELECT a.id_animal, a.nombre, a.anio_nac, a.img, a.descripcion, a.fecha_ingreso, 
+                                        b.nombre as nomRaza, c.nombre as tamanio, d.nombre as albergue
+                                    FROM animal a
+                                    INNER JOIN raza b ON a.raza_id = b.id_raza
+                                    INNER JOIN tamanio c ON a.tamanio_id = c.id_tamanio
+                                    INNER JOIN albergue d ON a.albergue_id = d.id_albergue
+                                    WHERE visible = 1");
+        if($result){
+            return $result;
+        } else {
+            return false;
+        }
+    }
 /*
     public function registrarUsuario($tabla, $rif, $nombre, $rol, $direccion, $contrasenia, $estado){
         //$tabla donde se ingresara 
