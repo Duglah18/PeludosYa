@@ -35,20 +35,41 @@ class SessionModel extends ConexionBD{
             return false;
         }
     }
-/*
-    public function registrarUsuario($tabla, $rif, $nombre, $rol, $direccion, $contrasenia, $estado){
-        //$tabla donde se ingresara 
-        //los nombres de los sectores del array data tienen q ser los mismos nombres
-        //de la tabla donde lo vayas a insertar
-        $data['cedula'] = $rif; //rif del usuario 
-        $data['nombre'] = $nombre; // nombre del usuario
-        $data['rol_id'] = $rol; //identificador del rol
-        $data['direccion'] = $direccion; //direccion del usuario
-        $data['contrasenia'] = $contrasenia; //contraseña del usuario a registrar
-        $data['activo'] = $estado; //si el usuario esta activo aunque deberia estar perma en 1 hasta
-        //que se modifique por otras personas
-        return $this->grabaData($tabla, $data);
-    }*/
-}
 
+    public function ObtenAnimalSelecc($id){
+        $resultado = $this->obtenData("SELECT a.id_animal, a.nombre, a.anio_nac, a.img, a.descripcion, a.fecha_ingreso, 
+                                              b.nombre as nomRaza, c.nombre as tamanio, d.nombre as albergue, a.visible
+                                      FROM animal a
+                                      INNER JOIN raza b ON a.raza_id = b.id_raza
+                                      INNER JOIN tamanio c ON a.tamanio_id = c.id_tamanio
+                                      INNER JOIN albergue d ON a.albergue_id = d.id_albergue
+                                      WHERE a.id_animal = '$id'");
+        if($resultado){
+            return $resultado;
+        } else {
+            return false;
+        }
+    }
+
+    public function verificaExistencia($idAnimal, $iduser){
+        $resultado = $this->obtenData("SELECT animal_id, cedula_usuario, estado
+                                        FROM adopcion");
+        return $resultado;
+    }
+
+    public function registraPeticionAdopcion($idAnimal, $user){
+        $data['fecha_adopcion'] = "Now()";
+        $data['animal_id'] = $idAnimal;
+        $data['cedula_usuario'] = $user;
+        $data['estado'] = "1";
+        return $this->grabaData('adopcion',$data);
+    }
+
+    public function retornaResponsable($iduser){//aca no hace falta revisar si es real pq ya se verifica antes
+        $resultado = $this->obtenData("SELECT nombre, telefono
+                                       FROM usuarios
+                                       WHERE cedula = '$iduser'");
+        return $resultado;
+    }
+}
 ?>

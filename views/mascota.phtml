@@ -1,0 +1,37 @@
+<?php 
+if(!isset($animal)){//si no llega animal tonces Pal home Pa
+    header("location: ".BASE_URL ."home/home");
+}
+if($animal[0]['visible'] = "0"){
+    die("Este Animal no deberia ser visible");
+}
+?>
+
+<h1>Vista de Mascota detallado</h1>
+<p>
+    que al que se ira cuando des click a la mascota q te interese en catalogo
+</p>
+
+<?php if (isset($animal)){
+    print_r($animal);
+} 
+?>
+
+<h2>Nombre: <?= $animal[0]['nombre']; ?></h2>
+<br>
+<img src="<?= URL_BASE;?>img/animales/<?=$animal[0]['img'];?>" alt="Foto Animal">
+<br>
+<p>
+    <?=$animal[0]['descripcion'];?> <br>
+    Año de Nacimiento: <?= $animal[0]['anio_nac'];?> <br>
+    fecha de ingreso al sistema(no deberia aparecer): <?= $animal[0]['fecha_ingreso']?><br>
+    Raza: <?= $animal[0]['nomRaza']?> <br>
+    Tamaño: <?= $animal[0]['tamanio'];?> <br>
+    Albergue donde se ubica(tambien tendriamos q consultar su direccion): <?= $animal[0]['albergue']?>
+</p>
+<form method="POST" action="<?=BASE_URL?>session/adopcion_peticion">
+    <input type="hidden" value="<?= $animal[0]['id_animal'];?>" name="idanimal">
+    <input type="hidden" value="<?= $id_user; ?>" name="usuario">
+    <button>Iniciar Adopcion</button>
+</form>
+<!--increible tardar mas de 20min pq el post no estaba en method sino q en otro action :V-->

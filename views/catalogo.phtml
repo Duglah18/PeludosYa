@@ -23,7 +23,16 @@ print_r($animales);
         <?php foreach($animales as $animal){ ?>
             <tr>
                     <td><?= $animal['id_animal']; ?></td>
-                    <td><?= $animal['nombre']; ?></td>
+                    <td><!--
+                        hay dos formas 
+                        1.enviar literalmente por url todos los datos del animal 
+                        2. o enviar el id solo y hacer una consulta para ver
+                        (para mi la mejor seria la 2da para no saturar la url)
+                        pq literal mira le envio el id y el nombre y mira la pedazo de url q se enviar
+                        <?= BASE_URL?>session/mascota?idanimal=<?=$animal['id_animal']?>&nombre=<?=$animal['nombre']?>
+                        -->
+                        <a href="<?= BASE_URL?>session/mascota?idanimal=<?=$animal['id_animal']?>"><?= $animal['nombre']; ?></a>
+                    </td>
                     <td><?= $animal['anio_nac']; ?></td>
 
                     <td>

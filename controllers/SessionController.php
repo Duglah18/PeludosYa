@@ -17,6 +17,14 @@ class SessionController extends GeneralController{
         $this->loadView("catalogo.phtml", "Ver Animales",$data);
     }
 
+    public function mascota(){
+        $objSess = $this->loadModel("SessionModel");
+        $identity = (isset($_GET['idanimal']))? $_GET['idanimal'] : "";
+        $data['animal'] = $objSess->ObtenAnimalSelecc($identity);
+        //el titulo se podria cambiar y poner el nombre del animal a ver
+        $this->loadView("mascota.phtml", "Animal Detallado", $data);
+    }
+    //adaptar a lo anterior
     public function redirectLogin($vista, $params = array()){//ir a la vista dependiendo de rol
         //params pasa los datos del usuario logeandose
         switch ($vista){
@@ -45,8 +53,6 @@ class SessionController extends GeneralController{
         $contrasenia = $_POST['pass'];
         $objUser = $this->loadModel("SessionModel");
         $validar = $objUser->loginUser($cedula,$contrasenia);
-        //password_verify() 
-        //password_hash()
         if ($validar != true){//verifica si existe en la Bd el usuario
             //aca deberia regresarte al login y decirte:
             //campos erroneos o algo invalidos o algo erroneo
@@ -57,36 +63,42 @@ class SessionController extends GeneralController{
             //tu cuenta se encuentra bloqueada
             die ("usted esta bloqueado");
         } 
+        $_SESSION['usuario'] = $validar[0]['nombre'];
+        $_SESSION['iduser'] = $validar[0]['cedula'];
+        $_SESSION['rol'] = $validar[0]['rol_id'];
         $data['user'] = $objUser->loginUser($cedula, $contrasenia);
-        switch ($validar[0]['rol_id']){//se verifica el tipo de usuario que es
-            //si eres vendedor a un lugar si usuario a otro y asi,
-            //exceptuando que si eres admin supongo que no servira
-            //se puede acortar mandando directamente en un case el 
-            //id del rol
-            case 1:
-                echo "USTED ES ADMIN ESTE NO ES SU LUGAR";
-                $this->redirectLogin(1);
-                break;
-            case 2:
-                echo "USTED ES USUARIO";
-                $this->redirectLogin(2);
-                break;
-            case 3:
-                echo "USTED ES FUNDACION";
-                $this->redirectLogin(3,$data);
-                break;
-            case 4:
-                echo "USTED ES VENDEDOR";
-                $this->redirectLogin(4);
-                break;
-            default:
-                echo "Este Rol No existe";
-                $this->redirectLogin(5);
-                break;
-        }
-        //print_r($validar);//queria ver el array
-        //se muestra si no esta baneado el usuario y si existe
-        //aca se deberia ir a la pagina ya logueado
+        //como todos iran a home pero logueados todo esto no sirve
+        $this->loadView("home.phtml","Inicio", $data);
+
+        // switch ($validar[0]['rol_id']){//se verifica el tipo de usuario que es
+        //     //si eres vendedor a un lugar si usuario a otro y asi,
+        //     //exceptuando que si eres admin supongo que no servira
+        //     //se puede acortar mandando directamente en un case el 
+        //     //id del rol
+        //     case 1:
+        //         echo "USTED ES ADMIN ESTE NO ES SU LUGAR";
+        //         $this->redirectLogin(1);
+        //         break;
+        //     case 2:
+        //         echo "USTED ES USUARIO";
+        //         $this->redirectLogin(2);
+        //         break;
+        //     case 3:
+        //         echo "USTED ES FUNDACION";
+        //         $this->redirectLogin(3,$data);
+        //         break;
+        //     case 4:
+        //         echo "USTED ES VENDEDOR";
+        //         $this->redirectLogin(4);
+        //         break;
+        //     default:
+        //         echo "Este Rol No existe";
+        //         $this->redirectLogin(5);
+        //         break;
+        // }
+        // //print_r($validar);//queria ver el array
+        // //se muestra si no esta baneado el usuario y si existe
+        // //aca se deberia ir a la pagina ya logueado
         echo "<br>" . "Esta logueado y no esta bloqueado";
         
     }
@@ -100,6 +112,26 @@ class SessionController extends GeneralController{
         $objUser->registerUser($cedu,$nom,$dirc,$contra);
         //en creacion
         
+    }
+
+    public function adopcion_peticion(){
+    if($_POST['usuario'] == "" || $_POST['idanimal'] == ""){
+        //si usuario no existe o esta vacio ps xD
+        $this->catalogoAnimales();
+        //aca se cargaria otra vista enviando mensaje de error
+        } else {
+            $usuario = $_POST['usuario'];
+            $idAnimal = $_POST['idanimal'];
+            $objSess = $this->loadModel("SessionModel");
+            //en teoria esto ya funciona
+            $resultado = $objSess->registraPeticionAdopcion($idAnimal, $usuario);
+            if ($resultado){  
+                $data['peticion'] = $objSess->retornaResponsable($usuario);
+                $this->loadView("peticion.phtml","Peticion Realizada",$data);
+                $_POST['usuario'] = "";
+                $_POST['idanimal'] = "";
+            }
+        }
     }
     #Endregion
 }

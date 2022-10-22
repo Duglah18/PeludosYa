@@ -1,6 +1,7 @@
 <?php
 if (isset($_SESSION)){
   $role = (isset($_SESSION['rol']))?$_SESSION['rol']:"";
+  $id_user = (isset($_SESSION['iduser']))?$_SESSION['iduser'] :"";
   //sin esto lo demas explota xD
 }
 ?>
@@ -22,26 +23,54 @@ if (isset($_SESSION)){
 <body>
 <nav>
     <div class="container nav-wrapper">
+      <!--El nav se solapa con el titulo pq creo que estan en el mismo div-->
+      <!--Creo q si estas en admin no deberia llevarte a la pag pero bueh-->
       <a href="<?= BASE_URL; ?>" class="brand-logo">Polipropeludos</a>
       <ul id="nav-mobile" class="right hide-on-med-and-down">
       <li><a class='btn' href='<?= BASE_URL; ?>'>Inicio</a></li>
       <li><a class='btn' href='<?= BASE_URL; ?>session/catalogoAnimales'>Catalogo (Ver animales)</a></li>
         <!-- Botones NavBar-->
         <?php if (isset($_SESSION)){ ?>
-          <?php if($role == "1"){ echo "<li><a class='dropdown-trigger btn' href='#' data-target='dropdown1'>Admin</a></li>"; } ?>
-          <?php if($role == "3"){ ?> <li><a class='dropdown-trigger btn' href='#' data-target='dropdown2'>Fundacion</a></li> <?php } ?>
-          <li><a class='dropdown-trigger btn' href='#' data-target='dropdown3'>Tienda</a></li>
-          <li><a class='dropdown-trigger btn' href='#' data-target='dropdown4'>Usuario</a></li>
+          
+          <?php if($role == "1"){ ?> 
+            <!--Aca irian todas las funciones de Admin-->
+            <!--Los Botones ps como los dividi antes o como sea mejor-->
+            <li><a class='dropdown-trigger btn' href='#' data-target='dropdown1'>Admin</a></li>
+          <?php } ?>
+          <!--Aca irian los botones que le pertecen a Fundacion-->
+          <?php if($role == "3"){ ?> 
+            <li><a class='dropdown-trigger btn' href='#' data-target='dropdown2'>Fundacion</a></li> 
+          <?php } ?>
+          <!--Aca irian los botones que le pertenecen al rol de tienda-->
+          <?php if($role == "4"){ ?>
+            <li><a class='dropdown-trigger btn' href='#' data-target='dropdown3'>Tienda</a></li>
+          <?php } ?>
+
+          <!--
+            Esto es innecesario ya que estos botones siempre se verian aunque no 
+            Estuvieras logueado ya que seria literal ver animales,veterinarios, productos, etc
+            lo unico a verificar de si tiene sesion usuario es cuando vaya a adoptar y ya.
+          -->
+            <li><a class='dropdown-trigger btn' href='#' data-target='dropdown4'>Usuario</a></li>
+        
         <?php } ?>
         <!-- Estado de Sesion -->
+        <!---
+          Hay que crear un cierre de sesion para los otros usuarios
+          Pq ese cierre te lleva al login de admin :V
+        -->
         <?php
           if(isset($_SESSION['usuario'])){
             $username = $_SESSION['usuario'];
               echo "<li>".$username."</li>";
-              echo "<li><a href='". BASE_URL ."admin/index'>Cerrar Sesion</a></li>";
+              if($role == "1"){
+                echo "<li><a href='". BASE_URL ."admin/index'>Cerrar Sesion</a></li>";
+              } else {
+                echo "<li><a href='". BASE_URL ."home/destroy_session'>Cerrar Sesion</a></li>";
+              }
         }
         ?>
-
+        <?php if(!isset($_SESSION['usuario'])){ ?>
         <li>
           <a class="nav-link" href="<?= BASE_URL;?>session/login" role="button" aria-expanded="false">
             <i class="material-icons">account_circle</i>
@@ -53,7 +82,7 @@ if (isset($_SESSION)){
             <i class="material-icons">edit</i>
           </a>
         </li>
-
+        <?php }?>
         <!-- Contenido de Dropdowns -->
         <ul id='dropdown1' class='dropdown-content'>
           <li><a href="<?= BASE_URL;?>admin/tipoAnimal">Agregar Tipo Animal</a></li>
