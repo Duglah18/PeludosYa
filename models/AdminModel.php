@@ -118,6 +118,22 @@ class AdminModel extends ConexionBD{
         return $this->grabaData($tabla, $data);
     }
 
+    public function registraVeterinario($nombre,$telefono,$direccion,$img,$adminregistra){
+        $data['nombre'] = $nombre;
+        $data['tlf'] = $telefono;
+        $data['direccion'] = $direccion;
+        $data['img'] = $img;
+        $data['visible'] = 1;
+        $data['usuario_Rveterinario'] = $adminregistra;
+        return $this->grabaData('veterinario',$data);
+    }
+
+    public function consultarVeterinarios(){
+        $resultado = $this->obtenData("SELECT id_veterinario, nombre, tlf, direccion, img, visible, usuario_Rveterinario
+                          FROM veterinario");
+        return $resultado;
+    }
+
 }
 
 ?>

@@ -1,0 +1,30 @@
+<?php print_r($adopciones);
+?>
+
+<h2>Vista de fundacion </h2>
+<p>Ver las adopciones en los albergues que les pertenecen.</p>
+
+<table>
+        <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Fecha de peticion</th>
+                    <th>Animal</th>
+                    <th>Usuario</th>
+                    <th>Albergue</th>
+                    <th>Estado</th>
+                </tr>
+        </thead>
+       <tbody>
+        <?php foreach($adopciones as $adopcion){ ?>
+            <tr>
+                    <td><?= $adopcion['id_adopcion']; ?></td>
+                    <td><?= $adopcion['fecha_adopcion']; ?></td>
+                    <td><?= $adopcion['nombreanimal']; ?></td>
+                    <td><?= $adopcion['nombreusuario']; ?></td>
+                    <td><?= $adopcion['nombrealbergue']; ?></td>
+                    <td><?= $adopcion['nombre_estado']; ?></td>
+            </tr>
+        <?php } ?>
+       </tbody>
+</table>

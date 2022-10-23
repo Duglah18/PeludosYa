@@ -19,6 +19,23 @@ class FundacionModel extends ConexionBD{
         }
     }
 
+    public function consultaAdopciones($fundacion){
+        $resultados = $this->obtenData("SELECT a.id_adopcion, a.fecha_adopcion, b.nombre as nombreanimal, 
+                                               d.nombre as nombreusuario, c.nombre as nombrealbergue,
+                                               e.nombre_estado 
+                                        FROM adopcion a
+                                        INNER JOIN animal b ON a.animal_id = b.id_animal
+                                        INNER JOIN albergue c ON b.albergue_id = c.id_albergue
+                                        INNER JOIN usuarios d ON c.cedula_usuario = d.cedula
+                                        INNER JOIN tipo_estado_adopcion e ON a.estado = e.id_tipo_estado
+                                        WHERE d.cedula = '$fundacion'");
+        if($resultados){
+            return $resultados;
+        } else {
+            return false;
+        }
+    }
+
     public function consultaAlbergue(){
         $resultados = $this->obtenData("SELECT id_albergue, nombre FROM albergue");
         if ($resultados){

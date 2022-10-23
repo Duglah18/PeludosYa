@@ -1,8 +1,10 @@
 <?php 
-    //busca el globalizar el $objFudnd
+    //busca el globalizar el $objFund
 class FundacionController extends GeneralController{
     #Region Views
     public function agregaAlberg(){
+        //hay que quitar el model porque este select es para seleccionar
+        //a que usuario guardarle el albergue
         $objFund = $this->loadModel("FundacionModel");
         $data['userfund'] = $objFund->consultaUser();
         $this->loadView("fundacion/agalbergue.phtml","Agregar Albergue",$data);
@@ -19,6 +21,14 @@ class FundacionController extends GeneralController{
         $data['albergues'] = $objFund->consultaAlbergue();
         $this->loadView("fundacion/agAnimal.phtml","Agregar Animal",$data);
     }
+    
+    public function verAdopciones(){
+        //aca mismo a futuro podriamos hacer un if te llega una variable especifica
+        //se hace en este mismo metodo el filtrar por las completadas, etc.
+        $objFund = $this->loadModel("FundacionModel");
+        $data['adopciones'] = $objFund->consultaAdopciones($_SESSION['iduser']);
+        $this->loadView("fundacion/adopciones.phtml","Ver Adopciones",$data);
+    }
     #endregion
     #Region Metods/functions
     public function registraFundacion(){//funciona 9/10
@@ -27,7 +37,13 @@ class FundacionController extends GeneralController{
         $direccion = $_POST['direccion'];
         $cedula = $_POST['cedula_user'];
         $objFund->registraAlbergue("albergue",$cedula,$Nombre,$direccion,1);
-        $this->agregaAlberg();
+        if($_SESSION['rol'] == "1"){
+            $objFund = $this->loadModel("FundacionModel");
+            $data['userfund'] = $objFund->consultaUser();
+            $this->loadView("admin/agalbergue.phtml","Agregar Albergue como Admin",$data);
+        } else {
+            $this->agregaAlberg();
+        }
     }
 
     public function registraAnimal(){//ahora si

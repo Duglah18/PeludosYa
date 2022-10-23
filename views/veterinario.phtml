@@ -1,0 +1,30 @@
+<?php 
+
+print_r($veterinario);
+
+?>
+
+<?php 
+if(!isset($veterinario)){//si no llega animal tonces Pal home Pa
+    header("location: ".BASE_URL ."home/home");
+}
+if($veterinario[0]['visible'] = "0"){
+    die("Este Veterinario no deberia ser visible");
+}
+?>
+
+<h1>Vista de Veterinario detallado</h1>
+<p>
+    que al que se ira cuando des click al veterinario q te interese en catalogo.
+    Aunque no se si sea necesaria alli esta 
+</p>
+
+<h2>Nombre: <?= $veterinario[0]['nombre']; ?></h2>
+<br>
+<img src="<?= URL_BASE;?>img/veterinarios/<?=$veterinario[0]['img'];?>" alt="Foto Veterinario">
+<br>
+<p>
+    Telefono: <?= $veterinario[0]['tlf'];?> <br>
+    Direccion: <?= $veterinario[0]['direccion']?><br>
+</p>
+<!--increible tardar mas de 20min pq el post no estaba en method sino q en otro action :V-->

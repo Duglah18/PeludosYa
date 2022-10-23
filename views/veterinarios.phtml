@@ -1,0 +1,39 @@
+<h1>Vista de los veterinarios que se recomiendan por la fundacion</h1>
+
+<?=print_r($veterinarios); ?>
+
+<table>
+        <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Telefono</th>
+                    <th>Direccion</th>
+                    <th>Imagen</th>
+                    <th>Visible</th>
+                </tr>
+        </thead>
+       <tbody>
+        <?php foreach($veterinarios as $veterinario){ ?>
+            <tr>
+                    <td><?= $veterinario['id_veterinario']; ?></td>
+                    <td><!--
+                        hay dos formas 
+                        1.enviar literalmente por url todos los datos del animal 
+                        2. o enviar el id solo y hacer una consulta para ver
+                        (para mi la mejor seria la 2da para no saturar la url)
+                        pq literal mira le envio el id y el nombre y mira la pedazo de url q se enviar
+                        <?= BASE_URL?>session/mascota?idanimal=<?=$veterinario['id_animal']?>&nombre=<?=$animal['nombre']?>
+                        -->
+                        <a href="<?= BASE_URL?>session/veterinario?idveterinario=<?=$veterinario['id_veterinario']?>"><?= $veterinario['nombre']; ?></a>
+                    </td>
+                    <td><?= $veterinario['tlf']; ?></td>
+                    <td><?= $veterinario['direccion']; ?></td>
+                    <td>
+                        <img src="<?=URL_BASE;?>img/veterinarios/<?= $veterinario['img']?>"  width="50" alt="foto veterinario">
+                    </td>
+                    <td><?= $veterinario['visible']; ?></td><!--quitar esto obviamente-->
+            </tr>
+        <?php } ?>
+       </tbody>
+</table>

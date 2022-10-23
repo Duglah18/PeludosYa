@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 17-10-2022 a las 00:51:46
+-- Tiempo de generación: 23-10-2022 a las 19:19:03
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 8.1.6
 
@@ -34,6 +34,14 @@ CREATE TABLE `adopcion` (
   `cedula_usuario` varchar(9) NOT NULL,
   `estado` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `adopcion`
+--
+
+INSERT INTO `adopcion` (`id_adopcion`, `fecha_adopcion`, `animal_id`, `cedula_usuario`, `estado`) VALUES
+(3, '2022-10-22', 3, '29517402', 1),
+(4, '2022-10-22', 3, '29517402', 1);
 
 -- --------------------------------------------------------
 
@@ -228,6 +236,15 @@ CREATE TABLE `tipo_estado_adopcion` (
   `nombre_estado` varchar(15) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Volcado de datos para la tabla `tipo_estado_adopcion`
+--
+
+INSERT INTO `tipo_estado_adopcion` (`id_tipo_estado`, `nombre_estado`) VALUES
+(1, 'Progreso'),
+(2, 'Cancelada'),
+(3, 'Completada');
+
 -- --------------------------------------------------------
 
 --
@@ -279,11 +296,23 @@ CREATE TABLE `veterinario` (
   `id_veterinario` int(11) NOT NULL,
   `nombre` varchar(255) NOT NULL,
   `tlf` int(11) NOT NULL,
-  `direccion` int(11) NOT NULL,
+  `direccion` varchar(55) NOT NULL,
   `img` varchar(1000) NOT NULL,
   `visible` int(1) NOT NULL,
   `usuario_Rveterinario` varchar(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `veterinario`
+--
+
+INSERT INTO `veterinario` (`id_veterinario`, `nombre`, `tlf`, `direccion`, `img`, `visible`, `usuario_Rveterinario`) VALUES
+(1, 'Andreina', 251445645, '0', '1666545068_8c5b0c49a2b2c6ccaf9a38ed8f8565ff.jpg', 1, '29517402'),
+(2, 'Andreina', 251445645, '0', '1666545072_8c5b0c49a2b2c6ccaf9a38ed8f8565ff.jpg', 1, '29517402'),
+(3, 'Sueter', 451, '0', 'imagen.jpg', 1, '29517402'),
+(4, 'Sueter', 451, '0', 'imagen.jpg', 1, '29517402'),
+(5, 'Sueter', 451, '0', 'imagen.jpg', 1, '29517402'),
+(6, 'Sueter', 451, '0', 'imagen.jpg', 1, '29517402');
 
 --
 -- Índices para tablas volcadas
@@ -395,7 +424,7 @@ ALTER TABLE `veterinario`
 -- AUTO_INCREMENT de la tabla `adopcion`
 --
 ALTER TABLE `adopcion`
-  MODIFY `id_adopcion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_adopcion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `albergue`
@@ -455,7 +484,7 @@ ALTER TABLE `tipo_animal`
 -- AUTO_INCREMENT de la tabla `tipo_estado_adopcion`
 --
 ALTER TABLE `tipo_estado_adopcion`
-  MODIFY `id_tipo_estado` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_tipo_estado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `tipo_producuto`
@@ -467,7 +496,7 @@ ALTER TABLE `tipo_producuto`
 -- AUTO_INCREMENT de la tabla `veterinario`
 --
 ALTER TABLE `veterinario`
-  MODIFY `id_veterinario` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_veterinario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Restricciones para tablas volcadas

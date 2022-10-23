@@ -17,6 +17,13 @@ class SessionController extends GeneralController{
         $this->loadView("catalogo.phtml", "Ver Animales",$data);
     }
 
+    public function catalogoVeterinarios(){
+        //el mismo metodo ya existe en admin asi q mejor no creo otro metodo en session y ya
+        $objSess = $this->loadModel("AdminModel");
+        $data['veterinarios'] = $objSess->consultarVeterinarios();
+        $this->loadView("veterinarios.phtml","Ver Veterinarios",$data);
+    }
+
     public function mascota(){
         $objSess = $this->loadModel("SessionModel");
         $identity = (isset($_GET['idanimal']))? $_GET['idanimal'] : "";
@@ -24,27 +31,37 @@ class SessionController extends GeneralController{
         //el titulo se podria cambiar y poner el nombre del animal a ver
         $this->loadView("mascota.phtml", "Animal Detallado", $data);
     }
-    //adaptar a lo anterior
-    public function redirectLogin($vista, $params = array()){//ir a la vista dependiendo de rol
-        //params pasa los datos del usuario logeandose
-        switch ($vista){
-            case 1://admin
-                $this->loadView("admin/admin.phtml","Admin");
-                break;
-            case 2://Usuario
-                $this->loadView("home.phtml","Pag principal Log");
-                break;
-            case 3://Fundacion
-                $this->loadView("fundacion/fundacion.phtml","Pag princ Fund log",$params);
-                break;
-            case 4://Vendedor
-                $this->loadView("vendedor/vendedor.phtml","Pag Princ Vend Log");
-                break;
-            default:
-                echo "papi pero entiendete q haces?";
-                break;
-        }
+
+    public function veterinario(){
+        $objSess = $this->loadModel("SessionModel");
+        //aca si creare un metodo
+        $identity = (isset($_GET['idveterinario']))? $_GET['idveterinario'] : "";
+        $data['veterinario'] = $objSess->ObtenVeterinarioSelecc($identity);
+        //el titulo se podria cambiar y poner el nombre del animal a ver
+        $this->loadView("veterinario.phtml", "Veterinario Detallado", $data);
     }
+    //adaptar a lo anterior
+    //adaptado a login_user() asi q esto esta basura
+    // public function redirectLogin($vista, $params = array()){//ir a la vista dependiendo de rol
+    //     //params pasa los datos del usuario logeandose
+    //     switch ($vista){
+    //         case 1://admin
+    //             $this->loadView("admin/admin.phtml","Admin");
+    //             break;
+    //         case 2://Usuario
+    //             $this->loadView("home.phtml","Pag principal Log");
+    //             break;
+    //         case 3://Fundacion
+    //             $this->loadView("fundacion/fundacion.phtml","Pag princ Fund log",$params);
+    //             break;
+    //         case 4://Vendedor
+    //             $this->loadView("vendedor/vendedor.phtml","Pag Princ Vend Log");
+    //             break;
+    //         default:
+    //             echo "papi pero entiendete q haces?";
+    //             break;
+    //     }
+    // }
     #Endregion
 
     #Regiond Metods with Functions
@@ -63,12 +80,26 @@ class SessionController extends GeneralController{
             //tu cuenta se encuentra bloqueada
             die ("usted esta bloqueado");
         } 
-        $_SESSION['usuario'] = $validar[0]['nombre'];
-        $_SESSION['iduser'] = $validar[0]['cedula'];
-        $_SESSION['rol'] = $validar[0]['rol_id'];
-        $data['user'] = $objUser->loginUser($cedula, $contrasenia);
-        //como todos iran a home pero logueados todo esto no sirve
-        $this->loadView("home.phtml","Inicio", $data);
+        switch($validar[0]['rol_id']){
+            //se verifica el rol si es admin el q introduces ps te manda a loguearte como admin
+            case 1:
+                $this->loadView("admin/admin.phtml","Login Administrador");
+                break;
+            case 2:
+            case 3:
+            case 4:
+                $_SESSION['usuario'] = $validar[0]['nombre'];
+                $_SESSION['iduser'] = $validar[0]['cedula'];
+                $_SESSION['rol'] = $validar[0]['rol_id'];
+                $data['user'] = $objUser->loginUser($cedula, $contrasenia);
+                //como todos iran a home pero logueados todo esto no sirve
+                $this->loadView("home.phtml","Inicio", $data);
+                break;
+            default: 
+                
+                break;
+        }
+       
 
         // switch ($validar[0]['rol_id']){//se verifica el tipo de usuario que es
         //     //si eres vendedor a un lugar si usuario a otro y asi,
@@ -109,9 +140,17 @@ class SessionController extends GeneralController{
         $dirc = $_POST['direccion'];
         $contra = $_POST['contrasenia'];
         $objUser = $this->loadModel("SessionModel");
-        $objUser->registerUser($cedu,$nom,$dirc,$contra);
-        //en creacion
-        
+        $verificacion = $objUser->registerUser($cedu,$nom,$dirc,$contra);
+        if ($verificacion = "Usuario ya registrado"){
+            $data['error'] = "Este usuario ya esta Registrado";
+            $this->loadView("session/register.phtml","Register",$data);
+        } else {
+            $_SESSION['usuario'] = $verificacion[0]['nombre'];
+            $_SESSION['iduser'] = $verificacion[0]['cedula'];
+            $_SESSION['rol'] = $verificacion[0]['rol_id'];
+            $data['user'] = $objUser->loginUser($cedu, $contra);
+            $this->loadView("home.phtml","Inicio", $data);
+        }
     }
 
     public function adopcion_peticion(){

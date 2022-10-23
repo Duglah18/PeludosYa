@@ -41,6 +41,19 @@ class AdminController extends GeneralController{
         $data['dataRoles'] = $objAdmin->ConsultaRoles();
         $this->loadView("admin/agusaurios.phtml","Agrega usuarios como Admin", $data);
     }
+    
+    public function agregaVeterinarios(){
+        $objAdmin = $this->loadmodel("AdminModel");
+        $data['Veterinarios'] = $objAdmin->consultarVeterinarios();
+        $this->loadView("admin/agVeterinario.phtml", "Agrega Veterinarios como Admin",$data);
+    }
+
+    public function agregaAlbergueAdmin(){
+        //este model es para cargar el select
+        $objFund = $this->loadModel("FundacionModel");
+        $data['userfund'] = $objFund->consultaUser();
+        $this->loadView("admin/agalbergue.phtml","Agregar Albergue como Admin",$data);
+    }
 
     public function mostrarData(){
         $objAdmin = $this->loadModel("AdminModel");
@@ -141,6 +154,33 @@ class AdminController extends GeneralController{
         $visible = 1;
         $objFund->registraAnimal('animal', $nombre, $fechanac, $nombreArchivo, $descrip, $fecha_ing, $raza_id,$tamanio_id, $albergue_id, $visible);
         $this->agregaAnimales();
+    }
+
+    public function registraVeterinario(){
+        $objAdmin = $this->loadModel("AdminModel");
+        $nombre = $_POST['nombre'];
+        $telefono = $_POST['telefono'];
+        $direccion = $_POST['direccion'];
+        if ($nombre != "" && $telefono != "" && $direccion != ""){
+            /*----------------------Tratamiento de Img------------------------------------------*/
+            $fecha_paratmp = new DateTime();
+            $imgtxt = (isset($_FILES['img']['name']))? $_FILES['img']['name']:"";
+            $nombreArchivo =($imgtxt!="")?$fecha_paratmp->getTimestamp()."_".$_FILES['img']['name']:"imagen.jpg";
+            $image = $_FILES['img']['tmp_name'];
+            if($image != ""){
+                move_uploaded_file($image,"./img/veterinarios/".$nombreArchivo);
+            }
+            /*-----------------------Terminando de Img------------------------------------------*/
+            $adminRegistrando = $_POST['admin'];
+            $objAdmin->registraVeterinario($nombre,$telefono,$direccion, $nombreArchivo,$adminRegistrando);
+            $data['error'] = "Veterinario Agregado satisfactoriamente";//solo para avisar que se agrego supongo
+            $this->loadView("admin/agVeterinario.phtml", "Agrega Veterinarios como Admin",$data);
+            //ps al recargar se vuelve a guardar asi q vamos a tener q enviarlo a otra pag cada que agreguemos 
+            //algo pq no encuentro otra forma de eliminar las variables luego de agregar
+        } else {
+            $data['error'] = "Estas enviando elementos vacios";
+            $this->loadView("admin/agVeterinario.phtml", "Agrega Veterinarios como Admin",$data);
+        }
     }
 }
 

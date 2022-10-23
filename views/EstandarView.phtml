@@ -29,7 +29,8 @@ if (isset($_SESSION)){
       <ul id="nav-mobile" class="right hide-on-med-and-down">
       <li><a class='btn' href='<?= BASE_URL; ?>'>Inicio</a></li>
       <li><a class='btn' href='<?= BASE_URL; ?>session/catalogoAnimales'>Catalogo (Ver animales)</a></li>
-        <!-- Botones NavBar-->
+      <li><a class='btn' href='<?= BASE_URL; ?>session/catalogoVeterinarios'>Veterinarios</a></li>
+      <!-- Botones NavBar-->
         <?php if (isset($_SESSION)){ ?>
           
           <?php if($role == "1"){ ?> 
@@ -84,22 +85,26 @@ if (isset($_SESSION)){
         </li>
         <?php }?>
         <!-- Contenido de Dropdowns -->
+        <!--Admin-->
         <ul id='dropdown1' class='dropdown-content'>
           <li><a href="<?= BASE_URL;?>admin/tipoAnimal">Agregar Tipo Animal</a></li>
           <li><a href="<?= BASE_URL;?>admin/razasAnimal">Agrega Razas</a></li>
           <li><a href="<?= BASE_URL;?>admin/agregaUsuarios">Agrega Usuarios</a></li>
           <li><a href="<?= BASE_URL;?>admin/agregaAnimales">Agrega Animales</a></li>
+          <li><a href="<?= BASE_URL;?>admin/agregaVeterinarios">Agrega Veterinarios</a></li>
+          <!--Ver adopciones falta-->
         </ul>
-
+          <!--Fundacion-->
         <ul id='dropdown2' class='dropdown-content'>
           <li><a href="<?= BASE_URL;?>fundacion/agregaAlberg">Agrega Albergue</a></li>
           <li><a href="<?= BASE_URL;?>fundacion/agregaAnimal">Agregar Animal</a></li>
+          <li><a href="<?= BASE_URL;?>fundacion/verAdopciones">Ver peticiones de Adopcion</a></li>
         </ul>
-
+          <!--Vendedores-->
         <ul id='dropdown3' class='dropdown-content'>
           <li><a href="#!">No hay nada xd</a></li>
         </ul>
-
+          <!--Usuarios?????-->
         <ul id='dropdown4' class='dropdown-content'>
           <li><a href="#!">one</a></li>
           <li><a href="#!">two</a></li>

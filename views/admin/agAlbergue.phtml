@@ -1,0 +1,39 @@
+Vista agregar albergue del admin <br>
+Envia al mismo metodo que fundacion pq literalmente haran los mismo simplemente se recibiran valores diferentes<br>
+
+
+<div class="card text-center">
+      <div class="card-body">
+        <h4 class="card-title">Title</h4>
+        <p class="card-text">Pagina para registrar Albergues</p>
+        <form action="<?=BASE_URL;?>fundacion/registraFundacion" method="post">
+        <label for="">Nombre Albergue</label>
+        <input type="text" name="nombre" required >
+        <label for="">Direccion</label>
+        <input type="text" name="direccion"required><br>
+        <label for="">Ced_usuario</label>
+        <select name="cedula_user" id="">
+          <!--=============================================
+            Este es el usuario de fundacion al que se le 
+            añadira el albergue nuevo
+          ==============================================-->
+        <?php 
+          foreach ($userfund as $key) {?>
+          <option value="<?= $key['cedula']; ?>"><?= $key['nombre']; ?></option>
+          <?php
+          }
+        ?>
+        </select>
+        <br>
+        <button>Aceptar</button>
+        </form>
+      </div>
+    </div>
+
+    
+Albergue Lleva:
+id que se auto agrega <br>
+nombre <br>
+direccion<br>
+ced de usuario<br>
+si esta activo<br>
