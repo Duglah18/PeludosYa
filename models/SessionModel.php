@@ -11,22 +11,22 @@ class SessionModel extends ConexionBD{
         }
     }
 //falta telefono usuario
-    public function registerUser($ced,$nombre,$direcc,$contra){
+    public function registerUser($ced,$nombre,$direcc,$contra,$telefono){
         $data['cedula'] = $ced; //rif del usuario 
         $data['nombre'] = $nombre; // nombre del usuario
         $data['rol_id'] = 2; //identificador del rol
         $data['direccion'] = $direcc; //direccion del usuario
         $data['contrasenia'] = $contra; //contraseña del usuario a registrar
         $data['activo'] = 1;
+        $data['telefono'] = $telefono;
         //primero verificamos si existimos 
         $verificar = $this->obtenData("SELECT cedula, nombre, contrasenia, activo, rol_id
                                        FROM usuarios
                                        WHERE cedula = '$ced'");
         if ($verificar){
             return "Usuario ya registrado";
-        } else {
-
-        return $this->grabaData('usuarios',$data);
+        } elseif(!$verificar) {
+            return $this->grabaData('usuarios',$data);
         }
     }
 

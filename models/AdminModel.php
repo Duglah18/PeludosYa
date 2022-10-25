@@ -12,6 +12,15 @@ class AdminModel extends ConexionBD{
         }
     }
 
+    public function consultaAlbergues(){
+        $resultados = $this->obtenData("SELECT id_albergue, nombre FROM albergue");
+        if ($resultados){
+            return $resultados;
+        } else {
+            return false;
+        }
+    }
+
     public function ConsultaRoles(){
         $resultado = $this->obtenData("SELECT id_rol, nombre FROM rol");
         if ($resultado) {

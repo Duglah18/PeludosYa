@@ -139,11 +139,14 @@ class SessionController extends GeneralController{
         $nom = $_POST['nombre'];
         $dirc = $_POST['direccion'];
         $contra = $_POST['contrasenia'];
+        $telefono = $_POST['telefono'];
         $objUser = $this->loadModel("SessionModel");
-        $verificacion = $objUser->registerUser($cedu,$nom,$dirc,$contra);
+        //este verifica y registra
+        $verificacion = $objUser->registerUser($cedu,$nom,$dirc,$contra,$telefono);
         if ($verificacion = "Usuario ya registrado"){
             $data['error'] = "Este usuario ya esta Registrado";
             $this->loadView("session/register.phtml","Register",$data);
+            die();
         } else {
             $_SESSION['usuario'] = $verificacion[0]['nombre'];
             $_SESSION['iduser'] = $verificacion[0]['cedula'];

@@ -10,6 +10,18 @@ class FundacionController extends GeneralController{
         $this->loadView("fundacion/agalbergue.phtml","Agregar Albergue",$data);
     }
 
+    public function albergues(){
+        $objFund = $this->loadModel("FundacionModel");
+        $data['userfund'] = $objFund->consultaAlbergue($_SESSION['iduser']);
+        $this->loadview("fundacion/veralbergues.phtml","Ver albergues",$data);
+    }
+
+    public function animales(){
+        $objFund = $this->loadModel("FundacionModel");
+        $data['useranimales'] = $objFund->consultaAnimales($_SESSION['iduser']);
+        $this->loadView("fundacion/veranimales.phtml","Ver Animales",$data);
+    }
+
     public function agregaAnimal(){
         $objFund = $this->loadModel("FundacionModel");
         $data['tipoanimal'] = $objFund->consultaTipoAnimal();
@@ -18,7 +30,7 @@ class FundacionController extends GeneralController{
         $data['raza'] = $objFund->consultaRazaAnimal($busqueda_animal);
         }
         $data['tamano'] = $objFund->consultaTamanoAnimal();
-        $data['albergues'] = $objFund->consultaAlbergue();
+        $data['albergues'] = $objFund->consultaAlbergue($_SESSION['iduser']);
         $this->loadView("fundacion/agAnimal.phtml","Agregar Animal",$data);
     }
     

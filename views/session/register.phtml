@@ -2,7 +2,11 @@
   if(isset($error)){
     echo $error;
   }
-  
+  /*$cedu = $_POST['cedula'];
+        $nom = $_POST['nombre'];
+        $dirc = $_POST['direccion'];
+        $contra = $_POST['contrasenia'];
+        */
   ?>
   
   <div class="page-header">
@@ -13,24 +17,42 @@
       <div class="col-lg-7 d-flex justify-content-center flex-column">
         <div class="card card-body d-flex justify-content-center shadow-lg p-7 blur align-items-center">
           <h3 class="text-center">Registrate</h3>
-          <form role="form" id="contact-form" method="post" autocomplete="off" >
+          <form role="form" id="contact-form" method="post" autocomplete="off" action="<?=BASE_URL?>session/register_user">
             <div class="card-body">
               <div class="row">
                 <div class="mb-4">
                   <div class="input-group input-group-static mb-4">
                     <label>Cedula</label>
-                    <input class="form-control" placeholder="ej. 26456789" aria-label="First Name..." type="text">
+                    <input class="form-control" placeholder="ej. 26456789" aria-label="First Name..." type="text" name="cedula">
+                  </div>
+                </div>
+                <div class="mb-4">
+                  <div class="input-group input-group-static mb-4">
+                    <label>Nombre</label>
+                    <input class="form-control" placeholder="ej. Douglas" aria-label="First Name..." type="text" name="nombre">
+                  </div>
+                </div>
+                <div class="mb-4">
+                  <div class="input-group input-group-static mb-4">
+                    <label>Direccion</label>
+                    <input type="text" class="form-control" placeholder="ej. Carrera 18 Calle 55" aria-label="Last Name..." name="direccion">
                   </div>
                 </div>
                 <div class="mb-4">
                   <div class="input-group input-group-static mb-4">
                     <label>Contraseña</label>
-                    <input type="password" class="form-control" placeholder="•••••••••••••" aria-label="Last Name...">
+                    <input type="password" class="form-control" placeholder="***********" aria-label="Direction..." name="contrasenia">
+                  </div>
+                </div>
+                <div class="mb-4">
+                  <div class="input-group input-group-static mb-4">
+                    <label>Telefono</label>
+                    <input type="tel" class="form-control" placeholder="042495652" aria-label="Phone..." name="telefono">
                   </div>
                 </div>
               </div>
                 <div class="col-md-12">
-                  <button type="button" class="btn bg-gradient-dark w-100 me-2">Enviar</button>
+                  <button type="submit" class="btn bg-gradient-dark w-100 me-2">Enviar</button>
                 </div>
               </div>
             </div>

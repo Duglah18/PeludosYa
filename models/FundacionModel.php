@@ -36,14 +36,37 @@ class FundacionModel extends ConexionBD{
         }
     }
 
-    public function consultaAlbergue(){
-        $resultados = $this->obtenData("SELECT id_albergue, nombre FROM albergue");
+    public function consultaAlbergue($cedula_user){
+        $resultados = $this->obtenData("SELECT a.id_albergue, a.nombre, a.direccion, a.activo, b.nombre as nombreusuario
+                                        FROM albergue a
+                                        INNER JOIN usuarios b ON a.cedula_usuario = b.cedula
+                                        WHERE (cedula_usuario = CASE WHEN '$cedula_user' = '' THEN cedula_usuario ELSE '$cedula_user' END)");
         if ($resultados){
             return $resultados;
         } else {
             return false;
         }
     }
+
+    public function consultaAnimales($cedula_user){
+        $resultados = $this->obtenData("SELECT a.id_animal, a.nombre, a.anio_nac, a.img, 
+                                                a.fecha_ingreso, b.nombre as nomraza, c.nombre as nomtipo,
+                                                e.nombre as nomalbergue, d.nombre as nombreUser
+                                        FROM animal a
+                                        INNER JOIN raza b ON a.raza_id = b.id_raza
+                                        INNER JOIN tipo_animal c ON c.id_tipo = b.id_tipo_animal
+                                        INNER JOIN albergue e ON e.id_albergue = a.albergue_id
+                                        INNER JOIN usuarios d ON d.cedula = e.cedula_usuario
+                                        WHERE (d.cedula = CASE WHEN '$cedula_user' = '' THEN d.cedula ELSE '$cedula_user' END)");
+        /*Inciso: CASE ES COMO SWITCH O IF EN SQL EN ESTE CASO SI LLEGA VACIO $cedula_user ENTONCES
+        MOSTRARA TODOS LOS CONTENIDOS DE LA TABLA PQ NO LO APLIQUE ANTES? PS DE PANA LO APRENDI HACE
+        POCO RELATIVAMENTE */
+       if ($resultados){
+            return $resultados;
+        } else {
+            return false;
+        }
+    } 
 
     public function consultaTipoAnimal(){
         $resultados = $this->obtenData("SELECT id_tipo, nombre FROM tipo_animal");

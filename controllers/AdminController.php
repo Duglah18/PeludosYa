@@ -19,6 +19,20 @@ class AdminController extends GeneralController{
         }
     }
 
+    public function animales(){
+        $objAdmin = $this->loadModel("FundacionModel");
+        $data['animalesAdmin'] = $objAdmin->consultaAnimales('');
+        //atras envie nada para que me arroje todo
+        $this->loadView("admin/veranimales.phtml","Ver Animales",$data);
+    }
+
+    public function albergues(){
+        $objAdmin = $this->loadModel("FundacionModel");
+        $data['alberguesAdmin'] = $objAdmin->consultaAlbergue('');
+        //atras envie nada para que me arroje todo
+        $this->loadView("admin/veralbergues.phtml","Ver Albergues",$data);
+    }
+
     //Vista Agregar animales Admin
     //aun sin acabar por favor cambialo asi que cammbialo
     //agarra y copia el modelo y demas
@@ -30,7 +44,7 @@ class AdminController extends GeneralController{
         $data['raza'] = $objAdmin->consultaRazaAnimal($busqueda_animal);
         }
         $data['tamano'] = $objAdmin->consultaTamanoAnimal();
-        $data['albergues'] = $objAdmin->consultaAlbergue();
+        $data['albergues'] = $objAdmin->consultaAlbergues();
         $this->loadView("admin/agAnimal.phtml","Agregar Animal Desde Admin",$data);
     }
     

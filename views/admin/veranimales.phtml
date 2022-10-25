@@ -1,0 +1,37 @@
+<?php 
+
+print_r($animalesAdmin);
+?>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Año Nac.</th>
+            <th>img</th>
+            <th>Fecha Ing</th>
+            <th>Raza</th>
+            <th>Animal</th>
+            <th>Albergue</th>
+            <th>Fundacion</th>
+            <th>Movimiento</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach($animalesAdmin as $animal){ ?>
+        <tr>
+            <td><?= $animal['id_animal'] ?></td>
+            <td><?= $animal['nombre'] ?></td>
+            <td><?= $animal['anio_nac'] ?></td>
+            <td><img src="<?=URL_BASE?>img/animales/<?=$animal['img']?>" alt="Imagen Animal" width="50"></td>
+            <td><?= $animal['fecha_ingreso'] ?></td>
+            <td><?= $animal['nomraza'] ?></td>
+            <td><?= $animal['nomtipo'] ?></td>
+            <td><?= $animal['nomalbergue'] ?></td> 
+            <td><?= $animal['nombreUser'] ?></td>
+            <td>Eliminar/modificar</td>
+        </tr>
+        <?php } ?>
+    </tbody>
+</table>
