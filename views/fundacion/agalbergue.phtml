@@ -12,19 +12,24 @@ como su id de fundacion o rif
         <input type="text" name="nombre" required >
         <label for="">Direccion</label>
         <input type="text" name="direccion"required><br>
-        <label for="">Ced_usuario</label>
-        <select name="cedula_user" id="">
+        <!-- <label for="">Ced_usuario</label> -->
+        <!-- <select name="cedula_user" id=""> -->
           <!--=============================================
             Este es el usuario de fundacion al que se le 
             añadira el albergue nuevo
           ==============================================-->
         <?php 
-          foreach ($userfund as $key) {?>
-          <option value="<?= $key['cedula']; ?>"><?= $key['nombre']; ?></option>
-          <?php
-          }
+          foreach ($userfund as $key) {
+          //echo "<option value='". $key['cedula'] ."'>" .$key['nombre']."</option>"; -->
+           }
         ?>
-        </select>
+        <!-- </select> -->
+        <!--===============================================
+          Usuario al que se le agregara el nuevo albergue tomando en cuenta que 
+          en esta vista la fundacion ya esta logueada
+        ===================================================-->
+        <input type="hidden" name="cedula_user" value="<?=$_SESSION['iduser']?>">
+        <br>
         <br>
         <button>Aceptar</button>
         </form>
