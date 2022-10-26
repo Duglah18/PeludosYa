@@ -16,6 +16,9 @@ class GeneralController {
         require_once 'views/EstandarView.phtml';
     }
 
+    public function Bitacoras(){
+        
+    }
     /*Podrias crear un controlador aca que aga el agregar a la BD a bitacora recibiendo lo q ingresas y ya */
 
     // public function imgs($procedimiento, $img = SQLT_BLOB, $imgname, $direcc){//total no se pudo

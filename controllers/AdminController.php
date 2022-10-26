@@ -50,10 +50,16 @@ class AdminController extends GeneralController{
     
     //Vista Agregar usuarios Admin
     public function agregaUsuarios(){
-        echo "estoy en Admin Controller en el metodo agregaUsuarios()<br>";
         $objAdmin = $this->loadModel("AdminModel");
+        if(isset($_POST['accion']) && $_POST['accion'] == 'Modificar'){
+            $data['usuario'] = $objAdmin->consultaUsuario($_POST['modificacion']);
+            $data['dataRoles'] = $objAdmin->ConsultaRoles();
+            $this->loadView("admin/agusaurios.phtml","Modifica el usuario", $data);
+        } else {
+        echo "estoy en Admin Controller en el metodo agregaUsuarios()<br>";
         $data['dataRoles'] = $objAdmin->ConsultaRoles();
         $this->loadView("admin/agusaurios.phtml","Agrega usuarios como Admin", $data);
+        }
     }
     
     public function agregaVeterinarios(){
@@ -119,16 +125,29 @@ class AdminController extends GeneralController{
 
     //aca se registran los usuarios por el Admin
     public function registraUsuario(){//falta telefono 
-        $cedula = $_POST['cedula'];
-        $nombre = $_POST['nombre'];
-        $rol = $_POST['rol'];
-        $direccion = $_POST['direccion'];
-        $contrasenia = $_POST['contrasenia'];
-        $tlf = $_POST['telefono'];
         $objAdmin = $this->loadModel("AdminModel");
-        $objAdmin->registrarUsuario("usuarios",$cedula,$nombre,$rol,$direccion,$contrasenia, "1", $tlf);
-        //mientras carga mostrarData agregar una pantalla de carga
-        $this->mostrarData();
+        if (isset($_POST['Agregar'])){
+            $cedula = $_POST['cedula'];
+            $nombre = $_POST['nombre'];
+            $rol = $_POST['rol'];
+            $direccion = $_POST['direccion'];
+            $contrasenia = $_POST['contrasenia'];
+            $tlf = $_POST['telefono'];
+        
+            $objAdmin->registrarUsuario("usuarios",$cedula,$nombre,$rol,$direccion,$contrasenia, "1", $tlf);
+            //mientras carga mostrarData agregar una pantalla de carga
+            $this->mostrarData();
+        } elseif (isset($_POST['Modificar'])){
+            $cedula = $_POST['cedula'];
+            $nombre = $_POST['nombre'];
+            $rol = $_POST['rol'];
+            $direccion = $_POST['direccion'];
+            $contrasenia = $_POST['contrasenia'];
+            $activo = $_POST['activo'];
+            $tlf = $_POST['telefono'];
+            $objAdmin->modificaUsuario($cedula,$nombre,$rol,$direccion,$contrasenia,$activo,$tlf);
+            $this->mostrarData();
+        }
     }
 
     public function agregaTipoanimal(){

@@ -60,16 +60,15 @@ class ConexionBD {
         $sql = "UPDATE ". $tabla . " SET ";
         $contadorColumnas = count($columnas) - 1;
         for ($i=0; $i < count($columnas); $i++) { 
-            $sql .= $columnas[$i] . "='" . htmlentities($data[$columnas[$i]], ENT_QUOTES, 'UTF-8') . ($i != $contadorColumnas)? "',": "'";
+            $sql .= $columnas[$i] . "='" . htmlentities($data[$columnas[$i]], ENT_QUOTES, 'UTF-8') . (($i != $contadorColumnas)? "',": "'");
         }
         $sql .= " WHERE " . $filtro;
-        print($sql);//probar
-        /*$conn = $this->conectar();
-    $resultado = mysqli_query($conn,$sql) or die("Error");
+        $conn = $this->conectar();
+        $resultado = mysqli_query($conn,$sql) or die("Error");
         if ($resultado) {
             return true;
         }
-        return false;*/
+        return false;
     }
 
     /* ===================

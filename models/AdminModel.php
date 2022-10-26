@@ -12,6 +12,28 @@ class AdminModel extends ConexionBD{
         }
     }
 
+    public function consultaUsuario($idusuario){
+        $resultado = $this->obtenData("SELECT cedula, nombre, contrasenia, rol_id, direccion, contrasenia,
+                                              activo, telefono
+                                        FROM usuarios
+                                        WHERE (cedula = CASE WHEN $idusuario = '' THEN cedula ELSE $idusuario END)");
+        return $resultado;
+    }
+
+    public function modificaUsuario($idusuario,$nombre,$rol,$direccion,$contrasena,$activo,$telefono){
+        $data['cedula'] = $idusuario;
+        $data['nombre'] = $nombre;
+        $data['rol_id'] = $rol;
+        $data['direccion'] = $direccion;
+        $data['contrasenia'] = $contrasena;
+        $data['activo'] = $activo;
+        $data['telefono'] = $telefono;
+        return $this->actualizaData("usuarios",$data,"cedula = " .$idusuario);
+    }
+/*public function actualizar(){
+        $data['nombre'] = "actualizado";
+        return $this->actualizaData("mb_menu", $data,"idmenu=1");
+    } */
     public function consultaAlbergues(){
         $resultados = $this->obtenData("SELECT id_albergue, nombre FROM albergue");
         if ($resultados){

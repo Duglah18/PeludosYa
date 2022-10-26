@@ -1,12 +1,21 @@
+<?php
+$cedula = isset($usuario[0]['cedula'])? $usuario[0]['cedula']:"";
+$Nombre =isset($usuario[0]['nombre'])? $usuario[0]['nombre']:"";
+$Rol =isset($usuario[0]['rol_id'])? $usuario[0]['rol_id']:"";
+$Direccion = isset($usuario[0]['direccion'])? $usuario[0]['direccion']:"";
+$contra =isset($usuario[0]['contrasenia'])? $usuario[0]['contrasenia']:"";
+$tlf =isset($usuario[0]['telefono'])? $usuario[0]['telefono']:"";
+$activo = isset($usuario[0]['activo'])? $usuario[0]['activo']:"";
+?>
 <div class="card text-center">
       <div class="card-body">
         <h4 class="card-title">Title</h4>
         <p class="card-text">Pagina para registrar usuarios sean fundaciones, etc..</p>
         <form action="<?= BASE_URL;?>admin/registraUsuario" method="post">
         <label for="">Cedula</label>
-        <input type="text" name="cedula" required >
+        <input type="text" name="cedula" value="<?=$cedula?>" required >
         <label for="">Nombre</label>
-        <input type="text" name="nombre"required><br>
+        <input type="text" name="nombre" value="<?=$Nombre?>"required><br>
         <label for="">Rol</label>
         <select name="rol" id="">
           <!--=============================================
@@ -17,22 +26,30 @@
             nombre dataRoles
           ==============================================-->
         <?php 
+        echo "<h1>". $Rol . "</h1>";
           foreach ($dataRoles as $key) {?>
-          <option value="<?= $key['id_rol']; ?>"><?= $key['nombre']; ?></option>
+          <option <?php if($Rol = $key['id_rol']){ echo"selected"; } ?> value="<?= $key['id_rol']; ?>"><?= $key['nombre']; ?></option>
           <?php
           }
         ?>
         </select>
         <!--no hay internet para buscar como nombrar un combobox-->
         <label for="">Direccion</label>
-        <input type="text" name="direccion" required><br><!--textarea-->
+        <input type="text" name="direccion" value="<?=$Direccion?>" required><br><!--textarea-->
         <label for="">Contraseña</label>
-        <input type="text" name="contrasenia" required>
+        <input type="text" name="contrasenia" value="<?= $contra?>" required>
         <br>
         <label for="">Telefono</label>
-        <input type="tel" name="telefono" required>
+        <input type="tel" name="telefono" value="<?= $tlf?>" required>
         <br>
-        <button>Aceptar</button>
+        <?php 
+        if($activo != ""){ ?>
+        <label for="">Activo</label>
+        <input type="text" name="activo" value="<?= $activo?>">
+        <?php
+        }
+        ?>
+        <button name="<?php if($_POST['accion']="Modificar"){ echo "Modificar"; } else {echo"Agregar";} ?>">Aceptar</button>
         </form>
       </div>
     </div>

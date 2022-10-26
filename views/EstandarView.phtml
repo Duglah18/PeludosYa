@@ -25,7 +25,12 @@ if (isset($_SESSION)){
     <div class="container nav-wrapper">
       <!--El nav se solapa con el titulo pq creo que estan en el mismo div-->
       <!--Creo q si estas en admin no deberia llevarte a la pag pero bueh-->
+      <?php if($role = "" || $role != "1"){ ?>
       <a href="<?= BASE_URL; ?>" class="brand-logo">Polipropeludos</a>
+      <?php } ?>
+      <?php if($role = "1"){ ?>
+      <a href="<?= BASE_URL; ?>" class="brand-logo">Polipropeludos</a>
+      <?php } ?>
       <ul id="nav-mobile" class="right hide-on-med-and-down">
       <li><a class='btn' href='<?= BASE_URL; ?>'>Inicio</a></li>
       <li><a class='btn' href='<?= BASE_URL; ?>session/catalogoAnimales'>Catalogo (Ver animales)</a></li>

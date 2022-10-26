@@ -59,20 +59,42 @@
         <?php 
         
         $tamanio = count($dataAdmin);
-        for ($i = 0; $i < $tamanio; $i++){
-            echo "<tr>" . 
-            "<td>" . $dataAdmin[$i]['cedula'] . "</td>" .
-            "<td>" . $dataAdmin[$i]['nombre'] . "</td>" .
-            "<td>" . $dataAdmin[$i]['nombrerol'] . "</td>" .
-            "<td>" . $dataAdmin[$i]['direccion'] . "</td>" .
-            "<td>" . $dataAdmin[$i]['contrasenia'] . "</td>" .
-            "<td>" . $dataAdmin[$i]['telefono'] . "</td>" .
-            "<td>" . $activado = ($dataAdmin[$i]['activo'] != 1)? "Bloqueado":"Activo" . "</td>" .
-            "<td>" . "BtnEliminar/BtnModificar" . "</td>" .
-            "</tr>"; 
-            // como el parametro de si esta activo el usuario o bloqueado es un numero
-            //se comprueba con codigo si es esta activo (1) o si esta bloqueado (0 o en este caso cualquier cosa)
-        }
+        for ($i = 0; $i < $tamanio; $i++){ ?>
+            <tr> 
+            <td> <?= $dataAdmin[$i]['cedula'] ?> </td> 
+            <td> <?= $dataAdmin[$i]['nombre'] ?> </td> 
+            <td> <?= $dataAdmin[$i]['nombrerol'] ?> </td> 
+            <td> <?= $dataAdmin[$i]['direccion'] ?> </td> 
+            <td> <?= $dataAdmin[$i]['contrasenia'] ?> </td> 
+            <td> <?= $dataAdmin[$i]['telefono'] ?> </td> 
+            <td> <?= $activado = ($dataAdmin[$i]['activo'] != 1)? "Bloqueado":"Activo" ?> </td>
+            <td>
+                <form action="<?=BASE_URL?>admin/agregaUsuarios" method="POST">
+                    <input type="hidden" name="modificacion" value="<?=$dataAdmin[$i]['cedula'] ?>">
+                    <button name="accion" value="Modificar">Modificar</button>
+                    <button name="accion" value="Borrar">Borrar</button>
+                </form>
+            </td>
+            </tr>
+            <!-- // como el parametro de si esta activo el usuario o bloqueado es un numero
+            //se comprueba con codigo si es esta activo (1) o si esta bloqueado (0 o en este caso cualquier cosa) -->
+        <?php 
+            }
         ?>
         </tbody>
     </table>
+<!--
+
+            <td>
+                    
+                        <form method="POST">
+                            <input type="hidden" name="textid" id="textid" value="<?= $libro['id']; ?>"/>
+
+                            <input type="submit" name="accion" value="Seleccionar" class="btn btn-primary"/>
+                            
+                            <input type="submit" name="accion" value="Borrar" class="btn btn-danger"/>
+                        </form>
+                    
+                    </td>
+
+-->
