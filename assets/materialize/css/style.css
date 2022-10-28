@@ -7,4 +7,16 @@ body {
   main {
     flex: 1 0 auto;
   }
+
+  .fondo {
+
+   background-image: url("p.png");
+   padding-top: 20px;
+
+  }
+  
+  .center-icons{
+    display: flex; 
+    align-items: center;
+  }
       
