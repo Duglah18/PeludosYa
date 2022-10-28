@@ -17,48 +17,36 @@ if (isset($_SESSION)){
   <!--Importar Iconos-->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <!--Importar Materialize-->
-  <link type="text/css" rel="stylesheet" href="<?= URL_ASSETS; ?>/materialize/css/materialize.min.css"  media="screen,projection"/>
   <link type="text/css" rel="stylesheet" href="<?= URL_ASSETS; ?>/materialize/css/style.css"  media="screen,projection"/>  
+  <link type="text/css" rel="stylesheet" href="<?= URL_ASSETS; ?>/materialize/css/materialize.css"  media="screen,projection"/>
 </head>
-<body>
-<nav>
-    <div class="container nav-wrapper">
+<body style="background: url(<?= URL_ASSETS; ?>/wallpaper.jpg) no-repeat fixed">
+<br>
+<nav class="indigo z-depth-4 nav-extended container" style="border-radius: 25px; padding-left: 20px; padding-right: 10px;">
+
+    <div class="nav-wrapper">
       <!--El nav se solapa con el titulo pq creo que estan en el mismo div-->
       <!--Creo q si estas en admin no deberia llevarte a la pag pero bueh-->
-      <?php if($role = "" || $role != "1"){ ?>
-      <a href="<?= BASE_URL; ?>" class="brand-logo">Polipropeludos</a>
-      <?php } ?>
-      <?php if($role = "1"){ ?>
-      <a href="<?= BASE_URL; ?>" class="brand-logo">Polipropeludos</a>
-      <?php } ?>
+        <a href="<?= BASE_URL; ?>" class="brand-logo s1"><img style="padding-top: 15px; padding-bottom: 10px;  height: 60px;" class="responsive-img small" src="<?= URL_ASSETS; ?>/logo.png"></a>
       <ul id="nav-mobile" class="right hide-on-med-and-down">
-      <li><a class='btn' href='<?= BASE_URL; ?>'>Inicio</a></li>
-      <li><a class='btn' href='<?= BASE_URL; ?>session/catalogoAnimales'>Catalogo (Ver animales)</a></li>
-      <li><a class='btn' href='<?= BASE_URL; ?>session/catalogoVeterinarios'>Veterinarios</a></li>
+      <li><a href='<?= BASE_URL; ?>session/catalogoAnimales'>Catalogo</a></li>
+      <li><a href='<?= BASE_URL; ?>session/catalogoVeterinarios'> Veterinarios</a></li>
       <!-- Botones NavBar-->
         <?php if (isset($_SESSION)){ ?>
           
           <?php if($role == "1"){ ?> 
             <!--Aca irian todas las funciones de Admin-->
             <!--Los Botones ps como los dividi antes o como sea mejor-->
-            <li><a class='dropdown-trigger btn' href='#' data-target='dropdown1'>Admin</a></li>
+            <li><a class='dropdown-trigger' href='#' data-target='dropdown1'>Admin</a></li>
           <?php } ?>
           <!--Aca irian los botones que le pertecen a Fundacion-->
           <?php if($role == "3"){ ?> 
-            <li><a class='dropdown-trigger btn' href='#' data-target='dropdown2'>Fundacion</a></li> 
+            <li><a class='dropdown-trigger' href='#' data-target='dropdown2'>Fundacion</a></li> 
           <?php } ?>
           <!--Aca irian los botones que le pertenecen al rol de tienda-->
           <?php if($role == "4"){ ?>
-            <li><a class='dropdown-trigger btn' href='#' data-target='dropdown3'>Tienda</a></li>
+            <li><a class='dropdown-trigger' href='#' data-target='dropdown3'>Tienda</a></li>
           <?php } ?>
-
-          <!--
-            Esto es innecesario ya que estos botones siempre se verian aunque no 
-            Estuvieras logueado ya que seria literal ver animales,veterinarios, productos, etc
-            lo unico a verificar de si tiene sesion usuario es cuando vaya a adoptar y ya.
-          -->
-            <li><a class='dropdown-trigger btn' href='#' data-target='dropdown4'>Usuario</a></li>
-        
         <?php } ?>
         <!-- Estado de Sesion -->
         <!---
@@ -76,6 +64,7 @@ if (isset($_SESSION)){
               }
         }
         ?>
+
         <?php if(!isset($_SESSION['usuario'])){ ?>
         <li>
           <a class="nav-link" href="<?= BASE_URL;?>session/login" role="button" aria-expanded="false">
@@ -85,10 +74,12 @@ if (isset($_SESSION)){
 
         <li>
           <a class="nav-link" href="<?= BASE_URL;?>session/register" role="button" aria-expanded="false">
-            <i class="material-icons">edit</i>
+            <i class="material-icons">cancel</i>
           </a>
         </li>
+        
         <?php }?>
+
         <!-- Contenido de Dropdowns -->
         <!--Admin-->
         <ul id='dropdown1' class='dropdown-content'>
@@ -112,53 +103,37 @@ if (isset($_SESSION)){
         </ul>
           <!--Vendedores-->
         <ul id='dropdown3' class='dropdown-content'>
-          <li><a href="#!">No hay nada xd</a></li>
-        </ul>
-          <!--Usuarios?????-->
-        <ul id='dropdown4' class='dropdown-content'>
-          <li><a href="#!">one</a></li>
-          <li><a href="#!">two</a></li>
-          <li class="divider" tabindex="-1"></li>
-          <li><a href="#!">three</a></li>
-          <li><a href="#!"><i class="material-icons">view_module</i>four</a></li>
-          <li><a href="#!"><i class="material-icons">cloud</i>five</a></li>
+          <li><a href="#!">EN CONSTRUCCIÓN</a></li>
         </ul>
       </ul>
     </div>
   </nav>
+
+
   <!-- Contenido Pirncipal -->
     <main>
-        <div class="container">
+        <div class="white-text">
             <?php require_once 'views/' . $vista; ?>
         </div>
     </main>
    <!-- Footer --> 
-    <footer class="page-footer ">
-          <div class="container">
-            <div class="row">
-              <div class="col l6 s12">
-                <h5 class="white-text">Footer Content</h5>
-                <p class="grey-text text-lighten-4">You can use rows and columns here to organize your footer content.</p>
-              </div>
-              <div class="col l4 offset-l2 s12">
-                <h5 class="white-text">Links</h5>
-                <ul>
-                  <li><a class="grey-text text-lighten-3" href="#!">Link 1</a></li>
-                </ul>
-              </div>
+    <footer class="page-footer indigo">
+            <div class="container center-align">
+            © 2022 IsanJeru & Duglah
             </div>
-          </div>
-          <div class="footer-copyright">
-            <div class="container">
-            © 2014 Copyright Text
-            <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
-            </div>
-          </div>
+            <br>
         </footer>
 
 
   <!--Funciones JavaScript-->
   <script type="text/javascript" src="<?= URL_ASSETS; ?>/materialize/js/materialize.min.js"></script>
-  <script> M.AutoInit() </script>
+  <script> 
+  M.AutoInit();
+    document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.carousel');
+    var instances = M.Carousel.init(elems, options);
+  });
+  </script>
 </body>
+
 

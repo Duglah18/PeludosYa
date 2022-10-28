@@ -8,6 +8,7 @@ class AdminController extends GeneralController{
         //q te mande a la misma pag pero q si recibe un parametro x q te haga algo diferente
         if (isset($_SESSION['usuario'])){
             session_destroy();
+            /*UY ESTO HAY QUE CAMBIARLO SI VAS AL INDEX LOGUEADO SE TE DESLOGUEA */
             //sin el refresh se seguiria viendo el Usuario como si
             //estuvieras logueado para entender si quieres
             //comenta la siguiente linea y carga el admin y cierra sesion
@@ -38,14 +39,23 @@ class AdminController extends GeneralController{
     //agarra y copia el modelo y demas
     public function agregaAnimales(){
         $objAdmin = $this->loadModel("AdminModel");
-        $data['tipoanimal'] = $objAdmin->consultaTipoAnimal();
-        if(isset($_POST['tipoanimal'])){
-            $busqueda_animal= $_POST['tipoanimal'];
-        $data['raza'] = $objAdmin->consultaRazaAnimal($busqueda_animal);
+        if (isset($_POST['accion']) && $_POST['accion'] == 'Modificar'){
+            $data['raza'] = $objAdmin->consultaRazaAnimal('');
+            $data['tipoanimal'] = $objAdmin->consultaTipoAnimal();
+            $data['tamano'] = $objAdmin->consultaTamanoAnimal();
+            $data['albergues'] = $objAdmin->consultaAlbergues();
+            $data['animal'] = $objAdmin->consultarAnimal($_POST['modificacion']);
+            $this->loadView("admin/agAnimal.phtml","Modifica el Animal desde Admmin", $data);
+        }else {
+            $data['tipoanimal'] = $objAdmin->consultaTipoAnimal();
+            if(isset($_POST['tipoanimal'])){
+                $busqueda_animal= $_POST['tipoanimal'];
+            $data['raza'] = $objAdmin->consultaRazaAnimal($busqueda_animal);
+            }
+            $data['tamano'] = $objAdmin->consultaTamanoAnimal();
+            $data['albergues'] = $objAdmin->consultaAlbergues();
+            $this->loadView("admin/agAnimal.phtml","Agregar Animal Desde Admin",$data);
         }
-        $data['tamano'] = $objAdmin->consultaTamanoAnimal();
-        $data['albergues'] = $objAdmin->consultaAlbergues();
-        $this->loadView("admin/agAnimal.phtml","Agregar Animal Desde Admin",$data);
     }
     
     //Vista Agregar usuarios Admin

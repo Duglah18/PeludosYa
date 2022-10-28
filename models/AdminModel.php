@@ -1,7 +1,7 @@
 <?php 
 
 class AdminModel extends ConexionBD{
-
+    #consultas Region
     public function consultarAdmin($user, $contrasenia){
         $resultado = $this->obtenData("SELECT cedula, nombre, contrasenia, rol_id FROM usuarios WHERE nombre = '$user' AND contrasenia = '$contrasenia' AND rol_id = 1");
         //sin el and del rol se podria loguear un usuario normal como admin :v
@@ -20,20 +20,6 @@ class AdminModel extends ConexionBD{
         return $resultado;
     }
 
-    public function modificaUsuario($idusuario,$nombre,$rol,$direccion,$contrasena,$activo,$telefono){
-        $data['cedula'] = $idusuario;
-        $data['nombre'] = $nombre;
-        $data['rol_id'] = $rol;
-        $data['direccion'] = $direccion;
-        $data['contrasenia'] = $contrasena;
-        $data['activo'] = $activo;
-        $data['telefono'] = $telefono;
-        return $this->actualizaData("usuarios",$data,"cedula = " .$idusuario);
-    }
-/*public function actualizar(){
-        $data['nombre'] = "actualizado";
-        return $this->actualizaData("mb_menu", $data,"idmenu=1");
-    } */
     public function consultaAlbergues(){
         $resultados = $this->obtenData("SELECT id_albergue, nombre FROM albergue");
         if ($resultados){
@@ -85,11 +71,6 @@ class AdminModel extends ConexionBD{
         return $this->grabaData("mb_menu", $data);
     }
 
-    public function actualizar(){
-        $data['nombre'] = "actualizado";
-        return $this->actualizaData("mb_menu", $data,"idmenu=1");
-    }
-
     public function listar(){
         return $this->obtenData("SELECT usuarios.cedula, usuarios.nombre, usuarios.direccion, usuarios.contrasenia, usuarios.activo, rol.nombre as nombrerol, usuarios.telefono
                                 FROM usuarios INNER JOIN rol ON usuarios.rol_id = rol.id_rol");
@@ -97,6 +78,14 @@ class AdminModel extends ConexionBD{
                                 //como el nombre del rol y el nombre del usuario tienen el mismo campo con mismo nombre entonces
                                 //simplemente hice que el nombre de rol se reconociera como as 
     }
+
+    public function consultarAnimal($id_animal){
+        return $this->obtenData("SELECT a.id_animal, a.nombre, a.anio_nac, a.img, a.descripcion, 
+                                a.fecha_ingreso, a.raza_id, a.tamanio_id, a.albergue_id, a.visible, b.id_tipo_animal
+                                FROM animal a
+                                INNER JOIN raza b ON a.raza_id = b.id_raza
+                                WHERE a.id_animal = CASE WHEN '$id_animal' = '' THEN a.id_animal ELSE '$id_animal'END");
+    }//Resolver el problema de si esta adoptado
 
     public function listaTiposAnimal(){
         return $this->obtenData("SELECT id_tipo, nombre
@@ -119,7 +108,8 @@ class AdminModel extends ConexionBD{
     }
 
     public function consultaRazaAnimal($id_tipo){
-        $resultados = $this->obtenData("SELECT id_raza, nombre FROM raza WHERE id_tipo_animal = '$id_tipo'");
+        $resultados = $this->obtenData("SELECT id_raza, nombre FROM raza 
+                                        WHERE id_tipo_animal = CASE WHEN '$id_tipo' = '' THEN id_tipo_animal ELSE '$id_tipo' END");
         if ($resultados){
             return $resultados;
         } else {
@@ -164,7 +154,26 @@ class AdminModel extends ConexionBD{
                           FROM veterinario");
         return $resultado;
     }
+    #Region de Modificar
+    public function modificaUsuario($idusuario,$nombre,$rol,$direccion,$contrasena,$activo,$telefono){
+        $data['cedula'] = $idusuario;
+        $data['nombre'] = $nombre;
+        $data['rol_id'] = $rol;
+        $data['direccion'] = $direccion;
+        $data['contrasenia'] = $contrasena;
+        $data['activo'] = $activo;
+        $data['telefono'] = $telefono;
+        return $this->actualizaData("usuarios",$data,"cedula = " .$idusuario);
+    }
+    public function modificaAnimal(){
 
+    }
+    #modificar End
+    
+    // public function actualizar(){
+    //     $data['nombre'] = "actualizado";
+    //     return $this->actualizaData("mb_menu", $data,"idmenu=1");
+    // }
 }
 
 ?>

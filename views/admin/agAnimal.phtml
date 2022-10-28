@@ -1,3 +1,14 @@
+<?php
+$tipoanimal = (isset($animal[0]['id_tipo_animal']))? $animal[0]['id_tipo_animal'] :"";
+$Nombre = (isset($animal[0]['id_tipo_animal']))? $animal[0]['id_tipo_animal'] :"";
+$anio_nac =(isset($animal[0]['id_tipo_animal']))? $animal[0]['id_tipo_animal'] :"";
+$img = (isset($animal[0]['id_tipo_animal']))? $animal[0]['id_tipo_animal'] :"";
+$Descripcion = (isset($animal[0]['id_tipo_animal']))? $animal[0]['id_tipo_animal'] :"";
+$Raza = (isset($animal[0]['id_tipo_animal']))? $animal[0]['id_tipo_animal'] :"";
+$tamano = (isset($animal[0]['id_tipo_animal']))? $animal[0]['id_tipo_animal'] :"";
+$Albergue = (isset($animal[0]['id_tipo_animal']))? $animal[0]['id_tipo_animal'] :"";
+?>
+
 <div class="card text-center">
 <label for="">Tipo animal</label>
 <form action="<?= BASE_URL?>fundacion/agregaAnimal" method="POST">
@@ -9,7 +20,7 @@
           ==============================================-->
         <?php 
           foreach ($tipoanimal as $key) {?>
-          <option value="<?= $key['id_tipo']; ?>"><?= $key['nombre']; ?></option>
+          <option <?php if($tipoanimal = $key['id_tipo']){ echo"selected"; } ?> value="<?= $key['id_tipo']; ?>"><?= $key['nombre']; ?></option>
           <?php
           }
         ?>
@@ -24,15 +35,16 @@
           Pagina para registrar animales Desde Admin.
           Estos inputs se mantendran debido a que el admin no tiene albergue
         </p>
-        <form action="<?=BASE_URL;?>admin/agregaAnimal" method="post" enctype="multipart/form-data">
+        <form action="<?=BASE_URL;?>admin/registraAnimal" method="post" enctype="multipart/form-data">
         <label for="">Nombre Animal</label>
-        <input type="text" name="nombre" >
+        <input type="text" value="<?= $Nombre;?>" name="nombre" >
         <label for="">Año de nacimiento</label>
-        <input type="text" name="fecha"><br>
+        <input type="text" value="<?= $anio_nac?>" name="fecha"><br>
         <label for="">Imagen</label>
-        <input type="file" name="img"><br>
+        <input type="hidden" value="<?=$img?>" name="imgmodificar">
+        <input type="file" name="img"><br><!--No hay forma creo ahora mismo de poner lo q recibo de img-->
         <label for="">Descripcion</label>
-        <input type="text" name="descrip" >
+        <input type="text" value="<?= $Descripcion?>" name="descrip" >
         
         <br>
         <?php if(isset($raza)){ ?>
@@ -46,7 +58,7 @@
           ==============================================-->
         <?php 
           foreach ($raza as $key) {?>
-          <option value="<?= $key['id_raza']; ?>"><?= $key['nombre']; ?></option>
+          <option <?php if($Raza = $key['id_raza']){ echo"selected"; } ?> value="<?= $key['id_raza']; ?>"><?= $key['nombre']; ?></option>
           <?php
           }
         ?>
@@ -67,7 +79,7 @@
           ==============================================-->
         <?php 
           foreach ($tamano as $key) {?>
-          <option value="<?= $key['id_tamanio']; ?>"><?= $key['nombre']; ?></option>
+          <option <?php if($tamano = $key['id_tamano']){ echo"selected"; } ?> value="<?= $key['id_tamanio']; ?>"><?= $key['nombre']; ?></option>
           <?php
           }
         ?>
@@ -83,13 +95,14 @@
         <?php 
           foreach ($albergues as $key) {
            ?>
-          <option value="<?= $key['id_albergue']; ?>"><?= $key['nombre']; ?></option>
+          <option <?php if($Albergue = $key['id_rol']){ echo"selected"; } ?> value="<?= $key['id_albergue']; ?>"><?= $key['nombre']; ?></option>
           <?php
 
           }
         ?>
         </select>
-        <button>Aceptar</button>
+        <!--No se mostrara si la adopcion se esta procesando porque esta no es su ventana-->
+        <button name="<?php $_POST['accion']=="Modificar"?"Modificar":"Agregar" ?>">Aceptar</button>
         </form>
       </div>
     </div>

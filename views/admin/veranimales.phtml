@@ -30,7 +30,13 @@ print_r($animalesAdmin);
             <td><?= $animal['nomtipo'] ?></td>
             <td><?= $animal['nomalbergue'] ?></td> 
             <td><?= $animal['nombreUser'] ?></td>
-            <td>Eliminar/modificar</td>
+            <td>
+                <form action="<?=BASE_URL?>admin/agregaAnimal" method="POST">
+                    <input type="hidden" name="modificacion" value="<?=$dataAdmin[$i]['id_animal'] ?>">
+                    <button name="accion" value="Modificar">Modificar</button>
+                    <button name="accion" value="Borrar">Borrar</button>
+                </form>
+            </td>
         </tr>
         <?php } ?>
     </tbody>

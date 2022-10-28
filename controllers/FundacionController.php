@@ -60,26 +60,38 @@ class FundacionController extends GeneralController{
 
     public function registraAnimal(){//ahora si
         $objFund = $this->loadModel("FundacionModel");
-        $nombre = $_POST['nombre'];
-        $fechanac= $_POST['fecha'];
-        /*----------------------Empezamos el tratamiento de img----------------------------*/
-        //esto es lo q queria automatizar pq vamos a tener q hacer esto cada q queramos guardar una img
-        $fecha_paratmp = new DateTime();
-        $imgtxt = (isset($_FILES['img']['name']))?$_FILES['img']['name']:"";
-        $nombreArchivo =($imgtxt!="")?$fecha_paratmp->getTimestamp()."_".$_FILES['img']['name']:"imagen.jpg";
-        $image= $_FILES['img']['tmp_name'];
-        if ($image!=""){
-            move_uploaded_file($image,"./img/animales/".$nombreArchivo);
+        if (isset($_POST['Agregar'])){
+            $nombre = $_POST['nombre'];
+            $fechanac= $_POST['fecha'];
+            /*----------------------Empezamos el tratamiento de img----------------------------*/
+            //esto es lo q queria automatizar pq vamos a tener q hacer esto cada q queramos guardar una img
+            $fecha_paratmp = new DateTime();
+            $imgtxt = (isset($_FILES['img']['name']))?$_FILES['img']['name']:"";
+            $nombreArchivo =($imgtxt!="")?$fecha_paratmp->getTimestamp()."_".$_FILES['img']['name']:"imagen.jpg";
+            $image= $_FILES['img']['tmp_name'];
+            if ($image!=""){
+                move_uploaded_file($image,"./img/animales/".$nombreArchivo);
+            }
+            /*----------------------Terminado el tratamiento de img----------------------------*/
+            $descrip= $_POST['descrip'];
+            $fecha_ing= "Now()";
+            $raza_id= $_POST['raza'];
+            $tamanio_id= $_POST['tamano'];
+            $albergue_id= $_POST['albergue'];
+            $visible = 1;
+            $objFund->registraAnimal('animal', $nombre, $fechanac, $nombreArchivo, $descrip, $fecha_ing, $raza_id,$tamanio_id, $albergue_id, $visible);
+            $this->agregaAnimal();
+        } else {
+            echo "Moddificar de pana estoy cansado";
+            $nombre = $_POST['nombre'];
+            $fechanac= $_POST['fecha'];
+            /*----------------------Empezamos el tratamiento de img----------------------------*/
+            //esto es lo q queria automatizar pq vamos a tener q hacer esto cada q queramos guardar una img
+            $fecha_paratmp = new DateTime();
+            $imgtxt = (isset($_FILES['img']['name']))?$_FILES['img']['name']:"";
+            $nombreArchivo =($imgtxt!="")?$fecha_paratmp->getTimestamp()."_".$_FILES['img']['name']:"imagen.jpg";
+            $image= $_FILES['img']['tmp_name'];
         }
-        /*----------------------Terminado el tratamiento de img----------------------------*/
-        $descrip= $_POST['descrip'];
-        $fecha_ing= "Now()";
-        $raza_id= $_POST['raza'];
-        $tamanio_id= $_POST['tamano'];
-        $albergue_id= $_POST['albergue'];
-        $visible = 1;
-        $objFund->registraAnimal('animal', $nombre, $fechanac, $nombreArchivo, $descrip, $fecha_ing, $raza_id,$tamanio_id, $albergue_id, $visible);
-        $this->agregaAnimal();
     }
     #endregion
 }

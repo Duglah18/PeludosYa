@@ -1,52 +1,43 @@
-<h1>Pag donde saldran los animales</h1>
-<?php
-echo "Array q se trae cuando vienes para aca";
-print_r($animales);
-
-?>
-
-<table>
-        <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Año Nacimiento</th>
-                    <th>img</th>
-                    <th>Descripcion</th>
-                    <th>Fecha ingreso</th>
-                    <th>Nom Raza</th>
-                    <th>Tamaño</th>
-                    <th>Albergue</th>
-                </tr>
-        </thead>
-       <tbody>
+<br>
+<div class="container">
+    <div class="card-panel indigo darken-4 center-align" style="height: 100px; border-radius: 100px;">
+        <h3 class="container">Catalogo de Adopcion</h3>
+    </div>
+</div>
+<br>
+<div class="row">
+<div class="card-panel indigo darken-4 col s3">
+Aqui iran las categorias
+</div>
+    <div class="col s9">
+        
         <?php foreach($animales as $animal){ ?>
-            <tr>
-                    <td><?= $animal['id_animal']; ?></td>
-                    <td><!--
-                        hay dos formas 
-                        1.enviar literalmente por url todos los datos del animal 
-                        2. o enviar el id solo y hacer una consulta para ver
-                        (para mi la mejor seria la 2da para no saturar la url)
-                        pq literal mira le envio el id y el nombre y mira la pedazo de url q se enviar
-                        <?= BASE_URL?>session/mascota?idanimal=<?=$animal['id_animal']?>&nombre=<?=$animal['nombre']?>
-                        -->
-                        <a href="<?= BASE_URL?>session/mascota?idanimal=<?=$animal['id_animal']?>"><?= $animal['nombre']; ?></a>
-                    </td>
-                    <td><?= $animal['anio_nac']; ?></td>
+            <div class="card indigo col s4">
 
-                    <td>
-                        <img src="<?=URL_BASE;?>img/animales/<?= $animal['img']?>"  width="50" alt="Foto Animal">
-                    </td>
+                <div class="card-image"> 
+                    <img src="<?=URL_BASE;?>img/animales/<?= $animal['img']?>" style=" width: 100%;"alt="Foto Animal">
+                </div>
 
-                    <td><?= $animal['descripcion']; ?></td>
-                    <td><?= $animal['fecha_ingreso']; ?></td>
-                    <td><?= $animal['nomRaza']; ?></td>
-                    <td><?= $animal['tamanio']; ?></td>
-                    <td><?= $animal['albergue']; ?></td>
-                    
-                    </td>
-            </tr>
+                <span class="card-title">
+                    <h5 style="display: flex; align-items: center;">
+                        <i class="material-icons">label</i>
+                         Nombre: <?= $animal['nombre']; ?>
+                    </h5>
+                </span>
+                <ul>
+                <li style="display: flex; align-items: center;"> <i class="material-icons">insert_invitation</i> Edad: <?= 2022-$animal['anio_nac']; ?> Años</li>
+                <li style="display: flex; align-items: center;"> <i class="material-icons">pets</i> Raza: <?= $animal['nomRaza']; ?></li>
+                <li style="display: flex; align-items: center;"> <i class="material-icons">title</i> Tamaño: <?= $animal['tamanio']; ?></li>
+                <li style="display: flex; align-items: center;"> <i class="material-icons">home</i> Alojado: <?= $animal['albergue']; ?></li>
+                <li style="display: flex; align-items: center;"> <i class="material-icons">date_range</i> Ingreso: <?= $animal['fecha_ingreso']; ?></li>
+                </ul>
+                <br>
+                <div class="card-action white-text center-align">
+                <a class="white-text" href="<?= BASE_URL?>session/mascota?idanimal=<?=$animal['id_animal']?>">Ver Animal</a>
+                </div>
+            </div>    
         <?php } ?>
-       </tbody>
-</table>
+            
+    </div>
+</div>
+     
