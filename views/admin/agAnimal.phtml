@@ -1,17 +1,21 @@
 <?php
-$tipoanimal = (isset($animal[0]['id_tipo_animal']))? $animal[0]['id_tipo_animal'] :"";
-$Nombre = (isset($animal[0]['id_tipo_animal']))? $animal[0]['id_tipo_animal'] :"";
-$anio_nac =(isset($animal[0]['id_tipo_animal']))? $animal[0]['id_tipo_animal'] :"";
-$img = (isset($animal[0]['id_tipo_animal']))? $animal[0]['id_tipo_animal'] :"";
-$Descripcion = (isset($animal[0]['id_tipo_animal']))? $animal[0]['id_tipo_animal'] :"";
-$Raza = (isset($animal[0]['id_tipo_animal']))? $animal[0]['id_tipo_animal'] :"";
-$tamano = (isset($animal[0]['id_tipo_animal']))? $animal[0]['id_tipo_animal'] :"";
-$Albergue = (isset($animal[0]['id_tipo_animal']))? $animal[0]['id_tipo_animal'] :"";
-?>
+$id_animal = (isset($animales[0]['id_animal']))? $animales[0]['id_animal'] :"";
+$tipoanimal = (isset($animales[0]['id_tipo_animal']))? $animales[0]['id_tipo_animal'] :"";
+$Nombre = (isset($animales[0]['nombre']))? $animales[0]['nombre'] :"";
+$anio_nac =(isset($animales[0]['anio_nac']))? $animales[0]['anio_nac'] :"";
+$img = (isset($animales[0]['img']))? $animales[0]['img'] :"";
+$Descripcion = (isset($animales[0]['descripcion']))? $animales[0]['descripcion'] :"";
+$Raza = (isset($animales[0]['raza_id']))? $animales[0]['raza_id'] :"";
+$tamanio_mod = (isset($animales[0]['tamanio_id']))? $animales[0]['tamanio_id'] :"";
+$Albergue = (isset($animales[0]['albergue_id']))? $animales[0]['albergue_id'] :"";
+$visible = (isset($animales[0]['visible']))? $animales[0]['visible']:"";
 
+
+print_r($animales)?>
+<h1 class="text-black"><?= $id_animal?> PRUEBA</h1>
 <div class="card text-center">
 <label for="">Tipo animal</label>
-<form action="<?= BASE_URL?>fundacion/agregaAnimal" method="POST">
+<form action="<?= BASE_URL?>admin/agregaAnimal" method="POST">
         <select name="tipoanimal" id="tipo_animal">
           <option value="0">Selecciona</option>
           <!--=============================================
@@ -35,7 +39,8 @@ $Albergue = (isset($animal[0]['id_tipo_animal']))? $animal[0]['id_tipo_animal'] 
           Pagina para registrar animales Desde Admin.
           Estos inputs se mantendran debido a que el admin no tiene albergue
         </p>
-        <form action="<?=BASE_URL;?>admin/registraAnimal" method="post" enctype="multipart/form-data">
+        <form action="<?=BASE_URL;?>admin/agregaAnimal" method="post" enctype="multipart/form-data">
+        <input type="hidden" value="<?= $id_animal;?>" name="id_animal">
         <label for="">Nombre Animal</label>
         <input type="text" value="<?= $Nombre;?>" name="nombre" >
         <label for="">Año de nacimiento</label>
@@ -79,7 +84,7 @@ $Albergue = (isset($animal[0]['id_tipo_animal']))? $animal[0]['id_tipo_animal'] 
           ==============================================-->
         <?php 
           foreach ($tamano as $key) {?>
-          <option <?php if($tamano = $key['id_tamano']){ echo"selected"; } ?> value="<?= $key['id_tamanio']; ?>"><?= $key['nombre']; ?></option>
+          <option <?php if($tamanio_mod = $key['id_tamanio']){ echo"selected"; } ?> value="<?= $key['id_tamanio']; ?>"><?= $key['nombre']; ?></option>
           <?php
           }
         ?>
@@ -95,14 +100,23 @@ $Albergue = (isset($animal[0]['id_tipo_animal']))? $animal[0]['id_tipo_animal'] 
         <?php 
           foreach ($albergues as $key) {
            ?>
-          <option <?php if($Albergue = $key['id_rol']){ echo"selected"; } ?> value="<?= $key['id_albergue']; ?>"><?= $key['nombre']; ?></option>
+          <option <?php if($Albergue = $key['id_albergue']){ echo"selected"; } ?> value="<?= $key['id_albergue']; ?>"><?= $key['nombre']; ?></option>
           <?php
 
           }
         ?>
         </select>
+        <br>
+        <?php
+          if(isset($_POST['accion'])=="Modificar"){?>
+          <label for="">Activo</label>
+          <input type="text" name="visible" value="<?= $visible?>">
+        <?php
+          }
+        ?>
+
         <!--No se mostrara si la adopcion se esta procesando porque esta no es su ventana-->
-        <button name="<?php $_POST['accion']=="Modificar"?"Modificar":"Agregar" ?>">Aceptar</button>
+        <button name="accion" value="<?php if($_POST['accion']="Modificar"){ echo "Modificar"; } else {echo"Agregar";} ?>">Aceptar</button>
         </form>
       </div>
     </div>

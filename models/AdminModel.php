@@ -165,8 +165,16 @@ class AdminModel extends ConexionBD{
         $data['telefono'] = $telefono;
         return $this->actualizaData("usuarios",$data,"cedula = " .$idusuario);
     }
-    public function modificaAnimal(){
-
+    public function modificaAnimal($tabla, $id_animal,$nom, $anionac, $nomimg, $descripcion, $id_raza, $tamano_id, $albergue, $visible){
+        $data['nombre'] = $nom;
+        $data['anio_nac'] = $anionac;
+        $data['img'] = $nomimg;
+        $data['descripcion'] = $descripcion;
+        $data['raza_id'] = $id_raza;
+        $data['tamanio_id'] = $tamano_id;
+        $data['albergue_id'] = $albergue;
+        $data['visible'] = $visible;
+        return $this->actualizaData($tabla, $data, "id_animal = " . $id_animal);
     }
     #modificar End
     
