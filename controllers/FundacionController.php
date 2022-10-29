@@ -45,16 +45,30 @@ class FundacionController extends GeneralController{
     #Region Metods/functions
     public function registraFundacion(){//funciona 9/10
         $objFund = $this->loadModel("FundacionModel");
-        $Nombre = $_POST['nombre'];
-        $direccion = $_POST['direccion'];
-        $cedula = $_POST['cedula_user'];
-        $objFund->registraAlbergue("albergue",$cedula,$Nombre,$direccion,1);
-        if($_SESSION['rol'] == "1"){
-            $objFund = $this->loadModel("FundacionModel");
-            $data['userfund'] = $objFund->consultaUser();
-            $this->loadView("admin/agalbergue.phtml","Agregar Albergue como Admin",$data);
+        if(isset($_POST['accion']) == 'Modificar'){
+            $id_albergue = $_POST['identificador'];
+            $Nombre = $_POST['nombre'];
+            $direccion = $_POST['direccion'];
+            $cedula = $_POST['cedula_user'];
+            $activo = $_POST['activo'];
+            $objFund->modificaAlbergue($id_albergue, $Nombre, $cedula, $direccion, $activo);
+            if($_SESSION['rol'] == "1"){
+                $objAdmin = $this->loadModel("FundacionModel");
+                $data['alberguesAdmin'] = $objAdmin->consultaAlbergue('');
+                $this->loadView("admin/veralbergues.phtml","Ver Albergues",$data);
+            }
         } else {
-            $this->agregaAlberg();
+            $Nombre = $_POST['nombre'];
+            $direccion = $_POST['direccion'];
+            $cedula = $_POST['cedula_user'];
+            $objFund->registraAlbergue("albergue",$cedula,$Nombre,$direccion,1);
+            if($_SESSION['rol'] == "1"){
+                $objFund = $this->loadModel("FundacionModel");
+                $data['userfund'] = $objFund->consultaUser();
+                $this->loadView("admin/agalbergue.phtml","Agregar Albergue como Admin",$data);
+            } else {
+                $this->agregaAlberg();
+            }
         }
     }
 

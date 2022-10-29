@@ -19,6 +19,18 @@ class FundacionModel extends ConexionBD{
         }
     }
 
+    public function consultaAlberguePorID($id_albergue){
+        $resultado = $this->obtenData("SELECT id_albergue, nombre, direccion, cedula_usuario, activo
+                                      FROM albergue 
+                                      WHERE id_albergue = CASE WHEN '$id_albergue' = '' THEN id_albergue ELSE '$id_albergue' END");
+
+        if(!$resultado){
+            return false;
+        }
+
+        return $resultado;
+    }
+
     public function consultaAdopciones($fundacion){
         $resultados = $this->obtenData("SELECT a.id_adopcion, a.fecha_adopcion, b.nombre as nombreanimal, 
                                                d.nombre as nombreusuario, c.nombre as nombrealbergue,
@@ -114,6 +126,14 @@ class FundacionModel extends ConexionBD{
         $data['albergue_id'] = $albergue;
         $data['visible'] = $visible;
         return $this->grabaData($tabla, $data);
+    }
+
+    public function modificaAlbergue($id_albergue, $nombre, $usuario, $direccion, $activo){
+        $data['nombre'] = $nombre;
+        $data['direccion'] = $direccion;
+        $data['cedula_usuario'] = $usuario;
+        $data['activo'] = $activo;
+        return $this->actualizaData('albergue',$data, "id_albergue = " .$id_albergue);
     }
 }
 ?>

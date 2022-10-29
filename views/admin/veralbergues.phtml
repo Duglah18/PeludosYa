@@ -10,6 +10,7 @@ print_r($alberguesAdmin);
             <th>Direccion</th>
             <th>Fundacion</th>
             <th>Activo</th>
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
@@ -20,6 +21,13 @@ print_r($alberguesAdmin);
             <td><?= $albergues['direccion'] ?></td>
             <td><?= $albergues['nombreusuario']?></td>
             <td><?= $albergues['activo'] ?></td>
+            <td>
+                <form action="<?=BASE_URL?>admin/agregaAlbergueAdmin" method="POST">
+                    <input type="hidden" name="modificacion" value="<?=$albergues['id_albergue'] ?>">
+                    <button name="accion" value="Modificar">Modificar</button>
+                    <button name="accion" value="Borrar">Borrar</button>
+                </form>
+            </td>
         </tr>
         <?php } ?>
     </tbody>

@@ -1,39 +1,45 @@
-Vista agregar albergue del admin <br>
-Envia al mismo metodo que fundacion pq literalmente haran los mismo simplemente se recibiran valores diferentes<br>
+<?php
+$idAlbergue = isset($albergue[0]['id_albergue'])? $albergue[0]['id_albergue']:"";
+$nombre =  isset($albergue[0]['nombre'])? $albergue[0]['nombre']:"";
+$direccion = isset($albergue[0]['direccion'])? $albergue[0]['direccion']:"";
+$usuario =  isset($albergue[0]['cedula_usuario'])? $albergue[0]['cedula_usuario']:"";
+$activo =  isset($albergue[0]['activo'])? $albergue[0]['activo']:"";
 
+?>
 
 <div class="card text-center">
       <div class="card-body">
         <h4 class="card-title">Title</h4>
-        <p class="card-text">Pagina para registrar Albergues</p>
+        <p class="card-text">Pagina para registrar/Modificar Albergues</p>
         <form action="<?=BASE_URL;?>fundacion/registraFundacion" method="post">
+        <input type="hidden" name="identificador" value="<?= $idAlbergue?>">
         <label for="">Nombre Albergue</label>
-        <input type="text" name="nombre" required >
+        <input type="text" name="nombre" value="<?=$nombre?>" required >
         <label for="">Direccion</label>
-        <input type="text" name="direccion"required><br>
+        <input type="text" name="direccion" value="<?= $direccion?>"required><br>
         <label for="">Ced_usuario</label>
         <select name="cedula_user" id="">
+          <option value="0">Seleccionar</option>
           <!--=============================================
             Este es el usuario de fundacion al que se le 
             añadira el albergue nuevo
           ==============================================-->
         <?php 
           foreach ($userfund as $key) {?>
-          <option value="<?= $key['cedula']; ?>"><?= $key['nombre']; ?></option>
+          <option <?php if($usuario = $key['cedula']){ echo"selected"; } ?> value="<?= $key['cedula']; ?>"><?= $key['nombre']; ?></option>
           <?php
           }
         ?>
         </select>
         <br>
-        <button>Aceptar</button>
+        <?php
+          if(isset($_POST['accion'])=="Modificar"){?>
+            <label for="">Activo</label>
+            <input type="text" value="<?= $activo;?>" name="activo">
+            <?php
+          }
+        ?>
+        <button name="accion" value="<?php if($_POST['accion']="Modificar"){ echo "Modificar"; } else {echo"Agregar";} ?>">Aceptar</button>
         </form>
       </div>
     </div>
-
-    
-Albergue Lleva:
-id que se auto agrega <br>
-nombre <br>
-direccion<br>
-ced de usuario<br>
-si esta activo<br>

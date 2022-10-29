@@ -82,8 +82,14 @@ class AdminController extends GeneralController{
     public function agregaAlbergueAdmin(){
         //este model es para cargar el select
         $objFund = $this->loadModel("FundacionModel");
-        $data['userfund'] = $objFund->consultaUser();
-        $this->loadView("admin/agalbergue.phtml","Agregar Albergue como Admin",$data);
+        if(isset($_POST['accion']) && $_POST['accion'] == 'Modificar'){
+            $data['userfund'] = $objFund->consultaUser();
+            $data['albergue'] = $objFund->consultaAlberguePorID($_POST['modificacion']);
+            $this->loadView("admin/agalbergue.phtml","Modificar Albergue como Admin",$data);
+        } else {
+            $data['userfund'] = $objFund->consultaUser();
+            $this->loadView("admin/agalbergue.phtml","Agregar Albergue como Admin",$data);
+        }
     }
 
     public function mostrarData(){
@@ -178,7 +184,7 @@ class AdminController extends GeneralController{
 
     public function agregaAnimal(){//ahora si
         $objFund = $this->loadModel("AdminModel");
-        if (isset($_POST['accion']) && $_POST['accion'] == 'Agregars'){
+        if (isset($_POST['accion']) && $_POST['accion'] == 'Agregar'){
             die("NO ");
             $nombre = $_POST['nombre'];
             $fechanac= $_POST['fecha'];
