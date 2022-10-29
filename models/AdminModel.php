@@ -149,9 +149,10 @@ class AdminModel extends ConexionBD{
         return $this->grabaData('veterinario',$data);
     }
 
-    public function consultarVeterinarios(){
+    public function consultarVeterinarios($id_veterinario){
         $resultado = $this->obtenData("SELECT id_veterinario, nombre, tlf, direccion, img, visible, usuario_Rveterinario
-                          FROM veterinario");
+                          FROM veterinario
+                          WHERE id_veterinario = CASE WHEN '$id_veterinario' = '' THEN id_veterinario ELSE '$id_veterinario' END");
         return $resultado;
     }
     #Region de Modificar
@@ -175,6 +176,15 @@ class AdminModel extends ConexionBD{
         $data['albergue_id'] = $albergue;
         $data['visible'] = $visible;
         return $this->actualizaData($tabla, $data, "id_animal = " . $id_animal);
+    }
+
+    public function modificaVeterinario($id_veterinario, $nombre, $tlf, $direccion, $img, $visible){
+        $data['nombre'] = $nombre;
+        $data['tlf'] = $tlf;
+        $data['direccion'] = $direccion;
+        $data['img'] = $img;
+        $data['visible'] = $visible;
+        return $this->actualizaData('veterinario', $data, "id_veterinario = ".$id_veterinario);
     }
     #modificar End
     

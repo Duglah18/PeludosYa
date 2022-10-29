@@ -75,8 +75,14 @@ class AdminController extends GeneralController{
     
     public function agregaVeterinarios(){
         $objAdmin = $this->loadmodel("AdminModel");
-        $data['Veterinarios'] = $objAdmin->consultarVeterinarios();
-        $this->loadView("admin/agVeterinario.phtml", "Agrega Veterinarios como Admin",$data);
+        if (isset($_POST['accion']) && $_POST['accion'] == 'Modificar'){
+            $data['Veterinarios'] = $objAdmin->consultarVeterinarios('');
+            $data['vtrModificar'] = $objAdmin->consultarVeterinarios($_POST['modificacion']);
+            $this->loadView("admin/agVeterinario.phtml", "Agrega Veterinarios como Admin",$data);
+        } else {
+            $data['Veterinarios'] = $objAdmin->consultarVeterinarios('');
+            $this->loadView("admin/agVeterinario.phtml", "Agrega Veterinarios como Admin",$data);
+        }
     }
 
     public function agregaAlbergueAdmin(){
@@ -185,7 +191,6 @@ class AdminController extends GeneralController{
     public function agregaAnimal(){//ahora si
         $objFund = $this->loadModel("AdminModel");
         if (isset($_POST['accion']) && $_POST['accion'] == 'Agregar'){
-            die("NO ");
             $nombre = $_POST['nombre'];
             $fechanac= $_POST['fecha'];
             /*----------------------Empezamos el tratamiento de img----------------------------*/
@@ -240,29 +245,62 @@ class AdminController extends GeneralController{
         }
     }
     public function registraVeterinario(){
+        //creo que esto puede servir
         $objAdmin = $this->loadModel("AdminModel");
+        if ($nombre = $_POST['nombre'] && $telefono = $_POST['telefono'] && $direccion = $_POST['direccion']){
+            $data['error'] = "Veterinario Ya en el sistema";//solo para avisar que se agrego supongo
+             return $this->loadView("admin/agVeterinario.phtml", "Agrega Veterinarios como Admin",$data);
+        }
         $nombre = $_POST['nombre'];
         $telefono = $_POST['telefono'];
         $direccion = $_POST['direccion'];
-        if ($nombre != "" && $telefono != "" && $direccion != ""){
+        $visible = $_POST['visible'];
+        if (isset($_POST['accion']) && $_POST['accion'] == 'Modificar'){
             /*----------------------Tratamiento de Img------------------------------------------*/
+            $img_modificar = $_POST['imgmodificar'];
+
+            $id_veterinario = $_POST['vetIdentificador'];
             $fecha_paratmp = new DateTime();
             $imgtxt = (isset($_FILES['img']['name']))? $_FILES['img']['name']:"";
             $nombreArchivo =($imgtxt!="")?$fecha_paratmp->getTimestamp()."_".$_FILES['img']['name']:"imagen.jpg";
             $image = $_FILES['img']['tmp_name'];
-            if($image != ""){
-                move_uploaded_file($image,"./img/veterinarios/".$nombreArchivo);
-            }
+            move_uploaded_file($image,"./img/animales/".$nombreArchivo);
+            
+            $imagenEliminar = $objAdmin->consultarVeterinarios($id_veterinario);
+                if($imagenEliminar[0]['img'] != $objAdmin){
+                    if (isset($imagenEliminar["img"]) && ($imagenEliminar["img"]!="imagen.jpg") ) {
+                        if (file_exists("./img/veterinarios/".$imagenEliminar["img"])) {
+                            unlink("./img/veterinarios/".$imagenEliminar["img"]);
+                        }
+                    }
+                } else {
+                    $nombreArchivo = $img_modificar;
+                }
             /*-----------------------Terminando de Img------------------------------------------*/
-            $adminRegistrando = $_POST['admin'];
-            $objAdmin->registraVeterinario($nombre,$telefono,$direccion, $nombreArchivo,$adminRegistrando);
-            $data['error'] = "Veterinario Agregado satisfactoriamente";//solo para avisar que se agrego supongo
-            $this->loadView("admin/agVeterinario.phtml", "Agrega Veterinarios como Admin",$data);
-            //ps al recargar se vuelve a guardar asi q vamos a tener q enviarlo a otra pag cada que agreguemos 
-            //algo pq no encuentro otra forma de eliminar las variables luego de agregar
+            $objAdmin->modificaVeterinario($id_veterinario, $nombre, $telefono, $direccion, $nombreArchivo, $visible);
+            $_POST['accion'] = "";
+            return $this->agregaVeterinarios();
         } else {
-            $data['error'] = "Estas enviando elementos vacios";
-            $this->loadView("admin/agVeterinario.phtml", "Agrega Veterinarios como Admin",$data);
+            if ($nombre != "" && $telefono != "" && $direccion != ""){
+                /*----------------------Tratamiento de Img------------------------------------------*/
+                $fecha_paratmp = new DateTime();
+                $imgtxt = (isset($_FILES['img']['name']))? $_FILES['img']['name']:"";
+                $nombreArchivo =($imgtxt!="")?$fecha_paratmp->getTimestamp()."_".$_FILES['img']['name']:"imagen.jpg";
+                $image = $_FILES['img']['tmp_name'];
+                if($image != ""){
+                    move_uploaded_file($image,"./img/veterinarios/".$nombreArchivo);
+                }
+                /*-----------------------Terminando de Img------------------------------------------*/
+                $adminRegistrando = $_POST['admin'];
+                $objAdmin->registraVeterinario($nombre,$telefono,$direccion, $nombreArchivo,$adminRegistrando);
+                $data['error'] = "Veterinario Agregado satisfactoriamente";//solo para avisar que se agrego supongo
+                $this->loadView("admin/agVeterinario.phtml", "Agrega Veterinarios como Admin",$data);
+                //ps al recargar se vuelve a guardar asi q vamos a tener q enviarlo a otra pag cada que agreguemos 
+                //algo pq no encuentro otra forma de eliminar las variables luego de agregar
+            } else {
+                $data['error'] = "Estas enviando elementos vacios";
+                $this->loadView("admin/agVeterinario.phtml", "Agrega Veterinarios como Admin",$data);
+            }
         }
     }
 }

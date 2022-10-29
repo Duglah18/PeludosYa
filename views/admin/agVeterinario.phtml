@@ -2,24 +2,41 @@
 if (isset($error)){
     echo $error;
 }
+$identificador = isset($vtrModificar[0]['id_veterinario'])? $vtrModificar[0]['id_veterinario']: "";
+$nombre = isset($vtrModificar[0]['nombre'])? $vtrModificar[0]['nombre']: "";
+$telefono = isset($vtrModificar[0]['tlf'])? $vtrModificar[0]['tlf']: "";
+$direccion = isset($vtrModificar[0]['direccion'])? $vtrModificar[0]['direccion']: "";
+$img = isset($vtrModificar[0]['img'])? $vtrModificar[0]['img']: "";
+$visible = isset($vtrModificar[0]['visible'])? $vtrModificar[0]['visible']: "";
 ?>
 <div class="card text-center">
       <div class="card-body">
         <h4 class="card-title">Title</h4>
         <p class="card-text">
           Pagina para registrar Veterinarios Desde Admin.
-        </p>
+        </p><?php if($identificador != ""){ echo "<label for=''> Se esta modificando el veterinario: " . $identificador . "</label> <br>"; } ?>
         <form action="<?=BASE_URL;?>admin/registraVeterinario" method="post" enctype="multipart/form-data">
+        
+        <input type="hidden" name="vetIdentificador" value="<?= $identificador?>">
         <label for="">Nombre Veterinario</label>
-        <input type="text" name="nombre" value="">
+        <input type="text" name="nombre" value="<?=$nombre?>">
         <label for="">Telefono</label>
-        <input type="tel" name="telefono" value=""><br>
+        <input type="tel" name="telefono" value="<?=$telefono?>"><br>
         <label for="">Direccion</label >
-        <input type="text" name="direccion" value=""><br>
+        <input type="text" name="direccion" value="<?=$direccion?>"><br>
         <label for="">Imagen</label>
+        <?php if($img != ""){ echo "<label for=''> Se esta modificando la siguiente Imagen: " . $img . "</label> <br>"; } ?>
+        <input type="hidden" value="<?=$img?>" name="imgmodificar">
         <input type="file" name="img"><br>
         <input type="hidden" name="admin" value="<?=$id_user;?>">
-        <button>Aceptar</button>
+        <?php 
+        if ($visible != ""){ ?>
+        <label for="">Visible</label>
+        <input type="text" name="visible" value="<?=$visible?>">
+        <?php
+        }
+        ?>
+        <button name="accion" value="<?php if($_POST['accion']=="Modificar"){ echo "Modificar"; } else {echo"Agregar";} ?>">Aceptar</button>
         </form>
       </div>
     </div>
@@ -50,20 +67,29 @@ if (isset($error)){
         <?php 
         
         $tamanio = count($Veterinarios);
-        for ($i = 0; $i < $tamanio; $i++){
-            echo "<tr>" . 
-            "<td>" . $Veterinarios[$i]['id_veterinario'] . "</td>" .
-            "<td>" . $Veterinarios[$i]['nombre'] . "</td>" .
-            "<td>" . $Veterinarios[$i]['tlf'] . "</td>" .
-            "<td>" . $Veterinarios[$i]['direccion'] . "</td>" .
-            "<td>" . "<img src='".URL_BASE."img/veterinarios/".$Veterinarios[$i]['img']."' width='50' alt='Foto Veterinario'>" . "</td>" .
-            "<td>" . $Veterinarios[$i]['visible'] . "</td>" .
-            "<td>" . $Veterinarios[$i]['usuario_Rveterinario']  . "</td>" .
-            "<td>" . "BtnEliminar/BtnModificar" . "</td>" .
-            "</tr>"; 
+        for ($i = 0; $i < $tamanio; $i++){ ?>
+            <tr>
+            <td><?= $Veterinarios[$i]['id_veterinario'] ?></td>
+            <td><?= $Veterinarios[$i]['nombre'] ?></td>
+            <td><?= $Veterinarios[$i]['tlf'] ?></td>
+            <td><?= $Veterinarios[$i]['direccion'] ?></td>
+            <td> 
+                <img src='<?= URL_BASE . "img/veterinarios/".$Veterinarios[$i]['img'];?>' width='50' alt='Foto Veterinario'>
+            </td>
+            <td><?= $Veterinarios[$i]['visible'] ?> </td>
+            <td><?= $Veterinarios[$i]['usuario_Rveterinario']  ?> </td>
+            <td>
+                <form action="<?=BASE_URL?>admin/agregaVeterinarios" method="POST">
+                    <input type="hidden" name="modificacion" value="<?=$Veterinarios[$i]['id_veterinario'] ?>">
+                    <button name="accion" value="Modificar">Modificar</button>
+                    <button name="accion" value="Borrar">Borrar</button>
+                </form>
+            </td>
+            </tr>
+            <?php
+            }
             // como el parametro de si esta activo el usuario o bloqueado es un numero
             //se comprueba con codigo si es esta activo (1) o si esta bloqueado (0 o en este caso cualquier cosa)
-        }
-        ?>
+            ?>
         </tbody>
     </table>
