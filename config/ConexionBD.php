@@ -71,6 +71,9 @@ class ConexionBD {
         return false;
     }
 
+    // public function grabaBitacora(){
+
+    // }
     /* ===================
         A futuro Crear:
         -Nuevo Grabadata para aquellas tablas q tienen imagenes ya que

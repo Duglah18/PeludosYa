@@ -106,14 +106,25 @@ class AdminController extends GeneralController{
 
     public function tipoAnimal(){
         $objAdmin = $this->loadModel("AdminModel");
-        $data['dataTipos'] = $objAdmin->listaTiposAnimal();
+        if (isset($_POST['accion']) && $_POST['accion'] == 'Modificar'){
+            $data['tAnimal'] = $objAdmin->listaTiposAnimal($_POST['modificacion']);
+            $data['dataTipos'] = $objAdmin->listaTiposAnimal('');
+            return $this->loadView("admin/adTAnimal.phtml", "Modifica el Tipo de Animal", $data);
+        }
+        $data['dataTipos'] = $objAdmin->listaTiposAnimal('');
         $this->loadView("admin/adTAnimal.phtml", "Administrar Tipos de Animal", $data);
     }
 
     public function razasAnimal(){
         $objAdmin = $this->loadModel("AdminModel");
         $objFund = $this->loadModel("FundacionModel");
-        $data['dataRazas'] = $objAdmin->listaRazas();
+        if (isset($_POST['accion']) && $_POST['accion'] == 'Modificar'){
+            $data['buscarazas'] = $objAdmin->listaRazas($_POST['modificacion']);
+            $data['dataRazas'] = $objAdmin->listaRazas('');
+            $data['tiposAnimales'] = $objFund->consultaTipoAnimal();
+            return $this->loadView("admin/adRazas.phtml", "Modifica la Raza de Animal", $data);
+        }
+        $data['dataRazas'] = $objAdmin->listaRazas('');
         $data['tiposAnimales'] = $objFund->consultaTipoAnimal();
         $this->loadView("admin/adRazas.phtml", "Administrar Razas de Animal", $data);
     }
@@ -149,7 +160,7 @@ class AdminController extends GeneralController{
     //aca se registran los usuarios por el Admin
     public function registraUsuario(){//falta telefono 
         $objAdmin = $this->loadModel("AdminModel");
-        if (isset($_POST['Agregar'])){
+        if (isset($_POST['accion']) == 'Agregar'){
             $cedula = $_POST['cedula'];
             $nombre = $_POST['nombre'];
             $rol = $_POST['rol'];
@@ -160,7 +171,7 @@ class AdminController extends GeneralController{
             $objAdmin->registrarUsuario("usuarios",$cedula,$nombre,$rol,$direccion,$contrasenia, "1", $tlf);
             //mientras carga mostrarData agregar una pantalla de carga
             $this->mostrarData();
-        } elseif (isset($_POST['Modificar'])){
+        } elseif (isset($_POST['accion']) == 'Modificar'){
             $cedula = $_POST['cedula'];
             $nombre = $_POST['nombre'];
             $rol = $_POST['rol'];
@@ -174,16 +185,35 @@ class AdminController extends GeneralController{
     }
 
     public function agregaTipoanimal(){
-        $nombre = $_POST['nombreTipo'];
         $objAdmin = $this->loadModel("AdminModel");
-        $objAdmin->registraTipoAnimal('tipo_animal',$nombre);
-        $this->tipoAnimal();
+        if(isset($_POST['accion']) && $_POST['accion'] == 'Modificar'){
+            $identificador = $_POST['identificador'];
+            $nombre = $_POST['nombreTipo'];
+            $objAdmin->modificaTipoAnimal($identificador,$nombre);
+            $_POST['accion'] = "";
+            $this->tipoAnimal();
+        } else {
+            if ($nombre = $_POST['nombreTipo']){
+                return $this->tipoAnimal();
+            }
+            $nombre = $_POST['nombreTipo'];
+            $objAdmin->registraTipoAnimal('tipo_animal',$nombre);
+            $this->tipoAnimal();
+        }
     }
 
     public function agregaRazaAnimal(){
+        $objAdmin = $this->loadModel("AdminModel");
+        if(isset($_POST['accion']) && $_POST['accion'] == 'Modificar'){
+            $identificador = $_POST['identificador'];
+            $nombre = $_POST['nombreRaza'];
+            $TipoAnimal = $_POST['tipoanimal'];
+            $objAdmin->modificaRaza($identificador, $nombre, $TipoAnimal);
+            $_POST['accion'] = "";
+            return $this->razasAnimal();
+        }
         $nombre = $_POST['nombreRaza'];
         $TipoAnimal = $_POST['tipoanimal'];
-        $objAdmin = $this->loadModel("AdminModel");
         $objAdmin->registraRazaAnimal('raza', $nombre, $TipoAnimal);
         $this->razasAnimal();
     }

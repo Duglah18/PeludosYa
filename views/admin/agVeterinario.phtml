@@ -36,7 +36,7 @@ $visible = isset($vtrModificar[0]['visible'])? $vtrModificar[0]['visible']: "";
         <?php
         }
         ?>
-        <button name="accion" value="<?php if($_POST['accion']=="Modificar"){ echo "Modificar"; } else {echo"Agregar";} ?>">Aceptar</button>
+        <button name="accion" value="<?php if(isset($_POST['accion'])=="Modificar"){ echo "Modificar"; } else {echo"Agregar";} ?>">Aceptar</button>
         </form>
       </div>
     </div>

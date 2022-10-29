@@ -87,18 +87,21 @@ class AdminModel extends ConexionBD{
                                 WHERE a.id_animal = CASE WHEN '$id_animal' = '' THEN a.id_animal ELSE '$id_animal'END");
     }//Resolver el problema de si esta adoptado
 
-    public function listaTiposAnimal(){
+    public function listaTiposAnimal($id_tipo){
         return $this->obtenData("SELECT id_tipo, nombre
-                                FROM tipo_animal");
+                                FROM tipo_animal 
+                                WHERE id_tipo = CASE WHEN '$id_tipo' = '' THEN id_tipo ELSE '$id_tipo' END");
     }
 
-    public function listaRazas(){
-        return $this->obtenData("SELECT raza.id_raza, raza.nombre, tipo_animal.nombre as nombreTipo
+    public function listaRazas($id_raza){
+        return $this->obtenData("SELECT raza.id_raza, raza.nombre, tipo_animal.nombre as nombreTipo, id_tipo_animal as id_tipo_2
                                 FROM raza
-                                INNER JOIN tipo_animal ON tipo_animal.id_tipo = raza.id_tipo_animal");
+                                INNER JOIN tipo_animal ON tipo_animal.id_tipo = raza.id_tipo_animal
+                                WHERE raza.id_raza = CASE WHEN '$id_raza' = '' THEN raza.id_raza ELSE '$id_raza' END");
     }
 
-    public function consultaTipoAnimal(){
+    public function consultaTipoAnimal(){//Esto esta haciendo lo mismo que hace otra
+        //podria hacerlo pero prefiero que funcione ahora a que no funcione y me ocupe en ello
         $resultados = $this->obtenData("SELECT id_tipo, nombre FROM tipo_animal");
         if ($resultados){
             return $resultados;
@@ -186,6 +189,17 @@ class AdminModel extends ConexionBD{
         $data['visible'] = $visible;
         return $this->actualizaData('veterinario', $data, "id_veterinario = ".$id_veterinario);
     }
+
+    public function modificaTipoAnimal($id_tipo, $nombre){
+        $data['nombre'] = $nombre;
+        return $this->actualizaData('tipo_animal', $data, "id_tipo = " .$id_tipo);
+    }
+
+    public function modificaRaza($id_raza, $nombre, $tipoAnimal){
+        $data['nombre'] = $nombre;
+        $data['id_tipo_animal'] = $tipoAnimal;
+        return $this->actualizaData('raza', $data, "id_raza = " . $id_raza);
+    }
     #modificar End
     
     // public function actualizar(){
@@ -193,5 +207,4 @@ class AdminModel extends ConexionBD{
     //     return $this->actualizaData("mb_menu", $data,"idmenu=1");
     // }
 }
-
 ?>

@@ -20,7 +20,7 @@ class SessionController extends GeneralController{
     public function catalogoVeterinarios(){
         //el mismo metodo ya existe en admin asi q mejor no creo otro metodo en session y ya
         $objSess = $this->loadModel("AdminModel");
-        $data['veterinarios'] = $objSess->consultarVeterinarios();
+        $data['veterinarios'] = $objSess->consultarVeterinarios('');
         $this->loadView("veterinarios.phtml","Ver Veterinarios",$data);
     }
 

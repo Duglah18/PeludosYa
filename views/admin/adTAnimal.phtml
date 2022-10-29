@@ -1,30 +1,30 @@
-    <table class="table table-dark table-striped w-20 text-center">
-        <!--
-            print_r($dataAdmin);
-        aca se reciben los datos de la consulta de admin 
-        por la var que se creo en Admincontroller(consultaData)
-        la del array $data['dataAdmin']
-        se pasa por su nombre gracias a que al generar la vista en el metodo
-        loadview lo pasamos por alli por la variable $$key
-        esta en el general controller se puede mostrar de manera de tabla asi:
-        -->
-        <thead>
-            <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Nombre</th>
+<?php
+$identificador = isset($tAnimal[0]['id_tipo'])? $tAnimal[0]['id_tipo']: "";
+$nombre = isset($tAnimal[0]['nombre'])? $tAnimal[0]['nombre']: "";
+?>
+<table class="table table-dark table-striped w-20 text-center">
+    <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Nombre</th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php 
+    $tamanio = count($dataTipos);
+    for ($i = 0; $i < $tamanio; $i++){ ?>
+        <tr>
+            <td><?= $dataTipos[$i]['id_tipo'] ?></td>
+            <td><?=$dataTipos[$i]['nombre'] ?></td>
+            <td>
+                <form action="<?=BASE_URL?>admin/tipoAnimal" method="POST">
+                    <input type="hidden" name="modificacion" value="<?=$dataTipos[$i]['id_tipo'] ?>">
+                    <button name="accion" value="Modificar">Modificar</button>
+                    <button name="accion" value="Borrar">Borrar</button>
+                </form>
+            </td>
             </tr>
-        </thead>
-        <tbody>
-        <?php 
-        
-        $tamanio = count($dataTipos);
-        for ($i = 0; $i < $tamanio; $i++){
-            echo "<tr>" . 
-            "<td>" . $dataTipos[$i]['id_tipo'] . "</td>" .
-            "<td>" . $dataTipos[$i]['nombre'] . "</td>" .
-            "</tr>"; 
-            // como el parametro de si esta activo el usuario o bloqueado es un numero
-            //se comprueba con codigo si es esta activo (1) o si esta bloqueado (0 o en este caso cualquier cosa)
+           <?php
         }
         ?>
         </tbody>
@@ -33,11 +33,12 @@
     <form action="<?= BASE_URL?>admin/agregaTipoanimal" method="POST">
         <label for="">Este es el formulario para registrar tipos de animal</label>
         <br>
-        <label for="">ID (si se va a modificar aca se enviara el id a mod a futuro)</label>
+        <label for="">ID <?=$identificador?></label>
+        <input type="hidden" name="identificador" value="<?=$identificador?>">
         <br>
         <label for="">Nombre</label>
-        <input type="text" name="nombreTipo">
+        <input type="text" name="nombreTipo" value="<?= $nombre?>">
         <br>
-        <button>Aceptar</button>
+        <button name="accion" value="<?php if(isset($_POST['accion'])=="Modificar"){ echo "Modificar"; } else {echo"Agregar";} ?>">Aceptar</button>
     </form>
     </div>
