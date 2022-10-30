@@ -31,14 +31,15 @@ class SessionModel extends ConexionBD{
     }
 
     public function obtenAnimales(){
-        $result = $this->obtenData("SELECT a.id_animal, a.nombre, a.anio_nac, a.img, a.descripcion, a.fecha_ingreso, 
+        $result = $this->obtenData("SELECT DISTINCT a.id_animal, a.nombre, a.anio_nac, a.img, a.descripcion, a.fecha_ingreso, 
                                         b.nombre as nomRaza, c.nombre as tamanio, d.nombre as albergue
                                     FROM animal a
                                     INNER JOIN raza b ON a.raza_id = b.id_raza
                                     INNER JOIN tamanio c ON a.tamanio_id = c.id_tamanio
                                     INNER JOIN albergue d ON a.albergue_id = d.id_albergue
                                     LEFT JOIN adopcion e ON a.id_animal = e.animal_id
-                                    WHERE a.visible = 1 AND e.estado <> 3");
+                                    WHERE (a.visible = '1') OR (a.visible = '1' AND e.estado <>'3')");
+                                    //creo que ya funciona
         if($result){
             return $result;
         } else {
