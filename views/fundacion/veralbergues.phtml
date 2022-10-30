@@ -12,6 +12,7 @@ print_r($userfund);
             <th>Nombre</th>
             <th>Direccion</th>
             <th>Activo</th>
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
@@ -21,6 +22,12 @@ print_r($userfund);
             <td><?= $albergues['nombre'] ?></td>
             <td><?= $albergues['direccion'] ?></td>
             <td><?= $albergues['activo'] ?></td>
+            <td>
+                <form action="<?=BASE_URL?>fundacion/agregaAlberg" method="POST">
+                    <input type="hidden" name="modificacion" value="<?=$albergues['id_albergue'] ?>">
+                    <button name="accion" value="Modificar">Modificar</button>
+                </form>
+            </td>
         </tr>
         <?php } ?>
     </tbody>

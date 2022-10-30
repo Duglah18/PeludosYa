@@ -1,20 +1,36 @@
+<?php 
+$id_animal = (isset($animales[0]['id_animal']))? $animales[0]['id_animal'] :"";
+$tipoanimalSelecc = (isset($animales[0]['id_tipo_animal']))? $animales[0]['id_tipo_animal'] :"";
+$Nombre = (isset($animales[0]['nombre']))? $animales[0]['nombre'] :"";
+$anio_nac =(isset($animales[0]['anio_nac']))? $animales[0]['anio_nac'] :"";
+$img = (isset($animales[0]['img']))? $animales[0]['img'] :"";
+$Descripcion = (isset($animales[0]['descripcion']))? $animales[0]['descripcion'] :"";
+$Raza = (isset($animales[0]['raza_id']))? $animales[0]['raza_id'] :"";
+$tamanio_mod = (isset($animales[0]['tamanio_id']))? $animales[0]['tamanio_id'] :"";
+$Albergue = (isset($animales[0]['albergue_id']))? $animales[0]['albergue_id'] :"";
+$visible = (isset($animales[0]['visible']))? $animales[0]['visible']:"";
+print_r($animales);
+echo $tipoanimalSelecc;
+print_r($tipoanimal);
+?>
+
 <div class="card text-center">
 <label for="">Tipo animal</label>
-<form action="<?= BASE_URL?>fundacion/agregaAnimal" method="POST">
+<form action="<?= BASE_URL?>fundacion/registraAnimal" method="POST">
         <select name="tipoanimal" id="tipo_animal">
-          <option value="0">Selecciona</option>
+          <option  value="0">Selecciona</option>
           <!--=============================================
             Este es el usuario de fundacion al que se le 
             añadira el albergue nuevo
           ==============================================-->
         <?php 
           foreach ($tipoanimal as $key) {?>
-          <option value="<?= $key['id_tipo']; ?>"><?= $key['nombre']; ?></option>
+          <option <?php if($tipoanimalSelecc == $key['id_tipo']){ echo"selected"; } ?> value="<?= $key['id_tipo']; ?>"><?= $key['nombre']; ?></option>
           <?php
           }
         ?>
         </select>
-        <button>Seleccionar Animal</button>
+        <button <?php if($tipoanimalSelecc != ""){ echo "disabled";} ?>>Seleccionar Animal</button>
         </form>
         </div>
 <div class="card text-center">
@@ -22,15 +38,18 @@
         <h4 class="card-title">Title</h4>
         <p class="card-text">Pagina para registrar animales</p>
         <form action="<?=BASE_URL;?>fundacion/registraAnimal" method="post" enctype="multipart/form-data">
+        <label for="">Animal Modificando: <?=$id_animal?></label>
+        <input type="hidden" value="<?= $id_animal;?>" name="id_animal">
         <label for="">Nombre Animal</label>
-        <input type="text" name="nombre" >
+        <input type="text" name="nombre" value="<?=$Nombre?>">
         <label for="">Año de nacimiento</label>
-        <input type="text" name="fecha"><br>
+        <input type="text" name="fecha" value="<?=$anio_nac?>"><br>
+        <label for="">Imagen Original: <?=$img?></label><br>
         <label for="">Imagen</label>
+        <input type="hidden" value="<?=$img?>" name="imgmodificar">
         <input type="file" name="img"><br>
         <label for="">Descripcion</label>
-        <input type="text" name="descrip" >
-        
+        <input type="text" name="descrip" value="<?=$Descripcion?>">
         <br>
         <?php if(isset($raza)){ ?>
         <label for="">Raza</label>
@@ -43,7 +62,7 @@
           ==============================================-->
         <?php 
           foreach ($raza as $key) {?>
-          <option value="<?= $key['id_raza']; ?>"><?= $key['nombre']; ?></option>
+          <option <?php if($Raza == $key['id_raza']){ echo"selected"; } ?> value="<?= $key['id_raza']; ?>"><?= $key['nombre']; ?></option>
           <?php
           }
         ?>
@@ -64,7 +83,7 @@
           ==============================================-->
         <?php 
           foreach ($tamano as $key) {?>
-          <option value="<?= $key['id_tamanio']; ?>"><?= $key['nombre']; ?></option>
+          <option <?php if($tamanio_mod == $key['id_tamanio']){ echo"selected"; } ?> value="<?= $key['id_tamanio']; ?>"><?= $key['nombre']; ?></option>
           <?php
           }
         ?>
@@ -80,13 +99,22 @@
         <?php 
           foreach ($albergues as $key) {
            ?>
-          <option value="<?= $key['id_albergue']; ?>"><?= $key['nombre']; ?></option>
+          <option <?php if($Albergue == $key['id_albergue']){ echo"selected"; } ?> value="<?= $key['id_albergue']; ?>"><?= $key['nombre']; ?></option>
           <?php
 
           }
         ?>
         </select>
-        <button>Aceptar</button>
+
+        <br>
+        <?php
+          if(isset($_POST['accion'])=="Modificar"){?>
+          <label for="">Activo</label>
+          <input type="text" name="visible" value="<?= $visible?>">
+        <?php
+          }
+        ?>
+        <button name="accion" value="<?php if($_POST['accion']="Modificar"){ echo "Modificar"; } else {echo"Agregar";} ?>">Aceptar</button>
         </form>
       </div>
     </div>

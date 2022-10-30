@@ -29,7 +29,13 @@ print_r($useranimales);
             <td><?= $animal['nomraza'] ?></td>
             <td><?= $animal['nomtipo'] ?></td>
             <td><?= $animal['nomalbergue'] ?></td>
-            <td>Eliminar/modificar</td>
+            <td>
+                <form action="<?=BASE_URL?>fundacion/agregaAnimal" method="POST">
+                    <input type="hidden" name="modificacion" value="<?=$animal['id_animal'] ?>">
+                    <button name="accion" value="Modificar">Modificar</button>
+                    <button name="accion" value="Borrar">Borrar</button>
+                </form>
+            </td>
         </tr>
         <?php } ?>
     </tbody>

@@ -48,6 +48,31 @@ class FundacionModel extends ConexionBD{
         }
     }
 
+    public function consultaAdopcionEspecifica($identificador_adop){
+        $resultados = $this->obtenData("SELECT a.id_adopcion, a.fecha_adopcion,b.nombre as nombreAnimal, 
+                                                a.estado, c.nombre as nombreUsuario
+                                        FROM adopcion a
+                                        INNER JOIN animal b ON a.animal_id = b.id_animal
+                                        INNER JOIN usuarios c ON a.cedula_usuario = c.cedula
+                                        WHERE a.id_adopcion = '$identificador_adop'");
+
+        if(!$resultados){
+            return false;
+        }
+        return $resultados;
+    }
+
+    public function consultaEstadosAdopciones(){//Esto sera para cargar un select de cada una de las
+        //opciones que se pueden cambiar del estado de una adopcion
+        $resultados = $this->obtenData("SELECT id_tipo_estado, nombre_estado
+                                        FROM tipo_estado_adopcion");
+
+        if(!$resultados){
+            return false;
+        }
+        return $resultados;
+    }
+
     public function consultaAlbergue($cedula_user){
         $resultados = $this->obtenData("SELECT a.id_albergue, a.nombre, a.direccion, a.activo, b.nombre as nombreusuario
                                         FROM albergue a
@@ -90,7 +115,8 @@ class FundacionModel extends ConexionBD{
     }
 
     public function consultaRazaAnimal($id_tipo){
-        $resultados = $this->obtenData("SELECT id_raza, nombre FROM raza WHERE id_tipo_animal = '$id_tipo'");
+        $resultados = $this->obtenData("SELECT id_raza, nombre FROM raza 
+                                        WHERE id_tipo_animal = CASE WHEN '$id_tipo' = '' THEN id_tipo_animal ELSE '$id_tipo' END");
         if ($resultados){
             return $resultados;
         } else {
@@ -134,6 +160,11 @@ class FundacionModel extends ConexionBD{
         $data['cedula_usuario'] = $usuario;
         $data['activo'] = $activo;
         return $this->actualizaData('albergue',$data, "id_albergue = " .$id_albergue);
+    }
+
+    public function modificaAdopcion($identificador, $estadonuevo){
+        $data['estado'] = $estadonuevo;
+        return $this->actualizaData('adopcion',$data, "id_adopcion = " . $identificador);
     }
 }
 ?>

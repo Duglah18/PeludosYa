@@ -1,9 +1,11 @@
-<?php print_r($adopciones);
-?>
-
 <h2>Vista de fundacion </h2>
 <p>Ver las adopciones en los albergues que les pertenecen.</p>
+<?php if($adopciones == false) { ?>
+<!--Esto se agrego porque si no tiene adopciones el albergue ps saca error -->
 
+        <h1>Aun no tiene adopciones</h1>
+
+<?php } else { ?>
 <table>
         <thead>
                 <tr>
@@ -13,18 +15,26 @@
                     <th>Usuario</th>
                     <th>Albergue</th>
                     <th>Estado</th>
+                    <th>Acciones</th>
                 </tr>
         </thead>
        <tbody>
         <?php foreach($adopciones as $adopcion){ ?>
             <tr>
-                    <td><?= $adopcion['id_adopcion']; ?></td>
-                    <td><?= $adopcion['fecha_adopcion']; ?></td>
-                    <td><?= $adopcion['nombreanimal']; ?></td>
-                    <td><?= $adopcion['nombreusuario']; ?></td>
-                    <td><?= $adopcion['nombrealbergue']; ?></td>
-                    <td><?= $adopcion['nombre_estado']; ?></td>
+                <td><?= $adopcion['id_adopcion']; ?></td>
+                <td><?= $fecha = date("d-m-Y",strtotime($adopcion['fecha_adopcion'])); ?></td><!--ORDENA LA FECHA -->
+                <td><?= $adopcion['nombreanimal']; ?></td>
+                <td><?= $adopcion['nombreusuario']; ?></td>
+                <td><?= $adopcion['nombrealbergue']; ?></td>
+                <td><?= $adopcion['nombre_estado']; ?></td>
+                <td>
+                        <form action="<?=BASE_URL?>fundacion/modificaAdopcion" method="POST">
+                                <input type="hidden" name="modificacion" value="<?=$adopcion['id_adopcion'] ?>">
+                                <button name="accion" value="Modificar">Modificar</button>
+                        </form>
+                </td>
             </tr>
         <?php } ?>
        </tbody>
 </table>
+<?php } ?>

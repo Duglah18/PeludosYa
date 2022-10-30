@@ -1,6 +1,6 @@
 <?php
 $id_animal = (isset($animales[0]['id_animal']))? $animales[0]['id_animal'] :"";
-$tipoanimal = (isset($animales[0]['id_tipo_animal']))? $animales[0]['id_tipo_animal'] :"";
+$tipoanimalSelecc = (isset($animales[0]['id_tipo_animal']))? $animales[0]['id_tipo_animal'] :"";
 $Nombre = (isset($animales[0]['nombre']))? $animales[0]['nombre'] :"";
 $anio_nac =(isset($animales[0]['anio_nac']))? $animales[0]['anio_nac'] :"";
 $img = (isset($animales[0]['img']))? $animales[0]['img'] :"";
@@ -24,12 +24,12 @@ print_r($animales)?>
           ==============================================-->
         <?php 
           foreach ($tipoanimal as $key) {?>
-          <option <?php if($tipoanimal = $key['id_tipo']){ echo"selected"; } ?> value="<?= $key['id_tipo']; ?>"><?= $key['nombre']; ?></option>
+          <option <?php if($tipoanimalSelecc == $key['id_tipo']){ echo"selected"; } ?> value="<?= $key['id_tipo']; ?>"><?= $key['nombre']; ?></option>
           <?php
           }
         ?>
         </select>
-        <button>Seleccionar Animal</button>
+        <button <?php if($tipoanimal != ""){ echo "disabled";} ?> >Seleccionar Animal</button>
         </form>
         </div>
 <div class="card text-center">
@@ -41,10 +41,12 @@ print_r($animales)?>
         </p>
         <form action="<?=BASE_URL;?>admin/agregaAnimal" method="post" enctype="multipart/form-data">
         <input type="hidden" value="<?= $id_animal;?>" name="id_animal">
+        <?php if($id_animal != ""){ ?><label for="">Animal Modificando: <?=$id_animal?></label><?php }?>
         <label for="">Nombre Animal</label>
         <input type="text" value="<?= $Nombre;?>" name="nombre" >
         <label for="">Año de nacimiento</label>
         <input type="text" value="<?= $anio_nac?>" name="fecha"><br>
+        <label for="">Imagen Original: <?=$img?></label><br>
         <label for="">Imagen</label>
         <input type="hidden" value="<?=$img?>" name="imgmodificar">
         <input type="file" name="img"><br><!--No hay forma creo ahora mismo de poner lo q recibo de img-->
