@@ -37,7 +37,8 @@ class SessionModel extends ConexionBD{
                                     INNER JOIN raza b ON a.raza_id = b.id_raza
                                     INNER JOIN tamanio c ON a.tamanio_id = c.id_tamanio
                                     INNER JOIN albergue d ON a.albergue_id = d.id_albergue
-                                    WHERE visible = 1");
+                                    LEFT JOIN adopcion e ON a.id_animal = e.animal_id
+                                    WHERE a.visible = 1 AND e.estado <> 3");
         if($result){
             return $result;
         } else {
