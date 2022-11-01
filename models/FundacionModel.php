@@ -40,7 +40,7 @@ class FundacionModel extends ConexionBD{
                                         INNER JOIN albergue c ON b.albergue_id = c.id_albergue
                                         INNER JOIN usuarios d ON c.cedula_usuario = d.cedula
                                         INNER JOIN tipo_estado_adopcion e ON a.estado = e.id_tipo_estado
-                                        WHERE d.cedula = '$fundacion'");
+                                        WHERE d.cedula = '$fundacion' AND a.estado = '1'");
         if($resultados){
             return $resultados;
         } else {

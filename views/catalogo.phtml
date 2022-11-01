@@ -30,7 +30,7 @@ Aqui iran las categorias
                 <li style="display: flex; align-items: center;"> <i class="material-icons">pets</i> Raza: <?= $animal['nomRaza']; ?></li>
                 <li style="display: flex; align-items: center;"> <i class="material-icons">title</i> Tamaño: <?= $animal['tamanio']; ?></li>
                 <li style="display: flex; align-items: center;"> <i class="material-icons">home</i> Alojado: <?= $animal['albergue']; ?></li>
-                <li style="display: flex; align-items: center;"> <i class="material-icons">date_range</i> Ingreso: <?= $animal['fecha_ingreso']; ?></li>
+                <li style="display: flex; align-items: center;"> <i class="material-icons">date_range</i> Ingreso: <?= $animal['fecha_ingreso'] = date("d-m-Y", strtotime($animal['fecha_ingreso'])); ?></li>
                 </ul>
                 <br>
                 <div class="card-action white-text center-align">

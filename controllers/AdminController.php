@@ -33,6 +33,21 @@ class AdminController extends GeneralController{
         $this->loadView("admin/veralbergues.phtml","Ver Albergues",$data);
     }
 
+    public function adopciones(){
+        $objAdmin = $this->loadmodel("AdminModel");
+        if (!isset($_POST['AlbergueEsp'])){
+            $data['adopciones'] = $objAdmin->consultaAdopciones('');
+            $data['albergues'] = $objAdmin->consultaAlbergues();
+            $this->loadView("admin/verAdopciones.phtml","Ver adopciones",$data);
+        } elseif(isset($_POST['AlbergueEsp']) && $_POST['AlbergueEsp'] != "0") {
+            $data['Busqueda'] = $_POST['AlbergueEsp'];
+            $data['adopciones'] = $objAdmin->consultaAdopciones($_POST['AlbergueEsp']);
+            $data['albergues'] = $objAdmin->consultaAlbergues();
+            $this->loadView("admin/verAdopciones.phtml","Ver adopciones",$data);
+        }
+        
+    }
+
     //Vista Agregar animales Admin
     public function agregaAnimales(){
         $objAdmin = $this->loadModel("AdminModel");

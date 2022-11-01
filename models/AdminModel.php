@@ -29,6 +29,22 @@ class AdminModel extends ConexionBD{
         }
     }
 
+    public function consultaAdopciones($albergueEsp){
+        $resultados = $this->obtenData("SELECT a.id_adopcion, a.fecha_adopcion, b.nombre as nombreanimal, 
+                                        d.nombre as nombreusuario, c.nombre as nombrealbergue,
+                                        e.nombre_estado
+                                        FROM adopcion a
+                                        INNER JOIN animal b ON a.animal_id = b.id_animal
+                                        INNER JOIN albergue c ON b.albergue_id = c.id_albergue
+                                        INNER JOIN usuarios d ON c.cedula_usuario = d.cedula
+                                        INNER JOIN tipo_estado_adopcion e ON a.estado = e.id_tipo_estado
+                                        WHERE c.id_albergue = CASE WHEN '$albergueEsp' = '' THEN c.id_albergue ELSE '$albergueEsp' END");
+        if (!$resultados){
+            return false;
+        } 
+        return $resultados;
+    }
+
     public function ConsultaRoles(){
         $resultado = $this->obtenData("SELECT id_rol, nombre FROM rol");
         if ($resultado) {
@@ -37,6 +53,7 @@ class AdminModel extends ConexionBD{
             return false;
         }
     }
+
 //falta telefono usuario
     public function registrarUsuario($tabla, $rif, $nombre, $rol, $direccion, $contrasenia, $estado, $tlf){
         //$tabla donde se ingresara 

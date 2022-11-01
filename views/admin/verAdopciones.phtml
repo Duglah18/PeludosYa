@@ -1,0 +1,41 @@
+<form action="<?=BASE_URL?>admin/adopciones" method="POST">
+    <label for="">Filtra por albergue especifico</label>
+    <select name="AlbergueEsp" id="">
+        <option value="0">Seleccionar</option>
+        <?php foreach ($albergues as $key){ ?>
+        <option <?php if(isset($Busqueda) == $key['id_albergue']){echo "selected";} ?> value="<?=$key['id_albergue'];?>"><?=$key['nombre']?></option>
+        <?php }?>
+    </select>
+    <button>Buscar</button>
+</form>
+<?php if($adopciones != false){ ?>
+<table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Fecha de Peticion</th>
+        <th>Animal</th>
+        <th>Usuario</th>
+        <th>Albergue</th>
+        <th>Estado</th>
+      </tr>  
+    </thead>
+    <tbody>
+    <?php foreach($adopciones as $adopcion){ ?>
+            <tr>
+                <td><?= $adopcion['id_adopcion']; ?></td>
+                <td><?= $fecha = date("d-m-Y",strtotime($adopcion['fecha_adopcion'])); ?></td><!--ORDENA LA FECHA -->
+                <td><?= $adopcion['nombreanimal']; ?></td>
+                <td><?= $adopcion['nombreusuario']; ?></td>
+                <td><?= $adopcion['nombrealbergue']; ?></td>
+                <td><?= $adopcion['nombre_estado']; ?></td>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>
+
+<?php } else { ?>
+
+    <h1>Aun no Existen adopciones</h1>
+
+<?php } ?>
