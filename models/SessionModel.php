@@ -38,7 +38,7 @@ class SessionModel extends ConexionBD{
                                     INNER JOIN tamanio c ON a.tamanio_id = c.id_tamanio
                                     INNER JOIN albergue d ON a.albergue_id = d.id_albergue
                                     LEFT JOIN adopcion e ON a.id_animal = e.animal_id
-                                    WHERE (a.visible = '1') AND (e.estado IN ('1','2') OR e.estado IS NULL)");
+                                    WHERE (a.visible = '1') AND (e.estado IN ('1','2') OR e.estado IS NULL) AND (d.activo = '1')");
                                     //creo que ya funciona
         if($result){
             return $result;

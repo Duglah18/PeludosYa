@@ -3,7 +3,6 @@
 class AdminController extends GeneralController{
     #Region Views
     public function index(){
-        echo "estoy en Admin controller en el metodo index()<br>";
         //esta logica se puede usar en el buscar
         //q te mande a la misma pag pero q si recibe un parametro x q te haga algo diferente
         if (isset($_SESSION['usuario'])){
@@ -65,7 +64,6 @@ class AdminController extends GeneralController{
             $data['dataRoles'] = $objAdmin->ConsultaRoles();
             $this->loadView("admin/agusaurios.phtml","Modifica el usuario", $data);
         } else {
-        echo "estoy en Admin Controller en el metodo agregaUsuarios()<br>";
         $data['dataRoles'] = $objAdmin->ConsultaRoles();
         $this->loadView("admin/agusaurios.phtml","Agrega usuarios como Admin", $data);
         }
@@ -158,7 +156,7 @@ class AdminController extends GeneralController{
     //aca se registran los usuarios por el Admin
     public function registraUsuario(){//falta telefono 
         $objAdmin = $this->loadModel("AdminModel");
-        if (isset($_POST['accion']) == 'Agregar'){
+        if (isset($_POST['Agregar'])){
             $cedula = $_POST['cedula'];
             $nombre = $_POST['nombre'];
             $rol = $_POST['rol'];
@@ -169,7 +167,7 @@ class AdminController extends GeneralController{
             $objAdmin->registrarUsuario("usuarios",$cedula,$nombre,$rol,$direccion,$contrasenia, "1", $tlf);
             //mientras carga mostrarData agregar una pantalla de carga
             $this->mostrarData();
-        } elseif (isset($_POST['accion']) == 'Modificar'){
+        } elseif (isset($_POST['Modificar'])){
             $cedula = $_POST['cedula'];
             $nombre = $_POST['nombre'];
             $rol = $_POST['rol'];

@@ -14,7 +14,7 @@ class SessionController extends GeneralController{
     public function catalogoAnimales(){
         $objSess = $this->loadModel("SessionModel");
         $data['animales'] =$objSess->obtenAnimales();
-        $this->loadView("catalogo.phtml", "Ver Animales",$data);
+        $this->loadView("catalogo.phtml", "Ver Peluditos",$data);
     }
 
     public function catalogoVeterinarios(){
@@ -99,39 +99,6 @@ class SessionController extends GeneralController{
                 
                 break;
         }
-       
-
-        // switch ($validar[0]['rol_id']){//se verifica el tipo de usuario que es
-        //     //si eres vendedor a un lugar si usuario a otro y asi,
-        //     //exceptuando que si eres admin supongo que no servira
-        //     //se puede acortar mandando directamente en un case el 
-        //     //id del rol
-        //     case 1:
-        //         echo "USTED ES ADMIN ESTE NO ES SU LUGAR";
-        //         $this->redirectLogin(1);
-        //         break;
-        //     case 2:
-        //         echo "USTED ES USUARIO";
-        //         $this->redirectLogin(2);
-        //         break;
-        //     case 3:
-        //         echo "USTED ES FUNDACION";
-        //         $this->redirectLogin(3,$data);
-        //         break;
-        //     case 4:
-        //         echo "USTED ES VENDEDOR";
-        //         $this->redirectLogin(4);
-        //         break;
-        //     default:
-        //         echo "Este Rol No existe";
-        //         $this->redirectLogin(5);
-        //         break;
-        // }
-        // //print_r($validar);//queria ver el array
-        // //se muestra si no esta baneado el usuario y si existe
-        // //aca se deberia ir a la pagina ya logueado
-        echo "<br>" . "Esta logueado y no esta bloqueado";
-        
     }
 
     public function register_user(){//funcion para registrarse como usuario

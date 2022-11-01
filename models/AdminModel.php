@@ -72,8 +72,10 @@ class AdminModel extends ConexionBD{
     }
 
     public function listar(){
-        return $this->obtenData("SELECT usuarios.cedula, usuarios.nombre, usuarios.direccion, usuarios.contrasenia, usuarios.activo, rol.nombre as nombrerol, usuarios.telefono
-                                FROM usuarios INNER JOIN rol ON usuarios.rol_id = rol.id_rol");
+        return $this->obtenData("SELECT usuarios.cedula, usuarios.nombre, usuarios.direccion, usuarios.activo, rol.nombre as nombrerol, usuarios.telefono
+                                FROM usuarios 
+                                INNER JOIN rol ON usuarios.rol_id = rol.id_rol
+                                ORDER BY usuarios.activo DESC, usuarios.rol_id ASC");
                                 //tristemente el array no capta algo tipo usuarios a = a.nombre asi que
                                 //como el nombre del rol y el nombre del usuario tienen el mismo campo con mismo nombre entonces
                                 //simplemente hice que el nombre de rol se reconociera como as 
