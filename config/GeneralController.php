@@ -19,6 +19,10 @@ class GeneralController {
     public function Bitacoras(){
         
     }
+
+    function alert_msg($msg){
+        echo "<script type='text/javascript'>alert('$msg')</script>";
+    }
     /*Podrias crear un controlador aca que aga el agregar a la BD a bitacora recibiendo lo q ingresas y ya */
 
     // public function imgs($procedimiento, $img = SQLT_BLOB, $imgname, $direcc){//total no se pudo

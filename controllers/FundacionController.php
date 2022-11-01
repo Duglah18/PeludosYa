@@ -31,7 +31,7 @@ class FundacionController extends GeneralController{
     public function agregaAnimal(){
         $objFund = $this->loadModel("FundacionModel");
         $objAdmin = $this->loadModel("AdminModel");
-        if (isset($_POST['accion'])){
+        if (isset($_POST['accion']) && $_POST['accion'] == 'Modificar'){
             $data['tipoanimal'] = $objFund->consultaTipoAnimal();
             $data['raza'] = $objFund->consultaRazaAnimal('');
             $data['tamano'] = $objFund->consultaTamanoAnimal();

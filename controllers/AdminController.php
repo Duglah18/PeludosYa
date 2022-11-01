@@ -35,8 +35,6 @@ class AdminController extends GeneralController{
     }
 
     //Vista Agregar animales Admin
-    //aun sin acabar por favor cambialo asi que cammbialo
-    //agarra y copia el modelo y demas
     public function agregaAnimales(){
         $objAdmin = $this->loadModel("AdminModel");
         if (isset($_POST['accion']) && $_POST['accion'] == 'Modificar'){

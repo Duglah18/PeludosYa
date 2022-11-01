@@ -29,9 +29,17 @@ if($animal[0]['visible'] = "0"){
     Tamaño: <?= $animal[0]['tamanio'];?> <br>
     Albergue donde se ubica(tambien tendriamos q consultar su direccion): <?= $animal[0]['albergue']?>
 </p>
-<form method="POST" action="<?=BASE_URL?>session/adopcion_peticion">
+<form method="POST" <?php if($id_user != ""){ echo "action='". BASE_URL ."session/adopcion_peticion'"; }?> >
     <input type="hidden" value="<?= $animal[0]['id_animal'];?>" name="idanimal">
     <input type="hidden" value="<?= $id_user; ?>" name="usuario">
-    <button>Iniciar Adopcion</button>
+    <button <?php if($id_user == ""){ echo"href='#idmodal' class='btn modal-trigger' "; } ?> >Iniciar Adopcion</button>
 </form>
-<!--increible tardar mas de 20min pq el post no estaba en method sino q en otro action :V-->
+
+<div id="idmodal" class="modal">
+    <div class="modal-content">
+        <p class="black-text">Usted no esta logueado asi que no puede adoptar ningún animal</p>
+        <div class="modal-footer">
+            <a href="#" class="btn modal-close">Cerrar</a>
+        </div>
+    </div>
+</div>

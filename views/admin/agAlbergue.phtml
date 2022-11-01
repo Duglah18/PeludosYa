@@ -26,7 +26,7 @@ $activo =  isset($albergue[0]['activo'])? $albergue[0]['activo']:"";
           ==============================================-->
         <?php 
           foreach ($userfund as $key) {?>
-          <option <?php if($usuario = $key['cedula']){ echo"selected"; } ?> value="<?= $key['cedula']; ?>"><?= $key['nombre']; ?></option>
+          <option <?php if($usuario == $key['cedula']){ echo"selected"; } ?> value="<?= $key['cedula']; ?>"><?= $key['nombre']; ?></option>
           <?php
           }
         ?>
@@ -39,7 +39,7 @@ $activo =  isset($albergue[0]['activo'])? $albergue[0]['activo']:"";
             <?php
           }
         ?>
-        <button name="accion" value="<?php if($_POST['accion']="Modificar"){ echo "Modificar"; } else {echo"Agregar";} ?>">Aceptar</button>
+        <button name="accion" value="<?php if(isset($_POST['accion'])=="Modificar"){ echo "Modificar"; } else {echo"Agregar";} ?>">Aceptar</button>
         </form>
       </div>
     </div>

@@ -18,6 +18,7 @@ $activo = isset($usuario[0]['activo'])? $usuario[0]['activo']:"";
         <input type="text" name="nombre" value="<?=$Nombre?>"required><br>
         <label for="">Rol</label>
         <select name="rol" id="">
+          <option name="0" id="">Seleccionar</option>
           <!--=============================================
             Este es el rol a asignar al nuevo usuario
             los valores se sacan de la BD gracias al metodo
@@ -28,7 +29,7 @@ $activo = isset($usuario[0]['activo'])? $usuario[0]['activo']:"";
         <?php 
         echo "<h1>". $Rol . "</h1>";
           foreach ($dataRoles as $key) {?>
-          <option <?php if($Rol = $key['id_rol']){ echo"selected"; } ?> value="<?= $key['id_rol']; ?>"><?= $key['nombre']; ?></option>
+          <option <?php if($Rol == $key['id_rol']){ echo"selected"; } ?> value="<?= $key['id_rol']; ?>"><?= $key['nombre']; ?></option>
           <?php
           }
         ?>
@@ -48,7 +49,7 @@ $activo = isset($usuario[0]['activo'])? $usuario[0]['activo']:"";
         <?php
         }
         ?>
-        <button name="<?php if($_POST['accion']="Modificar"){ echo "Modificar"; } else {echo"Agregar";} ?>">Aceptar</button>
+        <button name="<?php if(isset($_POST['accion'])=="Modificar"){ echo "Modificar"; } else {echo"Agregar";} ?>">Aceptar</button>
         </form>
       </div>
     </div>

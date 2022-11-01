@@ -1,7 +1,7 @@
 <?php 
 
 class AdminModel extends ConexionBD{
-    #consultas Region
+    // #consultas Region
     public function consultarAdmin($user, $contrasenia){
         $resultado = $this->obtenData("SELECT cedula, nombre, contrasenia, rol_id FROM usuarios WHERE nombre = '$user' AND contrasenia = '$contrasenia' AND rol_id = 1");
         //sin el and del rol se podria loguear un usuario normal como admin :v

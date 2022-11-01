@@ -9,7 +9,6 @@ $Raza = (isset($animales[0]['raza_id']))? $animales[0]['raza_id'] :"";
 $tamanio_mod = (isset($animales[0]['tamanio_id']))? $animales[0]['tamanio_id'] :"";
 $Albergue = (isset($animales[0]['albergue_id']))? $animales[0]['albergue_id'] :"";
 $visible = (isset($animales[0]['visible']))? $animales[0]['visible']:"";
-print_r($animales);
 echo $tipoanimalSelecc;
 print_r($tipoanimal);
 ?>
@@ -114,7 +113,7 @@ print_r($tipoanimal);
         <?php
           }
         ?>
-        <button name="accion" value="<?php if($_POST['accion']="Modificar"){ echo "Modificar"; } else {echo"Agregar";} ?>">Aceptar</button>
+        <button name="accion" value="<?php if(isset($_POST['accion'])=="Modificar"){ echo "Modificar"; } else {echo"Agregar";} ?>">Aceptar</button>
         </form>
       </div>
     </div>
