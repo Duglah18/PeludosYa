@@ -10,6 +10,24 @@ class SessionModel extends ConexionBD{
             return false;
         }
     }
+
+    public function consultarVeterinarios($id_veterinario, $pagina, $qty){
+        if($pagina <= 0){ $pagina = 1; }
+        $desde = ($pagina - 1) * $qty;
+        $resultado = $this->obtenData("SELECT id_veterinario, nombre, tlf, direccion, img, visible, usuario_Rveterinario
+                          FROM veterinario
+                          WHERE id_veterinario = CASE WHEN '$id_veterinario' = '' THEN id_veterinario ELSE '$id_veterinario' END
+                          AND visible = 1
+                          LIMIT $desde, $qty");
+        return $resultado;
+    }
+
+    public function TotalVeterinarios(){
+        $numTotal = $this->obtenData("SELECT COUNT(*) AS TotalVeter
+                                        FROM veterinario
+                                        WHERE visible = 1");
+        return $numTotal[0]['TotalVeter'];
+    }
 //falta telefono usuario
     public function registerUser($ced,$nombre,$direcc,$contra,$telefono){
         $data['cedula'] = $ced; //rif del usuario 

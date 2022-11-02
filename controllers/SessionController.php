@@ -19,8 +19,14 @@ class SessionController extends GeneralController{
 
     public function catalogoVeterinarios(){
         //el mismo metodo ya existe en admin asi q mejor no creo otro metodo en session y ya
-        $objSess = $this->loadModel("AdminModel");
-        $data['veterinarios'] = $objSess->consultarVeterinarios('');
+        $objSess = $this->loadModel("SessionModel");
+        $pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
+        $pagina = $pagina < 0? 1 : $pagina;
+        $qty = 5;
+        $data['pagina'] = $pagina;
+        $data['por_pagina'] = $qty;
+        $data['totalregistro'] = $objSess->TotalVeterinarios();
+        $data['veterinarios'] = $objSess->consultarVeterinarios('',$pagina,$qty);
         $this->loadView("veterinarios.phtml","Ver Veterinarios",$data);
     }
 

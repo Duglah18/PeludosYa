@@ -1,7 +1,10 @@
 <h1>Vista de los veterinarios que se recomiendan por Polipropeludos</h1>
 
-<?=print_r($veterinarios); ?>
-
+<?php
+    //paginador
+    //Total Registro y por_pagina llegan por el controlador
+    $total_paginas = ceil($totalregistro / $por_pagina);
+?>  
 <table>
         <thead>
                 <tr>
@@ -37,3 +40,37 @@
         <?php } ?>
        </tbody>
 </table>
+<div class="col-md-12 center text-center cyan lighten-2"><!--Paginador-->
+    <ul class="pagination">
+        <?php if($pagina != 1){ ?>
+            <li class="waves-effect blue-text"><a href="<?=BASE_URL?>session/catalogoVeterinarios?pagina=1"><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
+            <li class="waves-effect"><a href="<?=BASE_URL?>session/catalogoVeterinarios?pagina=<?=$pagina - 1?>"><i class="material-icons">chevron_left</i></a></li>
+        <?php
+        }else{ ?>
+            <li class="disabled"><a href=""><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
+            <li class="disabled"><a href=""><i class="material-icons">chevron_left</i></a></li>
+    <?php
+        } ?>
+        
+        
+        <?php for($i = 1; $i <= $total_paginas; $i++){ 
+            if ($i == $pagina){ ?>
+                <li class="active"><a href="<?=BASE_URL?>session/catalogoVeterinarios?pagina=<?=$i?>"><?=$i?></a></li>
+           <?php } else{
+            ?>
+            <li class="waves-effect"><a href="<?=BASE_URL?>session/catalogoVeterinarios?pagina=<?=$i?>"><?=$i?></a></li>
+        <?php 
+            }
+        } ?>
+
+        <?php if($pagina != $total_paginas){ ?>
+        <li class="waves-effect"><a href="<?=BASE_URL?>session/catalogoVeterinarios?pagina=<?=$pagina + 1?>"><i class="material-icons">chevron_right</i></a></li>
+        <li class="waves-effect"><a href="<?=BASE_URL?>session/catalogoVeterinarios?pagina=<?=$total_paginas?>"><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
+        <?php
+        }else{ ?>
+            <li class="disabled"><a href=""><i class="material-icons">chevron_right</i></a></li>
+            <li class="disabled"><a href=""><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
+    <?php
+        } ?>
+    </ul>
+</div>

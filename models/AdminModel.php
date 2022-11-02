@@ -1,7 +1,15 @@
 <?php 
 
 class AdminModel extends ConexionBD{
+
     // #consultas Region
+    public function consultarVeterinarios($id_veterinario){
+        $resultado = $this->obtenData("SELECT id_veterinario, nombre, tlf, direccion, img, visible, usuario_Rveterinario
+                          FROM veterinario
+                          WHERE id_veterinario = CASE WHEN '$id_veterinario' = '' THEN id_veterinario ELSE '$id_veterinario' END");
+        return $resultado;
+    }
+
     public function consultarAdmin($user, $contrasenia){
         $resultado = $this->obtenData("SELECT cedula, nombre, contrasenia, rol_id FROM usuarios WHERE nombre = '$user' AND contrasenia = '$contrasenia' AND rol_id = 1");
         //sin el and del rol se podria loguear un usuario normal como admin :v
@@ -170,13 +178,6 @@ class AdminModel extends ConexionBD{
         $data['usuario_Rveterinario'] = $adminregistra;
         return $this->grabaData('veterinario',$data);
     }
-
-    public function consultarVeterinarios($id_veterinario){
-        $resultado = $this->obtenData("SELECT id_veterinario, nombre, tlf, direccion, img, visible, usuario_Rveterinario
-                          FROM veterinario
-                          WHERE id_veterinario = CASE WHEN '$id_veterinario' = '' THEN id_veterinario ELSE '$id_veterinario' END");
-        return $resultado;
-    }
     #Region de Modificar
     public function modificaUsuario($idusuario,$nombre,$rol,$direccion,$contrasena,$activo,$telefono){
         $data['cedula'] = $idusuario;
@@ -220,7 +221,6 @@ class AdminModel extends ConexionBD{
         return $this->actualizaData('raza', $data, "id_raza = " . $id_raza);
     }
     #modificar End
-    
     // public function actualizar(){
     //     $data['nombre'] = "actualizado";
     //     return $this->actualizaData("mb_menu", $data,"idmenu=1");
