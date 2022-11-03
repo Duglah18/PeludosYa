@@ -15,7 +15,7 @@
                     <th>Usuario</th>
                     <th>Albergue</th>
                     <th>Estado</th>
-                    <th>Acciones</th>
+                    <th>Acciones</th><!--Quitar y colocar botones-->
                 </tr>
         </thead>
        <tbody>
@@ -28,9 +28,10 @@
                 <td><?= $adopcion['nombrealbergue']; ?></td>
                 <td><?= $adopcion['nombre_estado']; ?></td>
                 <td>
-                        <form action="<?=BASE_URL?>fundacion/modificaAdopcion" method="POST">
+                        <form action="<?=BASE_URL?>fundacion/destinoAdopcion" method="POST">
                                 <input type="hidden" name="modificacion" value="<?=$adopcion['id_adopcion'] ?>">
-                                <button name="accion" value="Modificar">Modificar</button>
+                                <button name="accion" value="Completada">Completada</button>
+                                <button name="accion" value="Cancelada">Cancelada</button>
                         </form>
                 </td>
             </tr>

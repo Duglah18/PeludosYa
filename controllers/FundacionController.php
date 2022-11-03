@@ -160,18 +160,21 @@ class FundacionController extends GeneralController{
             $this->animales();
         }
     }
-
-    public function modificacionAdopcion(){
+    public function destinoAdopcion(){
         $objFund = $this->loadModel("FundacionModel");
-        if(!isset($_POST['Identificador_adop']) || !isset($_POST['Estado_adopcion'])){
-            return $this->modificaAdopcion();
-        }
-        if(isset($_POST['accion']) && $_POST['accion'] == 'Modificar'){
-            $identificador = $_POST['Identificador_adop'];
-            $estadonuevo = $_POST['Estado_adopcion'];
-            $objFund->modificaAdopcion($identificador, $estadonuevo);
+        if(!isset($_POST['accion']) || !isset($_POST['modificacion'])){
             return $this->verAdopciones();
         }
+        $eleccion = $_POST['modificacion'];
+        if($_POST['accion'] == 'Completada'){
+            $accion = 3;
+        }
+        elseif($_POST['accion'] == 'Cancelada'){
+            $accion = 2;
+        }
+        $objFund->decisionAdopcion($eleccion, $accion);
+        $_POST['accion'] = "";
+        return $this->verAdopciones();
     }
     #endregion
 }

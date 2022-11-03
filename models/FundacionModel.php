@@ -162,7 +162,7 @@ class FundacionModel extends ConexionBD{
         return $this->actualizaData('albergue',$data, "id_albergue = " .$id_albergue);
     }
 
-    public function modificaAdopcion($identificador, $estadonuevo){
+    public function decisionAdopcion($identificador, $estadonuevo){
         $data['estado'] = $estadonuevo;
         return $this->actualizaData('adopcion',$data, "id_adopcion = " . $identificador);
     }
