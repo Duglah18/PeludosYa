@@ -15,29 +15,42 @@ class GeneralController {
         }
         require_once 'views/EstandarView.phtml';
     }
+    //funcion que regresa la consulta insert?
+    //esto ya no es necesario aqui es necesario es en conexion
+    public function creaCadenaInsert($data, $tabla){
+        $columnas = array_keys($data);
+        $sql = "INSERT INTO " . $tabla . "(";
+        $contadorColumnas = count($columnas) - 1;
+        for ($i=0; $i < count($columnas) ; $i++) { 
 
-    public function Bitacoras(){
-        
+            $sql .=  $columnas[$i] . (($i != $contadorColumnas)?", ": ") VALUES ( ");
+        }
+        $contadorData = count($data) - 1;
+        for ($i=0; $i < count($data); $i++) { 
+            if($data[$columnas[$i]] != "Now()"){
+                $sql .= "'" . str_replace("'","&#39;", $data[$columnas[$i]]) . (($i != $contadorData)? "', ": "')");
+            /*si quieres que seann en mayusculas rodea $data[$columnas[$i]] 
+            con strtoupper($data[Scolumnas[$i))]*/
+            } else {
+                $sql .= " " . str_replace("","&#39;", $data[$columnas[$i]]) . (($i != $contadorData)? ", ": ")");
+            }
+            //Se agrego este if si estas escribiendo Now() para registrar la fecha en la q ingresas esto
+            //si es now no se pondra entre comillas pq es un comando para agarrar la fecha
+        }
+        return $sql;
+    }
+
+    public function creaCadenaUpdate($tabla, $data, $filtro){
+        $columnas = array_keys($data);
+        $sql = "UPDATE ". $tabla . " SET ";
+        $contadorColumnas = count($columnas) - 1;
+        for ($i=0; $i < count($columnas); $i++) { 
+            $sql .= $columnas[$i] . "='" . htmlentities($data[$columnas[$i]], ENT_QUOTES, 'UTF-8') . (($i != $contadorColumnas)? "',": "'");
+        }
+        $sql .= " WHERE " . $filtro;
+        return $sql;
     }
     /*Podrias crear un controlador aca que aga el agregar a la BD a bitacora recibiendo lo q ingresas y ya */
-
-    // public function imgs($procedimiento, $img = SQLT_BLOB, $imgname, $direcc){//total no se pudo
-    //     $nomimgs = (isset($imgname))? $imgname:"";
-    //     $tmpimg = $img['tmp_name'];
-    //     $fecha = new datetime();
-    //     $nombreArchivo=($nomimgs!="")?$fecha->getTimestamp()."_".$img['name']:"imagen.jpg";
-    //     if ($tmpimg!=""){
-    //         move_uploaded_file($tmpimg, "../img/" . $direcc . $nombreArchivo);
-    //     }
-    //     // switch ($procedimiento){
-    //     //     case "insertar":
-    //     //         break;
-    //     //     case "actualizar":
-    //     //         break;
-    //     // }
-    //     echo $nombreArchivo;
-    //     return $nomimgs;
-    // }
 }
 /*
             $sentenciaSQL = $conexion->prepare("INSERT INTO libros (nombre,imagen,descripcion,precio) VALUES (:nombre,:imagen,:descrip,:precio)");

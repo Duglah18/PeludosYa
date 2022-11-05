@@ -28,8 +28,9 @@
                 <td><?= $adopcion['nombrealbergue']; ?></td>
                 <td><?= $adopcion['nombre_estado']; ?></td>
                 <td>
-                        <form action="<?=BASE_URL?>fundacion/destinoAdopcion" method="POST">
+                        <form action="<?=BASE_URL?>fundacion/destinoAdopcion" method="GET">
                                 <input type="hidden" name="modificacion" value="<?=$adopcion['id_adopcion'] ?>">
+                                <input type="hidden" name="usuario" value="<?=$_SESSION['iduser'];?>">
                                 <button name="accion" value="Completada">Completada</button>
                                 <button name="accion" value="Cancelada">Cancelada</button>
                         </form>

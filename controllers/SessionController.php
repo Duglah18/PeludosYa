@@ -3,6 +3,14 @@
 //pedir sus funciones
 class SessionController extends GeneralController{
     #Region Load views
+    //prueba de la creacion de cadenas funciona :D
+    // public function prueba(){
+    //     $data['hola'] = "amigo";
+    //     $data['columna2'] = "columna2prueba";
+    //     echo $this->creaCadenaInsert($data,"bitacora");
+    //     echo $this->creaCadenaUpdate("ajasi", $data, "igual = igual");
+    // }
+
     public function login(){
         $this->loadView("session/login.phtml","Login");
     }

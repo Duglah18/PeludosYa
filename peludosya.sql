@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 23-10-2022 a las 19:19:03
+-- Tiempo de generación: 05-11-2022 a las 01:53:45
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 8.1.6
 
@@ -40,8 +40,8 @@ CREATE TABLE `adopcion` (
 --
 
 INSERT INTO `adopcion` (`id_adopcion`, `fecha_adopcion`, `animal_id`, `cedula_usuario`, `estado`) VALUES
-(3, '2022-10-22', 3, '29517402', 1),
-(4, '2022-10-22', 3, '29517402', 1);
+(3, '2022-10-22', 3, '29517402', 3),
+(5, '2022-11-03', 4, '15597525', 3);
 
 -- --------------------------------------------------------
 
@@ -62,7 +62,8 @@ CREATE TABLE `albergue` (
 --
 
 INSERT INTO `albergue` (`id_albergue`, `nombre`, `direccion`, `cedula_usuario`, `activo`) VALUES
-(1, 'albergue1', 'Carrera 18 calle 55', '222222', 1);
+(1, 'albergue1115151qweq', 'Carrera 18 calle 55', '26976183', 1),
+(2, 'albergue1232', 'Carrera 18 calle 55', '26976183', 1);
 
 -- --------------------------------------------------------
 
@@ -88,10 +89,14 @@ CREATE TABLE `animal` (
 --
 
 INSERT INTO `animal` (`id_animal`, `nombre`, `anio_nac`, `img`, `descripcion`, `fecha_ingreso`, `raza_id`, `tamanio_id`, `albergue_id`, `visible`) VALUES
-(1, 'Pinpon', '2019', '1665946249_4f83f853.jpg', 'pinpon es un muñeco', '0000-00-00', 2, 1, 1, 1),
+(1, 'PRUEBA 501', '2019', 'imagen.jpg', 'pinpon es un mu&ntilde;eco', '0000-00-00', 5, 3, 1, 0),
 (2, 'Pinpon', '2019', '1665946339_4f83f853.jpg', 'pinpon es un muñeco', '0000-00-00', 2, 1, 1, 1),
 (3, 'Pinpon', '2019', '1665946459_4f83f853.jpg', 'pinpon es un muñeco', '0000-00-00', 2, 1, 1, 1),
-(4, 'Merry', '2019', '1665947240_0f10aa96.jpg', 'pinpon es un muñeco', '2022-10-16', 2, 2, 1, 1);
+(4, 'Merry', '2019', '1665947240_0f10aa96.jpg', 'pinpon es un muñeco', '2022-10-16', 2, 2, 1, 1),
+(6, 'Pinponqwdfwqf', '2019', 'imagen.jpg', 'pinpon es un muñeco', '2022-10-28', 5, 3, 1, 1),
+(7, 'Pinpon2', '2019', 'imagen.jpg', 'pinpon es un muñeco', '2022-10-28', 5, 3, 1, 1),
+(8, 'Pinpon2', '2019', 'imagen.jpg', 'pinpon es un muñeco', '2022-10-28', 5, 3, 1, 1),
+(9, 'Pinpon23232', '2019', 'imagen.jpg', 'pinpon es un muñeco', '2022-10-28', 5, 3, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -103,11 +108,36 @@ CREATE TABLE `bitacoras` (
   `id_bitacora` int(11) NOT NULL,
   `usuario_bit` varchar(11) NOT NULL,
   `modulo_afectado` varchar(25) NOT NULL,
-  `accion_realizada` varchar(25) NOT NULL,
-  `valor_anterior` varchar(255) DEFAULT NULL,
-  `valor_actual` varchar(255) NOT NULL,
+  `accion_realizada` varchar(1000) NOT NULL,
+  `valor_anterior` varchar(500) DEFAULT NULL,
+  `valor_actual` varchar(500) NOT NULL,
   `fecha_accion` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `bitacoras`
+--
+
+INSERT INTO `bitacoras` (`id_bitacora`, `usuario_bit`, `modulo_afectado`, `accion_realizada`, `valor_anterior`, `valor_actual`, `fecha_accion`) VALUES
+(1, '26976183', 'Modifica Adopcion', 'ACTUALIZACION', 'Array', 'UPDATE adopcion SET estado=&#39;3&#39; WHERE id_adopcion = 5', '2022-11-04 23:57:15'),
+(2, '26976183', 'Modifica Adopcion', 'ACTUALIZACION', 'Array', 'UPDATE adopcion SET estado=&#39;3&#39; WHERE id_adopcion = 5', '2022-11-05 00:00:23'),
+(3, '26976183', 'Modifica Adopcion', 'ACTUALIZACION', 'Array', 'UPDATE adopcion SET estado=&#39;3&#39; WHERE id_adopcion = 5', '2022-11-05 00:03:49'),
+(4, '26976183', 'Modifica Adopcion', 'ACTUALIZACION', 'Array', 'UPDATE adopcion SET estado=&#39;3&#39; WHERE id_adopcion = 5', '2022-11-05 00:05:11'),
+(5, '26976183', 'Modifica Adopcion', 'ACTUALIZACION', 'Array', 'UPDATE adopcion SET estado=&#39;3&#39; WHERE id_adopcion = 5', '2022-11-05 00:10:45'),
+(6, '26976183', 'Modifica Adopcion', 'ACTUALIZACION', '1', 'UPDATE adopcion SET estado=&#39;3&#39; WHERE id_adopcion = 5', '2022-11-05 00:11:15'),
+(7, '26976183', 'Modifica Adopcion', 'UPDATE adopcion SET estado=&#39;3&#39; WHERE id_adopcion = 5', '3', '3', '2022-11-05 00:15:32'),
+(8, '26976183', 'Modifica Adopcion', 'UPDATE adopcion SET estado=&#39;3&#39; WHERE id_adopcion = 5', '3', '3', '2022-11-05 00:17:14'),
+(9, '26976183', 'Modifica Adopcion', 'UPDATE adopcion SET estado=&#39;3&#39; WHERE id_adopcion = 5', '3', '3', '2022-11-05 00:17:18'),
+(10, '26976183', 'Modifica Adopcion', 'UPDATE adopcion SET estado=&#39;3&#39; WHERE id_adopcion = 5', '3', '1', '2022-11-05 00:19:59'),
+(11, '26976183', 'Modifica Adopcion', 'UPDATE adopcion SET estado=3&#39; WHERE id_adopcion = 5', '3', '1', '2022-11-05 00:29:50'),
+(12, '26976183', 'Modifica Adopcion', 'UPDATE adopcion SET estado=3&#39; WHERE id_adopcion = 5', '3', '3', '2022-11-05 00:29:53'),
+(13, '26976183', 'Modifica Adopcion', 'UPDATE adopcion SET estado=&#39;&#39; WHERE id_adopcion = 5', '3', '3', '2022-11-05 00:35:54'),
+(14, '26976183', 'Modifica Adopcion', 'UPDATE adopcion SET estado=3&#39; WHERE id_adopcion = 5', '3', '3', '2022-11-05 00:37:48'),
+(15, '26976183', 'Modifica Adopcion', 'UPDATE adopcion SET estado=&#39;3&#39; WHERE id_adopcion = 5', '3', '3', '2022-11-05 00:39:07'),
+(16, '26976183', 'Modifica Adopcion', 'UPDATE adopcion SET estado=&#39;3&#39; WHERE id_adopcion = 5', '3', '3', '2022-11-05 00:40:07'),
+(17, '26976183', 'Modifica Adopcion', 'UPDATE adopcion SET estado=3 WHERE id_adopcion = 5', '3', '3', '2022-11-05 00:40:22'),
+(18, '26976183', 'Modifica Adopcion', 'UPDATE adopcion SET estado=3 WHERE id_adopcion = 5', '3', '3', '2022-11-05 00:48:07'),
+(19, '26976183', 'Modifica Adopcion', 'UPDATE adopcion SET estado=3 WHERE id_adopcion = 5', '3', '3', '2022-11-05 00:48:19');
 
 -- --------------------------------------------------------
 
@@ -142,7 +172,7 @@ CREATE TABLE `raza` (
 
 INSERT INTO `raza` (`id_raza`, `nombre`, `id_tipo_animal`) VALUES
 (2, 'chihuahua', 2),
-(3, 'bulldog', 2),
+(3, 'Bulldog', 2),
 (4, 'Persa', 3),
 (5, 'Kohana', 3);
 
@@ -223,7 +253,7 @@ INSERT INTO `tipo_animal` (`id_tipo`, `nombre`) VALUES
 (2, 'Perro'),
 (3, 'Gato'),
 (4, 'Cocodrilo'),
-(5, 'Cocodrilo');
+(5, 'Ardilla');
 
 -- --------------------------------------------------------
 
@@ -277,14 +307,15 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`cedula`, `nombre`, `rol_id`, `direccion`, `contrasenia`, `activo`, `telefono`) VALUES
-('12345678', 'Merry', 2, 'donde sea', '123456789', 1, ''),
+('12345678', 'Merry', 2, 'donde sea', '123456789', 0, ''),
 ('123456789', 'Merry', 2, 'donde sea', '123456789', 1, ''),
 ('15597525', 'Anavilera', 2, 'Cabudare', '123456', 1, ''),
 ('222222', 'Polipropeludos', 3, 'no se', 'fundacion', 1, ''),
-('26976183', 'David', 2, 'Carr 18 calle 55', 'chicho', 0, ''),
+('26976183', 'David', 3, 'Carr 18 calle 55', 'chicho', 1, '1212121212'),
 ('29517402', 'Douglas', 1, 'Carr 18 con calle 55', 'lolcoptero', 1, ''),
 ('456456456', 'Torres', 2, 'vargas', '123456', 1, '04245936421'),
-('9624925', 'Javier', 2, 'Carr 18', '123456789', 1, '');
+('9624925', 'Javier', 2, 'Carr 18', '123456789', 1, ''),
+('Polipropelu', 'Polipropeludos', 3, 'Prueba', 'Polipropelu', 1, '04245936421');
 
 -- --------------------------------------------------------
 
@@ -307,12 +338,22 @@ CREATE TABLE `veterinario` (
 --
 
 INSERT INTO `veterinario` (`id_veterinario`, `nombre`, `tlf`, `direccion`, `img`, `visible`, `usuario_Rveterinario`) VALUES
-(1, 'Andreina', 251445645, '0', '1666545068_8c5b0c49a2b2c6ccaf9a38ed8f8565ff.jpg', 1, '29517402'),
+(1, 'Andreina23232', 251445645, '0', 'imagen.jpg', 1, '29517402'),
 (2, 'Andreina', 251445645, '0', '1666545072_8c5b0c49a2b2c6ccaf9a38ed8f8565ff.jpg', 1, '29517402'),
 (3, 'Sueter', 451, '0', 'imagen.jpg', 1, '29517402'),
 (4, 'Sueter', 451, '0', 'imagen.jpg', 1, '29517402'),
 (5, 'Sueter', 451, '0', 'imagen.jpg', 1, '29517402'),
-(6, 'Sueter', 451, '0', 'imagen.jpg', 1, '29517402');
+(6, 'Sueter', 451, '0', 'imagen.jpg', 1, '29517402'),
+(7, 'Sueter', 451, 'vargas', 'imagen.jpg', 1, '29517402'),
+(8, 'Sueter', 451, 'vargas', 'imagen.jpg', 1, '29517402'),
+(9, '', 451, 'vargas', 'imagen.jpg', 1, '29517402'),
+(10, '', 2147483647, 'donde sea', 'imagen.jpg', 1, '29517402'),
+(11, '', 2147483647, 'donde sea', 'imagen.jpg', 1, '29517402'),
+(12, '', 2147483647, 'donde sea', 'imagen.jpg', 1, '29517402'),
+(13, '', 2147483647, 'donde sea', 'imagen.jpg', 1, '29517402'),
+(14, 'Merry', 2147483647, 'Carrera 18 calle 55', 'imagen.jpg', 1, '29517402'),
+(15, 'Merry', 2147483647, 'Carrera 18 calle 55', 'imagen.jpg', 1, '29517402'),
+(16, 'Merry', 2147483647, 'Carrera 18 calle 55', 'imagen.jpg', 1, '29517402');
 
 --
 -- Índices para tablas volcadas
@@ -424,25 +465,25 @@ ALTER TABLE `veterinario`
 -- AUTO_INCREMENT de la tabla `adopcion`
 --
 ALTER TABLE `adopcion`
-  MODIFY `id_adopcion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_adopcion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `albergue`
 --
 ALTER TABLE `albergue`
-  MODIFY `id_albergue` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_albergue` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `animal`
 --
 ALTER TABLE `animal`
-  MODIFY `id_animal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_animal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `bitacoras`
 --
 ALTER TABLE `bitacoras`
-  MODIFY `id_bitacora` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_bitacora` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT de la tabla `productos`
@@ -496,7 +537,7 @@ ALTER TABLE `tipo_producuto`
 -- AUTO_INCREMENT de la tabla `veterinario`
 --
 ALTER TABLE `veterinario`
-  MODIFY `id_veterinario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_veterinario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- Restricciones para tablas volcadas

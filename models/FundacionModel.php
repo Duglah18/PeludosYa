@@ -162,9 +162,28 @@ class FundacionModel extends ConexionBD{
         return $this->actualizaData('albergue',$data, "id_albergue = " .$id_albergue);
     }
 
-    public function decisionAdopcion($identificador, $estadonuevo){
+    public function decisionAdopcion($identificador, $estadonuevo, $usuario){
+        //primero se pide luego se guarda en bitacora
+        $anterior = $this->obtenData("SELECT estado FROM adopcion WHERE id_adopcion = '$identificador'");
+        if ($anterior[0][0] == $estadonuevo){
+            return false;
+        }
         $data['estado'] = $estadonuevo;
-        return $this->actualizaData('adopcion',$data, "id_adopcion = " . $identificador);
+        $actualiza = $this->actualizaData('adopcion',$data, "id_adopcion = " . $identificador);
+        
+        $nuevo = $this->obtenData("SELECT estado FROM adopcion WHERE id_adopcion = '$identificador'");
+        
+        $arra['usuario_bit'] = $usuario;
+        $arra['modulo_afectado'] = 'Modifica Adopcion';
+        $arra['accion_realizada'] = $this->creaCadenaUpdate('adopcion',$data, "id_adopcion = " . $identificador);
+        $arra['valor_anterior'] = $nuevo[0][0];
+        $arra['valor_actual'] = $anterior[0][0];
+        $arra['fecha_accion'] ='Now()';
+
+        if (!$actualiza){
+            return false;
+        }
+        return $this->grabaData("bitacoras", $arra);
     }
 }
 ?>

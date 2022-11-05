@@ -162,18 +162,20 @@ class FundacionController extends GeneralController{
     }
     public function destinoAdopcion(){
         $objFund = $this->loadModel("FundacionModel");
-        if(!isset($_POST['accion']) || !isset($_POST['modificacion'])){
+        if(isset($_GET['accion']) == ""){
             return $this->verAdopciones();
         }
-        $eleccion = $_POST['modificacion'];
-        if($_POST['accion'] == 'Completada'){
+        if(!isset($_GET['accion']) || !isset($_GET['modificacion'])){
+            return $this->verAdopciones();
+        }
+        $eleccion = $_GET['modificacion'];
+        if($_GET['accion'] == 'Completada'){
             $accion = 3;
         }
-        elseif($_POST['accion'] == 'Cancelada'){
+        elseif($_GET['accion'] == 'Cancelada'){
             $accion = 2;
         }
-        $objFund->decisionAdopcion($eleccion, $accion);
-        $_POST['accion'] = "";
+        $objFund->decisionAdopcion($eleccion, $accion, $_GET['usuario']);
         return $this->verAdopciones();
     }
     #endregion
