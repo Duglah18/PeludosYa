@@ -27,14 +27,13 @@ $activo = isset($usuario[0]['activo'])? $usuario[0]['activo']:"";
             nombre dataRoles
           ==============================================-->
         <?php 
-        echo "<h1>". $Rol . "</h1>";
           foreach ($dataRoles as $key) {?>
           <option <?php if($Rol == $key['id_rol']){ echo"selected"; } ?> value="<?= $key['id_rol']; ?>"><?= $key['nombre']; ?></option>
           <?php
           }
         ?>
         </select>
-        <label for="">Direccion</label>
+        <label for="">Dirección</label>
         <input type="text" name="direccion" value="<?=$Direccion?>" required><br><!--textarea-->
         <label for="">Contraseña</label>
         <input type="text" name="contrasenia" value="<?= $contra?>" required>

@@ -55,30 +55,6 @@ class ConexionBD {
         return false;
     }
 
-    
-    // public function grabaBitacora($data){
-    //     $columnas = array_keys($data);
-    //     $sql = "INSERT INTO bitacoras (usuario_bit, modulo_afectado, accion_realizada, valor_anterior, valor_actual, fecha_accion) ";
-    //     $contadorData = count($data) - 1;
-    //     for ($i=0; $i < count($data); $i++) { 
-    //         if($data[$columnas[$i]] != "Now()"){
-    //             $sql .= "'" . str_replace("'","&#39;", $data[$columnas[$i]]) . (($i != $contadorData)? "', ": "')");
-    //         /*si quieres que seann en mayusculas rodea $data[$columnas[$i]] 
-    //         con strtoupper($data[Scolumnas[$i))]*/
-    //         } else {
-    //             $sql .= " " . str_replace("","&#39;", $data[$columnas[$i]]) . (($i != $contadorData)? ", ": ")");
-    //         }
-    //         //Se agrego este if si estas escribiendo Now() para registrar la fecha en la q ingresas esto
-    //         //si es now no se pondra entre comillas pq es un comando para agarrar la fecha
-    //     }
-    //     $conn = $this->conectar();
-    //     $resultado = mysqli_query($conn,$sql) or die ("Error");
-    //     if ($resultado){
-    //         return mysqli_insert_id($conn);
-    //     }
-    //     return false;
-    // }
-
     public function actualizaData($tabla, $data, $filtro){
         $columnas = array_keys($data);
         $sql = "UPDATE ". $tabla . " SET ";
@@ -106,7 +82,7 @@ class ConexionBD {
         $contadorData = count($data) - 1;
         for ($i=0; $i < count($data); $i++) { 
             if($data[$columnas[$i]] != "Now()"){
-                $sql .= "'" . str_replace("'","&#39;", $data[$columnas[$i]]) . (($i != $contadorData)? "', ": "')");
+                $sql .= "" . str_replace("","&#39;", $data[$columnas[$i]]) . (($i != $contadorData)? ", ": ")");
             /*si quieres que seann en mayusculas rodea $data[$columnas[$i]] 
             con strtoupper($data[Scolumnas[$i))]*/
             } else {

@@ -97,7 +97,11 @@ class SessionController extends GeneralController{
         switch($validar[0]['rol_id']){
             //se verifica el rol si es admin el q introduces ps te manda a loguearte como admin
             case 1:
-                $this->loadView("admin/admin.phtml","Login Administrador");
+                //ya te ingresa a admin si te logueas como admin directamente
+                $_SESSION['usuario'] = $validar[0]['nombre'];
+                $_SESSION['rol'] = $validar[0]['rol_id'];
+                $_SESSION['iduser'] = $validar[0]['cedula'];
+                header("location: " . BASE_URL. "admin/mostrarData");
                 break;
             case 2:
             case 3:

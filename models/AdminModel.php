@@ -24,7 +24,7 @@ class AdminModel extends ConexionBD{
         $resultado = $this->obtenData("SELECT cedula, nombre, contrasenia, rol_id, direccion, contrasenia,
                                               activo, telefono
                                         FROM usuarios
-                                        WHERE (cedula = CASE WHEN $idusuario = '' THEN cedula ELSE $idusuario END)");
+                                        WHERE (cedula = CASE WHEN '$idusuario' = '' THEN cedula ELSE '$idusuario' END)");
         return $resultado;
     }
 
@@ -60,40 +60,6 @@ class AdminModel extends ConexionBD{
         } else {
             return false;
         }
-    }
-
-//falta telefono usuario
-    public function registrarUsuario($tabla, $rif, $nombre, $rol, $direccion, $contrasenia, $estado, $tlf){
-        //$tabla donde se ingresara 
-        //los nombres de los sectores del array data tienen q ser los mismos nombres
-        //de la tabla donde lo vayas a insertar
-        $data['cedula'] = $rif; //rif del usuario 
-        $data['nombre'] = $nombre; // nombre del usuario
-        $data['rol_id'] = $rol; //identificador del rol
-        $data['direccion'] = $direccion; //direccion del usuario
-        $data['contrasenia'] = $contrasenia; //contraseña del usuario a registrar
-        $data['activo'] = $estado; //si el usuario esta activo aunque deberia estar perma en 1 hasta
-        $data['telefono'] = $tlf;
-        //que se modifique por otras personas
-        return $this->grabaData($tabla, $data);
-    }
-
-    public function registraTipoAnimal($tabla, $nombre){
-        $data['nombre'] = $nombre;
-        return $this->grabaData($tabla, $data);
-    }
-
-    public function registraRazaAnimal($tabla, $nombre, $tiporaza){
-        $data['nombre'] = $nombre;
-        $data['id_tipo_animal'] = $tiporaza;
-        return $this->grabaData($tabla, $data);
-    }
-
-    public function registrar(){
-        $data['padre'] = "0";
-        $data['nombre'] = "opcion 2";
-        $data['url'] = "opcion3/mostrar";
-        return $this->grabaData("mb_menu", $data);
     }
 
     public function listar(){
@@ -156,7 +122,88 @@ class AdminModel extends ConexionBD{
         }
     }
 
-    public function registraAnimal($tabla, $nom, $anionac, $nomimg, $descripcion, $fecha_ing, $id_raza, $tamano_id, $albergue, $visible){
+    public function registrarUsuario($tabla, $rif, $nombre, $rol, $direccion, 
+                                    $contrasenia, $estado, $tlf, $usuario_ingresando){
+        //X
+        $data['cedula'] = $rif;
+        $data['nombre'] = $nombre;
+        $data['rol_id'] = $rol;
+        $data['direccion'] = $direccion;
+        $data['contrasenia'] = $contrasenia;
+        $data['activo'] = $estado;
+        $data['telefono'] = $tlf;
+        $registrandoUser = $this->grabaData($tabla, $data);
+        //si se agrega no sera un booleano pero si no si lo sera hay un error raro que agarra
+        //el if si se verifica si es falso asi que esto se queda asi
+        if (is_bool($registrandoUser)){
+            return false;
+        }
+
+        $ingresando = $this->creaCadenaInsert($data, $tabla);
+        $arry['usuario_bit'] = $usuario_ingresando;
+        $arry['modulo_afectado'] = 'Añadir Usuario Admin';
+        $arry['accion_realizada'] = $ingresando;
+        $arry['valor_actual'] = implode("; ",$data);
+        $arry['fecha_accion'] ='Now()';
+
+        $bitacora = $this->grabaData("bitacoras",$arry);
+
+        if (!$bitacora){
+            return false;
+        }
+        return $bitacora;
+    }
+
+    public function registraTipoAnimal($tabla, $nombre, $usuario_ingresando){
+        //X
+        $data['nombre'] = $nombre;
+
+        $registrandoTAnimal = $this->grabaData($tabla, $data);
+        if (is_bool($registrandoTAnimal)){
+            return false;
+        }
+
+        $ingresando = $this->creaCadenaInsert($data, $tabla);
+        $arry['usuario_bit'] = $usuario_ingresando;
+        $arry['modulo_afectado'] = 'Añadir Tipo Animal Admin';
+        $arry['accion_realizada'] = $ingresando;
+        $arry['valor_actual'] = implode("; ",$data);
+        $arry['fecha_accion'] ='Now()';
+
+        $bitacora = $this->grabaData("bitacoras",$arry);
+
+        if (!$bitacora){
+            return false;
+        }
+        return $bitacora;
+    }
+
+    public function registraRazaAnimal($tabla, $nombre, $tiporaza, $usuario_ingresando){
+        $data['nombre'] = $nombre;
+        $data['id_tipo_animal'] = $tiporaza;
+        $registrandoRAnimal = $this->grabaData($tabla, $data);
+
+        if(is_bool($registrandoRAnimal)){
+            return false;
+        }
+
+        $ingresando = $this->creaCadenaInsert($data, $tabla);
+        $arry['usuario_bit'] = $usuario_ingresando;
+        $arry['modulo_afectado'] = 'Añadir Raza Animal Admin';
+        $arry['accion_realizada'] = $ingresando;
+        $arry['valor_actual'] = implode("; ",$data);
+        $arry['fecha_accion'] ='Now()';
+
+        $bitacora = $this->grabaData("bitacoras",$arry);
+
+        if (!$bitacora){
+            return false;
+        }
+        return $bitacora;
+    }
+    
+    public function registraAnimal($tabla, $nom, $anionac, $nomimg, $descripcion, $fecha_ing, 
+                                    $id_raza, $tamano_id, $albergue, $visible, $usuario_ingresando){
         $data['nombre'] = $nom;
         $data['anio_nac'] = $anionac;
         $data['img'] = $nomimg;
@@ -166,20 +213,58 @@ class AdminModel extends ConexionBD{
         $data['tamanio_id'] = $tamano_id;
         $data['albergue_id'] = $albergue;
         $data['visible'] = $visible;
-        return $this->grabaData($tabla, $data);
+        $registrandoAnimal = $this->grabaData($tabla, $data);
+
+        if(is_bool($registrandoAnimal)){
+            return false;
+        }
+
+        $ingresando = $this->creaCadenaInsert($data, $tabla);
+        $arry['usuario_bit'] = $usuario_ingresando;
+        $arry['modulo_afectado'] = 'Añadir Animal Admin';
+        $arry['accion_realizada'] = $ingresando;
+        $arry['valor_actual'] = implode("; ",$data);
+        $arry['fecha_accion'] ='Now()';
+
+        $bitacora = $this->grabaData("bitacoras",$arry);
+        if(!$bitacora){
+            return false;
+        }
+        return $bitacora;
     }
 
-    public function registraVeterinario($nombre,$telefono,$direccion,$img,$adminregistra){
+    public function registraVeterinario($nombre,$telefono,$direccion,$img,
+                                        $adminregistra){
         $data['nombre'] = $nombre;
         $data['tlf'] = $telefono;
         $data['direccion'] = $direccion;
         $data['img'] = $img;
         $data['visible'] = 1;
         $data['usuario_Rveterinario'] = $adminregistra;
-        return $this->grabaData('veterinario',$data);
+        $registrandoVeterinario = $this->grabaData('veterinario',$data);
+
+        if(is_bool($registrandoVeterinario)){
+            return false;
+        }
+
+        $ingresando = $this->creaCadenaInsert($data, 'veterinario');
+        $arry['usuario_bit'] = $adminregistra;
+        $arry['modulo_afectado'] = 'Añadir Veterinario Admin';
+        $arry['accion_realizada'] = $ingresando;
+        $arry['valor_actual'] = implode("; ",$data);
+        $arry['fecha_accion'] ='Now()';
+
+        $bitacora = $this->grabaData("bitacoras",$arry);
+        if(!$bitacora){
+            return false;
+        }
+        return $bitacora;
     }
     #Region de Modificar
-    public function modificaUsuario($idusuario,$nombre,$rol,$direccion,$contrasena,$activo,$telefono){
+    public function modificaUsuario($idusuario,$nombre,$rol,$direccion,$contrasena,
+                                    $activo,$telefono, $usuario_modificando){
+        $anterior = $this->obtenData("SELECT cedula, nombre, rol_id, direccion, activo, telefono
+                                        FROM usuarios WHERE cedula = '$idusuario'");
         $data['cedula'] = $idusuario;
         $data['nombre'] = $nombre;
         $data['rol_id'] = $rol;
@@ -187,8 +272,46 @@ class AdminModel extends ConexionBD{
         $data['contrasenia'] = $contrasena;
         $data['activo'] = $activo;
         $data['telefono'] = $telefono;
-        return $this->actualizaData("usuarios",$data,"cedula = " .$idusuario);
+        $modificaUsuario = $this->actualizaData("usuarios",$data,"cedula = '$idusuario'");
+
+        $nuevo = $this->obtenData("SELECT cedula, nombre, rol_id, direccion, activo, telefono
+                                    FROM usuarios WHERE cedula = '$idusuario'");
+        if(!$modificaUsuario){
+            return false;
+        }
+        $arra['usuario_bit'] = $usuario_modificando;
+        $arra['modulo_afectado'] = 'Modifica Usuario';
+        $arra['accion_realizada'] = $this->creaCadenaUpdate('adopcion',$data, "id_adopcion = " . $idusuario);
+        $arra['valor_anterior'] = implode(";", $anterior[0]);
+        $arra['valor_actual'] = implode("; ",$nuevo[0]);
+        $arra['fecha_accion'] ='Now()';
+
+        return $this->grabaData("bitacoras", $arra);
     }
+//falta de aca para abajo
+    /*public function decisionAdopcion($identificador, $estadonuevo, $usuario){
+        //primero se pide luego se guarda en bitacora
+        $anterior = $this->obtenData("SELECT estado FROM adopcion WHERE id_adopcion = '$identificador'");
+        if ($anterior[0][0] == $estadonuevo){
+            return false;
+        }
+        $data['estado'] = $estadonuevo;
+        $actualiza = $this->actualizaData('adopcion',$data, "id_adopcion = " . $identificador);
+        
+        $nuevo = $this->obtenData("SELECT estado FROM adopcion WHERE id_adopcion = '$identificador'");
+        
+        $arra['usuario_bit'] = $usuario;
+        $arra['modulo_afectado'] = 'Modifica Adopcion';
+        $arra['accion_realizada'] = $this->creaCadenaUpdate('adopcion',$data, "id_adopcion = " . $identificador);
+        $arra['valor_anterior'] = $nuevo[0][0];
+        $arra['valor_actual'] = $anterior[0][0];
+        $arra['fecha_accion'] ='Now()';
+
+        if (!$actualiza){
+            return false;
+        }
+        return $this->grabaData("bitacoras", $arra);
+    } */
     public function modificaAnimal($tabla, $id_animal,$nom, $anionac, $nomimg, $descripcion, $id_raza, $tamano_id, $albergue, $visible){
         $data['nombre'] = $nom;
         $data['anio_nac'] = $anionac;

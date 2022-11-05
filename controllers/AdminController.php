@@ -168,8 +168,9 @@ class AdminController extends GeneralController{
     //     $this->index();
     // }
 
-    //aca se registran los usuarios por el Admin
     public function registraUsuario(){//falta telefono 
+        //verifica si existe el usuario
+        //y la cedula
         $objAdmin = $this->loadModel("AdminModel");
         if (isset($_POST['Agregar'])){
             $cedula = $_POST['cedula'];
@@ -179,10 +180,11 @@ class AdminController extends GeneralController{
             $contrasenia = $_POST['contrasenia'];
             $tlf = $_POST['telefono'];
         
-            $objAdmin->registrarUsuario("usuarios",$cedula,$nombre,$rol,$direccion,$contrasenia, "1", $tlf);
+            $objAdmin->registrarUsuario("usuarios",$cedula,$nombre,$rol,$direccion,
+                                        $contrasenia, "1", $tlf, $_SESSION['iduser']);
             //mientras carga mostrarData agregar una pantalla de carga
-            $this->mostrarData();
-        } elseif (isset($_POST['Modificar'])){
+            header("location: ".BASE_URL. "admin/mostrarData");//solucion a recargar la pagina !!!!
+        } elseif (isset($_POST['Modificar'])){//usa redireccionamiento header
             $cedula = $_POST['cedula'];
             $nombre = $_POST['nombre'];
             $rol = $_POST['rol'];
@@ -190,8 +192,9 @@ class AdminController extends GeneralController{
             $contrasenia = $_POST['contrasenia'];
             $activo = $_POST['activo'];
             $tlf = $_POST['telefono'];
-            $objAdmin->modificaUsuario($cedula,$nombre,$rol,$direccion,$contrasenia,$activo,$tlf);
-            $this->mostrarData();
+            echo $objAdmin->modificaUsuario($cedula,$nombre,$rol,$direccion,$contrasenia,
+                                        $activo,$tlf, $_SESSION['iduser']);
+            header("location: ".BASE_URL. "admin/mostrarData");
         }
     }
 
@@ -202,14 +205,11 @@ class AdminController extends GeneralController{
             $nombre = $_POST['nombreTipo'];
             $objAdmin->modificaTipoAnimal($identificador,$nombre);
             $_POST['accion'] = "";
-            $this->tipoAnimal();
-        } else {
-            if ($nombre = $_POST['nombreTipo']){
-                return $this->tipoAnimal();
-            }
+            header("location: ".BASE_URL."admin/tipoAnimal");
+        } elseif(isset($_POST['accion']) && $_POST['accion'] == 'Agregar') {
             $nombre = $_POST['nombreTipo'];
-            $objAdmin->registraTipoAnimal('tipo_animal',$nombre);
-            $this->tipoAnimal();
+            $objAdmin->registraTipoAnimal('tipo_animal',$nombre, $_SESSION['iduser']);
+            header("location: ".BASE_URL."admin/tipoAnimal");
         }
     }
 
@@ -221,12 +221,13 @@ class AdminController extends GeneralController{
             $TipoAnimal = $_POST['tipoanimal'];
             $objAdmin->modificaRaza($identificador, $nombre, $TipoAnimal);
             $_POST['accion'] = "";
-            return $this->razasAnimal();
+            header("location: ".BASE_URL."admin/razasAnimal");
+        } elseif(isset($_POST['accion']) && $_POST['accion'] == 'Agregar'){
+            $nombre = $_POST['nombreRaza'];
+            $TipoAnimal = $_POST['tipoanimal'];
+            $objAdmin->registraRazaAnimal('raza', $nombre, $TipoAnimal, $_SESSION['iduser']);
+            header("location: ".BASE_URL."admin/razasAnimal");
         }
-        $nombre = $_POST['nombreRaza'];
-        $TipoAnimal = $_POST['tipoanimal'];
-        $objAdmin->registraRazaAnimal('raza', $nombre, $TipoAnimal);
-        $this->razasAnimal();
     }
 
     public function agregaAnimal(){//ahora si
@@ -250,8 +251,10 @@ class AdminController extends GeneralController{
             $tamanio_id= $_POST['tamano'];
             $albergue_id= $_POST['albergue'];
             $visible = 1;
-            $objFund->registraAnimal('animal', $nombre, $fechanac, $nombreArchivo, $descrip, $fecha_ing, $raza_id,$tamanio_id, $albergue_id, $visible);
-            $this->agregaAnimales();
+            $objFund->registraAnimal('animal', $nombre, $fechanac, $nombreArchivo, $descrip, 
+                                    $fecha_ing, $raza_id,$tamanio_id, $albergue_id, $visible,
+                                    $_SESSION['iduser']);
+            header("location: ".BASE_URL."admin/animales");
         } elseif (isset($_POST['accion']) && $_POST['accion'] == 'Modificar'){
             $id_animal = $_POST['id_animal'];
             $nombre = $_POST['nombre'];
@@ -281,22 +284,19 @@ class AdminController extends GeneralController{
             $tamanio_id= $_POST['tamano'];
             $albergue_id= $_POST['albergue'];
             $visible = $_POST['visible'];
-            $objFund->modificaAnimal('animal', $id_animal,$nombre, $fechanac, $nombreArchivo, $descrip, $raza_id,$tamanio_id, $albergue_id, $visible);
-            $this->animales();
+            $objFund->modificaAnimal('animal', $id_animal,$nombre, $fechanac, $nombreArchivo, 
+                                    $descrip, $raza_id,$tamanio_id, $albergue_id, $visible);
+            header("location: ".BASE_URL."admin/animales");
         }
     }
     public function registraVeterinario(){
         //creo que esto puede servir
         $objAdmin = $this->loadModel("AdminModel");
-        if ($nombre = $_POST['nombre'] && $telefono = $_POST['telefono'] && $direccion = $_POST['direccion']){
-            $data['error'] = "Veterinario Ya en el sistema";//solo para avisar que se agrego supongo
-             return $this->loadView("admin/agVeterinario.phtml", "Agrega Veterinarios como Admin",$data);
-        }
         $nombre = $_POST['nombre'];
         $telefono = $_POST['telefono'];
         $direccion = $_POST['direccion'];
-        $visible = $_POST['visible'];
         if (isset($_POST['accion']) && $_POST['accion'] == 'Modificar'){
+            $visible = $_POST['visible'];
             /*----------------------Tratamiento de Img------------------------------------------*/
             $img_modificar = $_POST['imgmodificar'];
 
@@ -318,10 +318,11 @@ class AdminController extends GeneralController{
                     $nombreArchivo = $img_modificar;
                 }
             /*-----------------------Terminando de Img------------------------------------------*/
-            $objAdmin->modificaVeterinario($id_veterinario, $nombre, $telefono, $direccion, $nombreArchivo, $visible);
+            $objAdmin->modificaVeterinario($id_veterinario, $nombre, $telefono, $direccion, 
+                                            $nombreArchivo, $visible);
             $_POST['accion'] = "";
-            return $this->agregaVeterinarios();
-        } else {
+            header("location: ".BASE_URL."admin/agregaVeterinarios");
+        } elseif(isset($_POST['accion']) && $_POST['accion'] == 'Agregar') {
             if ($nombre != "" && $telefono != "" && $direccion != ""){
                 /*----------------------Tratamiento de Img------------------------------------------*/
                 $fecha_paratmp = new DateTime();
@@ -333,14 +334,12 @@ class AdminController extends GeneralController{
                 }
                 /*-----------------------Terminando de Img------------------------------------------*/
                 $adminRegistrando = $_POST['admin'];
-                $objAdmin->registraVeterinario($nombre,$telefono,$direccion, $nombreArchivo,$adminRegistrando);
-                $data['error'] = "Veterinario Agregado satisfactoriamente";//solo para avisar que se agrego supongo
-                $this->loadView("admin/agVeterinario.phtml", "Agrega Veterinarios como Admin",$data);
-                //ps al recargar se vuelve a guardar asi q vamos a tener q enviarlo a otra pag cada que agreguemos 
-                //algo pq no encuentro otra forma de eliminar las variables luego de agregar
+                $objAdmin->registraVeterinario($nombre,$telefono,$direccion, 
+                                                $nombreArchivo, $adminRegistrando);
+                header("location: ".BASE_URL."admin/agregaVeterinarios");
             } else {
-                $data['error'] = "Estas enviando elementos vacios";
-                $this->loadView("admin/agVeterinario.phtml", "Agrega Veterinarios como Admin",$data);
+                header("location: ".BASE_URL."admin/agregaVeterinarios");
+                //añadir variable de error por get 
             }
         }
     }
