@@ -1,10 +1,9 @@
-Ver albergues de la fundacion <br>
-Mostrara los albergues que le pertenecen a la fundacion seleccionada
+<a href="<?= BASE_URL;?>fundacion/agregaAlberg"><input type="button" value="Agregar Albergue"></a>
 
-<?php 
-print_r($userfund);
-?>
-
+<?php if($userfund == false){ ?>
+    <h1>Aun no tiene Albergues</h1>
+<?php
+} else { ?>
 <table>
     <thead>
         <tr>
@@ -32,3 +31,5 @@ print_r($userfund);
         <?php } ?>
     </tbody>
 </table>
+
+<?php } ?>

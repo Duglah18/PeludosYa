@@ -25,6 +25,7 @@ class FundacionController extends GeneralController{
     public function animales(){
         $objFund = $this->loadModel("FundacionModel");
         $data['useranimales'] = $objFund->consultaAnimales($_SESSION['iduser']);
+        $data['albergues'] = $objFund->consultaAlbergue($_SESSION['iduser']);
         $this->loadView("fundacion/veranimales.phtml","Ver Animales",$data);
     }
 

@@ -79,25 +79,22 @@ if (isset($_SESSION)){
         </li>
         
         <?php }?>
-
+          <!--No creo que admin deba ver el catalogo ni a los veterinarios de la pag normal
+              pq literal ya tiene vistas para ver eso-->
         <!-- Contenido de Dropdowns -->
         <!--Admin-->
         <ul id='dropdown1' class='dropdown-content'>
           <li><a href="<?= BASE_URL;?>admin/tipoAnimal">Agregar Tipo Animal</a></li>
           <li><a href="<?= BASE_URL;?>admin/razasAnimal">Agrega Razas</a></li>
-          <li><a href="<?= BASE_URL;?>admin/agregaUsuarios">Agrega Usuarios</a></li>
-          <li><a href="<?= BASE_URL;?>admin/agregaAnimales">Agrega Animales</a></li>
           <li><a href="<?= BASE_URL;?>admin/agregaVeterinarios">Agrega Veterinarios</a></li>
-          <li><a href="<?= BASE_URL;?>admin/agregaAlbergueAdmin">Agrega Albergues</a></li>
           <li><a href="<?= BASE_URL;?>admin/animales">Ver Animales</a></li>
+          <li><a href="<?= BASE_URL;?>admin/mostrarData">Ver Usuarios</a></li>
           <li><a href="<?= BASE_URL;?>admin/albergues">Ver Albergues</a></li>
           <li><a href="<?= BASE_URL;?>admin/adopciones">Ver Adopciones</a></li>
           <!--Ver adopciones falta-->
         </ul>
           <!--Fundacion-->
         <ul id='dropdown2' class='dropdown-content'>
-          <li><a href="<?= BASE_URL;?>fundacion/agregaAlberg">Agrega Albergue</a></li>
-          <li><a href="<?= BASE_URL;?>fundacion/agregaAnimal">Agregar Animal</a></li>
           <li><a href="<?= BASE_URL;?>fundacion/verAdopciones">Ver peticiones de Adopcion</a></li>
           <li><a href="<?= BASE_URL;?>fundacion/albergues">Ver Albergues</a></li>
           <li><a href="<?= BASE_URL;?>fundacion/animales">Ver Animales</a></li>
