@@ -77,25 +77,23 @@ class FundacionController extends GeneralController{
             $direccion = $_POST['direccion'];
             $cedula = $_POST['cedula_user'];
             $activo = $_POST['activo'];
-            $objFund->modificaAlbergue($id_albergue, $Nombre, $cedula, $direccion, $activo);
+            $objFund->modificaAlbergue($id_albergue, $Nombre, $cedula, $direccion, 
+                                        $activo, $_SESSION['iduser']);
             if($_SESSION['rol'] == "1"){
                 $objAdmin = $this->loadModel("FundacionModel");
                 $data['alberguesAdmin'] = $objAdmin->consultaAlbergue('');
-                return $this->loadView("admin/veralbergues.phtml","Ver Albergues",$data);
+                header("location: ".BASE_URL."admin/albergues");
             } 
-
-            return $this->albergues();
+            header("location: ".BASE_URL."fundacion/albergues");
         } else {
             $Nombre = $_POST['nombre'];
             $direccion = $_POST['direccion'];
             $cedula = $_POST['cedula_user'];
             $objFund->registraAlbergue("albergue",$cedula,$Nombre,$direccion,1);
             if($_SESSION['rol'] == "1"){
-                $objFund = $this->loadModel("FundacionModel");
-                $data['userfund'] = $objFund->consultaUser();
-                $this->loadView("admin/agalbergue.phtml","Agregar Albergue como Admin",$data);
+                header("location: ".BASE_URL."admin/albergues");
             } else {
-                $this->agregaAlberg();
+                header("location: ".BASE_URL."fundacion/albergues");
             }
         }
     }
@@ -104,7 +102,7 @@ class FundacionController extends GeneralController{
         $objFund = $this->loadModel("FundacionModel");
         $objAdmin = $this->loadModel("AdminModel");
         if(!isset($_POST['nombre']) || !isset($_POST['raza']) || !isset($_POST['descrip'])){
-            return $this->agregaAnimal();
+            header("location: ".BASE_URL."fundacion/animales");
         }
         if (isset($_POST['accion']) && $_POST['accion'] == 'Agregar'){
             $nombre = $_POST['nombre'];
@@ -125,8 +123,10 @@ class FundacionController extends GeneralController{
             $tamanio_id= $_POST['tamano'];
             $albergue_id= $_POST['albergue'];
             $visible = 1;
-            $objFund->registraAnimal('animal', $nombre, $fechanac, $nombreArchivo, $descrip, $fecha_ing, $raza_id,$tamanio_id, $albergue_id, $visible);
-            $this->agregaAnimal();
+            $objFund->registraAnimal('animal', $nombre, $fechanac, $nombreArchivo, $descrip, 
+                                        $fecha_ing, $raza_id,$tamanio_id, $albergue_id, 
+                                        $visible, $_SESSION['iduser']);
+            header("location: ".BASE_URL."fundacion/animales");
         } elseif (isset($_POST['accion']) && $_POST['accion'] == 'Modificar') {
             $id_animal = $_POST['id_animal'];
             $nombre = $_POST['nombre'];
@@ -156,8 +156,10 @@ class FundacionController extends GeneralController{
             $tamanio_id= $_POST['tamano'];
             $albergue_id= $_POST['albergue'];
             $visible = $_POST['visible'];
-            $objAdmin->modificaAnimal('animal', $id_animal,$nombre, $fechanac, $nombreArchivo, $descrip, $raza_id,$tamanio_id, $albergue_id, $visible);
-            $this->animales();
+            $objAdmin->modificaAnimal('animal', $id_animal,$nombre, $fechanac, 
+                                        $nombreArchivo, $descrip, $raza_id,$tamanio_id, $albergue_id,
+                                         $visible, $_SESSION['iduser']);
+            header("location: ".BASE_URL."fundacion/animales");
         }
     }
     public function destinoAdopcion(){
@@ -176,7 +178,7 @@ class FundacionController extends GeneralController{
             $accion = 2;
         }
         $objFund->decisionAdopcion($eleccion, $accion, $_GET['usuario']);
-        return $this->verAdopciones();
+        header("location: ".BASE_URL."fundacion/verAdopciones");
     }
     #endregion
 }

@@ -1,7 +1,7 @@
 <?php 
 
 class FundacionModel extends ConexionBD{
-    public function registraAlberg($tabla, $nombre, $direcc, $ced_us, $estat){
+    public function registraAlberg($tabla, $nombre, $direcc, $ced_us, $estat){//esta no se usa :v creo 
         $data['nombre'] = $nombre;
         $data['direccion'] = $direcc;
         $data['cedula_usuario'] = $ced_us;
@@ -138,10 +138,30 @@ class FundacionModel extends ConexionBD{
         $data['direccion'] = $direccion;
         $data['cedula_usuario'] = $rif;
         $data['activo'] = $estado;
-        return $this->grabaData($tabla,$data);
+        $registrandoAlbergue = $this->grabaData($tabla,$data);
+
+        if(is_bool($registrandoAlbergue)){
+            return false;
+        }
+
+        $ingresando = $this->creaCadenaInsert($data, $tabla);
+        $arry['usuario_bit'] = $rif;
+        $arry['modulo_afectado'] = 'Añadir Albergue';
+        $arry['accion_realizada'] = $ingresando;
+        $arry['valor_actual'] = implode("; ",$data);
+        $arry['fecha_accion'] ='Now()';
+
+        $bitacora = $this->grabaData("bitacoras",$arry);
+
+        if (!$bitacora){
+            return false;
+        }
+        return $bitacora;
+
     }
 
-    public function registraAnimal($tabla, $nom, $anionac, $nomimg, $descripcion, $fecha_ing, $id_raza, $tamano_id, $albergue, $visible){
+    public function registraAnimal($tabla, $nom, $anionac, $nomimg, $descripcion, $fecha_ing, 
+                                    $id_raza, $tamano_id, $albergue, $visible, $usuario_ingresando){
         $data['nombre'] = $nom;
         $data['anio_nac'] = $anionac;
         $data['img'] = $nomimg;
@@ -151,15 +171,50 @@ class FundacionModel extends ConexionBD{
         $data['tamanio_id'] = $tamano_id;
         $data['albergue_id'] = $albergue;
         $data['visible'] = $visible;
-        return $this->grabaData($tabla, $data);
+        $registrandoAnimal = $this->grabaData($tabla, $data);
+
+        if(is_bool($registrandoAnimal)){
+            return false;
+        }
+
+        $ingresando = $this->creaCadenaInsert($data, $tabla);
+        $arry['usuario_bit'] = $usuario_ingresando;
+        $arry['modulo_afectado'] = 'Añadir Animal';
+        $arry['accion_realizada'] = $ingresando;
+        $arry['valor_actual'] = implode("; ",$data);
+        $arry['fecha_accion'] ='Now()';
+
+        $bitacora = $this->grabaData("bitacoras",$arry);
+
+        if (!$bitacora){
+            return false;
+        }
+        return $bitacora;
     }
 
-    public function modificaAlbergue($id_albergue, $nombre, $usuario, $direccion, $activo){
+    public function modificaAlbergue($id_albergue, $nombre, $usuario, $direccion, $activo, $usuario_modificando){
+        $anterior = $this->obtenData("SELECT nombre, direccion, cedula_usuario, activo
+                                        FROM albergue WHERE id_albergue = '$id_albergue'");
         $data['nombre'] = $nombre;
         $data['direccion'] = $direccion;
         $data['cedula_usuario'] = $usuario;
         $data['activo'] = $activo;
-        return $this->actualizaData('albergue',$data, "id_albergue = " .$id_albergue);
+        $modificaAlbergue = $this->actualizaData('albergue',$data, "id_albergue = '$id_albergue'");
+
+        $nuevo = $this->obtenData("SELECT nombre, direccion, cedula_usuario, activo
+                                    FROM albergue WHERE id_albergue = '$id_albergue'");
+
+        if(!$modificaAlbergue){
+            return false;
+        }
+        $arra['usuario_bit'] = $usuario_modificando;
+        $arra['modulo_afectado'] = 'Modifica Usuario';
+        $arra['accion_realizada'] = $this->creaCadenaUpdate('albergue',$data, "id_albergue = " . $id_albergue);
+        $arra['valor_anterior'] = implode(";", $anterior[0]);
+        $arra['valor_actual'] = implode("; ",$nuevo[0]);
+        $arra['fecha_accion'] ='Now()';
+
+        return $this->grabaData("bitacoras", $arra);
     }
 
     public function decisionAdopcion($identificador, $estadonuevo, $usuario){

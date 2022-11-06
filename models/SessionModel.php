@@ -44,7 +44,27 @@ class SessionModel extends ConexionBD{
         if ($verificar){
             return "Usuario ya registrado";
         } elseif(!$verificar) {
-            return $this->grabaData('usuarios',$data);
+            $registraUsuario = $this->grabaData('usuarios',$data);
+
+            if(is_bool($registraUsuario)){
+                return false;
+            }
+
+            
+        $ingresando = $this->creaCadenaInsert($data, 'usuarios');
+        $arry['usuario_bit'] = $ced;
+        $arry['modulo_afectado'] = 'Usuario Registrandose';
+        $arry['accion_realizada'] = $ingresando;
+        $arry['valor_actual'] = implode("; ",$data);
+        $arry['fecha_accion'] ='Now()';
+
+        $bitacora = $this->grabaData("bitacoras",$arry);
+
+        if (!$bitacora){
+            return false;
+        }
+        return $bitacora;
+
         }
     }
 
@@ -103,7 +123,7 @@ class SessionModel extends ConexionBD{
         $data['cedula_usuario'] = $user;
         $data['estado'] = "1";
         return $this->grabaData('adopcion',$data);
-    }
+    }//Deberia hacerle bitacora a esto?
 
     public function retornaResponsable($iduser){//aca no hace falta revisar si es real pq ya se verifica antes
         $resultado = $this->obtenData("SELECT nombre, telefono

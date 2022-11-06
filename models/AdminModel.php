@@ -133,6 +133,13 @@ class AdminModel extends ConexionBD{
         $data['contrasenia'] = $contrasenia;
         $data['activo'] = $estado;
         $data['telefono'] = $tlf;
+        $verificar = $this->obtenData("SELECT cedula, nombre, contrasenia, activo, rol_id
+                                        FROM usuarios
+                                        WHERE cedula = '$rif'");
+        if($verificar){//se verifica si existe un usuario con esa ced y si si retorna falso
+            return false;
+        }
+
         $registrandoUser = $this->grabaData($tabla, $data);
         //si se agrega no sera un booleano pero si no si lo sera hay un error raro que agarra
         //el if si se verifica si es falso asi que esto se queda asi
@@ -315,7 +322,7 @@ class AdminModel extends ConexionBD{
         }
 
         $arra['usuario_bit'] = $usuario_modificando;
-        $arra['modulo_afectado'] = 'Modifica Animal Admin';
+        $arra['modulo_afectado'] = 'Modifica Animal';
         $arra['accion_realizada'] = $this->creaCadenaUpdate('animal',$data, "id_animal = " . $id_animal);
         $arra['valor_anterior'] = implode(";", $anterior[0]);
         $arra['valor_actual'] = implode("; ",$nuevo[0]);
@@ -403,10 +410,5 @@ class AdminModel extends ConexionBD{
 
         return $this->grabaData("bitacoras", $arra);
     }
-    #modificar End
-    // public function actualizar(){
-    //     $data['nombre'] = "actualizado";
-    //     return $this->actualizaData("mb_menu", $data,"idmenu=1");
-    // }
 }
 ?>
