@@ -141,12 +141,12 @@ class FundacionController extends GeneralController{
             move_uploaded_file($image,"./img/animales/".$nombreArchivo);
             
             $imagenEliminar = $objAdmin->consultarAnimal($id_animal);
-            if($imagenEliminar[0]['img'] != $img_modificar){
-                if (isset($imagenEliminar["img"]) && ($imagenEliminar["img"]!="imagen.jpg") ) {
-                    if (file_exists("./img/animales/".$imagenEliminar["img"])) {
-                        unlink("./img/animales/".$imagenEliminar["img"]);
+                if($imagenEliminar[0]['img'] != $nombreArchivo){
+                    if ($imagenEliminar[0]["img"]!="imagen.jpg") {
+                        if (file_exists("./img/animales/".$imagenEliminar[0]["img"])) {
+                            unlink("./img/animales/".$imagenEliminar[0]["img"]);
+                        }
                     }
-                }
             } else {
                 $nombreArchivo = $img_modificar;
             }

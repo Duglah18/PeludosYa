@@ -63,7 +63,8 @@ class AdminModel extends ConexionBD{
     }
 
     public function listar(){
-        return $this->obtenData("SELECT usuarios.cedula, usuarios.nombre, usuarios.direccion, usuarios.activo, rol.nombre as nombrerol, usuarios.telefono
+        return $this->obtenData("SELECT usuarios.cedula, usuarios.nombre, usuarios.direccion, 
+                                        usuarios.activo, rol.nombre as nombrerol, usuarios.telefono
                                 FROM usuarios 
                                 INNER JOIN rol ON usuarios.rol_id = rol.id_rol
                                 ORDER BY usuarios.activo DESC, usuarios.rol_id ASC");
@@ -74,7 +75,8 @@ class AdminModel extends ConexionBD{
 
     public function consultarAnimal($id_animal){
         return $this->obtenData("SELECT a.id_animal, a.nombre, a.anio_nac, a.img, a.descripcion, 
-                                a.fecha_ingreso, a.raza_id, a.tamanio_id, a.albergue_id, a.visible, b.id_tipo_animal
+                                    a.fecha_ingreso, a.raza_id, a.tamanio_id, a.albergue_id, a.visible, 
+                                    b.id_tipo_animal
                                 FROM animal a
                                 INNER JOIN raza b ON a.raza_id = b.id_raza
                                 WHERE a.id_animal = CASE WHEN '$id_animal' = '' THEN a.id_animal ELSE '$id_animal'END");
@@ -124,7 +126,6 @@ class AdminModel extends ConexionBD{
 
     public function registrarUsuario($tabla, $rif, $nombre, $rol, $direccion, 
                                     $contrasenia, $estado, $tlf, $usuario_ingresando){
-        //X
         $data['cedula'] = $rif;
         $data['nombre'] = $nombre;
         $data['rol_id'] = $rol;
@@ -155,7 +156,6 @@ class AdminModel extends ConexionBD{
     }
 
     public function registraTipoAnimal($tabla, $nombre, $usuario_ingresando){
-        //X
         $data['nombre'] = $nombre;
 
         $registrandoTAnimal = $this->grabaData($tabla, $data);
@@ -281,38 +281,20 @@ class AdminModel extends ConexionBD{
         }
         $arra['usuario_bit'] = $usuario_modificando;
         $arra['modulo_afectado'] = 'Modifica Usuario';
-        $arra['accion_realizada'] = $this->creaCadenaUpdate('adopcion',$data, "id_adopcion = " . $idusuario);
+        $arra['accion_realizada'] = $this->creaCadenaUpdate('usuarios',$data, "cedula = " . $idusuario);
         $arra['valor_anterior'] = implode(";", $anterior[0]);
         $arra['valor_actual'] = implode("; ",$nuevo[0]);
         $arra['fecha_accion'] ='Now()';
 
         return $this->grabaData("bitacoras", $arra);
     }
-//falta de aca para abajo
-    /*public function decisionAdopcion($identificador, $estadonuevo, $usuario){
-        //primero se pide luego se guarda en bitacora
-        $anterior = $this->obtenData("SELECT estado FROM adopcion WHERE id_adopcion = '$identificador'");
-        if ($anterior[0][0] == $estadonuevo){
-            return false;
-        }
-        $data['estado'] = $estadonuevo;
-        $actualiza = $this->actualizaData('adopcion',$data, "id_adopcion = " . $identificador);
-        
-        $nuevo = $this->obtenData("SELECT estado FROM adopcion WHERE id_adopcion = '$identificador'");
-        
-        $arra['usuario_bit'] = $usuario;
-        $arra['modulo_afectado'] = 'Modifica Adopcion';
-        $arra['accion_realizada'] = $this->creaCadenaUpdate('adopcion',$data, "id_adopcion = " . $identificador);
-        $arra['valor_anterior'] = $nuevo[0][0];
-        $arra['valor_actual'] = $anterior[0][0];
-        $arra['fecha_accion'] ='Now()';
 
-        if (!$actualiza){
-            return false;
-        }
-        return $this->grabaData("bitacoras", $arra);
-    } */
-    public function modificaAnimal($tabla, $id_animal,$nom, $anionac, $nomimg, $descripcion, $id_raza, $tamano_id, $albergue, $visible){
+    public function modificaAnimal($tabla, $id_animal,$nom, $anionac, $nomimg, $descripcion, 
+                                    $id_raza, $tamano_id, $albergue, $visible, $usuario_modificando){
+        $anterior = $this->obtenData("SELECT nombre, anio_nac, img, descripcion, raza_id, tamanio_id,
+                                        albergue_id, visible
+                                        FROM animal
+                                        WHERE id_animal = '$id_animal'");
         $data['nombre'] = $nom;
         $data['anio_nac'] = $anionac;
         $data['img'] = $nomimg;
@@ -321,27 +303,105 @@ class AdminModel extends ConexionBD{
         $data['tamanio_id'] = $tamano_id;
         $data['albergue_id'] = $albergue;
         $data['visible'] = $visible;
-        return $this->actualizaData($tabla, $data, "id_animal = " . $id_animal);
+        $modificaAnimal = $this->actualizaData($tabla, $data, "id_animal = '$id_animal'");
+
+        $nuevo = $this->obtenData("SELECT nombre, anio_nac, img, descripcion, raza_id, tamanio_id,
+                                    albergue_id, visible
+                                    FROM animal
+                                    WHERE id_animal = '$id_animal'");
+
+        if(!$modificaAnimal){
+            return false;
+        }
+
+        $arra['usuario_bit'] = $usuario_modificando;
+        $arra['modulo_afectado'] = 'Modifica Animal Admin';
+        $arra['accion_realizada'] = $this->creaCadenaUpdate('animal',$data, "id_animal = " . $id_animal);
+        $arra['valor_anterior'] = implode(";", $anterior[0]);
+        $arra['valor_actual'] = implode("; ",$nuevo[0]);
+        $arra['fecha_accion'] ='Now()';
+
+        return $this->grabaData("bitacoras", $arra);
     }
 
-    public function modificaVeterinario($id_veterinario, $nombre, $tlf, $direccion, $img, $visible){
+    public function modificaVeterinario($id_veterinario, $nombre, $tlf, $direccion, 
+                                        $img, $visible, $usuario_modificando){
+        $anterior = $this->obtenData("SELECT nombre, tlf, direccion, img, visible
+                                        FROM veterinario WHERE id_veterinario = '$id_veterinario'");
+        
         $data['nombre'] = $nombre;
         $data['tlf'] = $tlf;
         $data['direccion'] = $direccion;
         $data['img'] = $img;
         $data['visible'] = $visible;
-        return $this->actualizaData('veterinario', $data, "id_veterinario = ".$id_veterinario);
+        $modificaVeterinario = $this->actualizaData('veterinario', $data, "id_veterinario = '$id_veterinario'");
+
+        $nuevo = $this->obtenData("SELECT nombre, tlf, direccion, img, visible
+                                    FROM veterinario WHERE id_veterinario = '$id_veterinario'");
+
+        if(!$modificaVeterinario){
+            return false;
+        }
+
+        $arra['usuario_bit'] = $usuario_modificando;
+        $arra['modulo_afectado'] = 'Modifica Veterinario Admin';
+        $arra['accion_realizada'] = $this->creaCadenaUpdate('veterinario',$data, "id_veterinario = " . $id_veterinario);
+        $arra['valor_anterior'] = implode(";", $anterior[0]);
+        $arra['valor_actual'] = implode("; ",$nuevo[0]);
+        $arra['fecha_accion'] ='Now()';
+
+        return $this->grabaData("bitacoras", $arra);
     }
 
-    public function modificaTipoAnimal($id_tipo, $nombre){
+    public function modificaTipoAnimal($id_tipo, $nombre, $usuario_modificando){
+        //Probar 3
+        $anterior = $this->obtenData("SELECT nombre
+                                        FROM tipo_animal WHERE id_tipo = '$id_tipo'");
+
         $data['nombre'] = $nombre;
-        return $this->actualizaData('tipo_animal', $data, "id_tipo = " .$id_tipo);
+        $modificaTipoAnimal = $this->actualizaData('tipo_animal', $data, "id_tipo = '$id_tipo'");
+
+        $nuevo = $this->obtenData("SELECT nombre
+                                    FROM tipo_animal WHERE id_tipo = '$id_tipo'");
+
+        if(!$modificaTipoAnimal){
+            return false;
+        }
+
+        $arra['usuario_bit'] = $usuario_modificando;
+        $arra['modulo_afectado'] = 'Modifica Tipo Animal admin';
+        $arra['accion_realizada'] = $this->creaCadenaUpdate('tipo_animal',$data, "id_tipo = " . $id_tipo);
+        $arra['valor_anterior'] = implode(";", $anterior[0]);
+        $arra['valor_actual'] = implode("; ",$nuevo[0]);
+        $arra['fecha_accion'] ='Now()';
+
+        return $this->grabaData("bitacoras", $arra);
     }
 
-    public function modificaRaza($id_raza, $nombre, $tipoAnimal){
+    public function modificaRaza($id_raza, $nombre, $tipoAnimal, $usuario_modificando){
+        //Probar 4
+        $anterior = $this->obtenData("SELECT nombre, id_tipo_animal
+                                        FROM raza WHERE id_raza = '$id_raza'");
+
         $data['nombre'] = $nombre;
         $data['id_tipo_animal'] = $tipoAnimal;
-        return $this->actualizaData('raza', $data, "id_raza = " . $id_raza);
+        $modificaRazaAnimal = $this->actualizaData('raza', $data, "id_raza = " . $id_raza);
+
+        $nuevo = $this->obtenData("SELECT nombre, id_tipo_animal
+                                    FROM raza WHERE id_raza = '$id_raza'");
+
+        if(!$modificaRazaAnimal){
+            return false;
+        }
+
+        $arra['usuario_bit'] = $usuario_modificando;
+        $arra['modulo_afectado'] = 'Modifica Raza Animal Admin';
+        $arra['accion_realizada'] = $this->creaCadenaUpdate('raza',$data, "id_raza = " . $id_raza);
+        $arra['valor_anterior'] = implode(";", $anterior[0]);
+        $arra['valor_actual'] = implode("; ",$nuevo[0]);
+        $arra['fecha_accion'] ='Now()';
+
+        return $this->grabaData("bitacoras", $arra);
     }
     #modificar End
     // public function actualizar(){

@@ -203,7 +203,7 @@ class AdminController extends GeneralController{
         if(isset($_POST['accion']) && $_POST['accion'] == 'Modificar'){
             $identificador = $_POST['identificador'];
             $nombre = $_POST['nombreTipo'];
-            $objAdmin->modificaTipoAnimal($identificador,$nombre);
+            $objAdmin->modificaTipoAnimal($identificador,$nombre, $_SESSION['iduser']);
             $_POST['accion'] = "";
             header("location: ".BASE_URL."admin/tipoAnimal");
         } elseif(isset($_POST['accion']) && $_POST['accion'] == 'Agregar') {
@@ -219,7 +219,7 @@ class AdminController extends GeneralController{
             $identificador = $_POST['identificador'];
             $nombre = $_POST['nombreRaza'];
             $TipoAnimal = $_POST['tipoanimal'];
-            $objAdmin->modificaRaza($identificador, $nombre, $TipoAnimal);
+            $objAdmin->modificaRaza($identificador, $nombre, $TipoAnimal, $_SESSION['iduser']);
             $_POST['accion'] = "";
             header("location: ".BASE_URL."admin/razasAnimal");
         } elseif(isset($_POST['accion']) && $_POST['accion'] == 'Agregar'){
@@ -269,10 +269,10 @@ class AdminController extends GeneralController{
             move_uploaded_file($image,"./img/animales/".$nombreArchivo);
 
             $imagenEliminar = $objFund->consultarAnimal($id_animal);
-                if($imagenEliminar[0]['img'] != $img_modificar){
-                    if (isset($imagenEliminar["img"]) && ($imagenEliminar["img"]!="imagen.jpg") ) {
-                        if (file_exists("./img/animales/".$imagenEliminar["img"])) {
-                            unlink("./img/animales/".$imagenEliminar["img"]);
+                if($imagenEliminar[0]['img'] != $nombreArchivo){
+                    if ($imagenEliminar[0]["img"]!="imagen.jpg") {
+                        if (file_exists("./img/animales/".$imagenEliminar[0]["img"])) {
+                            unlink("./img/animales/".$imagenEliminar[0]["img"]);
                         }
                     }
                 } else {
@@ -285,7 +285,8 @@ class AdminController extends GeneralController{
             $albergue_id= $_POST['albergue'];
             $visible = $_POST['visible'];
             $objFund->modificaAnimal('animal', $id_animal,$nombre, $fechanac, $nombreArchivo, 
-                                    $descrip, $raza_id,$tamanio_id, $albergue_id, $visible);
+                                    $descrip, $raza_id,$tamanio_id, $albergue_id, $visible,
+                                    $_SESSION['iduser']);
             header("location: ".BASE_URL."admin/animales");
         }
     }
@@ -305,13 +306,13 @@ class AdminController extends GeneralController{
             $imgtxt = (isset($_FILES['img']['name']))? $_FILES['img']['name']:"";
             $nombreArchivo =($imgtxt!="")?$fecha_paratmp->getTimestamp()."_".$_FILES['img']['name']:"imagen.jpg";
             $image = $_FILES['img']['tmp_name'];
-            move_uploaded_file($image,"./img/animales/".$nombreArchivo);
-            
+            move_uploaded_file($image,"./img/veterinarios/".$nombreArchivo);
+
             $imagenEliminar = $objAdmin->consultarVeterinarios($id_veterinario);
-                if($imagenEliminar[0]['img'] != $objAdmin){
-                    if (isset($imagenEliminar["img"]) && ($imagenEliminar["img"]!="imagen.jpg") ) {
-                        if (file_exists("./img/veterinarios/".$imagenEliminar["img"])) {
-                            unlink("./img/veterinarios/".$imagenEliminar["img"]);
+                if($imagenEliminar[0]['img'] != $nombreArchivo){
+                    if ($imagenEliminar[0]["img"]!="imagen.jpg"){//Se cumple?
+                        if (file_exists("./img/veterinarios/".$imagenEliminar[0]["img"])) {
+                            unlink("./img/veterinarios/".$imagenEliminar[0]["img"]);
                         }
                     }
                 } else {
@@ -319,7 +320,7 @@ class AdminController extends GeneralController{
                 }
             /*-----------------------Terminando de Img------------------------------------------*/
             $objAdmin->modificaVeterinario($id_veterinario, $nombre, $telefono, $direccion, 
-                                            $nombreArchivo, $visible);
+                                            $nombreArchivo, $visible, $_SESSION['iduser']);
             $_POST['accion'] = "";
             header("location: ".BASE_URL."admin/agregaVeterinarios");
         } elseif(isset($_POST['accion']) && $_POST['accion'] == 'Agregar') {
