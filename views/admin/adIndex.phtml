@@ -1,4 +1,5 @@
 <?php
+    $total_paginas = ceil($totalregistro / $por_pagina);
 ?>
 
     <h1>Admin Logueado Satisfactoriamente</h1>
@@ -6,44 +7,10 @@
         Agrega (Mostrar):
     </h2>
     <ul>
-        <li><p>Animales solo para admin (Ya)</p></li>
-        <li><p>Albergues (Aun no )</p></li>
-        <li><p>Pedidos Adopcion</p></li>
         <li><p>Paginacion</p></li>
-        <li><p>Vendedores(Final final)</p></li>
-        <li><p>Tiendas Con vendedores y productos por tienda</p></li>
-    </ul>
-
-    <h2>
-        Agrega (Registrar):
-    </h2>
-    <ul>
-        <li><p>Veterinarios (Ya)</p></li>
-        <li><p>Albergue (Ya)</p></li>
-        <li><p></p></li>
-        <li><p></p></li>
-    </ul>
-    <h2>
-        Agrega (Modificar):
-    </h2>
-    <ul>
-        <li><p>Adopciones</p></li>
-        <li><p>Animales</p></li>
-        <li><p>Usuarios</p></li>
-        <li><p>Tipos Razas y Animal</p></li>
-        <li><p>Veterinarios</p></li>
     </ul>
     <a href="<?= BASE_URL;?>admin/agregaUsuarios"><input type="button" value="Agrega Usuario"></a>
     <table class="highlight centered">
-        <!--
-            print_r($dataAdmin);
-        aca se reciben los datos de la consulta de admin 
-        por la var que se creo en Admincontroller(consultaData)
-        la del array $data['dataAdmin']
-        se pasa por su nombre gracias a que al generar la vista en el metodo
-        loadview lo pasamos por alli por la variable $$key
-        esta en el general controller se puede mostrar de manera de tabla asi:
-        -->
         <thead>
             <tr>
                 <th scope="col">Cedula</th>
@@ -82,18 +49,37 @@
         ?>
         </tbody>
     </table>
-<!--
+    <div class="col-md-12 center text-center cyan lighten-2"><!--Paginador-->
+    <ul class="pagination">
+        <?php if($pagina != 1){ ?>
+            <li class="waves-effect blue-text"><a href="<?=BASE_URL?>admin/mostrarData?pagina=1"><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
+            <li class="waves-effect"><a href="<?=BASE_URL?>admin/mostrarData?pagina=<?=$pagina - 1?>"><i class="material-icons">chevron_left</i></a></li>
+        <?php
+        }else{ ?>
+            <li class="disabled"><a href=""><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
+            <li class="disabled"><a href=""><i class="material-icons">chevron_left</i></a></li>
+    <?php
+        } ?>
+        
+        
+        <?php for($i = 1; $i <= $total_paginas; $i++){ 
+            if ($i == $pagina){ ?>
+                <li class="active"><a href="<?=BASE_URL?>admin/mostrarData?pagina=<?=$i?>"><?=$i?></a></li>
+           <?php } else{
+            ?>
+            <li class="waves-effect"><a href="<?=BASE_URL?>admin/mostrarData?pagina=<?=$i?>"><?=$i?></a></li>
+        <?php 
+            }
+        } ?>
 
-            <td>
-                    
-                        <form method="POST">
-                            <input type="hidden" name="textid" id="textid" value="<?= $libro['id']; ?>"/>
-
-                            <input type="submit" name="accion" value="Seleccionar" class="btn btn-primary"/>
-                            
-                            <input type="submit" name="accion" value="Borrar" class="btn btn-danger"/>
-                        </form>
-                    
-                    </td>
-
--->
+        <?php if($pagina != $total_paginas){ ?>
+        <li class="waves-effect"><a href="<?=BASE_URL?>admin/mostrarData?pagina=<?=$pagina + 1?>"><i class="material-icons">chevron_right</i></a></li>
+        <li class="waves-effect"><a href="<?=BASE_URL?>admin/mostrarData?pagina=<?=$total_paginas?>"><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
+        <?php
+        }else{ ?>
+            <li class="disabled"><a href=""><i class="material-icons">chevron_right</i></a></li>
+            <li class="disabled"><a href=""><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
+    <?php
+        } ?>
+    </ul>
+</div>

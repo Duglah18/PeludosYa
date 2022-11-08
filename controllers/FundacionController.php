@@ -80,9 +80,9 @@ class FundacionController extends GeneralController{
             $activo = $_POST['activo'];
             $objFund->modificaAlbergue($id_albergue, $Nombre, $cedula, $direccion, 
                                         $activo, $_SESSION['iduser']);
-            if($_SESSION['rol'] == "1"){
-                $objAdmin = $this->loadModel("FundacionModel");
-                $data['alberguesAdmin'] = $objAdmin->consultaAlbergue('');
+            if($_SESSION['rol'] == "1"){//revisa esto
+                // $objAdmin = $this->loadModel("FundacionModel");
+                // $data['alberguesAdmin'] = $objAdmin->consultaAlbergue('');
                 header("location: ".BASE_URL."admin/albergues");
             } 
             header("location: ".BASE_URL."fundacion/albergues");

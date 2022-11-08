@@ -21,7 +21,13 @@ class SessionController extends GeneralController{
     
     public function catalogoAnimales(){
         $objSess = $this->loadModel("SessionModel");
-        $data['animales'] =$objSess->obtenAnimales();
+        $pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
+        $pagina = $pagina < 0? 1: $pagina;
+        $qty = 5;
+        $data['pagina'] = $pagina;
+        $data['por_pagina'] = $qty;
+        $data['totalregistro'] = $objSess->TotalAnimalesCatalogoSess();
+        $data['animales'] =$objSess->obtenAnimales($pagina, $qty);
         $this->loadView("catalogo.phtml", "Ver Peluditos",$data);
     }
 
@@ -54,28 +60,6 @@ class SessionController extends GeneralController{
         //el titulo se podria cambiar y poner el nombre del animal a ver
         $this->loadView("veterinario.phtml", "Veterinario Detallado", $data);
     }
-    //adaptar a lo anterior
-    //adaptado a login_user() asi q esto esta basura
-    // public function redirectLogin($vista, $params = array()){//ir a la vista dependiendo de rol
-    //     //params pasa los datos del usuario logeandose
-    //     switch ($vista){
-    //         case 1://admin
-    //             $this->loadView("admin/admin.phtml","Admin");
-    //             break;
-    //         case 2://Usuario
-    //             $this->loadView("home.phtml","Pag principal Log");
-    //             break;
-    //         case 3://Fundacion
-    //             $this->loadView("fundacion/fundacion.phtml","Pag princ Fund log",$params);
-    //             break;
-    //         case 4://Vendedor
-    //             $this->loadView("vendedor/vendedor.phtml","Pag Princ Vend Log");
-    //             break;
-    //         default:
-    //             echo "papi pero entiendete q haces?";
-    //             break;
-    //     }
-    // }
     #Endregion
 
     #Regiond Metods with Functions

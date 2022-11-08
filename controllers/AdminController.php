@@ -108,11 +108,17 @@ class AdminController extends GeneralController{
             $this->loadView("admin/agalbergue.phtml","Agregar Albergue como Admin",$data);
         }
     }
-
+    
     public function mostrarData(){
         $objAdmin = $this->loadModel("AdminModel");
-        $data['dataAdmin'] = $objAdmin->listar();
-        $this->loadView("admin/adIndex.phtml", "Administrador registro usuario",$data);
+        $pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
+        $pagina = $pagina < 0? 1: $pagina;
+        $qty = 10;
+        $data['pagina'] = $pagina;
+        $data['por_pagina'] = $qty;
+        $data['totalregistro'] = $objAdmin->TotalUsuarios();
+        $data['dataAdmin'] = $objAdmin->listar($pagina, $qty);
+        $this->loadView("admin/adIndex.phtml", "Administrador Ver Usuarios",$data);
     }
 
     public function tipoAnimal(){
@@ -157,8 +163,7 @@ class AdminController extends GeneralController{
             $_SESSION['usuario'] = $dataAdmin[0]['nombre'];
             $_SESSION['rol'] = $dataAdmin[0]['rol_id'];
             $_SESSION['iduser'] = $dataAdmin[0]['cedula'];
-            $data['dataAdmin'] = $objAdmin->listar();
-            $this->loadView("admin/adIndex.phtml","Administrador Logueado",$data);
+            header("location: ". BASE_URL. "admin/mostrarData");
     }
 
     // public function Closesession(){
