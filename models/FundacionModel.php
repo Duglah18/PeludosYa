@@ -85,7 +85,9 @@ class FundacionModel extends ConexionBD{
         }
     }
 
-    public function consultaAnimales($cedula_user){
+    public function consultaAnimales($cedula_user, $pagina = 1, $qty = 10){
+        if ($pagina <= 0){ $pagina = 1; }
+        $desde = ($pagina - 1) * $qty;
         $resultados = $this->obtenData("SELECT a.id_animal, a.nombre, a.anio_nac, a.img, 
                                                 a.fecha_ingreso, b.nombre as nomraza, c.nombre as nomtipo,
                                                 e.nombre as nomalbergue, d.nombre as nombreUser
@@ -94,7 +96,8 @@ class FundacionModel extends ConexionBD{
                                         INNER JOIN tipo_animal c ON c.id_tipo = b.id_tipo_animal
                                         INNER JOIN albergue e ON e.id_albergue = a.albergue_id
                                         INNER JOIN usuarios d ON d.cedula = e.cedula_usuario
-                                        WHERE (d.cedula = CASE WHEN '$cedula_user' = '' THEN d.cedula ELSE '$cedula_user' END)");
+                                        WHERE (d.cedula = CASE WHEN '$cedula_user' = '' THEN d.cedula ELSE '$cedula_user' END)
+                                        LIMIT $desde,$qty");
         /*Inciso: CASE ES COMO SWITCH O IF EN SQL EN ESTE CASO SI LLEGA VACIO $cedula_user ENTONCES
         MOSTRARA TODOS LOS CONTENIDOS DE LA TABLA PQ NO LO APLIQUE ANTES? PS DE PANA LO APRENDI HACE
         POCO RELATIVAMENTE */
@@ -104,6 +107,17 @@ class FundacionModel extends ConexionBD{
             return false;
         }
     } 
+
+    public function TotalConsultaAnimales($usuario = ""){
+        $resultados = $this->obtenData("SELECT COUNT(*) AS TotalAnimales
+                                        FROM animal a
+                                        INNER JOIN raza b ON a.raza_id = b.id_raza
+                                        INNER JOIN tipo_animal c ON c.id_tipo = b.id_tipo_animal
+                                        INNER JOIN albergue e ON e.id_albergue = a.albergue_id
+                                        INNER JOIN usuarios d ON d.cedula = e.cedula_usuario
+                                        WHERE (d.cedula = CASE WHEN '$usuario' = '' THEN d.cedula ELSE '$usuario' END)");
+        return $resultados[0]['TotalAnimales'];
+    }
 
     public function consultaTipoAnimal(){
         $resultados = $this->obtenData("SELECT id_tipo, nombre FROM tipo_animal");

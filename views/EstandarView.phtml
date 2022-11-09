@@ -29,8 +29,10 @@ if (isset($_SESSION)){
       <!--Creo q si estas en admin no deberia llevarte a la pag pero bueh-->
         <a href="<?= BASE_URL; ?>" class="brand-logo s1"><img style="padding-top: 15px; padding-bottom: 10px;  height: 60px;" class="responsive-img small" src="<?= URL_ASSETS; ?>/logo.png"></a>
       <ul id="nav-mobile" class="right hide-on-med-and-down">
+      <?php if($role != "1"){ ?>
       <li><a href='<?= BASE_URL; ?>session/catalogoAnimales'>Peluditos</a></li>
       <?php if($role != "3"){ ?><li><a href='<?= BASE_URL; ?>session/catalogoVeterinarios'> Veterinarios</a></li><?php } ?>
+      <?php } ?>
       <!-- Botones NavBar-->
         <?php if (isset($_SESSION)){ ?>
           

@@ -1,16 +1,6 @@
 <?php 
 
 class SessionModel extends ConexionBD{
-    public function loginUser($cedula, $contra){
-        $result = $this->obtenData("SELECT cedula, nombre, contrasenia, activo, rol_id FROM usuarios 
-                    WHERE cedula = '$cedula' AND contrasenia = '$contra'");
-        if ($result){
-            return $result;
-        } else {
-            return false;
-        }
-    }
-
     public function consultarVeterinarios($id_veterinario, $pagina, $qty){
         if($pagina <= 0){ $pagina = 1; }
         $desde = ($pagina - 1) * $qty;
@@ -81,6 +71,23 @@ class SessionModel extends ConexionBD{
                                       WHERE id_veterinario = '$idveterinario'");
         if($resultado){
             return $resultado;
+        } else {
+            return false;
+        }
+    }
+
+    public function loginUser($cedula, $contra){
+        $result = $this->obtenData("SELECT cedula, nombre, contrasenia, activo, rol_id FROM usuarios 
+                    WHERE cedula = '$cedula' AND contrasenia = '$contra'");
+        if ($result){
+            $arry['usuario_bit'] = $cedula;
+            $arry['modulo_afectado'] = 'Usuario Logueandose';
+            $arry['accion_realizada'] = "Logueandose";
+            $arry['valor_actual'] = implode("; ",$result[0]);
+            $arry['fecha_accion'] ='Now()';
+            $this->grabaData("bitacoras",$arry);
+
+            return $result;
         } else {
             return false;
         }

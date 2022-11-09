@@ -21,7 +21,13 @@ class AdminController extends GeneralController{
 
     public function animales(){
         $objAdmin = $this->loadModel("FundacionModel");
-        $data['animalesAdmin'] = $objAdmin->consultaAnimales('');
+        $pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
+        $pagina = $pagina < 0? 1: $pagina;
+        $qty = 10;
+        $data['pagina'] = $pagina;
+        $data['por_pagina'] = $qty;
+        $data['totalregistro'] = $objAdmin->TotalConsultaAnimales('');
+        $data['animalesAdmin'] = $objAdmin->consultaAnimales('',$pagina,$qty);
         //atras envie nada para que me arroje todo
         $this->loadView("admin/veranimales.phtml","Ver Animales",$data);
     }

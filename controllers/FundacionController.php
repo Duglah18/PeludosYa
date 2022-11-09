@@ -24,7 +24,13 @@ class FundacionController extends GeneralController{
 
     public function animales(){
         $objFund = $this->loadModel("FundacionModel");
-        $data['useranimales'] = $objFund->consultaAnimales($_SESSION['iduser']);
+        $pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
+        $pagina = $pagina < 0? 1: $pagina;
+        $qty = 10;
+        $data['pagina'] = $pagina;
+        $data['por_pagina'] = $qty;
+        $data['totalregistro'] = $objFund->TotalConsultaAnimales($_SESSION['iduser']);
+        $data['useranimales'] = $objFund->consultaAnimales($_SESSION['iduser'],$pagina,$qty);
         $data['albergues'] = $objFund->consultaAlbergue($_SESSION['iduser']);
         $this->loadView("fundacion/veranimales.phtml","Ver Animales",$data);
     }
