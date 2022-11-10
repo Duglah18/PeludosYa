@@ -3,11 +3,19 @@
 class AdminModel extends ConexionBD{
 
     // #consultas Region
-    public function consultarVeterinarios($id_veterinario){
+    public function consultarVeterinarios($id_veterinario, $pagina, $qty){
+        if($pagina <= 0){ $pagina = 1; }
+        $desde = ($pagina - 1) * $qty;
         $resultado = $this->obtenData("SELECT id_veterinario, nombre, tlf, direccion, img, visible, usuario_Rveterinario
                           FROM veterinario
-                          WHERE id_veterinario = CASE WHEN '$id_veterinario' = '' THEN id_veterinario ELSE '$id_veterinario' END");
+                          WHERE id_veterinario = CASE WHEN '$id_veterinario' = '' THEN id_veterinario ELSE '$id_veterinario' END
+                          LIMIT $desde, $qty");
         return $resultado;
+    }
+
+    public function TotalVeterinariosConsults(){
+        $resultado = $this->obtenData("SELECT COUNT(*) AS TotalVeterinarios FROM veterinario");
+        return $resultado[0]['TotalVeterinarios'];
     }
 
     public function consultarAdmin($user, $contrasenia){
@@ -269,6 +277,20 @@ class AdminModel extends ConexionBD{
         $arry['modulo_afectado'] = 'Añadir Veterinario Admin';
         $arry['accion_realizada'] = $ingresando;
         $arry['valor_actual'] = implode("; ",$data);
+        $arry['fecha_accion'] ='Now()';
+
+        $bitacora = $this->grabaData("bitacoras",$arry);
+        if(!$bitacora){
+            return false;
+        }
+        return $bitacora;
+    }
+
+    public function registraCierraSesion($user){
+        $arry['usuario_bit'] = $user;
+        $arry['modulo_afectado'] = 'Cerrar Sesion';
+        $arry['accion_realizada'] = "Cerrar Sesion";
+        $arry['valor_actual'] = $user . " Cerrando Sesion";
         $arry['fecha_accion'] ='Now()';
 
         $bitacora = $this->grabaData("bitacoras",$arry);

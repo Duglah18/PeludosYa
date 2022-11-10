@@ -134,7 +134,7 @@ class SessionModel extends ConexionBD{
     }
 
     
-
+//esto de que sirve?
     public function verificaExistencia($idAnimal, $iduser){
         $resultado = $this->obtenData("SELECT animal_id, cedula_usuario, estado
                                         FROM adopcion");
@@ -146,8 +146,27 @@ class SessionModel extends ConexionBD{
         $data['animal_id'] = $idAnimal;
         $data['cedula_usuario'] = $user;
         $data['estado'] = "1";
-        return $this->grabaData('adopcion',$data);
-    }//Deberia hacerle bitacora a esto?
+        $registraPeticion = $this->grabaData('adopcion',$data);
+
+        if (is_bool($registraPeticion)){
+            return false;
+        }
+        $ingresando = $this->creaCadenaInsert($data, 'adopcion');
+        $arry['usuario_bit'] = $user;
+        $arry['modulo_afectado'] = 'Usuario Pidiendo Adopcion';
+        $arry['accion_realizada'] = $ingresando;
+        $arry['valor_actual'] = implode("; ",$data);
+        $arry['fecha_accion'] ='Now()';
+
+        $bitacora = $this->grabaData("bitacoras",$arry);
+
+        if (!$bitacora){
+            return false;
+        }
+        return $bitacora;
+
+
+    }//Deberia hacerle bitacora a esto? Si
 
     public function retornaResponsable($iduser){//aca no hace falta revisar si es real pq ya se verifica antes
         $resultado = $this->obtenData("SELECT nombre, telefono

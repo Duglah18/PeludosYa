@@ -8,6 +8,8 @@ class HomeController extends GeneralController{
     }
     public function destroy_session(){
       if(isset($_SESSION['usuario'])){
+        $objAdmin = $this->loadModel("AdminModel");
+        $objAdmin->registraCierraSesion($_SESSION['iduser']);
         session_destroy();
         header("refresh: ". 0);
         $this->loadView("home.phtml","inicio");

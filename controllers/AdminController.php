@@ -6,6 +6,8 @@ class AdminController extends GeneralController{
         //esta logica se puede usar en el buscar
         //q te mande a la misma pag pero q si recibe un parametro x q te haga algo diferente
         if (isset($_SESSION['usuario'])){
+            $objAdmin = $this->loadModel("AdminModel");
+            $objAdmin->registraCierraSesion($_SESSION['iduser']);
             session_destroy();
             /*UY ESTO HAY QUE CAMBIARLO SI VAS AL INDEX LOGUEADO SE TE DESLOGUEA */
             //sin el refresh se seguiria viendo el Usuario como si
@@ -89,15 +91,27 @@ class AdminController extends GeneralController{
         $this->loadView("admin/agusaurios.phtml","Agrega usuarios como Admin", $data);
         }
     }
-    
+
     public function agregaVeterinarios(){
         $objAdmin = $this->loadmodel("AdminModel");
         if (isset($_POST['accion']) && $_POST['accion'] == 'Modificar'){
-            $data['Veterinarios'] = $objAdmin->consultarVeterinarios('');
-            $data['vtrModificar'] = $objAdmin->consultarVeterinarios($_POST['modificacion']);
-            $this->loadView("admin/agVeterinario.phtml", "Agrega Veterinarios como Admin",$data);
+            $pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
+            $pagina = $pagina < 0? 1: $pagina;
+            $qty = 10;
+            $data['pagina'] = $pagina;
+            $data['por_pagina'] = $qty;
+            $data['totalregistro'] = $objAdmin->TotalVeterinariosConsults();
+            $data['Veterinarios'] = $objAdmin->consultarVeterinarios('',$pagina,$qty);
+            $data['vtrModificar'] = $objAdmin->consultarVeterinarios($_POST['modificacion'],$pagina,$qty);
+            $this->loadView("admin/agVeterinario.phtml", "Modifica Veterinario como Admin",$data);
         } else {
-            $data['Veterinarios'] = $objAdmin->consultarVeterinarios('');
+            $pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
+            $pagina = $pagina < 0? 1: $pagina;
+            $qty = 10;
+            $data['pagina'] = $pagina;
+            $data['por_pagina'] = $qty;
+            $data['totalregistro'] = $objAdmin->TotalVeterinariosConsults();
+            $data['Veterinarios'] = $objAdmin->consultarVeterinarios('',$pagina,$qty);
             $this->loadView("admin/agVeterinario.phtml", "Agrega Veterinarios como Admin",$data);
         }
     }
