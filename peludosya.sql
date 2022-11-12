@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 08-11-2022 a las 20:13:48
+-- Tiempo de generación: 12-11-2022 a las 23:59:01
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 8.1.6
 
@@ -40,7 +40,7 @@ CREATE TABLE `adopcion` (
 --
 
 INSERT INTO `adopcion` (`id_adopcion`, `fecha_adopcion`, `animal_id`, `cedula_usuario`, `estado`) VALUES
-(3, '2022-10-22', 3, '29517402', 3),
+(3, '2022-10-22', 3, '29517402', 2),
 (5, '2022-11-03', 4, '15597525', 3);
 
 -- --------------------------------------------------------
@@ -63,7 +63,8 @@ CREATE TABLE `albergue` (
 
 INSERT INTO `albergue` (`id_albergue`, `nombre`, `direccion`, `cedula_usuario`, `activo`) VALUES
 (1, 'albergue1115151qweq', 'Carrera 18 calle 55', '26976183', 1),
-(2, 'albergue1232', 'Carrera 18 calle 55', '26976183', 1);
+(2, 'albergue1232', 'Carrera 18 calle 55', '26976183', 1),
+(3, 'Albergue Polipro', 'Carr 18', '29517402j', 1);
 
 -- --------------------------------------------------------
 
@@ -100,7 +101,8 @@ INSERT INTO `animal` (`id_animal`, `nombre`, `anio_nac`, `img`, `descripcion`, `
 (10, 'terry', '2012', '1667688509_c1a82509.jpg', 'Terry es muy bravo', '2022-11-05', 6, 1, 2, 1),
 (11, 'oliver', '2021', '1667688623_d41e08c5.jpg', 'oliver es muy bravo', '2022-11-05', 5, 1, 2, 1),
 (12, 'bola de nieve', '2022', '1667689056_E9aVPwWWQAEbA_0.jpg', 'Bola de nieve', '2022-11-05', 5, 1, 1, 1),
-(13, 'Rocky', '2019', '1667689195_f58e675d.jpg', 'Prueba', '2022-11-05', 2, 2, 1, 1);
+(13, 'Rocky', '2019', '1667689195_f58e675d.jpg', 'Prueba', '2022-11-05', 2, 2, 1, 1),
+(14, 'Jhonny', '2022', '1668286878_33d9817d742e28e55c289c33b7087025.jpg', 'Esto es otra prueba', '2022-11-12', 4, 1, 3, 1);
 
 -- --------------------------------------------------------
 
@@ -173,7 +175,48 @@ INSERT INTO `bitacoras` (`id_bitacora`, `usuario_bit`, `modulo_afectado`, `accio
 (48, '29517402', 'Modifica Veterinario Admi', 'UPDATE veterinario SET nombre=David, tlf=42518859, direccion=donde sea, img=1667755235_85d4d82f.jpg, visible=1 WHERE id_veterinario = 17', 'David;David;42518859;42518859;donde sea;donde sea;imagen.jpg;imagen.jpg;1;1', 'David; David; 42518859; 42518859; donde sea; donde sea; 1667755235_85d4d82f.jpg; 1667755235_85d4d82f', '2022-11-06 17:20:35'),
 (49, '29517402', 'Modifica Veterinario Admi', 'UPDATE veterinario SET nombre=David, tlf=42518859, direccion=donde sea, img=1667755430_8c5b0c49a2b2c6ccaf9a38ed8f8565ff.jpg, visible=1 WHERE id_veterinario = 17', 'David;David;42518859;42518859;donde sea;donde sea;1667755235_85d4d82f.jpg;1667755235_85d4d82f.jpg;1;', 'David; David; 42518859; 42518859; donde sea; donde sea; 1667755430_8c5b0c49a2b2c6ccaf9a38ed8f8565ff.', '2022-11-06 17:23:50'),
 (50, '29517402', 'Modifica Tipo Animal admin', 'UPDATE tipo_animal SET nombre=Conejo2 WHERE id_tipo = 7', 'Conejo;Conejo', 'Conejo2; Conejo2', '2022-11-06 17:30:23'),
-(51, '29517402', 'Modifica Raza Animal Admin', 'UPDATE raza SET nombre=Persa2, id_tipo_animal=3 WHERE id_raza = 4', 'Persa;Persa;3;3', 'Persa2; Persa2; 3; 3', '2022-11-06 17:32:04');
+(51, '29517402', 'Modifica Raza Animal Admin', 'UPDATE raza SET nombre=Persa2, id_tipo_animal=3 WHERE id_raza = 4', 'Persa;Persa;3;3', 'Persa2; Persa2; 3; 3', '2022-11-06 17:32:04'),
+(52, '29517402', 'Usuario Logueandose', 'Logueandose', NULL, 'Array', '2022-11-09 21:09:57'),
+(53, '29517402', 'Usuario Logueandose', 'Logueandose', NULL, '29517402; 29517402; Douglas; Douglas; lolcoptero; lolcoptero; 1; 1; 1; 1', '2022-11-09 21:11:06'),
+(54, '26976183', 'Usuario Logueandose', 'Logueandose', NULL, '26976183; 26976183; David; David; chicho; chicho; 1; 1; 3; 3', '2022-11-09 21:45:57'),
+(55, '26976183', 'Usuario Logueandose', 'Logueandose', NULL, '26976183; 26976183; David; David; chicho; chicho; 1; 1; 3; 3', '2022-11-09 21:45:57'),
+(56, '29517402', 'Usuario Logueandose', 'Logueandose', NULL, '29517402; 29517402; Douglas; Douglas; lolcoptero; lolcoptero; 1; 1; 1; 1', '2022-11-10 21:42:54'),
+(57, '29517402', 'Usuario Logueandose', 'Logueandose', NULL, '29517402; 29517402; Douglas; Douglas; lolcoptero; lolcoptero; 1; 1; 1; 1', '2022-11-10 21:42:54'),
+(58, '29517402', 'Cerrar Sesion', 'Cerrar Sesion', NULL, '29517402 Cerrando Sesion', '2022-11-12 16:50:19'),
+(60, 'Polipropelu', 'Usuario Logueandose', 'Logueandose', NULL, 'Polipropelu; Polipropelu; Polipropeludos; Polipropeludos; Polipropelu; Polipropelu; 1; 1; 3; 3', '2022-11-12 17:04:55'),
+(61, 'Polipropelu', 'Usuario Logueandose', 'Logueandose', NULL, 'Polipropelu; Polipropelu; Polipropeludos; Polipropeludos; Polipropelu; Polipropelu; 1; 1; 3; 3', '2022-11-12 17:04:55'),
+(62, 'Polipropelu', 'Cerrar Sesion', 'Cerrar Sesion', NULL, 'Polipropelu Cerrando Sesion', '2022-11-12 17:06:12'),
+(63, '26976183', 'Usuario Logueandose', 'Logueandose', NULL, '26976183; 26976183; David; David; chicho; chicho; 1; 1; 3; 3', '2022-11-12 17:06:19'),
+(64, '26976183', 'Usuario Logueandose', 'Logueandose', NULL, '26976183; 26976183; David; David; chicho; chicho; 1; 1; 3; 3', '2022-11-12 17:06:19'),
+(65, '26976183', 'Cerrar Sesion', 'Cerrar Sesion', NULL, '26976183 Cerrando Sesion', '2022-11-12 18:27:02'),
+(66, '26976183', 'Usuario Logueandose', 'Logueandose', NULL, '26976183; 26976183; David; David; chicho; chicho; 1; 1; 3; 3', '2022-11-12 18:27:38'),
+(67, '26976183', 'Usuario Logueandose', 'Logueandose', NULL, '26976183; 26976183; David; David; chicho; chicho; 1; 1; 3; 3', '2022-11-12 18:27:39'),
+(68, '26976183', 'Modifica Adopcion', 'UPDATE adopcion SET estado=3 WHERE id_adopcion = 5', '3', '1', '2022-11-12 18:31:33'),
+(69, '26976183', 'Cerrar Sesion', 'Cerrar Sesion', NULL, '26976183 Cerrando Sesion', '2022-11-12 18:31:41'),
+(70, '26976183', 'Usuario Logueandose', 'Logueandose', NULL, '26976183; 26976183; David; David; chicho; chicho; 1; 1; 3; 3', '2022-11-12 18:32:02'),
+(71, '26976183', 'Usuario Logueandose', 'Logueandose', NULL, '26976183; 26976183; David; David; chicho; chicho; 1; 1; 3; 3', '2022-11-12 18:32:02'),
+(72, '26976183', 'Cerrar Sesion', 'Cerrar Sesion', NULL, '26976183 Cerrando Sesion', '2022-11-12 18:38:46'),
+(73, '29517402j', 'Usuario Logueandose', 'Logueandose', NULL, '222222; 222222; Polipropeludos; Polipropeludos; fundacion; fundacion; 1; 1; 3; 3', '2022-11-12 18:39:01'),
+(74, '29517402j', 'Usuario Logueandose', 'Logueandose', NULL, '222222; 222222; Polipropeludos; Polipropeludos; fundacion; fundacion; 1; 1; 3; 3', '2022-11-12 18:39:01'),
+(75, '29517402j', 'Cerrar Sesion', 'Cerrar Sesion', NULL, '222222 Cerrando Sesion', '2022-11-12 19:17:40'),
+(76, '29517402j', 'Usuario Logueandose', 'Logueandose', NULL, '29517402j; 29517402j; Polipropeludos; Polipropeludos; fundacion; fundacion; 1; 1; 3; 3', '2022-11-12 19:19:24'),
+(77, '29517402j', 'Usuario Logueandose', 'Logueandose', NULL, '29517402j; 29517402j; Polipropeludos; Polipropeludos; fundacion; fundacion; 1; 1; 3; 3', '2022-11-12 19:19:24'),
+(78, '29517402j', 'Añadir Albergue', 'INSERT INTO albergue(nombre, direccion, cedula_usuario, activo) VALUES ( Albergue Polipro, Carr 18, 29517402j, 1)', NULL, 'Albergue Polipro; Carr 18; 29517402j; 1', '2022-11-12 19:25:10'),
+(79, '29517402j', 'Añadir Animal', 'INSERT INTO animal(nombre, anio_nac, img, descripcion, fecha_ingreso, raza_id, tamanio_id, albergue_id, visible) VALUES ( Jhonny, 2022, 1668286878_33d9817d742e28e55c289c33b7087025.jpg, Esto es otra prueba,  Now(), 4, 1, 3, 1)', NULL, 'Jhonny; 2022; 1668286878_33d9817d742e28e55c289c33b7087025.jpg; Esto es otra prueba; Now(); 4; 1; 3; ', '2022-11-12 21:01:18'),
+(80, '29517402j', 'Cerrar Sesion', 'Cerrar Sesion', NULL, '29517402j Cerrando Sesion', '2022-11-12 21:04:39'),
+(81, '123456789', 'Usuario Logueandose', 'Logueandose', NULL, '123456789; 123456789; Merry; Merry; 123456789; 123456789; 1; 1; 2; 2', '2022-11-12 21:30:20'),
+(82, '123456789', 'Usuario Logueandose', 'Logueandose', NULL, '123456789; 123456789; Merry; Merry; 123456789; 123456789; 1; 1; 2; 2', '2022-11-12 21:30:20'),
+(83, '123456789', 'Cerrar Sesion', 'Cerrar Sesion', NULL, '123456789 Cerrando Sesion', '2022-11-12 21:47:22'),
+(84, '26976183', 'Usuario Logueandose', 'Logueandose', NULL, '26976183; 26976183; David; David; chicho; chicho; 1; 1; 3; 3', '2022-11-12 21:47:39'),
+(85, '26976183', 'Usuario Logueandose', 'Logueandose', NULL, '26976183; 26976183; David; David; chicho; chicho; 1; 1; 3; 3', '2022-11-12 21:47:39'),
+(86, '26976183', 'Modifica Usuario Razon', 'UPDATE usuarios SET detalles= WHERE cedula = 29517402', '', '29517402', '2022-11-12 22:38:43'),
+(87, '26976183', 'Modifica Adopcion', 'UPDATE adopcion SET estado=2 WHERE id_adopcion = 3', '2', '1', '2022-11-12 22:38:43'),
+(88, '26976183', 'Modifica Usuario Razon', 'UPDATE usuarios SET detalles=Santero WHERE cedula = 29517402', 'Santero; Santero', '29517402; 29517402; ; ', '2022-11-12 22:42:44'),
+(89, '26976183', 'Modifica Adopcion', 'UPDATE adopcion SET estado=2 WHERE id_adopcion = 3', '2', '1', '2022-11-12 22:42:44'),
+(90, '26976183', 'Modifica Usuario Razon', 'UPDATE usuarios SET detalles=Santero WHERE cedula = 29517402', 'Santero; Santero', '29517402; 29517402; Santero; Santero', '2022-11-12 22:47:49'),
+(91, '26976183', 'Modifica Adopcion', 'UPDATE adopcion SET estado=2 WHERE id_adopcion = 3', '2', '1', '2022-11-12 22:47:49'),
+(92, '26976183', 'Cerrar Sesion', 'Cerrar Sesion', NULL, '26976183 Cerrando Sesion', '2022-11-12 22:51:43'),
+(93, '29517402', 'Usuario Logueandose', 'Logueandose', NULL, '29517402; 29517402; Douglas; Douglas; lolcoptero; lolcoptero; 1; 1; 1; 1', '2022-11-12 22:51:50');
 
 -- --------------------------------------------------------
 
@@ -295,37 +338,38 @@ CREATE TABLE `usuarios` (
   `direccion` varchar(255) NOT NULL,
   `contrasenia` varchar(1000) NOT NULL,
   `activo` int(1) NOT NULL,
-  `telefono` varchar(20) NOT NULL
+  `telefono` varchar(20) NOT NULL,
+  `detalles` varchar(255) NOT NULL DEFAULT 'Registro Usuario'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `usuarios`
 --
 
-INSERT INTO `usuarios` (`cedula`, `nombre`, `rol_id`, `direccion`, `contrasenia`, `activo`, `telefono`) VALUES
-('12345678', 'Merry', 2, 'donde sea', '123456789', 0, ''),
-('123456789', 'Merry', 2, 'donde sea', '123456789', 1, ''),
-('15597525', 'Anavilera', 2, 'Cabudare', '123456', 1, ''),
-('222222', 'Polipropeludos', 3, 'no se', 'fundacion', 1, ''),
-('26976183', 'David', 3, 'Carr 18 calle 55', 'chicho', 1, '1212121212'),
-('29517402', 'Douglas', 1, 'Carr 18 con calle 55', 'lolcoptero', 1, ''),
-('456456456', 'Torres', 2, 'vargas', '123456', 1, '04245936421'),
-('654981564', '654981564qwfwqfq', 1, '654981564', 'v654981564', 1, '654981564'),
-('9624925', 'Javier', 2, 'Carr 18', '123456789', 1, ''),
-('Polipropelu', 'Polipropeludos', 3, 'Prueba', 'Polipropelu', 1, '04245936421'),
-('prueba', 'pruebauser', 1, 'direccion', 'prueba', 1, 'prueba'),
-('prueba 1001', '1001', 1, '1001', '1001', 1, '1001'),
-('prueba 1002', '1002 pruebafunciona', 1, '1002', '10021002', 1, '1002'),
-('prueba 1003', '1003', 1, '1003', '100210023123', 1, '100212321'),
-('prueba 1004', '1004', 1, '1004', '100210023123', 1, '100212321'),
-('prueba 1005', '1005', 1, '1005', '1005', 1, '1005'),
-('prueba100', 'prueba100', 1, 'prueba100', 'prueba100', 1, 'prueba100'),
-('prueba1000', 'prueba100', 1, 'prueba100', 'prueba100', 1, 'prueba100'),
-('prueba2', 'prueba2', 1, 'Prueba', 'prueba', 1, 'prueba telf'),
-('prueba3', 'prueba3', 1, 'Prueba3', 'prueba3', 1, 'prueba3'),
-('prueba4', 'prueba4', 1, 'Prueba4', 'prueba4', 1, 'prueba4'),
-('prueba5', 'prueba5', 1, 'prueba5', 'prueba5', 1, 'prueba5'),
-('prueba6', 'prueba6', 1, 'prueba6', 'prueba6', 1, 'prueba6');
+INSERT INTO `usuarios` (`cedula`, `nombre`, `rol_id`, `direccion`, `contrasenia`, `activo`, `telefono`, `detalles`) VALUES
+('12345678', 'Merry', 2, 'donde sea', '123456789', 0, '', 'Registro Usario'),
+('123456789', 'Merry', 2, 'donde sea', '123456789', 1, '', 'Registro Usario'),
+('15597525', 'Anavilera', 2, 'Cabudare', '123456', 1, '', 'Registro Usario'),
+('26976183', 'David', 3, 'Carr 18 calle 55', 'chicho', 1, '1212121212', 'Registro Usario'),
+('29517402', 'Douglas', 1, 'Carr 18 con calle 55', 'lolcoptero', 1, '', 'Santero'),
+('29517402j', 'Polipropeludos', 3, 'no se', 'fundacion', 1, '', 'Santero'),
+('456456456', 'Torres', 2, 'vargas', '123456', 1, '04245936421', 'Registro Usario'),
+('654981564', '654981564qwfwqfq', 1, '654981564', 'v654981564', 1, '654981564', 'Registro Usario'),
+('9624925', 'Javier', 2, 'Carr 18', '123456789', 1, '', 'Registro Usario'),
+('Polipropelu', 'Polipropeludos', 3, 'Prueba', 'Polipropelu', 1, '04245936421', 'Registro Usario'),
+('prueba', 'pruebauser', 1, 'direccion', 'prueba', 1, 'prueba', 'Registro Usario'),
+('prueba 1001', '1001', 1, '1001', '1001', 1, '1001', 'Registro Usario'),
+('prueba 1002', '1002 pruebafunciona', 1, '1002', '10021002', 1, '1002', 'Registro Usario'),
+('prueba 1003', '1003', 1, '1003', '100210023123', 1, '100212321', 'Registro Usario'),
+('prueba 1004', '1004', 1, '1004', '100210023123', 1, '100212321', 'Registro Usario'),
+('prueba 1005', '1005', 1, '1005', '1005', 1, '1005', 'Registro Usario'),
+('prueba100', 'prueba100', 1, 'prueba100', 'prueba100', 1, 'prueba100', 'Registro Usario'),
+('prueba1000', 'prueba100', 1, 'prueba100', 'prueba100', 1, 'prueba100', 'Registro Usario'),
+('prueba2', 'prueba2', 1, 'Prueba', 'prueba', 1, 'prueba telf', 'Registro Usario'),
+('prueba3', 'prueba3', 1, 'Prueba3', 'prueba3', 1, 'prueba3', 'Registro Usario'),
+('prueba4', 'prueba4', 1, 'Prueba4', 'prueba4', 1, 'prueba4', 'Registro Usario'),
+('prueba5', 'prueba5', 1, 'prueba5', 'prueba5', 1, 'prueba5', 'Registro Usario'),
+('prueba6', 'prueba6', 1, 'prueba6', 'prueba6', 1, 'prueba6', 'Registro Usario');
 
 -- --------------------------------------------------------
 
@@ -462,19 +506,19 @@ ALTER TABLE `adopcion`
 -- AUTO_INCREMENT de la tabla `albergue`
 --
 ALTER TABLE `albergue`
-  MODIFY `id_albergue` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_albergue` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `animal`
 --
 ALTER TABLE `animal`
-  MODIFY `id_animal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id_animal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT de la tabla `bitacoras`
 --
 ALTER TABLE `bitacoras`
-  MODIFY `id_bitacora` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `id_bitacora` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
 
 --
 -- AUTO_INCREMENT de la tabla `raza`
