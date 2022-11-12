@@ -162,8 +162,10 @@ class FundacionModel extends ConexionBD{
 	}
 
     public function consultaRazaAnimal($id_tipo){
-        $resultados = $this->obtenData("SELECT id_raza, nombre FROM raza 
-                                        WHERE id_tipo_animal = CASE WHEN '$id_tipo' = '' THEN id_tipo_animal ELSE '$id_tipo' END");
+        $resultados = $this->obtenData("SELECT a.id_raza, a.nombre, b.nombre AS nombredeTanimal
+                                        FROM raza a
+                                        INNER JOIN tipo_animal b ON a.id_tipo_animal = b.id_tipo
+                                        WHERE a.id_tipo_animal = CASE WHEN '$id_tipo' = '' THEN a.id_tipo_animal ELSE '$id_tipo' END");
         if ($resultados){
             return $resultados;
         } else {
@@ -270,24 +272,40 @@ class FundacionModel extends ConexionBD{
         return $this->grabaData("bitacoras", $arra);
     }
 
-    public function decisionAdopcion($identificador, $estadonuevo, $usuario){
+    public function decisionAdopcion($identificador, $estadonuevo, $razon, $usuario){
         //primero se pide luego se guarda en bitacora
         $anterior = $this->obtenData("SELECT estado FROM adopcion WHERE id_adopcion = '$identificador'");
+        $anteriorUser = $this->obtenData("SELECT a.cedula, a.detalles FROM usuarios a 
+                                            INNER JOIN adopcion b ON a.cedula = b.cedula_usuario
+                                            WHERE b.id_adopcion = '$identificador'");
         if ($anterior[0][0] == $estadonuevo){
             return false;
         }
         $data['estado'] = $estadonuevo;
         $actualiza = $this->actualizaData('adopcion',$data, "id_adopcion = " . $identificador);
-        
+        $modifica = $anteriorUser[0]['cedula'];
+        $dataUser['detalles'] = $razon;
+        $this->actualizaData("usuarios",$dataUser,"cedula = '$modifica'");
+
+        $nuevoUser = $this->obtenData("SELECT detalles FROM usuarios a 
+                                        INNER JOIN adopcion b ON a.cedula = b.cedula_usuario
+                                        WHERE b.id_adopcion = '$identificador'");
         $nuevo = $this->obtenData("SELECT estado FROM adopcion WHERE id_adopcion = '$identificador'");
         
         $arra['usuario_bit'] = $usuario;
         $arra['modulo_afectado'] = 'Modifica Adopcion';
         $arra['accion_realizada'] = $this->creaCadenaUpdate('adopcion',$data, "id_adopcion = " . $identificador);
-        $arra['valor_anterior'] = $nuevo[0][0];
-        $arra['valor_actual'] = $anterior[0][0];
+        $arra['valor_anterior'] = $anterior[0][0];
+        $arra['valor_actual'] = $nuevo[0][0];
         $arra['fecha_accion'] ='Now()';
 
+        $arraUser['usuario_bit'] = $usuario;
+        $arraUser['modulo_afectado'] = 'Modifica Usuario Razon';
+        $arraUser['accion_realizada'] = $this->creaCadenaUpdate("usuarios",$dataUser,"cedula = ".$anteriorUser[0]['cedula']);
+        $arraUser['valor_anterior'] = implode("; ",$anteriorUser[0]);
+        $arraUser['valor_actual'] = implode("; ", $nuevoUser[0]);
+        $arraUser['fecha_accion'] ='Now()';
+        $this->grabaData("bitacoras", $arraUser);
         if (!$actualiza){
             return false;
         }

@@ -52,14 +52,15 @@ class FundacionController extends GeneralController{
             $data['animales'] = $objAdmin->consultarAnimal($_POST['modificacion']);
             $this->loadView("fundacion/agAnimal.phtml","Modificar Animal",$data);
         } else {
-        $data['tipoanimal'] = $objFund->consultaTipoAnimal();
-        if(isset($_POST['tipoanimal'])){
-            $busqueda_animal= $_POST['tipoanimal'];
-        $data['raza'] = $objFund->consultaRazaAnimal($busqueda_animal);
-        }
-        $data['tamano'] = $objFund->consultaTamanoAnimal();
-        $data['albergues'] = $objFund->consultaAlbergue($_SESSION['iduser']);
-        $this->loadView("fundacion/agAnimal.phtml","Agregar Animal",$data);
+            $data['tipoanimal'] = $objFund->consultaTipoAnimal();
+            if(isset($_POST['tipoanimal'])){
+                $busqueda_animal= $_POST['tipoanimal'];
+                $data['raza'] = $objFund->consultaRazaAnimal($busqueda_animal);
+                $data['animal_selecc'] = $data['raza'][0]['nombredeTanimal'];
+            }
+            $data['tamano'] = $objFund->consultaTamanoAnimal();
+            $data['albergues'] = $objFund->consultaAlbergue($_SESSION['iduser']);
+            $this->loadView("fundacion/agAnimal.phtml","Agregar Animal",$data);
         }
     }
     
@@ -90,7 +91,10 @@ class FundacionController extends GeneralController{
     #Region Metods/functions
     public function registraFundacion(){//funciona 9/10
         $objFund = $this->loadModel("FundacionModel");
-        if(isset($_POST['accion']) == 'Modificar'){
+        if(!isset($_POST['accion'])){//es mejor asi
+            header("location: ".BASE_URL);
+        }
+        if($_POST['accion'] == 'Modificar'){
             $id_albergue = $_POST['identificador'];
             $Nombre = $_POST['nombre'];
             $direccion = $_POST['direccion'];
@@ -104,7 +108,7 @@ class FundacionController extends GeneralController{
                 header("location: ".BASE_URL."admin/albergues");
             } 
             header("location: ".BASE_URL."fundacion/albergues");
-        } else {
+        } elseif ($_POST['accion'] == 'Agregar') {
             $Nombre = $_POST['nombre'];
             $direccion = $_POST['direccion'];
             $cedula = $_POST['cedula_user'];
@@ -120,10 +124,10 @@ class FundacionController extends GeneralController{
     public function registraAnimal(){//ahora si
         $objFund = $this->loadModel("FundacionModel");
         $objAdmin = $this->loadModel("AdminModel");
-        if(!isset($_POST['nombre']) || !isset($_POST['raza']) || !isset($_POST['descrip'])){
+        if(!isset($_POST['accion'])|| !isset($_POST['nombre']) || !isset($_POST['raza']) || !isset($_POST['descrip'])){
             header("location: ".BASE_URL."fundacion/animales");
         }
-        if (isset($_POST['accion']) && $_POST['accion'] == 'Agregar'){
+        if ($_POST['accion'] == 'Agregar'){
             $nombre = $_POST['nombre'];
             $fechanac= $_POST['fecha'];
             /*----------------------Empezamos el tratamiento de img----------------------------*/
@@ -146,7 +150,7 @@ class FundacionController extends GeneralController{
                                         $fecha_ing, $raza_id,$tamanio_id, $albergue_id, 
                                         $visible, $_SESSION['iduser']);
             header("location: ".BASE_URL."fundacion/animales");
-        } elseif (isset($_POST['accion']) && $_POST['accion'] == 'Modificar') {
+        } elseif ($_POST['accion'] == 'Modificar') {
             $id_animal = $_POST['id_animal'];
             $nombre = $_POST['nombre'];
             $fechanac= $_POST['fecha'];
@@ -192,11 +196,13 @@ class FundacionController extends GeneralController{
         $eleccion = $_GET['modificacion'];
         if($_GET['accion'] == 'Completada'){
             $accion = 3;
+            $razon = "Registro Usuario";
         }
         elseif($_GET['accion'] == 'Cancelada'){
             $accion = 2;
+            $razon = $_GET['razoncancelado'];
         }
-        $objFund->decisionAdopcion($eleccion, $accion, $_GET['usuario']);
+        $objFund->decisionAdopcion($eleccion, $accion, $razon,$_GET['usuario']);
         header("location: ".BASE_URL."fundacion/verAdopciones");
     }
     #endregion

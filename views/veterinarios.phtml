@@ -4,6 +4,7 @@
     //paginador
     //Total Registro y por_pagina llegan por el controlador
     $total_paginas = ceil($totalregistro / $por_pagina);
+    if($veterinarios != false){
 ?>  
 <table>
         <thead>
@@ -74,3 +75,9 @@
         } ?>
     </ul>
 </div>
+
+<?php } else { ?>
+
+    <h1>Aun no existen Veterinarios registrados</h1>
+
+<?php } ?>

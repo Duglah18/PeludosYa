@@ -167,9 +167,9 @@ class SessionController extends GeneralController{
     }
 
     public function adopcion_peticion(){
-    if($_POST['usuario'] == "" || $_POST['idanimal'] == ""){
+        if($_POST['usuario'] == "" || $_POST['idanimal'] == ""){
         //si usuario no existe o esta vacio ps xD
-        $this->catalogoAnimales();
+            header("location: ".BASE_URL."session/catalogoAnimales?error");
         //aca se cargaria otra vista enviando mensaje de error
         } else {
             $usuario = $_POST['usuario'];
@@ -180,8 +180,6 @@ class SessionController extends GeneralController{
             if ($resultado){  
                 $data['peticion'] = $objSess->retornaResponsable($usuario);
                 $this->loadView("peticion.phtml","Peticion Realizada",$data);
-                $_POST['usuario'] = "";
-                $_POST['idanimal'] = "";
             }
         }
     }

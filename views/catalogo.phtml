@@ -1,10 +1,10 @@
 <?php 
-
     //paginador
     //Total Registro y por_pagina llegan por el controlador
     $total_paginas = ceil($totalregistro / $por_pagina);
- 
-
+    if(isset($_GET['error'])){
+        echo "<h1>Ocurrio un error en la Adopcion</h1>";
+    }
 ?>
 <br>
 <div class="container">
@@ -12,6 +12,8 @@
         <h3 class="container">Peluditos que puedes Adoptar</h3>
     </div>
 </div>
+
+<?php if($animales != false){ ?>
 <br>
 <div class="row">
 <div class="card-panel indigo darken-4 col s3">
@@ -82,4 +84,8 @@ Aqui iran las categorias
         } ?>
     </ul>
 </div>
-     
+<?php } else { ?>
+
+    <h1>Aun no se encuentran Peluditos para adoptar Disponibles</h1>
+
+<?php } ?>

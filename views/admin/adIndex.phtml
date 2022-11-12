@@ -19,6 +19,7 @@
                 <th scope="col">direcc</th>
                 <th scope="col">Telefono</th>
                 <th scope="col">Activo</th>
+                <th scope="col">Detalles</th>
                 <th scope="col">Botones</th>
             </tr>
         </thead>
@@ -34,6 +35,7 @@
             <td> <?= $dataAdmin[$i]['direccion'] ?> </td> 
             <td> <?= $dataAdmin[$i]['telefono'] ?> </td> 
             <td> <?= $activado = ($dataAdmin[$i]['activo'] != 1)? "Bloqueado":"Activo" ?> </td>
+            <td> <?= $dataAdmin[$i]['detalles'] ?></td>
             <td>
                 <form action="<?=BASE_URL?>admin/agregaUsuarios" method="POST">
                     <input type="hidden" name="modificacion" value="<?=$dataAdmin[$i]['cedula'] ?>">

@@ -89,7 +89,8 @@ class AdminModel extends ConexionBD{
         if($pagina <= 0){ $pagina = 1; }
         $desde = ($pagina - 1) * $qty;
         return $this->obtenData("SELECT usuarios.cedula, usuarios.nombre, usuarios.direccion, 
-                                        usuarios.activo, rol.nombre as nombrerol, usuarios.telefono
+                                        usuarios.activo, rol.nombre as nombrerol, usuarios.telefono,
+                                        usuarios.detalles
                                 FROM usuarios 
                                 INNER JOIN rol ON usuarios.rol_id = rol.id_rol
                                 ORDER BY usuarios.activo DESC, usuarios.rol_id ASC

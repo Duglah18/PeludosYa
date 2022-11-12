@@ -66,6 +66,7 @@ class SessionModel extends ConexionBD{
     }
 
     public function ObtenVeterinarioSelecc($idveterinario){
+        $idveterinario = mysqli_real_escape_string($this->conectar(),$idveterinario);
         $resultado = $this->obtenData("SELECT id_veterinario, nombre, tlf, direccion, img
                                       FROM veterinario 
                                       WHERE id_veterinario = '$idveterinario'");
@@ -77,6 +78,8 @@ class SessionModel extends ConexionBD{
     }
 
     public function loginUser($cedula, $contra){
+        $cedula = mysqli_real_escape_string($this->conectar(),$cedula);
+        $contra = mysqli_real_escape_string($this->conectar(),$contra);
         $result = $this->obtenData("SELECT cedula, nombre, contrasenia, activo, rol_id 
                                     FROM usuarios 
                                     WHERE cedula = '$cedula' AND contrasenia = '$contra'");
