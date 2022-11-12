@@ -1,4 +1,18 @@
-<div class="page-header">
+<?php
+if (!isset($datosUsuario) || $datosUsuario[0]['activo'] == 0){
+	//activo = 0 bloqueado segun recuerdo
+	//Error no me estan llegando los datos del usuario
+	header("location: ".BASE_URL."home/home");
+}
+$cedula = $datosUsuario[0]['cedula'];
+$nombre = $datosUsuario[0]['nombre'];
+$Direccion = $datosUsuario[0]['direccion'];
+$contra = $datosUsuario[0]['contrasenia'];
+$telefono = $datosUsuario[0]['telefono'];
+
+ ?>
+
+<div class="page-header black-text">
   <div class="position-absolute fixed-top ms-auto w-50 h-100 rounded-3 z-index-0 d-none d-sm-none d-md-block me-n4" style="background-image: url(<?= URL_ASSETS;?>img/examples/blog2.jpg); background-size: contain, cover; background-repeat: no-repeat;">
   </div>
   <div class="container py-7">
@@ -6,42 +20,44 @@
       <div class="col-lg-7 d-flex justify-content-center flex-column">
         <div class="card card-body d-flex justify-content-center shadow-lg p-7 blur align-items-center">
           <h3 class="text-center">Tus Datos</h3>
-          <form role="form" id="contact-form" method="post" autocomplete="off" action="<?=BASE_URL?>session/register_user">
+          <form role="form" id="contact-form" method="post" autocomplete="off" action="<?=BASE_URL?>session/modifica_user">
             <div class="card-body">
               <div class="row">
                 <div class="mb-4">
                   <div class="input-group input-group-static mb-4">
-                    <label>Cedula</label>
-                    <input class="form-control" placeholder="ej. 26456789" aria-label="First Name..." type="text" name="cedula">
+                    <h1>Cedula <?= $cedula?></h1>
+					<input type="hidden" name="cedula" value="<?= $cedula?>">
                   </div>
                 </div>
                 <div class="mb-4">
                   <div class="input-group input-group-static mb-4">
-                    <label>Nombre</label>
-                    <input class="form-control" placeholder="ej. Douglas" aria-label="First Name..." type="text" name="nombre">
+                    <h2>Nombre <?= $nombre?></h2>
+					<input type="hidden" name="nombre" value="<?=$nombre?>">
                   </div>
                 </div>
                 <div class="mb-4">
                   <div class="input-group input-group-static mb-4">
-                    <label>Direccion</label>
-                    <input type="text" class="form-control" placeholder="ej. Carrera 18 Calle 55" aria-label="Last Name..." name="direccion">
+                    <h2>Direccion <?= $Direccion?></h2>
+					<input type="hidden" name="direccion" value="<?= $Direccion?>">
                   </div>
                 </div>
                 <div class="mb-4">
                   <div class="input-group input-group-static mb-4">
-                    <label>Contraseña</label>
-                    <input type="password" class="form-control" placeholder="***********" aria-label="Direction..." name="contrasenia">
+                    <h2>Contraseña <?= $contra?></h2>
+					<input type="hidden" name="contrasenia" value="<?= $contra?>">
                   </div>
                 </div>
                 <div class="mb-4">
                   <div class="input-group input-group-static mb-4">
-                    <label>Telefono</label>
-                    <input type="tel" class="form-control" placeholder="042495652" aria-label="Phone..." name="telefono">
+                    <h2>Telefono <?= $telefono?></h2>
+					<input type="hidden" name="telefono" value="<?=$telefono?>">
                   </div>
                 </div>
               </div>
                 <div class="col-md-12">
-                  <button type="submit" class="btn bg-gradient-dark w-100 me-2">Enviar</button>
+				<!--En lugar de volver a preguntar a la BD lo que tiene el usuario para cambiar es mejor
+				Simplemente enviar lo que ya se tiene osea todo lo que se muestra aqui-->
+                  <button type="submit" name="accion" class="btn bg-gradient-dark w-100 me-2">Enviar</button>
                 </div>
               </div>
             </div>

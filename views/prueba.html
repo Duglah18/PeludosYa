@@ -1,10 +1,3 @@
-<?php
-if (isset($_SESSION)){
-  $role = (isset($_SESSION['rol']))?$_SESSION['rol']:"";
-  $id_user = (isset($_SESSION['iduser']))?$_SESSION['iduser'] :"";
-  //sin esto lo demas explota xD
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 <meta charset="UTF-8">
@@ -19,14 +12,21 @@ if (isset($_SESSION)){
   <!--Importar Materialize-->
   <link type="text/css" rel="stylesheet" href="<?= URL_ASSETS; ?>/materialize/css/style.css"  media="screen,projection"/>  
   <link type="text/css" rel="stylesheet" href="<?= URL_ASSETS; ?>/materialize/css/materialize.css"  media="screen,projection"/>
-  <!--<link type="text/css" rel="stylesheet" hreg=" https://developers.google.com/fonts/docs/getting_started" media="screen,projection">
-   https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Fonts/Variable_Fonts_Guide
-  https://developer.microsoft.com/en-us/microsoft-edge/testdrive/demos/variable-fonts Unas topografias recomendables-->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald">
+  <!--  https://developers.google.com/fonts/docs/getting_started
+  https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Fonts/Variable_Fonts_Guide
+  https://developer.microsoft.com/en-us/microsoft-edge/testdrive/demos/variable-fonts-->
 </head>
 <body style="background: url(<?= URL_ASSETS; ?>/wallpaper.jpg) no-repeat fixed">
 <br>
 <nav class="indigo z-depth-4 nav-extended container" style="border-radius: 25px; padding-left: 20px; padding-right: 10px;">
-
+<style>
+      body {
+        font-family: 'Oswald', serif;
+        font-size: 48px;
+		font-weight: 900;
+      }
+    </style>
     <div class="nav-wrapper">
       <!--El nav se solapa con el titulo pq creo que estan en el mismo div-->
       <!--Creo q si estas en admin no deberia llevarte a la pag pero bueh-->
@@ -61,7 +61,7 @@ if (isset($_SESSION)){
         <?php
           if(isset($_SESSION['usuario'])){
             $username = $_SESSION['usuario'];
-              echo "<li><a href='".BASE_URL."session/verUsuario?id_user=".$id_user."'>".$username."</li>";
+              echo "<li>".$username."</li>";
               if($role == "1"){
                 echo "<li><a href='". BASE_URL ."admin/index'>Cerrar Sesion</a></li>";
               } else {

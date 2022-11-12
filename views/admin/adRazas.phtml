@@ -2,6 +2,7 @@
 $identificador = isset($buscarazas[0]['id_raza'])? $buscarazas[0]['id_raza']: "";
 $nombre = isset($buscarazas[0]['nombre'])? $buscarazas[0]['nombre']: "";
 $tipo = isset($buscarazas[0]['id_tipo_2'])? $buscarazas[0]['id_tipo_2']: "";
+$total_paginas = ceil($totalregistro / $por_pagina);
 ?>
     <table class="highlight centered">
         <thead>
@@ -32,6 +33,40 @@ $tipo = isset($buscarazas[0]['id_tipo_2'])? $buscarazas[0]['id_tipo_2']: "";
         ?>
         </tbody>
     </table>
+    <div class="col-md-12 center text-center cyan lighten-2"><!--Paginador-->
+    <ul class="pagination">
+        <?php if($pagina != 1){ ?>
+            <li class="waves-effect blue-text"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=1"><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
+            <li class="waves-effect"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$pagina - 1?>"><i class="material-icons">chevron_left</i></a></li>
+        <?php
+        }else{ ?>
+            <li class="disabled"><a href=""><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
+            <li class="disabled"><a href=""><i class="material-icons">chevron_left</i></a></li>
+    <?php
+        } ?>
+        
+        
+        <?php for($i = 1; $i <= $total_paginas; $i++){ 
+            if ($i == $pagina){ ?>
+                <li class="active"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$i?>"><?=$i?></a></li>
+           <?php } else { ?>
+            <li class="waves-effect"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$i?>"><?=$i?></a></li>
+        <?php 
+            }
+        } ?>
+
+        <?php if($pagina != $total_paginas){ ?>
+        <li class="waves-effect"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$pagina + 1?>"><i class="material-icons">chevron_right</i></a></li>
+        <li class="waves-effect"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$total_paginas?>"><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
+        <?php
+        }else{ ?>
+            <li class="disabled"><a href=""><i class="material-icons">chevron_right</i></a></li>
+            <li class="disabled"><a href=""><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
+    <?php
+        } ?>
+    </ul>
+</div>
+
     <div class="card text-center">
     <form action="<?= BASE_URL?>admin/agregaRazaAnimal" method="POST">
         <label for="">Este es el formulario para registrar tipos de animal</label>

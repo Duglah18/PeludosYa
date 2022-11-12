@@ -1,4 +1,6 @@
-<?php if($adopciones == false) { ?>
+<?php
+$total_paginas = ceil($totalregistro / $por_pagina);
+if($adopciones == false) { ?>
 <!--Esto se agrego porque si no tiene adopciones el albergue ps saca error -->
 
         <h1>Aun no tiene adopciones</h1>
@@ -11,6 +13,7 @@
                     <th>Fecha de peticion</th>
                     <th>Animal</th>
                     <th>Usuario</th>
+                    <th>Contacto</th>
                     <th>Albergue</th>
                     <th>Estado</th>
                     <th>Acciones</th><!--Quitar y colocar botones-->
@@ -23,6 +26,7 @@
                 <td><?= $fecha = date("d-m-Y",strtotime($adopcion['fecha_adopcion'])); ?></td><!--ORDENA LA FECHA -->
                 <td><?= $adopcion['nombreanimal']; ?></td>
                 <td><?= $adopcion['nombreusuario']; ?></td>
+                <td><?= $adopcion['telefono']; ?></td>
                 <td><?= $adopcion['nombrealbergue']; ?></td>
                 <td><?= $adopcion['nombre_estado']; ?></td>
                 <td>
@@ -37,4 +41,38 @@
         <?php } ?>
        </tbody>
 </table>
+<div class="col-md-12 center text-center cyan lighten-2"><!--Paginador-->
+    <ul class="pagination">
+        <?php if($pagina != 1){ ?>
+            <li class="waves-effect blue-text"><a href="<?=BASE_URL?>fundacion/verAdopciones?pagina=1"><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
+            <li class="waves-effect"><a href="<?=BASE_URL?>fundacion/verAdopciones?pagina=<?=$pagina - 1?>"><i class="material-icons">chevron_left</i></a></li>
+        <?php
+        }else{ ?>
+            <li class="disabled"><a href=""><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
+            <li class="disabled"><a href=""><i class="material-icons">chevron_left</i></a></li>
+    <?php
+        } ?>
+        
+        
+        <?php for($i = 1; $i <= $total_paginas; $i++){ 
+            if ($i == $pagina){ ?>
+                <li class="active"><a href="<?=BASE_URL?>fundacion/verAdopciones?pagina=<?=$i?>"><?=$i?></a></li>
+           <?php } else{
+            ?>
+            <li class="waves-effect"><a href="<?=BASE_URL?>fundacion/verAdopciones?pagina=<?=$i?>"><?=$i?></a></li>
+        <?php 
+            }
+        } ?>
+
+        <?php if($pagina != $total_paginas){ ?>
+        <li class="waves-effect"><a href="<?=BASE_URL?>fundacion/verAdopciones?pagina=<?=$pagina + 1?>"><i class="material-icons">chevron_right</i></a></li>
+        <li class="waves-effect"><a href="<?=BASE_URL?>fundacion/verAdopciones?pagina=<?=$total_paginas?>"><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
+        <?php
+        }else{ ?>
+            <li class="disabled"><a href=""><i class="material-icons">chevron_right</i></a></li>
+            <li class="disabled"><a href=""><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
+    <?php
+        } ?>
+    </ul>
+</div>
 <?php } ?>

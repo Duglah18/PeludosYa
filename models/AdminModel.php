@@ -45,7 +45,9 @@ class AdminModel extends ConexionBD{
         }
     }
 
-    public function consultaAdopciones($albergueEsp){
+    public function consultaAdopciones($albergueEsp, $pagina, $qty){
+        if($pagina <= 0){ $pagina = 1; }
+        $desde = ($pagina - 1) * $qty;
         $resultados = $this->obtenData("SELECT a.id_adopcion, a.fecha_adopcion, b.nombre as nombreanimal, 
                                         d.nombre as nombreusuario, c.nombre as nombrealbergue,
                                         e.nombre_estado
@@ -54,11 +56,24 @@ class AdminModel extends ConexionBD{
                                         INNER JOIN albergue c ON b.albergue_id = c.id_albergue
                                         INNER JOIN usuarios d ON c.cedula_usuario = d.cedula
                                         INNER JOIN tipo_estado_adopcion e ON a.estado = e.id_tipo_estado
-                                        WHERE c.id_albergue = CASE WHEN '$albergueEsp' = '' THEN c.id_albergue ELSE '$albergueEsp' END");
+                                        WHERE c.id_albergue = CASE WHEN '$albergueEsp' = '' THEN c.id_albergue ELSE '$albergueEsp' END
+                                        LIMIT $desde,$qty");
         if (!$resultados){
             return false;
         } 
         return $resultados;
+    }
+
+    public function TotalconsultaAdopciones($albergueEsp){
+        $resultados = $this->obtenData("SELECT COUNT(*) AS TotalAdopciones
+                                        FROM adopcion a
+                                        INNER JOIN animal b ON a.animal_id = b.id_animal
+                                        INNER JOIN albergue c ON b.albergue_id = c.id_albergue
+                                        INNER JOIN usuarios d ON c.cedula_usuario = d.cedula
+                                        INNER JOIN tipo_estado_adopcion e ON a.estado = e.id_tipo_estado
+                                        WHERE c.id_albergue = CASE WHEN '$albergueEsp' = '' THEN c.id_albergue ELSE '$albergueEsp' END");
+
+        return $resultados[0]['TotalAdopciones'];
     }
 
     public function ConsultaRoles(){
@@ -100,17 +115,35 @@ class AdminModel extends ConexionBD{
                                 WHERE a.id_animal = CASE WHEN '$id_animal' = '' THEN a.id_animal ELSE '$id_animal'END");
     }//Resolver el problema de si esta adoptado
 
-    public function listaTiposAnimal($id_tipo){
+    public function listaTiposAnimal($id_tipo, $pagina, $qty){
+		if($pagina <= 0){ $pagina = 1; }
+        $desde = ($pagina - 1) * $qty;
         return $this->obtenData("SELECT id_tipo, nombre
                                 FROM tipo_animal 
-                                WHERE id_tipo = CASE WHEN '$id_tipo' = '' THEN id_tipo ELSE '$id_tipo' END");
-    }
+                                WHERE id_tipo = CASE WHEN '$id_tipo' = '' THEN id_tipo ELSE '$id_tipo' END
+								LIMIT $desde, $qty");
+    } //bien XD este es el que se usa para listar en admin?
 
-    public function listaRazas($id_raza){
+	public function TotallistaTiposAnimal(){
+		$resultados = $this->obtenData("SELECT COUNT(*) AS TotalTiposAnimal
+                                FROM tipo_animal ");
+		return $resultados[0]['TotalTiposAnimal'];
+	}
+
+    public function listaRazas($id_raza, $pagina, $qty){
+        if($pagina <= 0){ $pagina = 1; }
+        $desde = ($pagina - 1) * $qty;
         return $this->obtenData("SELECT raza.id_raza, raza.nombre, tipo_animal.nombre as nombreTipo, id_tipo_animal as id_tipo_2
                                 FROM raza
                                 INNER JOIN tipo_animal ON tipo_animal.id_tipo = raza.id_tipo_animal
-                                WHERE raza.id_raza = CASE WHEN '$id_raza' = '' THEN raza.id_raza ELSE '$id_raza' END");
+                                WHERE raza.id_raza = CASE WHEN '$id_raza' = '' THEN raza.id_raza ELSE '$id_raza' END
+                                LIMIT $desde, $qty");
+    }//Repito esto es lo q se usa para listar en admin?
+
+    public function TotallistaRazas(){
+        $resultados = $this->obtenData("SELECT COUNT(*) AS TotalRazasAnimal
+                                        FROM raza");
+        return $resultados[0]['TotalRazasAnimal'];
     }
 
     public function consultaTipoAnimal(){//Esto esta haciendo lo mismo que hace otra

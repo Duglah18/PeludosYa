@@ -1,0 +1,28 @@
+<?php 
+if (!isset($usuario)){
+  //var de error?
+  header("location: ".BASE_URL);
+}
+ ?>
+ 
+ <div class="card text-center">
+      <div class="card-body">
+        <h4 class="card-title">Title</h4>
+        <p class="card-text">Modifica tu usuario</p>
+        <form action="<?= BASE_URL;?>session/modificarmiUsuario" method="post">
+        <label for="">Cedula</label>
+        <input type="text" name="cedula" value="<?=$usuario[0]?>" required readonly>
+        <label for="">Nombre</label>
+        <input type="text" name="nombre" value="<?=$usuario[1]?>"required><br>
+        <label for="">Dirección</label>
+        <input type="text" name="direccion" value="<?=$usuario[2]?>" required><br><!--textarea-->
+        <label for="">Contraseña</label>
+        <input type="text" name="contrasenia" value="<?= $usuario[3]?>" required>
+        <br>
+        <label for="">Telefono</label>
+        <input type="tel" name="telefono" value="<?= $usuario[4]?>" required>
+        <br>
+        <button name="Modificar">Aceptar</button>
+        </form>
+      </div>
+    </div>

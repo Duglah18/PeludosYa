@@ -18,7 +18,13 @@ class FundacionController extends GeneralController{
 
     public function albergues(){
         $objFund = $this->loadModel("FundacionModel");
-        $data['userfund'] = $objFund->consultaAlbergue($_SESSION['iduser']);
+        $pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
+        $pagina = $pagina < 0? 1: $pagina;
+        $qty = 10;
+        $data['pagina'] = $pagina;
+        $data['por_pagina'] = $qty;
+        $data['totalregistro'] = $objFund->TotalconsultaAlbergues($_SESSION['iduser']);
+        $data['userfund'] = $objFund->consultaAlbergue($_SESSION['iduser'],$pagina,$qty);
         $this->loadview("fundacion/veralbergues.phtml","Ver albergues",$data);
     }
 
@@ -31,7 +37,7 @@ class FundacionController extends GeneralController{
         $data['por_pagina'] = $qty;
         $data['totalregistro'] = $objFund->TotalConsultaAnimales($_SESSION['iduser']);
         $data['useranimales'] = $objFund->consultaAnimales($_SESSION['iduser'],$pagina,$qty);
-        $data['albergues'] = $objFund->consultaAlbergue($_SESSION['iduser']);
+        $data['albergues'] = $objFund->consultaAlbergue($_SESSION['iduser'],$pagina,$qty);
         $this->loadView("fundacion/veranimales.phtml","Ver Animales",$data);
     }
 
@@ -61,7 +67,13 @@ class FundacionController extends GeneralController{
         //aca mismo a futuro podriamos hacer un if te llega una variable especifica
         //se hace en este mismo metodo el filtrar por las completadas, etc.
         $objFund = $this->loadModel("FundacionModel");
-        $data['adopciones'] = $objFund->consultaAdopciones($_SESSION['iduser']);
+        $pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
+        $pagina = $pagina < 0? 1: $pagina;
+        $qty = 10;
+        $data['pagina'] = $pagina;
+        $data['por_pagina'] = $qty;
+        $data['totalregistro'] = $objFund->TotalconsultaAdopciones($_SESSION['iduser']);
+        $data['adopciones'] = $objFund->consultaAdopciones($_SESSION['iduser'],$pagina,$qty);
         $this->loadView("fundacion/adopciones.phtml","Ver Adopciones",$data);
     }
 

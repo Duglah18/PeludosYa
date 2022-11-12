@@ -8,7 +8,7 @@ class FundacionModel extends ConexionBD{
         $data['activo'] = $estat;
         return $this->grabaData($tabla, $data);
     }
-
+	//Esto revisa si se sigue usando y para que 
     public function consultaUser(){//esto a futuro abra q borrarlo luego esto es para mostrar
         //los usuarios a registrarles los albergues cuando halla sessions se quitara
         $resultados = $this->obtenData("SELECT cedula, rol_id, nombre FROM usuarios WHERE rol_id = 3");
@@ -31,21 +31,37 @@ class FundacionModel extends ConexionBD{
         return $resultado;
     }
 
-    public function consultaAdopciones($fundacion){
+    public function consultaAdopciones($fundacion,$pagina,$qty){
+        if ($pagina <= 0){ $pagina = 1; }
+        $desde = ($pagina - 1) * $qty;
         $resultados = $this->obtenData("SELECT a.id_adopcion, a.fecha_adopcion, b.nombre as nombreanimal, 
-                                               d.nombre as nombreusuario, c.nombre as nombrealbergue,
-                                               e.nombre_estado 
+                                               j.nombre as nombreusuario, j.telefono, c.nombre as nombrealbergue,
+                                               e.nombre_estado
                                         FROM adopcion a
+										INNER JOIN usuarios j ON j.cedula = a.cedula_usuario
                                         INNER JOIN animal b ON a.animal_id = b.id_animal
                                         INNER JOIN albergue c ON b.albergue_id = c.id_albergue
                                         INNER JOIN usuarios d ON c.cedula_usuario = d.cedula
                                         INNER JOIN tipo_estado_adopcion e ON a.estado = e.id_tipo_estado
-                                        WHERE d.cedula = '$fundacion' AND a.estado = '1'");
+                                        WHERE d.cedula = '$fundacion' AND a.estado = '1'
+										LIMIT $desde,$qty");
         if($resultados){
             return $resultados;
         } else {
             return false;
         }
+    }
+
+    public function TotalconsultaAdopciones($fundacion){
+        $resultados = $this->obtenData("SELECT COUNT(*) AS TotalAdopciones
+                                        FROM adopcion a
+										INNER JOIN usuarios j ON j.cedula = a.cedula_usuario
+                                        INNER JOIN animal b ON a.animal_id = b.id_animal
+                                        INNER JOIN albergue c ON b.albergue_id = c.id_albergue
+                                        INNER JOIN usuarios d ON c.cedula_usuario = d.cedula
+                                        INNER JOIN tipo_estado_adopcion e ON a.estado = e.id_tipo_estado
+                                        WHERE d.cedula = '$fundacion' AND a.estado = '1'");
+        return $resultados[0]['TotalAdopciones'];
     }
 
     public function consultaAdopcionEspecifica($identificador_adop){
@@ -73,16 +89,28 @@ class FundacionModel extends ConexionBD{
         return $resultados;
     }
 
-    public function consultaAlbergue($cedula_user){
+    public function consultaAlbergue($cedula_user,$pagina = 1,$qty = 1){
+        if ($pagina <= 0){ $pagina = 1; }
+        $desde = ($pagina - 1) * $qty;
         $resultados = $this->obtenData("SELECT a.id_albergue, a.nombre, a.direccion, a.activo, b.nombre as nombreusuario
                                         FROM albergue a
                                         INNER JOIN usuarios b ON a.cedula_usuario = b.cedula
-                                        WHERE (cedula_usuario = CASE WHEN '$cedula_user' = '' THEN cedula_usuario ELSE '$cedula_user' END)");
+                                        WHERE (cedula_usuario = CASE WHEN '$cedula_user' = '' THEN cedula_usuario ELSE '$cedula_user' END)
+                                        LIMIT $desde,$qty");
         if ($resultados){
             return $resultados;
         } else {
             return false;
         }
+    }
+
+    public function TotalconsultaAlbergues($cedula_user){
+        $resultados = $this->obtenData("SELECT COUNT(*) AS TotalAlbergues
+                                        FROM albergue a
+                                        INNER JOIN usuarios b ON a.cedula_usuario = b.cedula
+                                        WHERE (cedula_usuario = CASE WHEN '$cedula_user' = '' THEN cedula_usuario ELSE '$cedula_user' END)");
+        
+        return $resultados[0]['TotalAlbergues'];
     }
 
     public function consultaAnimales($cedula_user, $pagina = 1, $qty = 10){
@@ -98,7 +126,7 @@ class FundacionModel extends ConexionBD{
                                         INNER JOIN usuarios d ON d.cedula = e.cedula_usuario
                                         WHERE (d.cedula = CASE WHEN '$cedula_user' = '' THEN d.cedula ELSE '$cedula_user' END)
                                         LIMIT $desde,$qty");
-        /*Inciso: CASE ES COMO SWITCH O IF EN SQL EN ESTE CASO SI LLEGA VACIO $cedula_user ENTONCES
+        /*Inciso: CASE ES COMO SWITCH O IF EN SQL (TRANSACT SQL) EN ESTE CASO SI LLEGA VACIO $cedula_user ENTONCES
         MOSTRARA TODOS LOS CONTENIDOS DE LA TABLA PQ NO LO APLIQUE ANTES? PS DE PANA LO APRENDI HACE
         POCO RELATIVAMENTE */
        if ($resultados){
@@ -108,7 +136,7 @@ class FundacionModel extends ConexionBD{
         }
     } 
 
-    public function TotalConsultaAnimales($usuario = ""){
+    public function TotalConsultaAnimales($usuario = ""){ //Esto se usaba para fundacion para ver los animales?
         $resultados = $this->obtenData("SELECT COUNT(*) AS TotalAnimales
                                         FROM animal a
                                         INNER JOIN raza b ON a.raza_id = b.id_raza
@@ -127,6 +155,11 @@ class FundacionModel extends ConexionBD{
             return false;
         }
     }
+	
+	public function TotalConsultaTipoAnimal(){
+		$resultados = $this->obtenData("SELECT COUNT(*) AS TotalTipoAnimales FROM tipo_animal");
+		return $resultados[0]['TotalTipoAnimales'];
+	}
 
     public function consultaRazaAnimal($id_tipo){
         $resultados = $this->obtenData("SELECT id_raza, nombre FROM raza 
@@ -137,8 +170,14 @@ class FundacionModel extends ConexionBD{
             return false;
         }
     }
+	
+	public function TotalConsultaRazaAnimal($id_tipo){
+		$resultados = $this->obtenData("SELECT COUNT(*) AS TotalRazaAnimales FROM raza 
+                                        WHERE id_tipo_animal = CASE WHEN '$id_tipo' = '' THEN id_tipo_animal ELSE '$id_tipo' END");
+		return $resultados[0]['TotalRazaAnimales'];
+	}
 
-    public function consultaTamanoAnimal(){
+    public function consultaTamanoAnimal(){//Esta creo yo no necesita paginacion
         $resultados = $this->obtenData("SELECT id_tamanio, nombre FROM tamanio");
         if ($resultados){
             return $resultados;

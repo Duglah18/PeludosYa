@@ -60,6 +60,47 @@ class SessionController extends GeneralController{
         //el titulo se podria cambiar y poner el nombre del animal a ver
         $this->loadView("veterinario.phtml", "Veterinario Detallado", $data);
     }
+	//Creado en la oficina 11/11/2022
+	public function verUsuario(){
+		$objSess = $this->loadModel("SessionModel");
+		if (!isset($_GET['id_user'])){
+			//error no estas mandando ningun usuario a ver detalladamente
+            echo "NO MANDASTE USUARIO";
+		}
+		$buscar = $objSess->consultaUsuarioEspecifico($_SESSION['iduser']);
+		if ($buscar == "No existe"){
+			//error este usuario no existe
+            echo "ESTE USUARIO NO EXISTE";
+		}
+		$data['datosUsuario'] = $buscar;
+		$this->loadView("session/usuario.phtml", "Ver mi Usuario", $data);
+		//a futuro lo puedes cambiar a cualquier otra cosa como que le saque su nombre o algo;
+	}
+	
+	public function modifica_user(){
+		if (!isset($_POST['accion']) || !isset($_POST['cedula']) || !isset($_POST['nombre']) || !isset($_POST['direccion']) || !isset($_POST['contrasenia']) || !isset($_POST['telefono'])){
+		//error no llega nada
+        echo "NO SE ESTAN ENVIANDO DATOS";
+		}
+		$cedula = $_POST['cedula'];
+		$nombre = $_POST['nombre'];
+		$Direccion = $_POST['direccion'];
+		$contra = $_POST['contrasenia'];
+		$telefono = $_POST['telefono'];
+		
+		if($cedula == "" || $nombre == "" || $Direccion == "" || $contra == "" || $telefono == ""){
+			//error estan vacios
+		}
+		$fusion = $cedula . ";" . $nombre . ";" . $Direccion . ";" . $contra . ";" . $telefono;
+		$fusion = explode(";", $fusion);
+		$data['usuario'] = $fusion;
+		// $data['cedula'] = $cedula;
+		// $data['nombre'] = $nombre;
+		// $data['direccion'] = $Direccion;
+		// $data['contrasenia'] = $contra;
+		// $data['telefono'] = $telefono;
+		$this->loadView("session/modificausuario.phtml","Modifica Tu usuario", $data);
+	}
     #Endregion
 
     #Regiond Metods with Functions
@@ -144,6 +185,20 @@ class SessionController extends GeneralController{
             }
         }
     }
+	
+	public function modificarmiUsuario(){
+		if(!isset($_POST['cedula'])){
+			$_POST['Error'] = "No se especifico a quien modificar"; //esto funcionaria? sino por get se puede
+			//error retorna
+		}
+        $objSess = $this->loadModel("SessionModel");
+        $Nombre = $_POST['nombre'];
+        $Direccion = $_POST['direccion'];
+        $contrasenia = $_POST['contrasenia'];
+        $telefono = $_POST['telefono'];
+        $objSess->modificaUsuario($_SESSION['iduser'], $Nombre, $Direccion,$contrasenia, $telefono);
+        header("location: ".BASE_URL."session/verUsuario");
+	}
     #Endregion
 }
 ?>

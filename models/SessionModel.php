@@ -77,8 +77,9 @@ class SessionModel extends ConexionBD{
     }
 
     public function loginUser($cedula, $contra){
-        $result = $this->obtenData("SELECT cedula, nombre, contrasenia, activo, rol_id FROM usuarios 
-                    WHERE cedula = '$cedula' AND contrasenia = '$contra'");
+        $result = $this->obtenData("SELECT cedula, nombre, contrasenia, activo, rol_id 
+                                    FROM usuarios 
+                                    WHERE cedula = '$cedula' AND contrasenia = '$contra'");
         if ($result){
             $arry['usuario_bit'] = $cedula;
             $arry['modulo_afectado'] = 'Usuario Logueandose';
@@ -132,6 +133,16 @@ class SessionModel extends ConexionBD{
 
         }
     }
+	//Creado en la oficina 11/11/2022
+	public function consultaUsuarioEspecifico($identify){
+		$buscar = $this->ObtenData("SELECT cedula, nombre, direccion ,contrasenia, telefono, activo
+                                       FROM usuarios
+                                       WHERE cedula = '$identify' AND activo = 1");
+		if(!$buscar){
+		return "No existe";
+		}
+		return $buscar;
+	}
 
     
 //esto de que sirve?
@@ -173,6 +184,30 @@ class SessionModel extends ConexionBD{
                                        FROM usuarios
                                        WHERE cedula = '$iduser'");
         return $resultado;
+    }
+
+    public function modificaUsuario($idusuario,$nombre,$direccion,$contrasena,$telefono){
+        $anterior = $this->obtenData("SELECT cedula, nombre, rol_id, direccion, activo, telefono
+                                        FROM usuarios WHERE cedula = '$idusuario'");
+        $data['nombre'] = $nombre;
+        $data['direccion'] = $direccion;
+        $data['contrasenia'] = $contrasena;
+        $data['telefono'] = $telefono;
+        $modificaUsuario = $this->actualizaData("usuarios",$data,"cedula = '$idusuario'");
+
+        $nuevo = $this->obtenData("SELECT cedula, nombre, rol_id, direccion, activo, telefono
+                                    FROM usuarios WHERE cedula = '$idusuario'");
+        if(!$modificaUsuario){
+            return false;
+        }
+        $arra['usuario_bit'] = $idusuario;
+        $arra['modulo_afectado'] = 'Modifica Usuario Propio';
+        $arra['accion_realizada'] = $this->creaCadenaUpdate('usuarios',$data, "cedula = " . $idusuario);
+        $arra['valor_anterior'] = implode(";", $anterior[0]);
+        $arra['valor_actual'] = implode("; ",$nuevo[0]);
+        $arra['fecha_accion'] ='Now()';
+
+        return $this->grabaData("bitacoras", $arra);
     }
 }
 ?>

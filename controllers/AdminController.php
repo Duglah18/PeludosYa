@@ -36,20 +36,33 @@ class AdminController extends GeneralController{
 
     public function albergues(){
         $objAdmin = $this->loadModel("FundacionModel");
-        $data['alberguesAdmin'] = $objAdmin->consultaAlbergue('');
+        $pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
+        $pagina = $pagina < 0? 1: $pagina;
+        $qty = 10;
+        $data['pagina'] = $pagina;
+        $data['por_pagina'] = $qty;
+        $data['totalregistro'] = $objAdmin->TotalconsultaAlbergues('');
+        $data['alberguesAdmin'] = $objAdmin->consultaAlbergue('', $pagina, $qty);
         //atras envie nada para que me arroje todo
         $this->loadView("admin/veralbergues.phtml","Ver Albergues",$data);
     }
 
     public function adopciones(){
         $objAdmin = $this->loadmodel("AdminModel");
-        if (!isset($_POST['AlbergueEsp'])){
-            $data['adopciones'] = $objAdmin->consultaAdopciones('');
+        $pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
+        $pagina = $pagina < 0? 1: $pagina;
+        $qty = 10;
+        $data['pagina'] = $pagina;
+        $data['por_pagina'] = $qty;
+        if (!isset($_POST['AlbergueEsp']) || $_POST['AlbergueEsp'] == "0"){
+            $data['totalregistro'] = $objAdmin->TotalconsultaAdopciones('');
+            $data['adopciones'] = $objAdmin->consultaAdopciones('',$pagina, $qty);
             $data['albergues'] = $objAdmin->consultaAlbergues();
             $this->loadView("admin/verAdopciones.phtml","Ver adopciones",$data);
         } elseif(isset($_POST['AlbergueEsp']) && $_POST['AlbergueEsp'] != "0") {
             $data['Busqueda'] = $_POST['AlbergueEsp'];
-            $data['adopciones'] = $objAdmin->consultaAdopciones($_POST['AlbergueEsp']);
+            $data['totalregistro'] = $objAdmin->TotalconsultaAdopciones($_POST['AlbergueEsp']);
+            $data['adopciones'] = $objAdmin->consultaAdopciones($_POST['AlbergueEsp'],$pagina, $qty);
             $data['albergues'] = $objAdmin->consultaAlbergues();
             $this->loadView("admin/verAdopciones.phtml","Ver adopciones",$data);
         }
@@ -141,27 +154,49 @@ class AdminController extends GeneralController{
         $this->loadView("admin/adIndex.phtml", "Administrador Ver Usuarios",$data);
     }
 
-    public function tipoAnimal(){
+    public function tipoAnimal(){// Probar falta el div bajo de la tabla aunque haz un if para
+	//ver si los resultados son muchos si son muchos si pagina si no no
         $objAdmin = $this->loadModel("AdminModel");
         if (isset($_POST['accion']) && $_POST['accion'] == 'Modificar'){
-            $data['tAnimal'] = $objAdmin->listaTiposAnimal($_POST['modificacion']);
-            $data['dataTipos'] = $objAdmin->listaTiposAnimal('');
+			$pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
+			$pagina = $pagina < 0? 1: $pagina;
+			$qty = 10;
+			$data['pagina'] = $pagina;
+			$data['por_pagina'] = $qty;
+			$data['totalregistro'] = $objAdmin->TotallistaTiposAnimal();
+            $data['tAnimal'] = $objAdmin->listaTiposAnimal($_POST['modificacion'],$pagina, $qty);
+            $data['dataTipos'] = $objAdmin->listaTiposAnimal('',$pagina, $qty);
             return $this->loadView("admin/adTAnimal.phtml", "Modifica el Tipo de Animal", $data);
         }
-        $data['dataTipos'] = $objAdmin->listaTiposAnimal('');
+		$pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
+        $pagina = $pagina < 0? 1: $pagina;
+        $qty = 10;
+        $data['pagina'] = $pagina;
+        $data['por_pagina'] = $qty;
+        $data['totalregistro'] = $objAdmin->TotallistaTiposAnimal();
+        $data['dataTipos'] = $objAdmin->listaTiposAnimal('',$pagina, $qty);
         $this->loadView("admin/adTAnimal.phtml", "Administrar Tipos de Animal", $data);
     }
 
     public function razasAnimal(){
         $objAdmin = $this->loadModel("AdminModel");
         $objFund = $this->loadModel("FundacionModel");
+        $pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
+        $pagina = $pagina < 0? 1: $pagina;
+        $qty = 10;
         if (isset($_POST['accion']) && $_POST['accion'] == 'Modificar'){
-            $data['buscarazas'] = $objAdmin->listaRazas($_POST['modificacion']);
-            $data['dataRazas'] = $objAdmin->listaRazas('');
+            $data['buscarazas'] = $objAdmin->listaRazas($_POST['modificacion'], $pagina, $qty);
+            $data['pagina'] = $pagina;
+            $data['por_pagina'] = $qty;
+            $data['totalregistro'] = $objAdmin->TotallistaRazas();
+            $data['dataRazas'] = $objAdmin->listaRazas('',$pagina, $qty);
             $data['tiposAnimales'] = $objFund->consultaTipoAnimal();
             return $this->loadView("admin/adRazas.phtml", "Modifica la Raza de Animal", $data);
         }
-        $data['dataRazas'] = $objAdmin->listaRazas('');
+        $data['pagina'] = $pagina;
+        $data['por_pagina'] = $qty;
+        $data['totalregistro'] = $objAdmin->TotallistaRazas();
+        $data['dataRazas'] = $objAdmin->listaRazas('',$pagina, $qty);
         $data['tiposAnimales'] = $objFund->consultaTipoAnimal();
         $this->loadView("admin/adRazas.phtml", "Administrar Razas de Animal", $data);
     }
