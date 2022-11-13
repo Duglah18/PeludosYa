@@ -1,7 +1,6 @@
 <?php
     $total_paginas = ceil($totalregistro / $por_pagina);
 ?>
-
     <h1>Admin Logueado Satisfactoriamente</h1>
     <h2>
         Agrega (Mostrar):
@@ -40,7 +39,11 @@
                 <form action="<?=BASE_URL?>admin/agregaUsuarios" method="POST">
                     <input type="hidden" name="modificacion" value="<?=$dataAdmin[$i]['cedula'] ?>">
                     <button name="accion" value="Modificar">Modificar</button>
-                    <button name="accion" value="Borrar">Borrar</button>
+                </form>
+                <form action="<?=BASE_URL?>admin/inactivaUsuario" method="POST">
+                    <input type="hidden" name="modificacion" value="<?=$dataAdmin[$i]['cedula'] ?>">
+                    <input type="hidden" name="decision" value="<?=$dataAdmin[$i]['activo'] ?>">
+                    <button name="accion" <?= $dataAdmin[$i]['activo'] != 1? "value='Activar'": "value='Inactivar'" ?>><?= $dataAdmin[$i]['activo'] != 1? "Desbloquear": "Bloquear" ?></button>
                 </form>
             </td>
             </tr>

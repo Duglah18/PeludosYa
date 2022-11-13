@@ -18,12 +18,16 @@
             <td><?= $albergues['nombre'] ?></td>
             <td><?= $albergues['direccion'] ?></td>
             <td><?= $albergues['nombreusuario']?></td>
-            <td><?= $albergues['activo'] ?></td>
+            <td><?= $visible = $albergues['activo'] != 1? "No visible": "Visible"?></td>
             <td>
                 <form action="<?=BASE_URL?>admin/agregaAlbergueAdmin" method="POST">
                     <input type="hidden" name="modificacion" value="<?=$albergues['id_albergue'] ?>">
                     <button name="accion" value="Modificar">Modificar</button>
-                    <button name="accion" value="Borrar">Borrar</button>
+                </form>
+                <form action="<?=BASE_URL?>admin/inactivaAlbergue" method="POST">
+                    <input type="hidden" name="modificacion" value="<?=$albergues['id_albergue'] ?>">
+                    <input type="hidden" name="decision" value="<?=$albergues['activo'] ?>">
+                    <button name="accion" <?= $albergues['activo'] != 1? "value='Activar'": "value='Inactivar'" ?>><?= $albergues['activo'] != 1? "Mostrar": "Ocultar" ?></button>
                 </form>
             </td>
         </tr>

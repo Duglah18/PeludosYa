@@ -34,8 +34,7 @@ $activo =  isset($albergue[0]['activo'])? $albergue[0]['activo']:"";
         <br>
         <?php
           if(isset($_POST['accion'])=="Modificar"){?>
-            <label for="">Activo</label>
-            <input type="text" value="<?= $activo;?>" name="activo">
+            <input type="hidden" value="<?= $activo;?>" name="activo">
             <?php
           }
         ?>

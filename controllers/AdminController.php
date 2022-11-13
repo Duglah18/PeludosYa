@@ -2,18 +2,17 @@
 
 class AdminController extends GeneralController{
     #Region Views
+    public function Comprobador(){
+        if(!isset($_SESSION['usuario']) || $_SESSION['rol'] != "1"){
+            return header("location: ".BASE_URL);
+        }
+    }
+
     public function index(){
-        //esta logica se puede usar en el buscar
-        //q te mande a la misma pag pero q si recibe un parametro x q te haga algo diferente
         if (isset($_SESSION['usuario'])){
             $objAdmin = $this->loadModel("AdminModel");
             $objAdmin->registraCierraSesion($_SESSION['iduser']);
             session_destroy();
-            /*UY ESTO HAY QUE CAMBIARLO SI VAS AL INDEX LOGUEADO SE TE DESLOGUEA */
-            //sin el refresh se seguiria viendo el Usuario como si
-            //estuvieras logueado para entender si quieres
-            //comenta la siguiente linea y carga el admin y cierra sesion
-            //y mira la barra de navegacion
             header("refresh: " . 0);
             $this->loadView("admin/admin.phtml","Login Administrador");
         } else {
@@ -22,6 +21,7 @@ class AdminController extends GeneralController{
     }
 
     public function animales(){
+        $this->Comprobador();
         $objAdmin = $this->loadModel("FundacionModel");
         $pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
         $pagina = $pagina < 0? 1: $pagina;
@@ -35,6 +35,7 @@ class AdminController extends GeneralController{
     }
 
     public function albergues(){
+        $this->Comprobador();
         $objAdmin = $this->loadModel("FundacionModel");
         $pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
         $pagina = $pagina < 0? 1: $pagina;
@@ -48,6 +49,7 @@ class AdminController extends GeneralController{
     }
 
     public function adopciones(){
+        $this->Comprobador();
         $objAdmin = $this->loadmodel("AdminModel");
         $pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
         $pagina = $pagina < 0? 1: $pagina;
@@ -71,6 +73,7 @@ class AdminController extends GeneralController{
 
     //Vista Agregar animales Admin
     public function agregaAnimales(){
+        $this->Comprobador();
         $objAdmin = $this->loadModel("AdminModel");
         if (isset($_POST['accion']) && $_POST['accion'] == 'Modificar'){
             $data['raza'] = $objAdmin->consultaRazaAnimal('');
@@ -94,6 +97,7 @@ class AdminController extends GeneralController{
     
     //Vista Agregar usuarios Admin
     public function agregaUsuarios(){
+        $this->Comprobador();
         $objAdmin = $this->loadModel("AdminModel");
         if(isset($_POST['accion']) && $_POST['accion'] == 'Modificar'){
             $data['usuario'] = $objAdmin->consultaUsuario($_POST['modificacion']);
@@ -106,6 +110,7 @@ class AdminController extends GeneralController{
     }
 
     public function agregaVeterinarios(){
+        $this->Comprobador();
         $objAdmin = $this->loadmodel("AdminModel");
         if (isset($_POST['accion']) && $_POST['accion'] == 'Modificar'){
             $pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
@@ -130,6 +135,7 @@ class AdminController extends GeneralController{
     }
 
     public function agregaAlbergueAdmin(){
+        $this->Comprobador();
         //este model es para cargar el select
         $objFund = $this->loadModel("FundacionModel");
         if(isset($_POST['accion']) && $_POST['accion'] == 'Modificar'){
@@ -143,6 +149,7 @@ class AdminController extends GeneralController{
     }
     
     public function mostrarData(){
+        $this->Comprobador();
         $objAdmin = $this->loadModel("AdminModel");
         $pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
         $pagina = $pagina < 0? 1: $pagina;
@@ -154,8 +161,8 @@ class AdminController extends GeneralController{
         $this->loadView("admin/adIndex.phtml", "Administrador Ver Usuarios",$data);
     }
 
-    public function tipoAnimal(){// Probar falta el div bajo de la tabla aunque haz un if para
-	//ver si los resultados son muchos si son muchos si pagina si no no
+    public function tipoAnimal(){
+        $this->Comprobador();
         $objAdmin = $this->loadModel("AdminModel");
         if (isset($_POST['accion']) && $_POST['accion'] == 'Modificar'){
 			$pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
@@ -179,6 +186,7 @@ class AdminController extends GeneralController{
     }
 
     public function razasAnimal(){
+        $this->Comprobador();
         $objAdmin = $this->loadModel("AdminModel");
         $objFund = $this->loadModel("FundacionModel");
         $pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
@@ -221,16 +229,7 @@ class AdminController extends GeneralController{
             header("location: ". BASE_URL. "admin/mostrarData");
     }
 
-    // public function Closesession(){
-    //     if (isset($_SESSION)){
-    //         session_destroy();
-    //     }
-    //     $this->index();
-    // }
-
-    public function registraUsuario(){//falta telefono 
-        //verifica si existe el usuario
-        //y la cedula
+    public function registraUsuario(){
         $objAdmin = $this->loadModel("AdminModel");
         if (isset($_POST['Agregar'])){
             $cedula = $_POST['cedula'];
@@ -242,6 +241,10 @@ class AdminController extends GeneralController{
         
             $objAdmin->registrarUsuario("usuarios",$cedula,$nombre,$rol,$direccion,
                                         $contrasenia, "1", $tlf, $_SESSION['iduser']);
+            if($objAdmin == false){
+                $error = "Usuario ya en el sistema";
+                header("location: ".BASE_URL. "admin/mostrarData?error=".$error);
+            }
             //mientras carga mostrarData agregar una pantalla de carga
             header("location: ".BASE_URL. "admin/mostrarData");//solucion a recargar la pagina !!!!
         } elseif (isset($_POST['Modificar'])){//usa redireccionamiento header
@@ -252,8 +255,9 @@ class AdminController extends GeneralController{
             $contrasenia = $_POST['contrasenia'];
             $activo = $_POST['activo'];
             $tlf = $_POST['telefono'];
-            echo $objAdmin->modificaUsuario($cedula,$nombre,$rol,$direccion,$contrasenia,
-                                        $activo,$tlf, $_SESSION['iduser']);
+            $detalles = $_POST['detalle'];
+            $objAdmin->modificaUsuario($cedula,$nombre,$rol,$direccion,$contrasenia,
+                                        $activo,$tlf, $detalles,$_SESSION['iduser']);
             header("location: ".BASE_URL. "admin/mostrarData");
         }
     }
@@ -403,6 +407,74 @@ class AdminController extends GeneralController{
                 //añadir variable de error por get 
             }
         }
+    }
+
+    public function inactivaUsuario(){
+        $this->Comprobador();
+        $objAdmin = $this->loadModel("AdminModel");
+        if(!isset($_POST['accion']) || !isset($_POST['decision']) || !isset($_POST['modificacion'])){
+            return header("location: ".BASE_URL."admin/mostrarData");
+        }
+        $cedula_user = $_POST['modificacion'];
+        if($_POST['accion'] == "Activar"){
+            $decision = 1;
+        } elseif ($_POST['accion'] == "Inactivar"){
+            $decision = 0;
+        }
+
+        $objAdmin->DecisionActivacionUsuario($cedula_user, $decision, $_SESSION['iduser']);
+        return header("location: ".BASE_URL."admin/mostrarData");
+    }
+
+    public function inactivaVeterinario(){
+        $this->Comprobador();
+        $objAdmin = $this->loadModel("AdminModel");
+        if(!isset($_POST['accion']) || !isset($_POST['decision']) || !isset($_POST['modificacion'])){
+            return header("location: ".BASE_URL."admin/agregaVeterinarios?error");
+        }
+        $id_veterinario = $_POST['modificacion'];
+        if($_POST['accion'] == "Activar"){
+            $decision = 1;
+        } elseif ($_POST['accion'] == "Inactivar"){
+            $decision = 0;
+        }
+
+        $objAdmin->DecisionActivacionVeterinario($id_veterinario, $decision, $_SESSION['iduser']);
+        return header("location: ".BASE_URL."admin/agregaVeterinarios");
+    }
+
+    public function inactivaPeludos(){
+        $this->Comprobador();
+        $objAdmin = $this->loadModel("AdminModel");
+        if(!isset($_POST['accion']) || !isset($_POST['decision']) || !isset($_POST['modificacion'])){
+            return header("location: ".BASE_URL."admin/animales?error");
+        }
+        $id_peludo = $_POST['modificacion'];
+        if($_POST['accion'] == "Activar"){
+            $decision = 1;
+        } elseif ($_POST['accion'] == "Inactivar"){
+            $decision = 0;
+        }
+
+        $objAdmin->DecisionActivacionPeludos($id_peludo, $decision, $_SESSION['iduser']);
+        return header("location: ".BASE_URL."admin/animales");
+    }
+
+    public function inactivaAlbergue(){
+        $this->Comprobador();
+        $objAdmin = $this->loadModel("AdminModel");
+        if(!isset($_POST['accion']) || !isset($_POST['decision']) || !isset($_POST['modificacion'])){
+            return header("location: ".BASE_URL."admin/albergues?error");
+        }
+        $id_albergue = $_POST['modificacion'];
+        if($_POST['accion'] == "Activar"){
+            $decision = 1;
+        } elseif ($_POST['accion'] == "Inactivar"){
+            $decision = 0;
+        }
+
+        $objAdmin->DecisionActivacionAlbergues($id_albergue, $decision, $_SESSION['iduser']);
+        return header("location: ".BASE_URL."admin/albergues");
     }
 }
 

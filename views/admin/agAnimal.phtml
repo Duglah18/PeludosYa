@@ -108,8 +108,7 @@ $visible = (isset($animales[0]['visible']))? $animales[0]['visible']:"";
         <br>
         <?php
           if(isset($_POST['accion'])=="Modificar"){?>
-          <label for="">Activo</label>
-          <input type="text" name="visible" value="<?= $visible?>">
+          <input type="hidden" name="visible" value="<?= $visible?>">
         <?php
           }
         ?>

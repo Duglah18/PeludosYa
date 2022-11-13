@@ -16,6 +16,7 @@
             <th>Animal</th>
             <th>Albergue</th>
             <th>Fundacion</th>
+            <th>Visible</th>
             <th>Acciones</th>
         </tr>
     </thead>
@@ -31,11 +32,16 @@
             <td><?= $animal['nomtipo'] ?></td>
             <td><?= $animal['nomalbergue'] ?></td> 
             <td><?= $animal['nombreUser'] ?></td>
+            <td><?= $activo = $animal['visible'] != 1? "No visible": "visible"?></td>
             <td>
                 <form action="<?=BASE_URL?>admin/agregaAnimales" method="POST">
                     <input type="hidden" name="modificacion" value="<?=$animal['id_animal'] ?>">
                     <button name="accion" value="Modificar">Modificar</button>
-                    <button name="accion" value="Borrar">Borrar</button>
+                </form>
+                <form action="<?=BASE_URL?>admin/inactivaPeludos" method="POST">
+                    <input type="hidden" name="modificacion" value="<?=$animal['id_animal'] ?>">
+                    <input type="hidden" name="decision" value="<?=$animal['visible'] ?>">
+                    <button name="accion" <?= $animal['visible'] != 1? "value='Activar'": "value='Inactivar'" ?>><?= $animal['visible'] != 1? "Mostrar": "Ocultar" ?></button>
                 </form>
             </td>
         </tr>

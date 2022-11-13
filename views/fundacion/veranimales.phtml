@@ -1,6 +1,6 @@
+<?php
+$total_paginas = ceil($totalregistro / $por_pagina);
 
-<?php 
- $total_paginas = ceil($totalregistro / $por_pagina);
 if($albergues == false){ ?>
     <h1>Aun no tiene albergues en los que registrar Animales</h1>
 <?php
@@ -25,6 +25,7 @@ if($albergues == false){ ?>
             <th>Animal</th>
             <th>Albergue</th>
             <th>Movimiento</th>
+            <th>Visible</th>
         </tr>
     </thead>
     <tbody>
@@ -38,11 +39,16 @@ if($albergues == false){ ?>
             <td><?= $animal['nomraza'] ?></td>
             <td><?= $animal['nomtipo'] ?></td>
             <td><?= $animal['nomalbergue'] ?></td>
+            <td><?= $activo = $animal['visible'] != 1? "No visible": "visible"?></td>
             <td>
                 <form action="<?=BASE_URL?>fundacion/agregaAnimal" method="POST">
                     <input type="hidden" name="modificacion" value="<?=$animal['id_animal'] ?>">
                     <button name="accion" value="Modificar">Modificar</button>
-                    <button name="accion" value="Borrar">Borrar</button>
+                </form>
+                <form action="<?=BASE_URL?>fundacion/inactivaPeludos" method="POST">
+                    <input type="hidden" name="modificacion" value="<?=$animal['id_animal'] ?>">
+                    <input type="hidden" name="decision" value="<?=$animal['visible'] ?>">
+                    <button name="accion" <?= $animal['visible'] != 1? "value='Activar'": "value='Inactivar'" ?>><?= $animal['visible'] != 1? "Mostrar": "Ocultar" ?></button>
                 </form>
             </td>
         </tr>

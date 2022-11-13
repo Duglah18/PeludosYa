@@ -1,6 +1,6 @@
 <a href="<?= BASE_URL;?>fundacion/agregaAlberg"><input type="button" value="Agregar Albergue"></a>
 
-<?php 
+<?php
 $total_paginas = ceil($totalregistro / $por_pagina);
 
 if($userfund == false){ ?>
@@ -23,11 +23,16 @@ if($userfund == false){ ?>
             <td><?= $albergues['id_albergue'] ?></td>
             <td><?= $albergues['nombre'] ?></td>
             <td><?= $albergues['direccion'] ?></td>
-            <td><?= $albergues['activo'] ?></td>
+            <td><?= $visible = $albergues['activo'] != 1? "No visible": "Visible"?></td>
             <td>
                 <form action="<?=BASE_URL?>fundacion/agregaAlberg" method="POST">
                     <input type="hidden" name="modificacion" value="<?=$albergues['id_albergue'] ?>">
                     <button name="accion" value="Modificar">Modificar</button>
+                </form>
+                <form action="<?=BASE_URL?>fundacion/inactivaAlbergue" method="POST">
+                    <input type="hidden" name="modificacion" value="<?=$albergues['id_albergue'] ?>">
+                    <input type="hidden" name="decision" value="<?=$albergues['activo'] ?>">
+                    <button name="accion" <?= $albergues['activo'] != 1? "value='Activar'": "value='Inactivar'" ?>><?= $albergues['activo'] != 1? "Mostrar": "Ocultar" ?></button>
                 </form>
             </td>
         </tr>

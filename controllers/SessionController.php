@@ -3,19 +3,19 @@
 //pedir sus funciones
 class SessionController extends GeneralController{
     #Region Load views
-    //prueba de la creacion de cadenas funciona :D
-    // public function prueba(){
-    //     $data['hola'] = "amigo";
-    //     $data['columna2'] = "columna2prueba";
-    //     echo $this->creaCadenaInsert($data,"bitacora");
-    //     echo $this->creaCadenaUpdate("ajasi", $data, "igual = igual");
-    // }
+    public function Comprobador(){//aqui esta inverso a los demas
+        if(isset($_SESSION['usuario'])){
+            return header("location:" . BASE_URL);
+        }
+    }
 
     public function login(){
+        $this->Comprobador();
         $this->loadView("session/login.phtml","Login");
     }
 
     public function register(){
+        $this->Comprobador();
         $this->loadView("session/register.phtml","Register");
     }
     
@@ -65,12 +65,14 @@ class SessionController extends GeneralController{
 		$objSess = $this->loadModel("SessionModel");
 		if (!isset($_GET['id_user'])){
 			//error no estas mandando ningun usuario a ver detalladamente
-            echo "NO MANDASTE USUARIO";
+            $Error = "No Se envio ningun Usuario";
+            header("location: ".BASE_URL."?error=". $Error);
 		}
 		$buscar = $objSess->consultaUsuarioEspecifico($_SESSION['iduser']);
 		if ($buscar == "No existe"){
 			//error este usuario no existe
-            echo "ESTE USUARIO NO EXISTE";
+            $Error ="El usuario enviado es Inexistente";
+            header("location: ".BASE_URL."?error=". $Error);
 		}
 		$data['datosUsuario'] = $buscar;
 		$this->loadView("session/usuario.phtml", "Ver mi Usuario", $data);
@@ -80,7 +82,8 @@ class SessionController extends GeneralController{
 	public function modifica_user(){
 		if (!isset($_POST['accion']) || !isset($_POST['cedula']) || !isset($_POST['nombre']) || !isset($_POST['direccion']) || !isset($_POST['contrasenia']) || !isset($_POST['telefono'])){
 		//error no llega nada
-        echo "NO SE ESTAN ENVIANDO DATOS";
+        $Error = "NO SE ESTAN ENVIANDO DATOS";
+        header("location: ".BASE_URL."?error=". $Error);
 		}
 		$cedula = $_POST['cedula'];
 		$nombre = $_POST['nombre'];
@@ -89,16 +92,12 @@ class SessionController extends GeneralController{
 		$telefono = $_POST['telefono'];
 		
 		if($cedula == "" || $nombre == "" || $Direccion == "" || $contra == "" || $telefono == ""){
-			//error estan vacios
+			$Error = "NO SE ESTAN ENVIANDO DATOS";
+            return header("location: ".BASE_URL."?error=". $Error);
 		}
 		$fusion = $cedula . ";" . $nombre . ";" . $Direccion . ";" . $contra . ";" . $telefono;
 		$fusion = explode(";", $fusion);
 		$data['usuario'] = $fusion;
-		// $data['cedula'] = $cedula;
-		// $data['nombre'] = $nombre;
-		// $data['direccion'] = $Direccion;
-		// $data['contrasenia'] = $contra;
-		// $data['telefono'] = $telefono;
 		$this->loadView("session/modificausuario.phtml","Modifica Tu usuario", $data);
 	}
     #Endregion
@@ -112,12 +111,14 @@ class SessionController extends GeneralController{
         if ($validar != true){//verifica si existe en la Bd el usuario
             //aca deberia regresarte al login y decirte:
             //campos erroneos o algo invalidos o algo erroneo
-            die("No esta registrado");
+            $Error = "No esta registrado";
+            return header("location: ".BASE_URL."?error=". $Error);
         }
         if ($validar[0]['activo'] < 1){//verifica si no esta baneado
             //aca deberia regresarte al login y decirte:
             //tu cuenta se encuentra bloqueada
-            die ("usted esta bloqueado");
+            $Error = "usted esta bloqueado";
+            return header("location: ".BASE_URL."?error=". $Error);
         } 
         switch($validar[0]['rol_id']){
             //se verifica el rol si es admin el q introduces ps te manda a loguearte como admin
@@ -126,7 +127,7 @@ class SessionController extends GeneralController{
                 $_SESSION['usuario'] = $validar[0]['nombre'];
                 $_SESSION['rol'] = $validar[0]['rol_id'];
                 $_SESSION['iduser'] = $validar[0]['cedula'];
-                header("location: " . BASE_URL. "admin/mostrarData");
+                return header("location: " . BASE_URL. "admin/mostrarData");
                 break;
             case 2:
             case 3:
@@ -136,10 +137,11 @@ class SessionController extends GeneralController{
                 $_SESSION['rol'] = $validar[0]['rol_id'];
                 $data['user'] = $objUser->loginUser($cedula, $contrasenia);
                 //como todos iran a home pero logueados todo esto no sirve
-                $this->loadView("home.phtml","Inicio", $data);
+                return $this->loadView("home.phtml","Inicio", $data);
                 break;
             default: 
-                
+                $Error = "Ha ocurrido un error";
+                return header("location: ".BASE_URL."?error=". $Error);    
                 break;
         }
     }
@@ -155,14 +157,14 @@ class SessionController extends GeneralController{
         $verificacion = $objUser->registerUser($cedu,$nom,$dirc,$contra,$telefono);
         if ($verificacion = "Usuario ya registrado"){
             $data['error'] = "Este usuario ya esta Registrado";
-            $this->loadView("session/register.phtml","Register",$data);
+            return $this->loadView("session/register.phtml","Register",$data);
             die();
         } else {
             $_SESSION['usuario'] = $verificacion[0]['nombre'];
             $_SESSION['iduser'] = $verificacion[0]['cedula'];
             $_SESSION['rol'] = $verificacion[0]['rol_id'];
             $data['user'] = $objUser->loginUser($cedu, $contra);
-            $this->loadView("home.phtml","Inicio", $data);
+            return $this->loadView("home.phtml","Inicio", $data);
         }
     }
 
@@ -186,8 +188,8 @@ class SessionController extends GeneralController{
 	
 	public function modificarmiUsuario(){
 		if(!isset($_POST['cedula'])){
-			$_POST['Error'] = "No se especifico a quien modificar"; //esto funcionaria? sino por get se puede
-			//error retorna
+			$Error = "No se especifico a quien modificar"; //esto funcionaria? sino por get se puede
+			return header("location: ".BASE_URL."?error=".$Error);
 		}
         $objSess = $this->loadModel("SessionModel");
         $Nombre = $_POST['nombre'];

@@ -1,4 +1,4 @@
-<?php 
+<?php
 $idAlbergue = isset($albergue[0]['id_albergue'])? $albergue[0]['id_albergue']:"";
 $nombre =  isset($albergue[0]['nombre'])? $albergue[0]['nombre']:"";
 $direccion = isset($albergue[0]['direccion'])? $albergue[0]['direccion']:"";
@@ -20,8 +20,7 @@ $activo =  isset($albergue[0]['activo'])? $albergue[0]['activo']:"";
         <br>
         <?php
           if(isset($_POST['accion'])=="Modificar"){?>
-            <label for="">Activo</label>
-            <input type="text" value="<?= $activo;?>" name="activo">
+            <input type="hidden" value="<?= $activo;?>" name="activo">
             <?php
           }
         ?>

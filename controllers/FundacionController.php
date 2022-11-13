@@ -2,9 +2,14 @@
     //busca el globalizar el $objFund
 class FundacionController extends GeneralController{
     #Region Views
+    public function Comprobador(){
+        if(!isset($_SESSION['usuario']) || $_SESSION['rol'] != 3){
+           return header("location:" . BASE_URL);
+        }
+    }
+
     public function agregaAlberg(){
-        //hay que quitar el model porque este select es para seleccionar
-        //a que usuario guardarle el albergue
+        $this->Comprobador();
         $objFund = $this->loadModel("FundacionModel");
         if (isset($_POST['accion'])){
             $data['userfund'] = $objFund->consultaUser();
@@ -17,6 +22,7 @@ class FundacionController extends GeneralController{
     }
 
     public function albergues(){
+        $this->Comprobador();
         $objFund = $this->loadModel("FundacionModel");
         $pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
         $pagina = $pagina < 0? 1: $pagina;
@@ -29,6 +35,7 @@ class FundacionController extends GeneralController{
     }
 
     public function animales(){
+        $this->Comprobador();
         $objFund = $this->loadModel("FundacionModel");
         $pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
         $pagina = $pagina < 0? 1: $pagina;
@@ -42,6 +49,7 @@ class FundacionController extends GeneralController{
     }
 
     public function agregaAnimal(){
+        $this->Comprobador();
         $objFund = $this->loadModel("FundacionModel");
         $objAdmin = $this->loadModel("AdminModel");
         if (isset($_POST['accion']) && $_POST['accion'] == 'Modificar'){
@@ -65,6 +73,7 @@ class FundacionController extends GeneralController{
     }
     
     public function verAdopciones(){
+        $this->Comprobador();
         //aca mismo a futuro podriamos hacer un if te llega una variable especifica
         //se hace en este mismo metodo el filtrar por las completadas, etc.
         $objFund = $this->loadModel("FundacionModel");
@@ -79,6 +88,7 @@ class FundacionController extends GeneralController{
     }
 
     public function modificaAdopcion(){
+        $this->Comprobador();
         if(!isset($_POST['accion'])){
             return $this->verAdopciones();
         }
@@ -204,6 +214,40 @@ class FundacionController extends GeneralController{
         }
         $objFund->decisionAdopcion($eleccion, $accion, $razon,$_GET['usuario']);
         header("location: ".BASE_URL."fundacion/verAdopciones");
+    }
+
+    public function inactivaPeludos(){
+        $this->Comprobador();
+        $objAdmin = $this->loadModel("FundacionModel");
+        if(!isset($_POST['accion']) || !isset($_POST['decision']) || !isset($_POST['modificacion'])){
+            return header("location: ".BASE_URL."fundacion/animales?error");
+        }
+        $id_peludo = $_POST['modificacion'];
+        if($_POST['accion'] == "Activar"){
+            $decision = 1;
+        } elseif ($_POST['accion'] == "Inactivar"){
+            $decision = 0;
+        }
+
+        $objAdmin->DecisionActivacionPeludos($id_peludo, $decision, $_SESSION['iduser']);
+        return header("location: ".BASE_URL."fundacion/animales");
+    }
+
+    public function inactivaAlbergue(){
+        $this->Comprobador();
+        $objAdmin = $this->loadModel("FundacionModel");
+        if(!isset($_POST['accion']) || !isset($_POST['decision']) || !isset($_POST['modificacion'])){
+            return header("location: ".BASE_URL."fundacion/albergues?error");
+        }
+        $id_albergue = $_POST['modificacion'];
+        if($_POST['accion'] == "Activar"){
+            $decision = 1;
+        } elseif ($_POST['accion'] == "Inactivar"){
+            $decision = 0;
+        }
+
+        $objAdmin->DecisionActivacionAlbergues($id_albergue, $decision, $_SESSION['iduser']);
+        return header("location: ".BASE_URL."fundacion/albergues");
     }
     #endregion
 }

@@ -33,8 +33,7 @@ $total_paginas = ceil($totalregistro / $por_pagina);
         <input type="hidden" name="admin" value="<?=$id_user;?>">
         <?php 
         if ($visible != ""){ ?>
-        <label for="">Visible</label>
-        <input type="text" name="visible" value="<?=$visible?>">
+        <input type="hidden" name="visible" value="<?=$visible?>">
         <?php
         }
         ?>
@@ -78,13 +77,17 @@ $total_paginas = ceil($totalregistro / $por_pagina);
             <td> 
                 <img src='<?= URL_BASE . "img/veterinarios/".$Veterinarios[$i]['img'];?>' width='50' alt='Foto Veterinario'>
             </td>
-            <td><?= $Veterinarios[$i]['visible'] ?> </td>
+            <td><?= $activo = $Veterinarios[$i]['visible'] !=1? "No visible": "Visible" ?> </td>
             <td><?= $Veterinarios[$i]['usuario_Rveterinario']  ?> </td>
             <td>
                 <form action="<?=BASE_URL?>admin/agregaVeterinarios" method="POST">
                     <input type="hidden" name="modificacion" value="<?=$Veterinarios[$i]['id_veterinario'] ?>">
                     <button name="accion" value="Modificar">Modificar</button>
-                    <button name="accion" value="Borrar">Borrar</button>
+                </form>
+                <form action="<?=BASE_URL?>admin/inactivaVeterinario" method="POST">
+                    <input type="hidden" name="modificacion" value="<?=$Veterinarios[$i]['id_veterinario'] ?>">
+                    <input type="hidden" name="decision" value="<?=$Veterinarios[$i]['visible'] ?>">
+                    <button name="accion" <?= $Veterinarios[$i]['visible'] != 1? "value='Activar'": "value='Inactivar'" ?>><?= $Veterinarios[$i]['visible'] != 1? "Mostrar": "Ocultar" ?></button>
                 </form>
             </td>
             </tr>

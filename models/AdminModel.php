@@ -19,8 +19,11 @@ class AdminModel extends ConexionBD{
     }
 
     public function consultarAdmin($user, $contrasenia){
-        $resultado = $this->obtenData("SELECT cedula, nombre, contrasenia, rol_id FROM usuarios WHERE nombre = '$user' AND contrasenia = '$contrasenia' AND rol_id = 1");
-        //sin el and del rol se podria loguear un usuario normal como admin :v
+        $user = mysqli_real_escape_string($this->conectar(),$user);
+        $contrasenia = mysqli_real_escape_string($this->conectar(),$contrasenia);
+        $resultado = $this->obtenData("SELECT cedula, nombre, contrasenia, rol_id 
+                                        FROM usuarios 
+                                        WHERE nombre = '$user' AND contrasenia = '$contrasenia' AND rol_id = 1");
         if ($resultado) {
             return $resultado;
         } else {
@@ -29,8 +32,9 @@ class AdminModel extends ConexionBD{
     }
 
     public function consultaUsuario($idusuario){
+        $idusuario = mysqli_real_escape_string($this->conectar(),$idusuario);
         $resultado = $this->obtenData("SELECT cedula, nombre, contrasenia, rol_id, direccion, contrasenia,
-                                              activo, telefono
+                                              activo, telefono, detalles
                                         FROM usuarios
                                         WHERE (cedula = CASE WHEN '$idusuario' = '' THEN cedula ELSE '$idusuario' END)");
         return $resultado;
@@ -46,6 +50,7 @@ class AdminModel extends ConexionBD{
     }
 
     public function consultaAdopciones($albergueEsp, $pagina, $qty){
+        $albergueEsp = mysqli_real_escape_string($this->conectar(),$albergueEsp);
         if($pagina <= 0){ $pagina = 1; }
         $desde = ($pagina - 1) * $qty;
         $resultados = $this->obtenData("SELECT a.id_adopcion, a.fecha_adopcion, b.nombre as nombreanimal, 
@@ -65,6 +70,7 @@ class AdminModel extends ConexionBD{
     }
 
     public function TotalconsultaAdopciones($albergueEsp){
+        mysqli_real_escape_string($this->conectar(),$albergueEsp);
         $resultados = $this->obtenData("SELECT COUNT(*) AS TotalAdopciones
                                         FROM adopcion a
                                         INNER JOIN animal b ON a.animal_id = b.id_animal
@@ -108,6 +114,7 @@ class AdminModel extends ConexionBD{
     }
 
     public function consultarAnimal($id_animal){
+        $id_animal = mysqli_real_escape_string($this->conectar(),$id_animal);
         return $this->obtenData("SELECT a.id_animal, a.nombre, a.anio_nac, a.img, a.descripcion, 
                                     a.fecha_ingreso, a.raza_id, a.tamanio_id, a.albergue_id, a.visible, 
                                     b.id_tipo_animal
@@ -117,13 +124,14 @@ class AdminModel extends ConexionBD{
     }//Resolver el problema de si esta adoptado
 
     public function listaTiposAnimal($id_tipo, $pagina, $qty){
+        $id_tipo = mysqli_real_escape_string($this->conectar(),$id_tipo);
 		if($pagina <= 0){ $pagina = 1; }
         $desde = ($pagina - 1) * $qty;
         return $this->obtenData("SELECT id_tipo, nombre
                                 FROM tipo_animal 
                                 WHERE id_tipo = CASE WHEN '$id_tipo' = '' THEN id_tipo ELSE '$id_tipo' END
 								LIMIT $desde, $qty");
-    } //bien XD este es el que se usa para listar en admin?
+    }
 
 	public function TotallistaTiposAnimal(){
 		$resultados = $this->obtenData("SELECT COUNT(*) AS TotalTiposAnimal
@@ -132,6 +140,7 @@ class AdminModel extends ConexionBD{
 	}
 
     public function listaRazas($id_raza, $pagina, $qty){
+        $id_raza = mysqli_real_escape_string($this->conectar(),$id_raza);
         if($pagina <= 0){ $pagina = 1; }
         $desde = ($pagina - 1) * $qty;
         return $this->obtenData("SELECT raza.id_raza, raza.nombre, tipo_animal.nombre as nombreTipo, id_tipo_animal as id_tipo_2
@@ -139,7 +148,7 @@ class AdminModel extends ConexionBD{
                                 INNER JOIN tipo_animal ON tipo_animal.id_tipo = raza.id_tipo_animal
                                 WHERE raza.id_raza = CASE WHEN '$id_raza' = '' THEN raza.id_raza ELSE '$id_raza' END
                                 LIMIT $desde, $qty");
-    }//Repito esto es lo q se usa para listar en admin?
+    }
 
     public function TotallistaRazas(){
         $resultados = $this->obtenData("SELECT COUNT(*) AS TotalRazasAnimal
@@ -147,8 +156,7 @@ class AdminModel extends ConexionBD{
         return $resultados[0]['TotalRazasAnimal'];
     }
 
-    public function consultaTipoAnimal(){//Esto esta haciendo lo mismo que hace otra
-        //podria hacerlo pero prefiero que funcione ahora a que no funcione y me ocupe en ello
+    public function consultaTipoAnimal(){
         $resultados = $this->obtenData("SELECT id_tipo, nombre FROM tipo_animal");
         if ($resultados){
             return $resultados;
@@ -158,6 +166,7 @@ class AdminModel extends ConexionBD{
     }
 
     public function consultaRazaAnimal($id_tipo){
+        $id_tipo = mysqli_real_escape_string($this->conectar(),$id_tipo);
         $resultados = $this->obtenData("SELECT id_raza, nombre FROM raza 
                                         WHERE id_tipo_animal = CASE WHEN '$id_tipo' = '' THEN id_tipo_animal ELSE '$id_tipo' END");
         if ($resultados){
@@ -178,17 +187,17 @@ class AdminModel extends ConexionBD{
 
     public function registrarUsuario($tabla, $rif, $nombre, $rol, $direccion, 
                                     $contrasenia, $estado, $tlf, $usuario_ingresando){
-        $data['cedula'] = $rif;
-        $data['nombre'] = $nombre;
-        $data['rol_id'] = $rol;
-        $data['direccion'] = $direccion;
-        $data['contrasenia'] = $contrasenia;
-        $data['activo'] = $estado;
-        $data['telefono'] = $tlf;
+        $data['cedula'] = mysqli_real_escape_string($this->conectar(),$rif);
+        $data['nombre'] = mysqli_real_escape_string($this->conectar(),$nombre);
+        $data['rol_id'] = mysqli_real_escape_string($this->conectar(),$rol);
+        $data['direccion'] = mysqli_real_escape_string($this->conectar(),$direccion);
+        $data['contrasenia'] = mysqli_real_escape_string($this->conectar(),$contrasenia);
+        $data['activo'] = mysqli_real_escape_string($this->conectar(),$estado);
+        $data['telefono'] = mysqli_real_escape_string($this->conectar(),$tlf);
         $verificar = $this->obtenData("SELECT cedula, nombre, contrasenia, activo, rol_id
                                         FROM usuarios
                                         WHERE cedula = '$rif'");
-        if($verificar){//se verifica si existe un usuario con esa ced y si si retorna falso
+        if($verificar){//se verifica si existe un usuario con esa ced y si es asi retorna falso
             return false;
         }
 
@@ -215,7 +224,7 @@ class AdminModel extends ConexionBD{
     }
 
     public function registraTipoAnimal($tabla, $nombre, $usuario_ingresando){
-        $data['nombre'] = $nombre;
+        $data['nombre'] = mysqli_real_escape_string($this->conectar(),$nombre);
 
         $registrandoTAnimal = $this->grabaData($tabla, $data);
         if (is_bool($registrandoTAnimal)){
@@ -238,8 +247,8 @@ class AdminModel extends ConexionBD{
     }
 
     public function registraRazaAnimal($tabla, $nombre, $tiporaza, $usuario_ingresando){
-        $data['nombre'] = $nombre;
-        $data['id_tipo_animal'] = $tiporaza;
+        $data['nombre'] = mysqli_real_escape_string($this->conectar(),$nombre);
+        $data['id_tipo_animal'] = mysqli_real_escape_string($this->conectar(),$tiporaza);
         $registrandoRAnimal = $this->grabaData($tabla, $data);
 
         if(is_bool($registrandoRAnimal)){
@@ -263,15 +272,15 @@ class AdminModel extends ConexionBD{
     
     public function registraAnimal($tabla, $nom, $anionac, $nomimg, $descripcion, $fecha_ing, 
                                     $id_raza, $tamano_id, $albergue, $visible, $usuario_ingresando){
-        $data['nombre'] = $nom;
-        $data['anio_nac'] = $anionac;
-        $data['img'] = $nomimg;
-        $data['descripcion'] = $descripcion;
-        $data['fecha_ingreso'] = $fecha_ing;
-        $data['raza_id'] = $id_raza;
-        $data['tamanio_id'] = $tamano_id;
-        $data['albergue_id'] = $albergue;
-        $data['visible'] = $visible;
+        $data['nombre'] = mysqli_real_escape_string($this->conectar(),$nom);
+        $data['anio_nac'] = mysqli_real_escape_string($this->conectar(),$anionac);
+        $data['img'] = mysqli_real_escape_string($this->conectar(),$nomimg);
+        $data['descripcion'] = mysqli_real_escape_string($this->conectar(),$descripcion);
+        $data['fecha_ingreso'] = mysqli_real_escape_string($this->conectar(),$fecha_ing);
+        $data['raza_id'] = mysqli_real_escape_string($this->conectar(),$id_raza);
+        $data['tamanio_id'] = mysqli_real_escape_string($this->conectar(),$tamano_id);
+        $data['albergue_id'] = mysqli_real_escape_string($this->conectar(),$albergue);
+        $data['visible'] = mysqli_real_escape_string($this->conectar(),$visible);
         $registrandoAnimal = $this->grabaData($tabla, $data);
 
         if(is_bool($registrandoAnimal)){
@@ -294,12 +303,12 @@ class AdminModel extends ConexionBD{
 
     public function registraVeterinario($nombre,$telefono,$direccion,$img,
                                         $adminregistra){
-        $data['nombre'] = $nombre;
-        $data['tlf'] = $telefono;
-        $data['direccion'] = $direccion;
-        $data['img'] = $img;
+        $data['nombre'] = mysqli_real_escape_string($this->conectar(),$nombre);
+        $data['tlf'] = mysqli_real_escape_string($this->conectar(),$telefono);
+        $data['direccion'] = mysqli_real_escape_string($this->conectar(),$direccion);
+        $data['img'] = mysqli_real_escape_string($this->conectar(),$img);
         $data['visible'] = 1;
-        $data['usuario_Rveterinario'] = $adminregistra;
+        $data['usuario_Rveterinario'] = mysqli_real_escape_string($this->conectar(),$adminregistra);
         $registrandoVeterinario = $this->grabaData('veterinario',$data);
 
         if(is_bool($registrandoVeterinario)){
@@ -321,7 +330,7 @@ class AdminModel extends ConexionBD{
     }
 
     public function registraCierraSesion($user){
-        $arry['usuario_bit'] = $user;
+        $arry['usuario_bit'] = mysqli_real_escape_string($this->conectar(),$user);
         $arry['modulo_afectado'] = 'Cerrar Sesion';
         $arry['accion_realizada'] = "Cerrar Sesion";
         $arry['valor_actual'] = $user . " Cerrando Sesion";
@@ -335,19 +344,20 @@ class AdminModel extends ConexionBD{
     }
     #Region de Modificar
     public function modificaUsuario($idusuario,$nombre,$rol,$direccion,$contrasena,
-                                    $activo,$telefono, $usuario_modificando){
-        $anterior = $this->obtenData("SELECT cedula, nombre, rol_id, direccion, activo, telefono
+                                    $activo,$telefono, $detalles, $usuario_modificando){
+        $anterior = $this->obtenData("SELECT cedula, nombre, rol_id, direccion, activo, telefono, detalles
                                         FROM usuarios WHERE cedula = '$idusuario'");
-        $data['cedula'] = $idusuario;
-        $data['nombre'] = $nombre;
-        $data['rol_id'] = $rol;
-        $data['direccion'] = $direccion;
-        $data['contrasenia'] = $contrasena;
-        $data['activo'] = $activo;
-        $data['telefono'] = $telefono;
+        $data['cedula'] = mysqli_real_escape_string($this->conectar(),$idusuario);
+        $data['nombre'] = mysqli_real_escape_string($this->conectar(),$nombre);
+        $data['rol_id'] = mysqli_real_escape_string($this->conectar(),$rol);
+        $data['direccion'] = mysqli_real_escape_string($this->conectar(),$direccion);
+        $data['contrasenia'] = mysqli_real_escape_string($this->conectar(),$contrasena);
+        $data['activo'] = mysqli_real_escape_string($this->conectar(),$activo);
+        $data['telefono'] = mysqli_real_escape_string($this->conectar(),$telefono);
+        $data['detalles'] = mysqli_real_escape_string($this->conectar(),$detalles);
         $modificaUsuario = $this->actualizaData("usuarios",$data,"cedula = '$idusuario'");
 
-        $nuevo = $this->obtenData("SELECT cedula, nombre, rol_id, direccion, activo, telefono
+        $nuevo = $this->obtenData("SELECT cedula, nombre, rol_id, direccion, activo, telefono, detalles
                                     FROM usuarios WHERE cedula = '$idusuario'");
         if(!$modificaUsuario){
             return false;
@@ -368,14 +378,14 @@ class AdminModel extends ConexionBD{
                                         albergue_id, visible
                                         FROM animal
                                         WHERE id_animal = '$id_animal'");
-        $data['nombre'] = $nom;
-        $data['anio_nac'] = $anionac;
-        $data['img'] = $nomimg;
-        $data['descripcion'] = $descripcion;
-        $data['raza_id'] = $id_raza;
-        $data['tamanio_id'] = $tamano_id;
-        $data['albergue_id'] = $albergue;
-        $data['visible'] = $visible;
+        $data['nombre'] = mysqli_real_escape_string($this->conectar(),$nom);
+        $data['anio_nac'] = mysqli_real_escape_string($this->conectar(),$anionac);
+        $data['img'] = mysqli_real_escape_string($this->conectar(),$nomimg);
+        $data['descripcion'] = mysqli_real_escape_string($this->conectar(),$descripcion);
+        $data['raza_id'] = mysqli_real_escape_string($this->conectar(),$id_raza);
+        $data['tamanio_id'] = mysqli_real_escape_string($this->conectar(),$tamano_id);
+        $data['albergue_id'] = mysqli_real_escape_string($this->conectar(),$albergue);
+        $data['visible'] = mysqli_real_escape_string($this->conectar(),$visible);
         $modificaAnimal = $this->actualizaData($tabla, $data, "id_animal = '$id_animal'");
 
         $nuevo = $this->obtenData("SELECT nombre, anio_nac, img, descripcion, raza_id, tamanio_id,
@@ -402,11 +412,11 @@ class AdminModel extends ConexionBD{
         $anterior = $this->obtenData("SELECT nombre, tlf, direccion, img, visible
                                         FROM veterinario WHERE id_veterinario = '$id_veterinario'");
         
-        $data['nombre'] = $nombre;
-        $data['tlf'] = $tlf;
-        $data['direccion'] = $direccion;
-        $data['img'] = $img;
-        $data['visible'] = $visible;
+        $data['nombre'] = mysqli_real_escape_string($this->conectar(),$nombre);
+        $data['tlf'] = mysqli_real_escape_string($this->conectar(),$tlf);
+        $data['direccion'] = mysqli_real_escape_string($this->conectar(),$direccion);
+        $data['img'] = mysqli_real_escape_string($this->conectar(),$img);
+        $data['visible'] = mysqli_real_escape_string($this->conectar(),$visible);
         $modificaVeterinario = $this->actualizaData('veterinario', $data, "id_veterinario = '$id_veterinario'");
 
         $nuevo = $this->obtenData("SELECT nombre, tlf, direccion, img, visible
@@ -427,15 +437,16 @@ class AdminModel extends ConexionBD{
     }
 
     public function modificaTipoAnimal($id_tipo, $nombre, $usuario_modificando){
-        //Probar 3
         $anterior = $this->obtenData("SELECT nombre
-                                        FROM tipo_animal WHERE id_tipo = '$id_tipo'");
+                                        FROM tipo_animal 
+                                        WHERE id_tipo = '$id_tipo'");
 
-        $data['nombre'] = $nombre;
+        $data['nombre'] = mysqli_real_escape_string($this->conectar(),$nombre);
         $modificaTipoAnimal = $this->actualizaData('tipo_animal', $data, "id_tipo = '$id_tipo'");
 
         $nuevo = $this->obtenData("SELECT nombre
-                                    FROM tipo_animal WHERE id_tipo = '$id_tipo'");
+                                    FROM tipo_animal 
+                                    WHERE id_tipo = '$id_tipo'");
 
         if(!$modificaTipoAnimal){
             return false;
@@ -452,12 +463,11 @@ class AdminModel extends ConexionBD{
     }
 
     public function modificaRaza($id_raza, $nombre, $tipoAnimal, $usuario_modificando){
-        //Probar 4
         $anterior = $this->obtenData("SELECT nombre, id_tipo_animal
                                         FROM raza WHERE id_raza = '$id_raza'");
 
-        $data['nombre'] = $nombre;
-        $data['id_tipo_animal'] = $tipoAnimal;
+        $data['nombre'] = mysqli_real_escape_string($this->conectar(),$nombre);
+        $data['id_tipo_animal'] = mysqli_real_escape_string($this->conectar(),$tipoAnimal);
         $modificaRazaAnimal = $this->actualizaData('raza', $data, "id_raza = " . $id_raza);
 
         $nuevo = $this->obtenData("SELECT nombre, id_tipo_animal
@@ -470,6 +480,114 @@ class AdminModel extends ConexionBD{
         $arra['usuario_bit'] = $usuario_modificando;
         $arra['modulo_afectado'] = 'Modifica Raza Animal Admin';
         $arra['accion_realizada'] = $this->creaCadenaUpdate('raza',$data, "id_raza = " . $id_raza);
+        $arra['valor_anterior'] = implode(";", $anterior[0]);
+        $arra['valor_actual'] = implode("; ",$nuevo[0]);
+        $arra['fecha_accion'] ='Now()';
+
+        return $this->grabaData("bitacoras", $arra);
+    }
+
+    public function DecisionActivacionUsuario($id_usuario, $decision, $usuario_modificando){
+        $id_usuario = mysqli_real_escape_string($this->conectar(),$id_usuario);
+        $anterior = $this->obtenData("SELECT cedula, activo
+                                        FROM usuarios 
+                                        WHERE cedula = '$id_usuario'");
+        $data['activo'] = $decision;
+
+        $modificaActivacionUsuario = $this->actualizaData('usuarios', $data, "cedula = " . $id_usuario);
+
+        $nuevo = $this->obtenData("SELECT cedula, activo
+                                    FROM usuarios 
+                                    WHERE cedula = '$id_usuario'");
+
+        if(!$modificaActivacionUsuario){
+            return false;
+        }
+
+        $arra['usuario_bit'] = $usuario_modificando;
+        $arra['modulo_afectado'] = 'Modifica Bloqueo de Usuario Admin';
+        $arra['accion_realizada'] = $this->creaCadenaUpdate('usuarios',$data, "cedula = " . $id_usuario);
+        $arra['valor_anterior'] = implode(";", $anterior[0]);
+        $arra['valor_actual'] = implode("; ",$nuevo[0]);
+        $arra['fecha_accion'] ='Now()';
+
+        return $this->grabaData("bitacoras", $arra);
+    }
+
+    public function DecisionActivacionVeterinario($id_veterinario, $decision, $usuario_modificando){
+        $id_veterinario = mysqli_real_escape_string($this->conectar(),$id_veterinario);
+        $anterior = $this->obtenData("SELECT id_veterinario, visible
+                                        FROM veterinario 
+                                        WHERE id_veterinario = '$id_veterinario'");
+        $data['visible'] = $decision;
+
+        $modificaActivacionUsuario = $this->actualizaData('veterinario', $data, "id_veterinario = " . $id_veterinario);
+
+        $nuevo = $this->obtenData("SELECT id_veterinario, visible
+                                    FROM veterinario 
+                                    WHERE id_veterinario = '$id_veterinario'");
+
+        if(!$modificaActivacionUsuario){
+            return false;
+        }
+
+        $arra['usuario_bit'] = $usuario_modificando;
+        $arra['modulo_afectado'] = 'Modifica Vision de Veterinario Admin';
+        $arra['accion_realizada'] = $this->creaCadenaUpdate('veterinario',$data, "id_veterinario = " . $id_veterinario);
+        $arra['valor_anterior'] = implode(";", $anterior[0]);
+        $arra['valor_actual'] = implode("; ",$nuevo[0]);
+        $arra['fecha_accion'] ='Now()';
+
+        return $this->grabaData("bitacoras", $arra);
+    }
+
+    public function DecisionActivacionPeludos($id_peludo, $decision, $usuario_modificando){
+        $id_peludo = mysqli_real_escape_string($this->conectar(),$id_peludo);
+        $anterior = $this->obtenData("SELECT id_animal, visible
+                                        FROM animal 
+                                        WHERE id_animal = '$id_peludo'");
+        $data['visible'] = $decision;
+
+        $modificaActivacionUsuario = $this->actualizaData('animal', $data, "id_animal = " . $id_peludo);
+
+        $nuevo = $this->obtenData("SELECT id_animal, visible
+                                    FROM animal 
+                                    WHERE id_animal = '$id_peludo'");
+
+        if(!$modificaActivacionUsuario){
+            return false;
+        }
+
+        $arra['usuario_bit'] = $usuario_modificando;
+        $arra['modulo_afectado'] = 'Modifica Visibilidad Peludo Admin';
+        $arra['accion_realizada'] = $this->creaCadenaUpdate('animal',$data, "id_animal = " . $id_peludo);
+        $arra['valor_anterior'] = implode(";", $anterior[0]);
+        $arra['valor_actual'] = implode("; ",$nuevo[0]);
+        $arra['fecha_accion'] ='Now()';
+
+        return $this->grabaData("bitacoras", $arra);
+    }
+
+    public function DecisionActivacionAlbergues($id_albergue,$decision, $usuario_modificando){
+        $id_albergue = mysqli_real_escape_string($this->conectar(),$id_albergue);
+        $anterior = $this->obtenData("SELECT id_albergue, activo
+                                        FROM albergue 
+                                        WHERE id_albergue = '$id_albergue'");
+        $data['activo'] = $decision;
+
+        $modificaActivacionUsuario = $this->actualizaData('albergue', $data, "id_albergue = " . $id_albergue);
+
+        $nuevo = $this->obtenData("SELECT id_albergue, activo
+                                    FROM albergue 
+                                    WHERE id_albergue = '$id_albergue'");
+
+        if(!$modificaActivacionUsuario){
+            return false;
+        }
+
+        $arra['usuario_bit'] = $usuario_modificando;
+        $arra['modulo_afectado'] = 'Modifica Visibilidad Albergue Admin';
+        $arra['accion_realizada'] = $this->creaCadenaUpdate('albergue',$data, "id_albergue = " . $id_albergue);
         $arra['valor_anterior'] = implode(";", $anterior[0]);
         $arra['valor_actual'] = implode("; ",$nuevo[0]);
         $arra['fecha_accion'] ='Now()';

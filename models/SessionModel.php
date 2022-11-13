@@ -2,6 +2,7 @@
 
 class SessionModel extends ConexionBD{
     public function consultarVeterinarios($id_veterinario, $pagina, $qty){
+        $id_veterinario = mysqli_real_escape_string($this->conectar(),$id_veterinario);
         if($pagina <= 0){ $pagina = 1; }
         $desde = ($pagina - 1) * $qty;
         $resultado = $this->obtenData("SELECT id_veterinario, nombre, tlf, direccion, img, visible, usuario_Rveterinario
@@ -51,6 +52,7 @@ class SessionModel extends ConexionBD{
     }
 
     public function ObtenAnimalSelecc($id){
+        $id = mysqli_real_escape_string($this->conectar(),$id);
         $resultado = $this->obtenData("SELECT a.id_animal, a.nombre, a.anio_nac, a.img, a.descripcion, a.fecha_ingreso, 
                                               b.nombre as nomRaza, c.nombre as tamanio, d.nombre as albergue, a.visible
                                       FROM animal a
@@ -99,13 +101,13 @@ class SessionModel extends ConexionBD{
 
 //falta telefono usuario
     public function registerUser($ced,$nombre,$direcc,$contra,$telefono){
-        $data['cedula'] = $ced; //rif del usuario 
-        $data['nombre'] = $nombre; // nombre del usuario
+        $data['cedula'] = mysqli_real_escape_string($this->conectar(),$ced); //rif del usuario 
+        $data['nombre'] = mysqli_real_escape_string($this->conectar(),$nombre); // nombre del usuario
         $data['rol_id'] = 2; //identificador del rol
-        $data['direccion'] = $direcc; //direccion del usuario
-        $data['contrasenia'] = $contra; //contraseña del usuario a registrar
+        $data['direccion'] = mysqli_real_escape_string($this->conectar(),$direcc); //direccion del usuario
+        $data['contrasenia'] = mysqli_real_escape_string($this->conectar(),$contra); //contraseña del usuario a registrar
         $data['activo'] = 1;
-        $data['telefono'] = $telefono;
+        $data['telefono'] = mysqli_real_escape_string($this->conectar(),$telefono);
         //primero verificamos si existimos 
         $verificar = $this->obtenData("SELECT cedula, nombre, contrasenia, activo, rol_id
                                        FROM usuarios
@@ -138,6 +140,7 @@ class SessionModel extends ConexionBD{
     }
 	//Creado en la oficina 11/11/2022
 	public function consultaUsuarioEspecifico($identify){
+        $identify = mysqli_real_escape_string($this->conectar(),$identify);
 		$buscar = $this->ObtenData("SELECT cedula, nombre, direccion ,contrasenia, telefono, activo
                                        FROM usuarios
                                        WHERE cedula = '$identify' AND activo = 1");
@@ -149,6 +152,7 @@ class SessionModel extends ConexionBD{
 
     
 //esto de que sirve?
+//es para verificar si existe un animal
     public function verificaExistencia($idAnimal, $iduser){
         $resultado = $this->obtenData("SELECT animal_id, cedula_usuario, estado
                                         FROM adopcion");
@@ -157,8 +161,8 @@ class SessionModel extends ConexionBD{
 
     public function registraPeticionAdopcion($idAnimal, $user){
         $data['fecha_adopcion'] = "Now()";
-        $data['animal_id'] = $idAnimal;
-        $data['cedula_usuario'] = $user;
+        $data['animal_id'] = mysqli_real_escape_string($this->conectar(),$idAnimal);
+        $data['cedula_usuario'] = mysqli_real_escape_string($this->conectar(),$user);
         $data['estado'] = "1";
         $registraPeticion = $this->grabaData('adopcion',$data);
 
@@ -183,6 +187,7 @@ class SessionModel extends ConexionBD{
     }//Deberia hacerle bitacora a esto? Si
 
     public function retornaResponsable($iduser){//aca no hace falta revisar si es real pq ya se verifica antes
+        $iduser = mysqli_real_escape_string($this->conectar(),$iduser);
         $resultado = $this->obtenData("SELECT nombre, telefono
                                        FROM usuarios
                                        WHERE cedula = '$iduser'");
@@ -190,12 +195,13 @@ class SessionModel extends ConexionBD{
     }
 
     public function modificaUsuario($idusuario,$nombre,$direccion,$contrasena,$telefono){
+        $idusuario = mysqli_real_escape_string($this->conectar(),$idusuario);
         $anterior = $this->obtenData("SELECT cedula, nombre, rol_id, direccion, activo, telefono
                                         FROM usuarios WHERE cedula = '$idusuario'");
-        $data['nombre'] = $nombre;
-        $data['direccion'] = $direccion;
-        $data['contrasenia'] = $contrasena;
-        $data['telefono'] = $telefono;
+        $data['nombre'] = mysqli_real_escape_string($this->conectar(),$nombre);
+        $data['direccion'] = mysqli_real_escape_string($this->conectar(),$direccion);
+        $data['contrasenia'] = mysqli_real_escape_string($this->conectar(),$contrasena);
+        $data['telefono'] = mysqli_real_escape_string($this->conectar(),$telefono);
         $modificaUsuario = $this->actualizaData("usuarios",$data,"cedula = '$idusuario'");
 
         $nuevo = $this->obtenData("SELECT cedula, nombre, rol_id, direccion, activo, telefono

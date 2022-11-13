@@ -2,7 +2,6 @@
 if (isset($_SESSION)){
   $role = (isset($_SESSION['rol']))?$_SESSION['rol']:"";
   $id_user = (isset($_SESSION['iduser']))?$_SESSION['iduser'] :"";
-  //sin esto lo demas explota xD
 }
 ?>
 <!DOCTYPE html>
@@ -19,9 +18,6 @@ if (isset($_SESSION)){
   <!--Importar Materialize-->
   <link type="text/css" rel="stylesheet" href="<?= URL_ASSETS; ?>/materialize/css/style.css"  media="screen,projection"/>  
   <link type="text/css" rel="stylesheet" href="<?= URL_ASSETS; ?>/materialize/css/materialize.css"  media="screen,projection"/>
-  <!--<link type="text/css" rel="stylesheet" hreg=" https://developers.google.com/fonts/docs/getting_started" media="screen,projection">
-   https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Fonts/Variable_Fonts_Guide
-  https://developer.microsoft.com/en-us/microsoft-edge/testdrive/demos/variable-fonts Unas topografias recomendables-->
 </head>
 <body style="background: url(<?= URL_ASSETS; ?>/wallpaper.jpg) no-repeat fixed">
 <br>
@@ -49,6 +45,7 @@ if (isset($_SESSION)){
             <li><a class='dropdown-trigger' href='#' data-target='dropdown2'>Fundacion</a></li> 
           <?php } ?>
           <!--Aca irian los botones que le pertenecen al rol de tienda-->
+          <!--Esto hay que borrarlo-->
           <?php if($role == "4"){ ?>
             <li><a class='dropdown-trigger' href='#' data-target='dropdown3'>Tienda</a></li>
           <?php } ?>
@@ -96,6 +93,7 @@ if (isset($_SESSION)){
           <li><a href="<?= BASE_URL;?>admin/mostrarData">Usuarios</a></li>
           <li><a href="<?= BASE_URL;?>admin/albergues">Albergues</a></li>
           <li><a href="<?= BASE_URL;?>admin/adopciones">Adopciones</a></li>
+          <li><a href="<?= BASE_URL;?>">Reportes (En progreso)</a></li>
           <!--Ver adopciones falta-->
         </ul>
           <!--Fundacion-->

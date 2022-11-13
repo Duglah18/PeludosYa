@@ -1,4 +1,4 @@
-<?php 
+<?php
 $id_animal = (isset($animales[0]['id_animal']))? $animales[0]['id_animal'] :"";
 $tipoanimalSelecc = (isset($animales[0]['id_tipo_animal']))? $animales[0]['id_tipo_animal'] :"";
 $Nombre = (isset($animales[0]['nombre']))? $animales[0]['nombre'] :"";
@@ -10,7 +10,6 @@ $tamanio_mod = (isset($animales[0]['tamanio_id']))? $animales[0]['tamanio_id'] :
 $Albergue = (isset($animales[0]['albergue_id']))? $animales[0]['albergue_id'] :"";
 $visible = (isset($animales[0]['visible']))? $animales[0]['visible']:"";
 $animalAingresarTipo = (isset($animal_selecc))? $animal_selecc: "";
-echo $tipoanimalSelecc;
 ?>
 
 <div class="card text-center">
@@ -108,8 +107,7 @@ echo $tipoanimalSelecc;
         <br>
         <?php
           if(isset($_POST['accion'])=="Modificar"){?>
-          <label for="">Activo</label>
-          <input type="text" name="visible" value="<?= $visible?>">
+          <input type="hidden" name="visible" value="<?= $visible?>">
         <?php
           }
         ?>

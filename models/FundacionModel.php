@@ -118,13 +118,14 @@ class FundacionModel extends ConexionBD{
         $desde = ($pagina - 1) * $qty;
         $resultados = $this->obtenData("SELECT a.id_animal, a.nombre, a.anio_nac, a.img, 
                                                 a.fecha_ingreso, b.nombre as nomraza, c.nombre as nomtipo,
-                                                e.nombre as nomalbergue, d.nombre as nombreUser
+                                                e.nombre as nomalbergue, d.nombre as nombreUser, a.visible
                                         FROM animal a
                                         INNER JOIN raza b ON a.raza_id = b.id_raza
                                         INNER JOIN tipo_animal c ON c.id_tipo = b.id_tipo_animal
                                         INNER JOIN albergue e ON e.id_albergue = a.albergue_id
                                         INNER JOIN usuarios d ON d.cedula = e.cedula_usuario
                                         WHERE (d.cedula = CASE WHEN '$cedula_user' = '' THEN d.cedula ELSE '$cedula_user' END)
+                                        ORDER BY a.id_animal DESC, a.visible ASC
                                         LIMIT $desde,$qty");
         /*Inciso: CASE ES COMO SWITCH O IF EN SQL (TRANSACT SQL) EN ESTE CASO SI LLEGA VACIO $cedula_user ENTONCES
         MOSTRARA TODOS LOS CONTENIDOS DE LA TABLA PQ NO LO APLIQUE ANTES? PS DE PANA LO APRENDI HACE
@@ -309,6 +310,60 @@ class FundacionModel extends ConexionBD{
         if (!$actualiza){
             return false;
         }
+        return $this->grabaData("bitacoras", $arra);
+    }
+
+    public function DecisionActivacionPeludos($id_peludo, $decision, $usuario_modificando){
+        $id_peludo = mysqli_real_escape_string($this->conectar(),$id_peludo);
+        $anterior = $this->obtenData("SELECT id_animal, visible
+                                        FROM animal 
+                                        WHERE id_animal = '$id_peludo'");
+        $data['visible'] = $decision;
+
+        $modificaActivacionUsuario = $this->actualizaData('animal', $data, "id_animal = " . $id_peludo);
+
+        $nuevo = $this->obtenData("SELECT id_animal, visible
+                                    FROM animal 
+                                    WHERE id_animal = '$id_peludo'");
+
+        if(!$modificaActivacionUsuario){
+            return false;
+        }
+
+        $arra['usuario_bit'] = $usuario_modificando;
+        $arra['modulo_afectado'] = 'Modifica Visibilidad Peludo Fundacion';
+        $arra['accion_realizada'] = $this->creaCadenaUpdate('animal',$data, "id_animal = " . $id_peludo);
+        $arra['valor_anterior'] = implode(";", $anterior[0]);
+        $arra['valor_actual'] = implode("; ",$nuevo[0]);
+        $arra['fecha_accion'] ='Now()';
+
+        return $this->grabaData("bitacoras", $arra);
+    }
+
+    public function DecisionActivacionAlbergues($id_albergue,$decision, $usuario_modificando){
+        $id_albergue = mysqli_real_escape_string($this->conectar(),$id_albergue);
+        $anterior = $this->obtenData("SELECT id_albergue, activo
+                                        FROM albergue 
+                                        WHERE id_albergue = '$id_albergue'");
+        $data['activo'] = $decision;
+
+        $modificaActivacionUsuario = $this->actualizaData('albergue', $data, "id_albergue = " . $id_albergue);
+
+        $nuevo = $this->obtenData("SELECT id_albergue, activo
+                                    FROM albergue 
+                                    WHERE id_albergue = '$id_albergue'");
+
+        if(!$modificaActivacionUsuario){
+            return false;
+        }
+
+        $arra['usuario_bit'] = $usuario_modificando;
+        $arra['modulo_afectado'] = 'Modifica Visibilidad Albergue Fundacion';
+        $arra['accion_realizada'] = $this->creaCadenaUpdate('albergue',$data, "id_albergue = " . $id_albergue);
+        $arra['valor_anterior'] = implode(";", $anterior[0]);
+        $arra['valor_actual'] = implode("; ",$nuevo[0]);
+        $arra['fecha_accion'] ='Now()';
+
         return $this->grabaData("bitacoras", $arra);
     }
 }

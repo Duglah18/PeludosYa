@@ -1,4 +1,8 @@
 <?php
+if (isset($_GET['error'])){
+  echo "<h1>". $_GET['error'] ."</h1>";
+}
+
 $cedula = isset($usuario[0]['cedula'])? $usuario[0]['cedula']:"";
 $Nombre =isset($usuario[0]['nombre'])? $usuario[0]['nombre']:"";
 $Rol =isset($usuario[0]['rol_id'])? $usuario[0]['rol_id']:"";
@@ -6,6 +10,7 @@ $Direccion = isset($usuario[0]['direccion'])? $usuario[0]['direccion']:"";
 $contra =isset($usuario[0]['contrasenia'])? $usuario[0]['contrasenia']:"";
 $tlf =isset($usuario[0]['telefono'])? $usuario[0]['telefono']:"";
 $activo = isset($usuario[0]['activo'])? $usuario[0]['activo']:"";
+$detalle = isset($usuario[0]['detalles'])? $usuario[0]['detalles']:"";
 ?>
 <div class="card text-center">
       <div class="card-body">
@@ -43,8 +48,10 @@ $activo = isset($usuario[0]['activo'])? $usuario[0]['activo']:"";
         <br>
         <?php 
         if($activo != ""){ ?>
-        <label for="">Activo</label>
-        <input type="text" name="activo" value="<?= $activo?>">
+        <label for="">Detalles</label>
+        <input type="text" name="detalle" value="<?= $detalle?>">
+        <br>
+        <input type="hidden" name="activo" value="<?= $activo?>">
         <?php
         }
         ?>
