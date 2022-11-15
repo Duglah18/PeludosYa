@@ -182,9 +182,7 @@ class SessionModel extends ConexionBD{
             return false;
         }
         return $bitacora;
-
-
-    }//Deberia hacerle bitacora a esto? Si
+    }
 
     public function retornaResponsable($iduser){//aca no hace falta revisar si es real pq ya se verifica antes
         $iduser = mysqli_real_escape_string($this->conectar(),$iduser);

@@ -1,7 +1,6 @@
 <?php
 $total_paginas = ceil($totalregistro / $por_pagina);
 if($adopciones == false) { ?>
-<!--Esto se agrego porque si no tiene adopciones el albergue ps saca error -->
 
         <h1>Aun no tiene adopciones</h1>
 
@@ -13,6 +12,7 @@ if($adopciones == false) { ?>
                     <th>Fecha de peticion</th>
                     <th>Animal</th>
                     <th>Usuario</th>
+					<th>Historial</th><!--¿Han sido cancelada alguna vez una de sus peticiones de adopcion?-->
                     <th>Contacto</th>
                     <th>Albergue</th>
                     <th>Estado</th>
@@ -26,6 +26,7 @@ if($adopciones == false) { ?>
                 <td><?= $fecha = date("d-m-Y",strtotime($adopcion['fecha_adopcion'])); ?></td><!--ORDENA LA FECHA -->
                 <td><?= $adopcion['nombreanimal']; ?></td>
                 <td><?= $adopcion['nombreusuario']; ?></td>
+				<td><?= $detalle =  $adopcion['detalles'] == "Registro Usuario"? "Sin problemas Aparentes":$adopcion['detalles'] ?></td><!--Si ha sido marcado con anterioridad al intentar adoptar una mascota-->
                 <td><?= $adopcion['telefono']; ?></td>
                 <td><?= $adopcion['nombrealbergue']; ?></td>
                 <td><?= $adopcion['nombre_estado']; ?></td>
@@ -35,10 +36,12 @@ if($adopciones == false) { ?>
                                 <input type="hidden" name="usuario" value="<?=$_SESSION['iduser'];?>">
                                 <button name="accion" value="Completada">Completada</button>
                         </form>
-                                <button href='#idmodal' class='modal-trigger'>Cancelada</button>
+                                <button href="#idmodal<?=$adopcion['id_adopcion']?>" class='modal-trigger'>Cancelada</button>
                 </td>
             </tr>
-        <?php } ?>
+        <?php 
+        include("./includes/Cancelar.phtml");
+    } ?>
        </tbody>
 </table>
 <div class="col-md-12 center text-center cyan lighten-2"><!--Paginador-->
@@ -76,18 +79,3 @@ if($adopciones == false) { ?>
     </ul>
 </div>
 <?php } ?>
-
-<div id="idmodal" class="modal">
-    <div class="modal-content">
-        <p class="black-text">¿Por que fue rechazada la Peticion?</p>
-        <form action="<?=BASE_URL?>fundacion/destinoAdopcion" method="GET">
-                <input type="text" name="razoncancelado">
-                <input type="hidden" name="modificacion" value="<?=$adopcion['id_adopcion'] ?>">
-                <input type="hidden" name="usuario" value="<?=$_SESSION['iduser'];?>">
-                <button class="btn" name="accion" value="Cancelada">Enviar</button>
-            </form>
-        <div class="modal-footer">
-            <a href="#" class="btn modal-close">Cancelar</a>
-        </div>
-    </div>
-</div>

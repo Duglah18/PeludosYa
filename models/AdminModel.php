@@ -122,7 +122,9 @@ class AdminModel extends ConexionBD{
                                 INNER JOIN raza b ON a.raza_id = b.id_raza
                                 WHERE a.id_animal = CASE WHEN '$id_animal' = '' THEN a.id_animal ELSE '$id_animal'END");
     }//Resolver el problema de si esta adoptado
-
+	//he de suponer que mi yo pasado se preguntaba sobre lo de si esta adoptado o no en vista de usuarios
+	//pero este no es el de usuarios
+	
     public function listaTiposAnimal($id_tipo, $pagina, $qty){
         $id_tipo = mysqli_real_escape_string($this->conectar(),$id_tipo);
 		if($pagina <= 0){ $pagina = 1; }

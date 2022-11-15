@@ -1,6 +1,13 @@
 <?php
 $total_paginas = ceil($totalregistro / $por_pagina);
 
+if(isset($_GET['error'])){
+	
+	echo "<h1>" . $_GET['error'] . "</h1>";
+	
+}
+
+
 if($albergues == false){ ?>
     <h1>Aun no tiene albergues en los que registrar Animales</h1>
 <?php

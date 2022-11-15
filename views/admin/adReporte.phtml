@@ -1,0 +1,35 @@
+<?php
+
+echo "Pagina para la toma de decision acerca de que tipo de reporte se quiere presentar";
+
+?>
+
+<form method="POST">
+    
+    <select id="opciones" name="opcion">
+       <option>---</option>
+       <option>Negro</option>
+       <option>Color</option>
+    </select>
+
+    <input id="color" name="color" type="text"></input>
+    <input id="" name="" type="text"></input>
+    <input id="" name="" type="text"></input>
+
+<button type="submit">Guardar</button>
+</form>
+
+<script>
+ let opciones  = document.getElementById("opciones")
+ let cajaTexto = document.getElementById("color")
+ 
+ opciones.addEventListener("change", () => {
+   let eleccion = opciones.options[opciones.selectedIndex].text
+   
+   if(eleccion === "Negro") {
+     cajaTexto.style.display = "none"
+   } else {
+     cajaTexto.style.display = "inline"
+   }
+ })
+</script>

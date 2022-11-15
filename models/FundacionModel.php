@@ -36,7 +36,7 @@ class FundacionModel extends ConexionBD{
         $desde = ($pagina - 1) * $qty;
         $resultados = $this->obtenData("SELECT a.id_adopcion, a.fecha_adopcion, b.nombre as nombreanimal, 
                                                j.nombre as nombreusuario, j.telefono, c.nombre as nombrealbergue,
-                                               e.nombre_estado
+                                               e.nombre_estado, j.detalles
                                         FROM adopcion a
 										INNER JOIN usuarios j ON j.cedula = a.cedula_usuario
                                         INNER JOIN animal b ON a.animal_id = b.id_animal

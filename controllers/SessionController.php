@@ -1,7 +1,15 @@
 <?php 
-//Controlador donde se manejara las idas a login y register ademas de
-//pedir sus funciones
+
 class SessionController extends GeneralController{
+	/*==========TAREAS PARA FINALIZAR ESTE MODULO==========
+	/	-Filtros de busqueda Animal 
+	/	-Filtros de busqueda Veterinario
+	/	-Probar Modificar usuario propio
+	/	-Revisar en vistas si en algun lugar se muestra la fecha desordenada
+	/	-
+	==========TAREAS PARA FINALIZAR ESTE MODULO==========*/
+	
+	
     #Region Load views
     public function Comprobador(){//aqui esta inverso a los demas
         if(isset($_SESSION['usuario'])){
@@ -80,10 +88,11 @@ class SessionController extends GeneralController{
 	}
 	
 	public function modifica_user(){
-		if (!isset($_POST['accion']) || !isset($_POST['cedula']) || !isset($_POST['nombre']) || !isset($_POST['direccion']) || !isset($_POST['contrasenia']) || !isset($_POST['telefono'])){
+		if (!isset($_POST['accion']) || !isset($_POST['cedula']) || !isset($_POST['nombre']) || 
+			!isset($_POST['direccion']) || !isset($_POST['contrasenia']) || !isset($_POST['telefono'])){
 		//error no llega nada
-        $Error = "NO SE ESTAN ENVIANDO DATOS";
-        header("location: ".BASE_URL."?error=". $Error);
+			$Error = "NO SE ESTAN ENVIANDO DATOS";
+			header("location: ".BASE_URL."?error=". $Error);
 		}
 		$cedula = $_POST['cedula'];
 		$nombre = $_POST['nombre'];
@@ -111,13 +120,13 @@ class SessionController extends GeneralController{
         if ($validar != true){//verifica si existe en la Bd el usuario
             //aca deberia regresarte al login y decirte:
             //campos erroneos o algo invalidos o algo erroneo
-            $Error = "No esta registrado";
+            $Error = "El usuario o la contraseña son incorrectos";
             return header("location: ".BASE_URL."?error=". $Error);
         }
         if ($validar[0]['activo'] < 1){//verifica si no esta baneado
             //aca deberia regresarte al login y decirte:
             //tu cuenta se encuentra bloqueada
-            $Error = "usted esta bloqueado";
+            $Error = "Usuario Bloqueado.";
             return header("location: ".BASE_URL."?error=". $Error);
         } 
         switch($validar[0]['rol_id']){
@@ -158,7 +167,6 @@ class SessionController extends GeneralController{
         if ($verificacion = "Usuario ya registrado"){
             $data['error'] = "Este usuario ya esta Registrado";
             return $this->loadView("session/register.phtml","Register",$data);
-            die();
         } else {
             $_SESSION['usuario'] = $verificacion[0]['nombre'];
             $_SESSION['iduser'] = $verificacion[0]['cedula'];

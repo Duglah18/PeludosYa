@@ -1,0 +1,14 @@
+<div id="idmodal<?=$adopcion['id_adopcion']?>" class="modal">
+    <div class="modal-content">
+        <p class="black-text">¿Por que fue rechazada la Peticion?</p>
+        <form action="<?=BASE_URL?>fundacion/destinoAdopcion" method="GET">
+                <input class="black-text" type="text" name="razoncancelado" id="Razon" value="">
+                <input type="hidden" name="modificacion" value="<?=$adopcion['id_adopcion'] ?>">
+                <input type="hidden" name="usuario" value="<?=$_SESSION['iduser'];?>">
+                <button class="btn" name="accion" value="Cancelada">Enviar</button>
+            </form>
+        <div class="modal-footer">
+            <a href="#" class="btn modal-close">Cancelar</a>
+        </div>
+    </div>
+</div>
