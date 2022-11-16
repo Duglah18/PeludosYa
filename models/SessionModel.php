@@ -20,7 +20,7 @@ class SessionModel extends ConexionBD{
         return $numTotal[0]['TotalVeter'];
     }
 
-    public function obtenAnimales($pagina, $qty){
+    public function obtenAnimales($pagina, $qty, $filtro =""){
         if($pagina <= 0){ $pagina = 1; }
         $desde = ($pagina - 1) * $qty;
         $result = $this->obtenData("SELECT DISTINCT a.id_animal, a.nombre, a.anio_nac, a.img, a.descripcion, a.fecha_ingreso, 
@@ -30,7 +30,9 @@ class SessionModel extends ConexionBD{
                                     INNER JOIN tamanio c ON a.tamanio_id = c.id_tamanio
                                     INNER JOIN albergue d ON a.albergue_id = d.id_albergue
                                     LEFT JOIN adopcion e ON a.id_animal = e.animal_id
-                                    WHERE (a.visible = '1') AND (e.estado IN ('1','2') OR e.estado IS NULL) AND (d.activo = '1')
+                                    WHERE 
+											(a.visible = '1') AND (e.estado IN ('1','2') OR e.estado IS NULL) AND (d.activo = '1') AND
+											(b.id_tipo_animal = CASE WHEN '$filtro' = '' THEN b.id_tipo_animal ELSE '$filtro' END)
                                     LIMIT $desde, $qty");
                                     //creo que ya funciona
         if($result){
@@ -40,14 +42,16 @@ class SessionModel extends ConexionBD{
         }
     }
 
-    public function TotalAnimalesCatalogoSess(){
-        $numTotal = $this->ObtenData("SELECT DISTINCT COUNT(*) AS TotalAnimales
-                                                FROM animal a
-                                                INNER JOIN raza b ON a.raza_id = b.id_raza
-                                                INNER JOIN tamanio c ON a.tamanio_id = c.id_tamanio
-                                                INNER JOIN albergue d ON a.albergue_id = d.id_albergue
-                                                LEFT JOIN adopcion e ON a.id_animal = e.animal_id
-                                                WHERE (a.visible = '1') AND (e.estado IN ('1','2') OR e.estado IS NULL) AND (d.activo = '1')");
+    public function TotalAnimalesCatalogoSess($filtro =""){
+        $numTotal = $this->ObtenData("SELECT COUNT(*) AS TotalAnimales
+                                        FROM animal a
+                                        INNER JOIN raza b ON a.raza_id = b.id_raza
+                                        INNER JOIN tamanio c ON a.tamanio_id = c.id_tamanio
+                                        INNER JOIN albergue d ON a.albergue_id = d.id_albergue
+                                        LEFT JOIN adopcion e ON a.id_animal = e.animal_id
+                                        WHERE 
+                                        ((a.visible = '1') AND (e.estado IN ('1','2') OR e.estado IS NULL) AND (d.activo = '1')) AND 
+                                        (b.id_tipo_animal = CASE WHEN '$filtro' = '' THEN b.id_tipo_animal ELSE '$filtro' END)");
         return $numTotal[0]['TotalAnimales'];
     }
 

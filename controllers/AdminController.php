@@ -32,7 +32,7 @@ class AdminController extends GeneralController{
 
     public function animales(){
         $this->Comprobador();
-        $objAdmin = $this->loadModel("FundacionModel");
+        $objAdmin = $this->loadModel("AdminModel");//probar ya que modifique y ahora tambien existen estos metodos en adminModel
         $pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
         $pagina = $pagina < 0? 1: $pagina;
         $qty = 10;
@@ -61,20 +61,25 @@ class AdminController extends GeneralController{
     public function adopciones(){
         $this->Comprobador();
         $objAdmin = $this->loadmodel("AdminModel");
+		// $desde = isset($_POST['desde'])?$_POST['desde']:"";
+		// $hasta = isset($_POST['hasta'])?$_POST['hasta']:"";
+		$filtro = isset($_GET ['filtro'])? $_GET['filtro']: "";
+		$filtro = $filtro == "0"? "": $filtro;//se iguala a si mismo si no es todos sino entonces a nada para buscar todos
         $pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
         $pagina = $pagina < 0? 1: $pagina;
         $qty = 10;
+		$data['filtro'] = $filtro;
         $data['pagina'] = $pagina;
         $data['por_pagina'] = $qty;
         if (!isset($_POST['AlbergueEsp']) || $_POST['AlbergueEsp'] == "0"){
-            $data['totalregistro'] = $objAdmin->TotalconsultaAdopciones('');
-            $data['adopciones'] = $objAdmin->consultaAdopciones('',$pagina, $qty);
+            $data['totalregistro'] = $objAdmin->TotalconsultaAdopciones('',$filtro);
+            $data['adopciones'] = $objAdmin->consultaAdopciones('',$pagina, $qty, $filtro);
             $data['albergues'] = $objAdmin->consultaAlbergues();
             $this->loadView("admin/verAdopciones.phtml","Ver adopciones",$data);
         } elseif(isset($_POST['AlbergueEsp']) && $_POST['AlbergueEsp'] != "0") {
             $data['Busqueda'] = $_POST['AlbergueEsp'];
-            $data['totalregistro'] = $objAdmin->TotalconsultaAdopciones($_POST['AlbergueEsp']);
-            $data['adopciones'] = $objAdmin->consultaAdopciones($_POST['AlbergueEsp'],$pagina, $qty);
+            $data['totalregistro'] = $objAdmin->TotalconsultaAdopciones($_POST['AlbergueEsp'],$filtro);
+            $data['adopciones'] = $objAdmin->consultaAdopciones($_POST['AlbergueEsp'],$pagina, $qty, $filtro);
             $data['albergues'] = $objAdmin->consultaAlbergues();
             $this->loadView("admin/verAdopciones.phtml","Administrador | Ver adopciones",$data);
         }
@@ -162,13 +167,15 @@ class AdminController extends GeneralController{
     public function mostrarData(){
         $this->Comprobador();
         $objAdmin = $this->loadModel("AdminModel");
+		$filtro = isset($_GET['filtro'])?$_GET['filtro']: "";
         $pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
         $pagina = $pagina < 0? 1: $pagina;
         $qty = 10;
+		$data['filtro'] = $filtro;
         $data['pagina'] = $pagina;
         $data['por_pagina'] = $qty;
-        $data['totalregistro'] = $objAdmin->TotalUsuarios();
-        $data['dataAdmin'] = $objAdmin->listar($pagina, $qty);
+        $data['totalregistro'] = $objAdmin->TotalUsuarios($filtro);
+        $data['dataAdmin'] = $objAdmin->listar($pagina, $qty, $filtro);
         $this->loadView("admin/adIndex.phtml", "Administrador | Ver Usuarios",$data);
     }
 
@@ -225,6 +232,7 @@ class AdminController extends GeneralController{
 	//Reportes del sistema Vista
 	public function Reportes(){
 		$this->Comprobador();
+		//Cargar literalmente todos los modelos porque hay selects pero hasta para regalar
 		$this->loadView("admin/adReporte.phtml","Administrador | Reportes del Sistema");
 	}
 

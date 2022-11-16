@@ -44,8 +44,9 @@ class FundacionModel extends ConexionBD{
                                         INNER JOIN usuarios d ON c.cedula_usuario = d.cedula
                                         INNER JOIN tipo_estado_adopcion e ON a.estado = e.id_tipo_estado
                                         WHERE d.cedula = '$fundacion' AND a.estado = '1'
+										ORDER BY a.fecha_adopcion ASC
 										LIMIT $desde,$qty");
-        if($resultados){
+        if($resultados){//las ordeno de manera ascendente para que las mas antiguas salgan primero
             return $resultados;
         } else {
             return false;
@@ -112,7 +113,7 @@ class FundacionModel extends ConexionBD{
         
         return $resultados[0]['TotalAlbergues'];
     }
-
+//modificado pienso yo que sumara los resultados que halla del numero de adopciones de cada animal
     public function consultaAnimales($cedula_user, $pagina = 1, $qty = 10){
         if ($pagina <= 0){ $pagina = 1; }
         $desde = ($pagina - 1) * $qty;
@@ -124,12 +125,15 @@ class FundacionModel extends ConexionBD{
                                         INNER JOIN tipo_animal c ON c.id_tipo = b.id_tipo_animal
                                         INNER JOIN albergue e ON e.id_albergue = a.albergue_id
                                         INNER JOIN usuarios d ON d.cedula = e.cedula_usuario
+										LEFT JOIN adopcion f ON a.id_animal = f.animal_id
                                         WHERE (d.cedula = CASE WHEN '$cedula_user' = '' THEN d.cedula ELSE '$cedula_user' END)
+										AND a.visible = 1 
                                         ORDER BY a.id_animal DESC, a.visible ASC
                                         LIMIT $desde,$qty");
         /*Inciso: CASE ES COMO SWITCH O IF EN SQL (TRANSACT SQL) EN ESTE CASO SI LLEGA VACIO $cedula_user ENTONCES
         MOSTRARA TODOS LOS CONTENIDOS DE LA TABLA PQ NO LO APLIQUE ANTES? PS DE PANA LO APRENDI HACE
         POCO RELATIVAMENTE */
+		//Probar ya que modifique para que solo salgan animales que sean visibles para que parezcan borrados
        if ($resultados){
             return $resultados;
         } else {

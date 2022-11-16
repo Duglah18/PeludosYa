@@ -1,0 +1,17 @@
+Filtros de Busqueda Faltantes:
+Explicacion ()
+lo que esta dentro del parentesis indica el estado de ese filtro:
+X completado, = Realizado para probar, () Aun sin realizar
+
+*Usuario:
+	-Animales: Tipos de animal(X)
+
+*Fundacion:
+	-Adopciones: Fecha?()
+	-Animales: Tipos de animal(), razas(), id?(), nombre?()
+
+*Administrador:
+	-Animales: Tipo de animal(), Razasanimal(), Busqueda por id()
+	-Albergues: Por fundaciones(Dueños)() ordenar primero los activos y luego los no activos
+	-Usuarios: ID(), Nombre(), estado(X), detalles es diferente de lo usual()
+	-Adopciones: Estado(X), Fecha(=)--Rehacer

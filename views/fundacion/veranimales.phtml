@@ -42,7 +42,7 @@ if($albergues == false){ ?>
             <td><?= $animal['nombre'] ?></td>
             <td><?= $animal['anio_nac'] ?></td>
             <td><img src="<?=URL_BASE?>img/animales/<?=$animal['img']?>" alt="Imagen Animal" width="50"></td>
-            <td><?= $animal['fecha_ingreso'] ?></td>
+            <td><?= $fecha = date("d-m-Y", strtotime($animal['fecha_ingreso']));?></td>
             <td><?= $animal['nomraza'] ?></td>
             <td><?= $animal['nomtipo'] ?></td>
             <td><?= $animal['nomalbergue'] ?></td>

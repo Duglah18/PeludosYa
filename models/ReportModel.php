@@ -3,9 +3,24 @@ class SessionModel extends ConexionBD {
 	/*
 	Creo que tambien hay que colocar para buscar los animales adoptados o no adoptados de todos los albergues o mas 
 	bien de un albergue especifico ej: alberg polipro todos los animales adoptados
+	
+	Contadores:
+		-Usuarios Bloqueados
+		-Veterinarios Bloqueados
+		-
+	
+	
 	*/
+	/*
+	Actualizacion no se buscara por edad del animal de pana q me mato si lo hago
+	Ademas de q como esta en string seria mas complicado
+	o tal vez sea lo mismo
+	*/
+	
+	
+	//creo que lo que pide sql es un string no un numero como 2022
 	//0 = a todos 
-	public function Animales($columna, $filtro, $desde = 2022, $hasta = 2022, $estatus = 0){
+	public function Animales($columna, $filtro, $desde = "2022", $hasta = "2022", $estatus = 0){
 		//estatus serviria para buscar en albergue esos animales adoptados no adoptados o en proceso
 		//https://codigoroot.net/blog/obtener-fecha-y-hora-en-php-con-date/#:~:text=Obtener%20fecha%20actual%20php%20con%20formato%20(Dia%2FMes%2FA%C3%B1o)&text=%24fechaActual%20%3D%20date('d%2Fm%2Fy')%3B
 		
@@ -17,7 +32,7 @@ class SessionModel extends ConexionBD {
 																						INNER JOIN raza b ON a.raza_id = b.id_raza
 																						INNER JOIN tamanio c ON a.tamanio_id = c.id_tamanio
 																						INNER JOIN albergue d ON a.albergue_id = d.id_albergue
-																						INNER JOIN --TipoAnimal e ON 
+																						INNER JOIN tipo_animal e ON b.id_tipo_animal = e.id_tipo
 																						LEFT JOIN adopcion f ON a.id_animal = f.animal_id
 																						WHERE (
 																										($columna = 0 AND a.id_animal = CASE WHEN '$filtro' = '' THEN a.id_animal ELSE '$filtro' END) OR 
@@ -28,8 +43,8 @@ class SessionModel extends ConexionBD {
 																										($columna = 5 AND c.id_tamanio = CASE WHEN $filtro = 0 THEN c.id_tamanio ELSE $filtro END) OR --Tamanio
 																										($columna = 6 AND a.albergue_id = CASE WHEN $filtro = 0 THEN a.albergue_id ELSE $filtro END AND f.estado = CASE WHEN $estatus = 0 THEN f.estado ELSE $estatus END) OR --Albergue podria ser codigo --si saliera un cmb podria sacarle una consulta
 																										($columna = 7 AND d.nombre LIKE '$filtro' + '%') OR --Albergue nombre
-																										($columna = 7 AND ) OR --Tipo Animal
-																										($columna = 8 AND CASE WHEN f.estado IS NULL THEN 0 ELSE SUM(f.estado) END < $filtro) --Numero de adopciones
+																										($columna = 8 AND  e.id_tipo = $filtro) OR --Tipo Animal
+																										($columna = 9 AND CASE WHEN f.estado IS NULL THEN 0 ELSE SUM(f.estado) END < $filtro) --Numero de adopciones
 																									  )");//Estas buscando menores numeros de adopcion que estas ingresando o cuantos?
 		return $resultados;//Se podria colocar un and como en los ejemplos
 	}
@@ -44,7 +59,7 @@ class SessionModel extends ConexionBD {
 																														INNER JOIN raza b ON a.raza_id = b.id_raza
 																														INNER JOIN tamanio c ON a.tamanio_id = c.id_tamanio
 																														INNER JOIN albergue d ON a.albergue_id = d.id_albergue
-																														INNER JOIN --TipoAnimal e ON 
+																														INNER JOIN tipo_animal e ON b.id_tipo_animal = e.id_tipo
 																														LEFT JOIN adopcion f ON a.id_animal = f.animal_id
 																														WHERE (
 																																		($columna = 0 AND a.id_animal = CASE WHEN '$filtro' = '' THEN a.id_animal ELSE '$filtro' END) OR 
@@ -55,8 +70,8 @@ class SessionModel extends ConexionBD {
 																																		($columna = 5 AND c.id_tamanio = CASE WHEN $filtro = 0 THEN c.id_tamanio ELSE $filtro END) OR --Tamanio
 																																		($columna = 6 AND a.albergue_id = CASE WHEN $filtro = 0 THEN a.albergue_id ELSE $filtro END) OR --Albergue podria ser codigo --si saliera un cmb podria sacarle una consulta
 																																		($columna = 7 AND d.nombre LIKE '$filtro' + '%') OR --Albergue nombre
-																																		($columna = 7 AND ) OR --Tipo Animal
-																																		($columna = 8 AND CASE WHEN f.estado IS NULL THEN 0 ELSE SUM(f.estado) END < $filtro) --Numero de adopciones
+																																		($columna = 8 AND  e.id_tipo = $filtro) OR --Tipo Animal
+																																		($columna = 9 AND CASE WHEN f.estado IS NULL THEN 0 ELSE SUM(f.estado) END < $filtro) --Numero de adopciones
 																																	  )");
 									
 		return $resultados[0]['TotalAnimales'];
@@ -78,7 +93,7 @@ class SessionModel extends ConexionBD {
                                 WHERE a.id_animal = CASE WHEN '$id_animal' = '' THEN a.id_animal ELSE '$id_animal'END");
     }
 	*/
-	
+	//creo que este esta de mas si en lo anterior puedo hacerlo no ?
 	public function AnimalesAdoptados($columna, $filtro, $desde = 2022, $hasta = 2022, $estatus = 0){
 		return $resultados =  $this->ObtenData("SELECT a.id_animal, a.nombre, a.anio_nac, a.img, a.descripcion,
 																					a.fecha_ingreso, b.nombre as nombreRaza, c.nombre AS nombreTamano,
@@ -88,7 +103,7 @@ class SessionModel extends ConexionBD {
 																						INNER JOIN raza b ON a.raza_id = b.id_raza
 																						INNER JOIN tamanio c ON a.tamanio_id = c.id_tamanio
 																						INNER JOIN albergue d ON a.albergue_id = d.id_albergue
-																						INNER JOIN --TipoAnimal e ON 
+																						INNER JOIN tipo_animal e ON b.id_tipo_animal = e.id_tipo
 																						INNER JOIN adopcion f ON a.id_animal = f.animal_id
 																						WHERE (
 																											($columna = 0 AND a.id_animal = CASE WHEN '$filtro' = '' THEN a.id_animal ELSE '$filtro' END) OR 
@@ -99,38 +114,94 @@ class SessionModel extends ConexionBD {
 																											($columna = 5 AND c.id_tamanio = CASE WHEN $filtro = 0 THEN c.id_tamanio ELSE $filtro END) OR --Tamanio
 																											($columna = 6 AND a.albergue_id = CASE WHEN $filtro = 0 THEN a.albergue_id ELSE $filtro END) OR --Albergue podria ser codigo --si saliera un cmb podria sacarle una consulta
 																											($columna = 7 AND d.nombre LIKE '$filtro' + '%') OR --Albergue nombre
-																											($columna = 7 AND )--Tipo Animal
+																											($columna = 8 AND e.id_tipo = $filtro)--Tipo Animal
 																										  )");
 	}
 	
 	public function Usuarios($columna, $filtro){
-		return $this->ObtenData("SELECT cedula, nombre, rol_id
+		return $this->ObtenData("SELECT cedula, nombre, rol_id, direccion, activo, telefono, detalles
 																	FROM usuarios
 																	WHERE(
 																						($columna = 0 AND cedula = CASE WHEN $filtro = '' THEN cedula ELSE $filtro END ) OR 
 																						($columna = 1 AND nombre LIKE '$filtro' + %) OR 
-																						($columna = 2 AND rol_id = $filtro)
+																						($columna = 2 AND rol_id = $filtro) OR 
+																						($columna = 3 AND activo = $filtro)
 																					)");
 	}
 	
-	public function Albergues() {
-		$this->ObtenData("SELECT *
+	public function TotalUsuarios($columna, $filtro){
+		return $this->ObtenData("SELECT COUNT(*) AS TotalUsuarios
+																	FROM usuarios
+																	WHERE(
+																						($columna = 0 AND cedula = CASE WHEN $filtro = '' THEN cedula ELSE $filtro END ) OR 
+																						($columna = 1 AND nombre LIKE '$filtro' + %) OR 
+																						($columna = 2 AND rol_id = $filtro) OR 
+																						($columna = 3 AND activo = $filtro)
+																					)");
+	}
+	
+	public function Albergues($columna, $filtro) {
+		$this->ObtenData("SELECT id_albergue, nombre, direccion, cedula_usuario, activo
 									FROM albergue
-									WHERE");
+									WHERE(
+														($columna = 0 AND id_albergue = CASE WHEN '$filtro' = '' THEN id_albergue ELSE '$filtro' END) OR
+														($columna = 1 AND nombre LIKE '$filtro' + '%') OR 
+														($columna = 2 AND cedula_usuaurio CASE WHEN '$filtro' = '' THEN cedula_usuario ELSE '$filtro') OR
+														($columna = 3 AND activo = CASE WHEN '$filtro' = '' THEN activo ELSE $filtro)
+													 )");
 	}
 	//supongo que sera una consulta sobre logins y registers
-	public function Movimientos(){
-		return $this->ObtenData("SELECT *
+	//creo que esto se puede ampliar a INSERTS Y UPDATES
+	public function Movimientos($columna, $filtro, $desde, $hasta){
+		return $this->ObtenData("SELECT id_bitacora, usuario_bit, modulo_afectado, accion_realizada, fecha_accion
 									FROM bitacoras
-									WHERE ");
+									WHERE(
+														($columna = 0 AND id_bitacora = CASE WHEN '$filtro' = '' THEN id_bitacora ELSE '$filtro' END) OR
+														($columna = 1 AND usuario_bit =CASE WHEN '$filtro' = '' THEN usuario_bit ELSE '$filtro' END) OR
+														($columna = 2 AND modulo_afectado = '$filtro') OR 
+														($columna = 3 AND accion_realizada = '$filtro') OR
+														($columna = 4 AND fecha_accion BETWEEN $desde, $hasta)
+													 ) 
+													 AND (modulo_afectado = 'Usuario Logueandose' OR modulo_afectado = 'Cerrar Sesion')");
 		
 	}
-	//esto podria ser por modulo, si fue un UPDATE o un INSERT
-	public function Bitacora(){
-		return $this->ObtenData("SELECT *
+	
+	public function ContadorMovimientos($columna, $filtro, $desde, $hasta){
+		return $this->ObtenData("SELECT COUNT(*) AS TotalMovimientos
 									FROM bitacoras
-									WHERE ");
-		return 0;
+									WHERE(
+														($columna = 0 AND id_bitacora = CASE WHEN '$filtro' = '' THEN id_bitacora ELSE '$filtro' END) OR
+														($columna = 1 AND usuario_bit =CASE WHEN '$filtro' = '' THEN usuario_bit ELSE '$filtro' END) OR
+														($columna = 2 AND modulo_afectado = '$filtro') OR 
+														($columna = 3 AND accion_realizada = '$filtro') OR
+														($columna = 4 AND fecha_accion BETWEEN $desde, $hasta)
+													 ) 
+													 AND (modulo_afectado = 'Usuario Logueandose' OR modulo_afectado = 'Cerrar Sesion')");
+	}
+	
+	//esto podria ser por modulo, si fue un UPDATE o un INSERT
+	public function Bitacora($columna, $filtro, $desde, $hasta){
+		return $this->ObtenData("SELECT id_bitacora, usuario_bit, modulo_afectado, accion_realizada, fecha_accion
+									FROM bitacoras
+									WHERE(
+														($columna = 0 AND id_bitacora = CASE WHEN '$filtro' = '' THEN id_bitacora ELSE '$filtro' END) OR
+														($columna = 1 AND usuario_bit =CASE WHEN '$filtro' = '' THEN usuario_bit ELSE '$filtro' END) OR
+														($columna = 2 AND modulo_afectado = '$filtro') OR 
+														($columna = 3 AND accion_realizada = '$filtro') OR
+														($columna = 4 AND fecha_accion BETWEEN $desde, $hasta)
+													 )");
+	}
+	
+	public function TotalBitacora($columna, $filtro, $desde, $hasta){
+		return $this->ObtenData("SELECT COUNT(*) AS totalBitacora
+									FROM bitacoras
+									WHERE(
+														($columna = 0 AND id_bitacora = CASE WHEN '$filtro' = '' THEN id_bitacora ELSE '$filtro' END) OR
+														($columna = 1 AND usuario_bit =CASE WHEN '$filtro' = '' THEN usuario_bit ELSE '$filtro' END) OR
+														($columna = 2 AND modulo_afectado = '$filtro') OR 
+														($columna = 3 AND accion_realizada = '$filtro') OR
+														($columna = 4 AND fecha_accion BETWEEN $desde, $hasta)
+													 )");
 	}
 	//las columnas son basicamente el select que va a tener el buscar reporte veterinario
 	//no especificamos en que direccion tiene asi que sera dificil hacerle un buscar
@@ -145,19 +216,20 @@ class SessionModel extends ConexionBD {
 													($columna = 4 AND usuario_Rveterinario = CASE WHEN '$filtro' = '' THEN usuario_Rveterinario ELSE '$filtro' END)
 												  )");
 	}
-	
+	//me parecio muy tonto buscar a un veterinario por su tlf 
+	//Linea borrada ($columna = 2 AND tlf = CASE WHEN '$filtro' = '' THEN tlf ELSE '$filtro' END) OR Fecha: 16/11/2022
 	public function TotalVeterinarios($columna, $filtro){
 		$resultados = $this->ObtenData("SELECT COUNT(*) AS TotalVeterinarios
 									FROM veterinario
 									WHERE (
 													($columna = 0 AND id_veterinario = CASE WHEN $filtro = '' THEN id_veterinario ELSE '$filtro' END) OR
 													($columna = 1 AND nombre LIKE '$filtro' + '%' ) OR
-													($columna = 2 AND tlf = CASE WHEN '$filtro' = '' THEN tlf ELSE '$filtro' END) OR
-													($columna = 3 AND visible = CASE WHEN '$filtro' = '' THEN visible ELSE CASE WHEN '$filtro' LIKE  'visible' THEN 1 ELSE 0 END END) OR 
-													($columna = 4 AND usuario_Rveterinario = CASE WHEN '$filtro' = '' THEN usuario_Rveterinario ELSE '$filtro' END)
+													($columna = 2 AND visible = CASE WHEN '$filtro' = '' THEN visible ELSE CASE WHEN '$filtro' LIKE  'visible' THEN 1 ELSE 0 END END) OR 
+													($columna = 3 AND usuario_Rveterinario = CASE WHEN '$filtro' = '' THEN usuario_Rveterinario ELSE '$filtro' END)
 												  )");
 		return $resultados [0]['TotalVeterinarios'];
 	}
+	
 /*(@COLUMNA = 0 AND A1.IDNPP = CASE WHEN @TEXTO = '' THEN A1.IDNPP ELSE @TEXTO END) OR        
 					--(@COLUMNA = 1 AND A1.NOMCLI LIKE '%' + @TEXTO + '%') OR --NO EXISTE EL NOMBRE DE LA PROMOCION EN LA TABLA PROMOCION
 					(@COLUMNA = 2 AND A1.DCTO = CASE WHEN @COLUMNA <> 2 THEN A1.DCTO ELSE @TEXTO END) OR

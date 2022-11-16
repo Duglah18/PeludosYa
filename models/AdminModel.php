@@ -3,7 +3,60 @@
 class AdminModel extends ConexionBD{
 
     // #consultas Region
+	//Agregados el 16/11/2022
+	 public function consultaAnimales($cedula_user, $pagina = 1, $qty = 10){
+		/*-----------------------------------------------------------------------------------/
+		/	Fecha de cambio: 
+		/	Razon:
+		/	Cambio: 
+		/-----------------------------------------------------------------------------------*/
+        if ($pagina <= 0){ $pagina = 1; }
+        $desde = ($pagina - 1) * $qty;
+        $resultados = $this->obtenData("SELECT a.id_animal, a.nombre, a.anio_nac, a.img, 
+                                                a.fecha_ingreso, b.nombre as nomraza, c.nombre as nomtipo,
+                                                e.nombre as nomalbergue, d.nombre as nombreUser, a.visible, CASE WHEN f.animal_id IS NULL THEN 0 ELSE 
+												SUM(f.id_animal) END AS NumeroPeticiones
+                                        FROM animal a
+                                        INNER JOIN raza b ON a.raza_id = b.id_raza
+                                        INNER JOIN tipo_animal c ON c.id_tipo = b.id_tipo_animal
+                                        INNER JOIN albergue e ON e.id_albergue = a.albergue_id
+                                        INNER JOIN usuarios d ON d.cedula = e.cedula_usuario
+										LEFT JOIN adopcion f ON a.id_animal = f.animal_id
+                                        WHERE (d.cedula = CASE WHEN '$cedula_user' = '' THEN d.cedula ELSE '$cedula_user' END)
+                                        ORDER BY a.id_animal DESC, a.visible ASC
+                                        LIMIT $desde,$qty");
+        /*Inciso: CASE ES COMO SWITCH O IF EN SQL (TRANSACT SQL) EN ESTE CASO SI LLEGA VACIO $cedula_user ENTONCES
+        MOSTRARA TODOS LOS CONTENIDOS DE LA TABLA PQ NO LO APLIQUE ANTES? PS DE PANA LO APRENDI HACE
+        POCO RELATIVAMENTE */
+       if ($resultados){
+            return $resultados;
+        } else {
+            return false;
+        }
+    } 
+
+    public function TotalConsultaAnimales($usuario = ""){ 
+	/*-----------------------------------------------------------------------------------/
+		/	Fecha de cambio: 
+		/	Razon:
+		/	Cambio: 
+		/-----------------------------------------------------------------------------------*/
+        $resultados = $this->obtenData("SELECT COUNT(*) AS TotalAnimales
+                                        FROM animal a
+                                        INNER JOIN raza b ON a.raza_id = b.id_raza
+                                        INNER JOIN tipo_animal c ON c.id_tipo = b.id_tipo_animal
+                                        INNER JOIN albergue e ON e.id_albergue = a.albergue_id
+                                        INNER JOIN usuarios d ON d.cedula = e.cedula_usuario
+                                        WHERE (d.cedula = CASE WHEN '$usuario' = '' THEN d.cedula ELSE '$usuario' END)");
+        return $resultados[0]['TotalAnimales'];
+    }
+	
     public function consultarVeterinarios($id_veterinario, $pagina, $qty){
+		/*-----------------------------------------------------------------------------------/
+		/	Fecha de cambio: 
+		/	Razon:
+		/	Cambio: 
+		/-----------------------------------------------------------------------------------*/
         if($pagina <= 0){ $pagina = 1; }
         $desde = ($pagina - 1) * $qty;
         $resultado = $this->obtenData("SELECT id_veterinario, nombre, tlf, direccion, img, visible, usuario_Rveterinario
@@ -14,11 +67,21 @@ class AdminModel extends ConexionBD{
     }
 
     public function TotalVeterinariosConsults(){
+		/*-----------------------------------------------------------------------------------/
+		/	Fecha de cambio: 
+		/	Razon:
+		/	Cambio: 
+		/-----------------------------------------------------------------------------------*/
         $resultado = $this->obtenData("SELECT COUNT(*) AS TotalVeterinarios FROM veterinario");
         return $resultado[0]['TotalVeterinarios'];
     }
 
     public function consultarAdmin($user, $contrasenia){
+		/*-----------------------------------------------------------------------------------/
+		/	Fecha de cambio: 
+		/	Razon:
+		/	Cambio: 
+		/-----------------------------------------------------------------------------------*/
         $user = mysqli_real_escape_string($this->conectar(),$user);
         $contrasenia = mysqli_real_escape_string($this->conectar(),$contrasenia);
         $resultado = $this->obtenData("SELECT cedula, nombre, contrasenia, rol_id 
@@ -32,6 +95,11 @@ class AdminModel extends ConexionBD{
     }
 
     public function consultaUsuario($idusuario){
+		/*-----------------------------------------------------------------------------------/
+		/	Fecha de cambio: 
+		/	Razon:
+		/	Cambio: 
+		/-----------------------------------------------------------------------------------*/
         $idusuario = mysqli_real_escape_string($this->conectar(),$idusuario);
         $resultado = $this->obtenData("SELECT cedula, nombre, contrasenia, rol_id, direccion, contrasenia,
                                               activo, telefono, detalles
@@ -41,6 +109,11 @@ class AdminModel extends ConexionBD{
     }
 
     public function consultaAlbergues(){
+		/*-----------------------------------------------------------------------------------/
+		/	Fecha de cambio: 
+		/	Razon:
+		/	Cambio: 
+		/-----------------------------------------------------------------------------------*/
         $resultados = $this->obtenData("SELECT id_albergue, nombre FROM albergue");
         if ($resultados){
             return $resultados;
@@ -48,8 +121,20 @@ class AdminModel extends ConexionBD{
             return false;
         }
     }
-
-    public function consultaAdopciones($albergueEsp, $pagina, $qty){
+	
+    public function consultaAdopciones($albergueEsp, $pagina, $qty, $filtro ="", $desde = "", $hasta = ""){
+		/*-----------------------------------------------------------------------------------/
+		/	Fecha de cambio: 16/11/2022
+		/	Razon: Filtrar por el estado de la adopcion
+		/	Cambio: Agrego $filtro, Se le agregaron $desde, $hasta
+		/-----------------------------------------------------------------------------------*/
+        //podria hacer funcionar esto pero de pana estoy quemado
+		// if ($desde != "" || $hasta !="" ){//espero y funcione
+		// 	$desde = date("Y-m-d", strtotime($desde));
+		// 	$hasta = date("Y-m-d", strtotime($hasta));
+		// }
+		// $desde = $desde != ""? date("Y-m-d", strtotime($desde)): date("Y-m-d");
+		// $hasta = $hasta != ""? date("Y-m-d", strtotime($hasta)): date("Y-m-d");
         $albergueEsp = mysqli_real_escape_string($this->conectar(),$albergueEsp);
         if($pagina <= 0){ $pagina = 1; }
         $desde = ($pagina - 1) * $qty;
@@ -61,7 +146,8 @@ class AdminModel extends ConexionBD{
                                         INNER JOIN albergue c ON b.albergue_id = c.id_albergue
                                         INNER JOIN usuarios d ON c.cedula_usuario = d.cedula
                                         INNER JOIN tipo_estado_adopcion e ON a.estado = e.id_tipo_estado
-                                        WHERE c.id_albergue = CASE WHEN '$albergueEsp' = '' THEN c.id_albergue ELSE '$albergueEsp' END
+                                        WHERE c.id_albergue = CASE WHEN '$albergueEsp' = '' THEN c.id_albergue ELSE '$albergueEsp' END 
+										AND a.estado = CASE WHEN '$filtro' = '' THEN a.estado ELSE '$filtro' END 
                                         LIMIT $desde,$qty");
         if (!$resultados){
             return false;
@@ -69,7 +155,12 @@ class AdminModel extends ConexionBD{
         return $resultados;
     }
 
-    public function TotalconsultaAdopciones($albergueEsp){
+    public function TotalconsultaAdopciones($albergueEsp, $filtro = ""){
+		/*-----------------------------------------------------------------------------------/
+		/	Fecha de cambio: 
+		/	Razon:
+		/	Cambio: 
+		/-----------------------------------------------------------------------------------*/
         mysqli_real_escape_string($this->conectar(),$albergueEsp);
         $resultados = $this->obtenData("SELECT COUNT(*) AS TotalAdopciones
                                         FROM adopcion a
@@ -77,12 +168,18 @@ class AdminModel extends ConexionBD{
                                         INNER JOIN albergue c ON b.albergue_id = c.id_albergue
                                         INNER JOIN usuarios d ON c.cedula_usuario = d.cedula
                                         INNER JOIN tipo_estado_adopcion e ON a.estado = e.id_tipo_estado
-                                        WHERE c.id_albergue = CASE WHEN '$albergueEsp' = '' THEN c.id_albergue ELSE '$albergueEsp' END");
+                                        WHERE c.id_albergue = CASE WHEN '$albergueEsp' = '' THEN c.id_albergue ELSE '$albergueEsp' END
+										AND a.estado = CASE WHEN '$filtro' = '' THEN a.estado ELSE '$filtro' END");
 
         return $resultados[0]['TotalAdopciones'];
     }
 
     public function ConsultaRoles(){
+		/*-----------------------------------------------------------------------------------/
+		/	Fecha de cambio: 
+		/	Razon:
+		/	Cambio: 
+		/-----------------------------------------------------------------------------------*/
         $resultado = $this->obtenData("SELECT id_rol, nombre FROM rol");
         if ($resultado) {
             return $resultado;
@@ -91,7 +188,13 @@ class AdminModel extends ConexionBD{
         }
     }
 
-    public function listar($pagina, $qty){
+    public function listar($pagina, $qty, $filtro = ""){
+		/*-----------------------------------------------------------------------------------/
+		/	Fecha de cambio: 16/11/2022
+		/	Razon: Filtrar por estado usuarios
+		/	Cambio: $filtro
+		/-----------------------------------------------------------------------------------*/
+		//falta el de detalles es diferente a lo usual en la BD pero de pana necesitaria otro select
         if($pagina <= 0){ $pagina = 1; }
         $desde = ($pagina - 1) * $qty;
         return $this->obtenData("SELECT usuarios.cedula, usuarios.nombre, usuarios.direccion, 
@@ -99,6 +202,8 @@ class AdminModel extends ConexionBD{
                                         usuarios.detalles
                                 FROM usuarios 
                                 INNER JOIN rol ON usuarios.rol_id = rol.id_rol
+								WHERE 
+												(usuarios.activo = CASE WHEN '$filtro' = '' THEN usuarios.activo ELSE '$filtro' END)
                                 ORDER BY usuarios.activo DESC, usuarios.rol_id ASC
                                 LIMIT $desde, $qty");
                                 //tristemente el array no capta algo tipo usuarios a = a.nombre asi que
@@ -106,14 +211,25 @@ class AdminModel extends ConexionBD{
                                 //simplemente hice que el nombre de rol se reconociera como as 
     }
 
-    public function TotalUsuarios(){
+    public function TotalUsuarios($filtro){
+		/*-----------------------------------------------------------------------------------/
+		/	Fecha de cambio: 16/11/2022
+		/	Razon: Filtrar por estado usuarios
+		/	Cambio: $filtro
+		/-----------------------------------------------------------------------------------*/
         $resultado = $this->obtenData("SELECT COUNT(*) AS TotalUsuarios
                                 FROM usuarios 
-                                INNER JOIN rol ON usuarios.rol_id = rol.id_rol");
+                                INNER JOIN rol ON usuarios.rol_id = rol.id_rol
+								WHERE usuarios.activo = CASE WHEN '$filtro' = '' THEN usuarios.activo ELSE '$filtro' END");
         return $resultado[0]['TotalUsuarios'];
     }
 
     public function consultarAnimal($id_animal){
+		/*-----------------------------------------------------------------------------------/
+		/	Fecha de cambio: 
+		/	Razon:
+		/	Cambio: 
+		/-----------------------------------------------------------------------------------*/
         $id_animal = mysqli_real_escape_string($this->conectar(),$id_animal);
         return $this->obtenData("SELECT a.id_animal, a.nombre, a.anio_nac, a.img, a.descripcion, 
                                     a.fecha_ingreso, a.raza_id, a.tamanio_id, a.albergue_id, a.visible, 
@@ -126,6 +242,11 @@ class AdminModel extends ConexionBD{
 	//pero este no es el de usuarios
 	
     public function listaTiposAnimal($id_tipo, $pagina, $qty){
+		/*-----------------------------------------------------------------------------------/
+		/	Fecha de cambio: 
+		/	Razon:
+		/	Cambio: 
+		/-----------------------------------------------------------------------------------*/
         $id_tipo = mysqli_real_escape_string($this->conectar(),$id_tipo);
 		if($pagina <= 0){ $pagina = 1; }
         $desde = ($pagina - 1) * $qty;
@@ -136,12 +257,22 @@ class AdminModel extends ConexionBD{
     }
 
 	public function TotallistaTiposAnimal(){
+		/*-----------------------------------------------------------------------------------/
+		/	Fecha de cambio: 
+		/	Razon:
+		/	Cambio: 
+		/-----------------------------------------------------------------------------------*/
 		$resultados = $this->obtenData("SELECT COUNT(*) AS TotalTiposAnimal
                                 FROM tipo_animal ");
 		return $resultados[0]['TotalTiposAnimal'];
 	}
 
     public function listaRazas($id_raza, $pagina, $qty){
+		/*-----------------------------------------------------------------------------------/
+		/	Fecha de cambio: 
+		/	Razon:
+		/	Cambio: 
+		/-----------------------------------------------------------------------------------*/
         $id_raza = mysqli_real_escape_string($this->conectar(),$id_raza);
         if($pagina <= 0){ $pagina = 1; }
         $desde = ($pagina - 1) * $qty;
@@ -153,12 +284,22 @@ class AdminModel extends ConexionBD{
     }
 
     public function TotallistaRazas(){
+		/*-----------------------------------------------------------------------------------/
+		/	Fecha de cambio: 
+		/	Razon:
+		/	Cambio: 
+		/-----------------------------------------------------------------------------------*/
         $resultados = $this->obtenData("SELECT COUNT(*) AS TotalRazasAnimal
                                         FROM raza");
         return $resultados[0]['TotalRazasAnimal'];
     }
 
     public function consultaTipoAnimal(){
+		/*-----------------------------------------------------------------------------------/
+		/	Fecha de cambio: 
+		/	Razon:
+		/	Cambio: 
+		/-----------------------------------------------------------------------------------*/
         $resultados = $this->obtenData("SELECT id_tipo, nombre FROM tipo_animal");
         if ($resultados){
             return $resultados;
@@ -168,6 +309,11 @@ class AdminModel extends ConexionBD{
     }
 
     public function consultaRazaAnimal($id_tipo){
+		/*-----------------------------------------------------------------------------------/
+		/	Fecha de cambio: 
+		/	Razon:
+		/	Cambio: 
+		/-----------------------------------------------------------------------------------*/
         $id_tipo = mysqli_real_escape_string($this->conectar(),$id_tipo);
         $resultados = $this->obtenData("SELECT id_raza, nombre FROM raza 
                                         WHERE id_tipo_animal = CASE WHEN '$id_tipo' = '' THEN id_tipo_animal ELSE '$id_tipo' END");
@@ -179,6 +325,11 @@ class AdminModel extends ConexionBD{
     }
 
     public function consultaTamanoAnimal(){
+		/*-----------------------------------------------------------------------------------/
+		/	Fecha de cambio: 
+		/	Razon:
+		/	Cambio: 
+		/-----------------------------------------------------------------------------------*/
         $resultados = $this->obtenData("SELECT id_tamanio, nombre FROM tamanio");
         if ($resultados){
             return $resultados;
@@ -189,6 +340,11 @@ class AdminModel extends ConexionBD{
 
     public function registrarUsuario($tabla, $rif, $nombre, $rol, $direccion, 
                                     $contrasenia, $estado, $tlf, $usuario_ingresando){
+		/*-----------------------------------------------------------------------------------/
+		/	Fecha de cambio: 
+		/	Razon:
+		/	Cambio: 
+		/-----------------------------------------------------------------------------------*/
         $data['cedula'] = mysqli_real_escape_string($this->conectar(),$rif);
         $data['nombre'] = mysqli_real_escape_string($this->conectar(),$nombre);
         $data['rol_id'] = mysqli_real_escape_string($this->conectar(),$rol);
@@ -249,6 +405,11 @@ class AdminModel extends ConexionBD{
     }
 
     public function registraRazaAnimal($tabla, $nombre, $tiporaza, $usuario_ingresando){
+		/*-----------------------------------------------------------------------------------/
+		/	Fecha de cambio: 
+		/	Razon:
+		/	Cambio: 
+		/-----------------------------------------------------------------------------------*/
         $data['nombre'] = mysqli_real_escape_string($this->conectar(),$nombre);
         $data['id_tipo_animal'] = mysqli_real_escape_string($this->conectar(),$tiporaza);
         $registrandoRAnimal = $this->grabaData($tabla, $data);
@@ -274,6 +435,11 @@ class AdminModel extends ConexionBD{
     
     public function registraAnimal($tabla, $nom, $anionac, $nomimg, $descripcion, $fecha_ing, 
                                     $id_raza, $tamano_id, $albergue, $visible, $usuario_ingresando){
+		/*-----------------------------------------------------------------------------------/
+		/	Fecha de cambio: 
+		/	Razon:
+		/	Cambio: 
+		/-----------------------------------------------------------------------------------*/
         $data['nombre'] = mysqli_real_escape_string($this->conectar(),$nom);
         $data['anio_nac'] = mysqli_real_escape_string($this->conectar(),$anionac);
         $data['img'] = mysqli_real_escape_string($this->conectar(),$nomimg);
@@ -305,6 +471,11 @@ class AdminModel extends ConexionBD{
 
     public function registraVeterinario($nombre,$telefono,$direccion,$img,
                                         $adminregistra){
+		/*-----------------------------------------------------------------------------------/
+		/	Fecha de cambio: 
+		/	Razon:
+		/	Cambio: 
+		/-----------------------------------------------------------------------------------*/
         $data['nombre'] = mysqli_real_escape_string($this->conectar(),$nombre);
         $data['tlf'] = mysqli_real_escape_string($this->conectar(),$telefono);
         $data['direccion'] = mysqli_real_escape_string($this->conectar(),$direccion);
@@ -332,6 +503,11 @@ class AdminModel extends ConexionBD{
     }
 
     public function registraCierraSesion($user){
+		/*-----------------------------------------------------------------------------------/
+		/	Fecha de cambio: 
+		/	Razon:
+		/	Cambio: 
+		/-----------------------------------------------------------------------------------*/
         $arry['usuario_bit'] = mysqli_real_escape_string($this->conectar(),$user);
         $arry['modulo_afectado'] = 'Cerrar Sesion';
         $arry['accion_realizada'] = "Cerrar Sesion";
@@ -347,6 +523,11 @@ class AdminModel extends ConexionBD{
     #Region de Modificar
     public function modificaUsuario($idusuario,$nombre,$rol,$direccion,$contrasena,
                                     $activo,$telefono, $detalles, $usuario_modificando){
+		/*-----------------------------------------------------------------------------------/
+		/	Fecha de cambio: 
+		/	Razon:
+		/	Cambio: 
+		/-----------------------------------------------------------------------------------*/
         $anterior = $this->obtenData("SELECT cedula, nombre, rol_id, direccion, activo, telefono, detalles
                                         FROM usuarios WHERE cedula = '$idusuario'");
         $data['cedula'] = mysqli_real_escape_string($this->conectar(),$idusuario);
@@ -376,6 +557,11 @@ class AdminModel extends ConexionBD{
 
     public function modificaAnimal($tabla, $id_animal,$nom, $anionac, $nomimg, $descripcion, 
                                     $id_raza, $tamano_id, $albergue, $visible, $usuario_modificando){
+		/*-----------------------------------------------------------------------------------/
+		/	Fecha de cambio: 
+		/	Razon:
+		/	Cambio: 
+		/-----------------------------------------------------------------------------------*/
         $anterior = $this->obtenData("SELECT nombre, anio_nac, img, descripcion, raza_id, tamanio_id,
                                         albergue_id, visible
                                         FROM animal
@@ -411,6 +597,11 @@ class AdminModel extends ConexionBD{
 
     public function modificaVeterinario($id_veterinario, $nombre, $tlf, $direccion, 
                                         $img, $visible, $usuario_modificando){
+		/*-----------------------------------------------------------------------------------/
+		/	Fecha de cambio: 
+		/	Razon:
+		/	Cambio: 
+		/-----------------------------------------------------------------------------------*/
         $anterior = $this->obtenData("SELECT nombre, tlf, direccion, img, visible
                                         FROM veterinario WHERE id_veterinario = '$id_veterinario'");
         
@@ -439,6 +630,11 @@ class AdminModel extends ConexionBD{
     }
 
     public function modificaTipoAnimal($id_tipo, $nombre, $usuario_modificando){
+		/*-----------------------------------------------------------------------------------/
+		/	Fecha de cambio: 
+		/	Razon:
+		/	Cambio: 
+		/-----------------------------------------------------------------------------------*/
         $anterior = $this->obtenData("SELECT nombre
                                         FROM tipo_animal 
                                         WHERE id_tipo = '$id_tipo'");
@@ -465,6 +661,11 @@ class AdminModel extends ConexionBD{
     }
 
     public function modificaRaza($id_raza, $nombre, $tipoAnimal, $usuario_modificando){
+		/*-----------------------------------------------------------------------------------/
+		/	Fecha de cambio: 
+		/	Razon:
+		/	Cambio: 
+		/-----------------------------------------------------------------------------------*/
         $anterior = $this->obtenData("SELECT nombre, id_tipo_animal
                                         FROM raza WHERE id_raza = '$id_raza'");
 
@@ -490,6 +691,11 @@ class AdminModel extends ConexionBD{
     }
 
     public function DecisionActivacionUsuario($id_usuario, $decision, $usuario_modificando){
+		/*-----------------------------------------------------------------------------------/
+		/	Fecha de cambio: 
+		/	Razon:
+		/	Cambio: 
+		/-----------------------------------------------------------------------------------*/
         $id_usuario = mysqli_real_escape_string($this->conectar(),$id_usuario);
         $anterior = $this->obtenData("SELECT cedula, activo
                                         FROM usuarios 
@@ -517,6 +723,11 @@ class AdminModel extends ConexionBD{
     }
 
     public function DecisionActivacionVeterinario($id_veterinario, $decision, $usuario_modificando){
+		/*-----------------------------------------------------------------------------------/
+		/	Fecha de cambio: 
+		/	Razon:
+		/	Cambio: 
+		/-----------------------------------------------------------------------------------*/
         $id_veterinario = mysqli_real_escape_string($this->conectar(),$id_veterinario);
         $anterior = $this->obtenData("SELECT id_veterinario, visible
                                         FROM veterinario 
@@ -544,6 +755,11 @@ class AdminModel extends ConexionBD{
     }
 
     public function DecisionActivacionPeludos($id_peludo, $decision, $usuario_modificando){
+		/*-----------------------------------------------------------------------------------/
+		/	Fecha de cambio: 
+		/	Razon:
+		/	Cambio: 
+		/-----------------------------------------------------------------------------------*/
         $id_peludo = mysqli_real_escape_string($this->conectar(),$id_peludo);
         $anterior = $this->obtenData("SELECT id_animal, visible
                                         FROM animal 
@@ -571,6 +787,11 @@ class AdminModel extends ConexionBD{
     }
 
     public function DecisionActivacionAlbergues($id_albergue,$decision, $usuario_modificando){
+		/*-----------------------------------------------------------------------------------/
+		/	Fecha de cambio: 
+		/	Razon:
+		/	Cambio: 
+		/-----------------------------------------------------------------------------------*/
         $id_albergue = mysqli_real_escape_string($this->conectar(),$id_albergue);
         $anterior = $this->obtenData("SELECT id_albergue, activo
                                         FROM albergue 

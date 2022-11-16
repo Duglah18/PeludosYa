@@ -6,6 +6,17 @@
         echo "<h1>Ocurrio un error en la Adopcion</h1>";
     }
 ?>
+<form action="<?=BASE_URL?>session/catalogoAnimales" method="GET">
+	<label>Filtrar Tipos de animales</label>
+		<select name="filtro"> 
+			<option value="0">Todas</option>
+			<?php foreach($tiposDeAnimal as $tipos){ ?>
+					<option <?=$filtro == $tipos['id_tipo']? "Selected": "";?> value= "<?= $tipos['id_tipo']?>"><?=$tipos['nombre']?></option>
+			<?php } ?>
+		</select>
+        <button>Aceptar</button>
+</form>
+<!--Tipos de animal(), Razas()-->
 <br>
 <div class="container">
     <div class="card-panel indigo darken-4 center-align" style="height: 100px; border-radius: 100px;">
@@ -53,8 +64,9 @@ Aqui iran las categorias
 <div class="col-md-12 center text-center cyan lighten-2"><!--Paginador-->
     <ul class="pagination">
         <?php if($pagina != 1){ ?>
-            <li class="waves-effect blue-text"><a href="<?=BASE_URL?>session/catalogoAnimales?pagina=1"><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
-            <li class="waves-effect"><a href="<?=BASE_URL?>session/catalogoAnimales?pagina=<?=$pagina - 1?>"><i class="material-icons">chevron_left</i></a></li>
+            <!-- PA q sirve esto? <?= $fun ?> -->
+            <li class="waves-effect blue-text"><a href="<?=BASE_URL?>session/catalogoAnimales?pagina=1<?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
+            <li class="waves-effect"><a href="<?=BASE_URL?>session/catalogoAnimales?pagina=<?=$pagina - 1?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_left</i></a></li>
         <?php
         }else{ ?>
             <li class="disabled"><a href=""><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
@@ -65,17 +77,17 @@ Aqui iran las categorias
         
         <?php for($i = 1; $i <= $total_paginas; $i++){ 
             if ($i == $pagina){ ?>
-                <li class="active"><a href="<?=BASE_URL?>session/catalogoAnimales?pagina=<?=$i?>"><?=$i?></a></li>
+                <li class="active"><a href="<?=BASE_URL?>session/catalogoAnimales?pagina=<?=$i?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><?=$i?></a></li>
            <?php } else{
             ?>
-            <li class="waves-effect"><a href="<?=BASE_URL?>session/catalogoAnimales?pagina=<?=$i?>"><?=$i?></a></li>
+            <li class="waves-effect"><a href="<?=BASE_URL?>session/catalogoAnimales?pagina=<?=$i?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><?=$i?></a></li>
         <?php 
             }
         } ?>
 
         <?php if($pagina != $total_paginas){ ?>
-        <li class="waves-effect"><a href="<?=BASE_URL?>session/catalogoAnimales?pagina=<?=$pagina + 1?>"><i class="material-icons">chevron_right</i></a></li>
-        <li class="waves-effect"><a href="<?=BASE_URL?>session/catalogoAnimales?pagina=<?=$total_paginas?>"><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
+        <li class="waves-effect"><a href="<?=BASE_URL?>session/catalogoAnimales?pagina=<?=$pagina + 1?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_right</i></a></li>
+        <li class="waves-effect"><a href="<?=BASE_URL?>session/catalogoAnimales?pagina=<?=$total_paginas?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
         <?php
         }else{ ?>
             <li class="disabled"><a href=""><i class="material-icons">chevron_right</i></a></li>

@@ -12,6 +12,30 @@
     </select>
     <button>Buscar</button>
 </form>
+
+
+<!--Agregado el 16/11/20222 Para filtrar por estado de adopciones facilitar al admin-->
+<form action="<?=BASE_URL?>admin/adopciones" method="GET">
+    <label for="">Filtra por Estado</label>
+    <select name="filtro" id="">
+        <option <?php if($filtro == "0"){ echo "selected"; } ?> value="0">Todas</option>
+        <option <?php if($filtro == "1"){ echo "selected"; } ?> value="1">En Progreso</option>
+		<option <?php if($filtro == "2"){ echo "selected"; } ?> value="2">Cancelada</option>
+		<option  <?php if($filtro == "3"){ echo "selected"; } ?> value="3">Completada</option>
+    </select>
+    <button>Buscar</button>
+</form>
+
+<!--Busqueda por fecha de peticion-->
+<!-- <form action="<?=BASE_URL?>admin/adopciones" method="POST">
+    <label for="">Filtra por Fecha</label>
+		<label>En proceso</label>
+		<input type="date" class="" placeholder="Inicio"  name="desde"/>
+		
+		<input type="date" class="" placeholder="Final"  name="hasta"/>
+    <button>Buscar</button>
+</form> -->
+
 <?php if($adopciones != false){ ?>
 <table>
     <thead>
@@ -40,8 +64,8 @@
 <div class="col-md-12 center text-center cyan lighten-2"><!--Paginador-->
     <ul class="pagination">
         <?php if($pagina != 1){ ?>
-            <li class="waves-effect blue-text"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=1"><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
-            <li class="waves-effect"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$pagina - 1?>"><i class="material-icons">chevron_left</i></a></li>
+            <li class="waves-effect blue-text"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=1<?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
+            <li class="waves-effect"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$pagina - 1?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_left</i></a></li>
         <?php
         }else{ ?>
             <li class="disabled"><a href=""><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
@@ -52,16 +76,16 @@
         
         <?php for($i = 1; $i <= $total_paginas; $i++){ 
             if ($i == $pagina){ ?>
-                <li class="active"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$i?>"><?=$i?></a></li>
+                <li class="active"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$i?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><?=$i?></a></li>
            <?php } else { ?>
-            <li class="waves-effect"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$i?>"><?=$i?></a></li>
+            <li class="waves-effect"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$i?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><?=$i?></a></li>
         <?php 
             }
         } ?>
 
         <?php if($pagina != $total_paginas){ ?>
-        <li class="waves-effect"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$pagina + 1?>"><i class="material-icons">chevron_right</i></a></li>
-        <li class="waves-effect"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$total_paginas?>"><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
+        <li class="waves-effect"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$pagina + 1?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_right</i></a></li>
+        <li class="waves-effect"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$total_paginas?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
         <?php
         }else{ ?>
             <li class="disabled"><a href=""><i class="material-icons">chevron_right</i></a></li>

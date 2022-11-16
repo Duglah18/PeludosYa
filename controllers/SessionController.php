@@ -28,14 +28,20 @@ class SessionController extends GeneralController{
     }
     
     public function catalogoAnimales(){
+		//ahora hay que cargar tambien que tipo de animales hay simplemente hare ese tipo de filtro porque el de razas de pana estoy cansado
         $objSess = $this->loadModel("SessionModel");
-        $pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
+        $objAdmin = $this->loadModel("AdminModel");
+		$filtro = isset($_GET['filtro']) ? $_GET['filtro'] : "";
+		$filtro = $filtro == "0"? "": $filtro;
+		$pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
         $pagina = $pagina < 0? 1: $pagina;
         $qty = 5;
+        $data['filtro'] = $filtro;
         $data['pagina'] = $pagina;
         $data['por_pagina'] = $qty;
-        $data['totalregistro'] = $objSess->TotalAnimalesCatalogoSess();
-        $data['animales'] =$objSess->obtenAnimales($pagina, $qty);
+		$data['tiposDeAnimal'] = $objAdmin->consultaTipoAnimal();
+        $data['totalregistro'] = $objSess->TotalAnimalesCatalogoSess($filtro);
+        $data['animales'] =$objSess->obtenAnimales($pagina, $qty,$filtro);
         $this->loadView("catalogo.phtml", "Ver Peluditos",$data);
     }
 

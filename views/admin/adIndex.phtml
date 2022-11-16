@@ -1,13 +1,17 @@
 <?php
     $total_paginas = ceil($totalregistro / $por_pagina);
 ?>
-    <h1>Admin Logueado Satisfactoriamente</h1>
-    <h2>
-        Agrega (Mostrar):
-    </h2>
-    <ul>
-        <li><p>Paginacion</p></li>
-    </ul>
+	<!--Agregado el 16/11/20222 Para filtrar por estado de usuarios facilitar al admin-->
+	<form action="<?=BASE_URL?>admin/mostrarData" method="GET">
+		<label for="">Filtra por Estado</label>
+		<select name="filtro" id="">
+            <option value="">Todos</option>
+			<option <?php if($filtro == "1"){ echo "selected"; } ?> value="1">Activo</option>
+			<option <?php if($filtro == "0"){ echo "selected"; } ?> value="0">Bloqueado</option>
+		</select>
+		<button>Buscar</button>
+	</form>
+    
     <a href="<?= BASE_URL;?>admin/agregaUsuarios"><input type="button" value="Agrega Usuario"></a>
     <table class="highlight centered">
         <thead>
@@ -57,8 +61,8 @@
     <div class="col-md-12 center text-center cyan lighten-2"><!--Paginador-->
     <ul class="pagination">
         <?php if($pagina != 1){ ?>
-            <li class="waves-effect blue-text"><a href="<?=BASE_URL?>admin/mostrarData?pagina=1"><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
-            <li class="waves-effect"><a href="<?=BASE_URL?>admin/mostrarData?pagina=<?=$pagina - 1?>"><i class="material-icons">chevron_left</i></a></li>
+            <li class="waves-effect blue-text"><a href="<?=BASE_URL?>admin/mostrarData?pagina=1<?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
+            <li class="waves-effect"><a href="<?=BASE_URL?>admin/mostrarData?pagina=<?=$pagina - 1?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_left</i></a></li>
         <?php
         }else{ ?>
             <li class="disabled"><a href=""><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
@@ -69,17 +73,17 @@
         
         <?php for($i = 1; $i <= $total_paginas; $i++){ 
             if ($i == $pagina){ ?>
-                <li class="active"><a href="<?=BASE_URL?>admin/mostrarData?pagina=<?=$i?>"><?=$i?></a></li>
+                <li class="active"><a href="<?=BASE_URL?>admin/mostrarData?pagina=<?=$i?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><?=$i?></a></li>
            <?php } else{
             ?>
-            <li class="waves-effect"><a href="<?=BASE_URL?>admin/mostrarData?pagina=<?=$i?>"><?=$i?></a></li>
+            <li class="waves-effect"><a href="<?=BASE_URL?>admin/mostrarData?pagina=<?=$i?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><?=$i?></a></li>
         <?php 
             }
         } ?>
 
         <?php if($pagina != $total_paginas){ ?>
-        <li class="waves-effect"><a href="<?=BASE_URL?>admin/mostrarData?pagina=<?=$pagina + 1?>"><i class="material-icons">chevron_right</i></a></li>
-        <li class="waves-effect"><a href="<?=BASE_URL?>admin/mostrarData?pagina=<?=$total_paginas?>"><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
+        <li class="waves-effect"><a href="<?=BASE_URL?>admin/mostrarData?pagina=<?=$pagina + 1?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_right</i></a></li>
+        <li class="waves-effect"><a href="<?=BASE_URL?>admin/mostrarData?pagina=<?=$total_paginas?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
         <?php
         }else{ ?>
             <li class="disabled"><a href=""><i class="material-icons">chevron_right</i></a></li>

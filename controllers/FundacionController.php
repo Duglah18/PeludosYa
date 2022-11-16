@@ -6,6 +6,7 @@ class FundacionController extends GeneralController{
 	/	-Filtros de busqueda
 	/	-Revisar en vistas si en algun lugar se muestra la fecha desordenada
 	/	-En la vista de Ver a los animales colocar cantidad de pedidos de adopciones
+	-Modificado el ver la fecha de ingreso de animales en ver animales fundacion
 	==========TAREAS PARA FINALIZAR ESTE MODULO==========*/
 	
 	#Region Views
@@ -81,27 +82,7 @@ class FundacionController extends GeneralController{
     
     public function verAdopciones(){
         $this->Comprobador();
-        //aca mismo a futuro podriamos hacer un if te llega una variable especifica
-        //se hace en este mismo metodo el filtrar por las completadas, etc.
-		//creo que puede existir un problema
-		//debido a que la paginacion siempre reiniciara la filtracion al darle a otra pagina
-		//no necesariamente podriamos hacer que siempre se envie un valor nos evitamos esta tonteria de filtra
-		//y hacemos que siempre se envien los datos de filtrado y ya
-		//con los case todo es posible
-		//como siempre se enviaran y se dejaran como siempre si es un cmb simplemente se seleccionara lo que 
-		//siga llegando
         $objFund = $this->loadModel("FundacionModel");
-		// if(isset($_POST['filtra'])){
-			// $eleccion = $_POST¨['filtrar'];
-			// $pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
-			// $pagina = $pagina < 0? 1: $pagina;
-			// $qty = 10;
-			// $data['pagina'] = $pagina;
-			// $data['por_pagina'] = $qty;
-			// $data['totalregistro'] = $objFund->TotalconsultaAdopciones($_SESSION['iduser']);
-			// $data['adopciones'] = $objFund->consultaAdopciones($_SESSION['iduser'],$pagina,$qty);
-			// $this->loadView("fundacion/adopciones.phtml","Ver Adopciones",$data);
-		// }
         $pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
         $pagina = $pagina < 0? 1: $pagina;
         $qty = 10;
