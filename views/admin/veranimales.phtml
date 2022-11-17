@@ -2,7 +2,11 @@
     //paginador
     //Total Registro y por_pagina llegan por el controlador
     $total_paginas = ceil($totalregistro / $por_pagina);
+if(isset($_GET['error'])){
+	echo "<h1>" .$_GET['error']."</h1>";
+}
 ?>  
+
 <a href="<?= BASE_URL;?>admin/agregaAnimales"><input type="button" value="Agrega Animales"></a>
 <table class="highlight centered">
     <thead>

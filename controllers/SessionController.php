@@ -6,7 +6,7 @@ class SessionController extends GeneralController{
 	/	-Filtros de busqueda Veterinario
 	/	-Probar Modificar usuario propio
 	/	-Revisar en vistas si en algun lugar se muestra la fecha desordenada
-	/	-
+	/	-Validaciones? 
 	==========TAREAS PARA FINALIZAR ESTE MODULO==========*/
 	
 	
@@ -28,7 +28,6 @@ class SessionController extends GeneralController{
     }
     
     public function catalogoAnimales(){
-		//ahora hay que cargar tambien que tipo de animales hay simplemente hare ese tipo de filtro porque el de razas de pana estoy cansado
         $objSess = $this->loadModel("SessionModel");
         $objAdmin = $this->loadModel("AdminModel");
 		$filtro = isset($_GET['filtro']) ? $_GET['filtro'] : "";
@@ -193,10 +192,17 @@ class SessionController extends GeneralController{
             $objSess = $this->loadModel("SessionModel");
             //en teoria esto ya funciona
             $resultado = $objSess->registraPeticionAdopcion($idAnimal, $usuario);
+			if($resultado == "Este Animal Ya fue adoptado"){//validacion de si ese animal ya esta adoptado
+				$_SESSION['Error']  = "Este Animal Ya fue adoptado";
+				header("location: ".BASE_URL);
+			}
             if ($resultado){  
                 $data['peticion'] = $objSess->retornaResponsable($usuario);
                 $this->loadView("peticion.phtml","Peticion Realizada",$data);
-            }
+            } else {
+				$_SESSION['Error'] = "Ocurrio un error Intentelo de nuevo mas tarde";
+				header("location: ".BASE_URL);
+			}
         }
     }
 	

@@ -232,6 +232,9 @@ class AdminController extends GeneralController{
 	//Reportes del sistema Vista
 	public function Reportes(){
 		$this->Comprobador();
+		$objAdmin = $this->loadModel("AdminModel");
+		$objSess = $this->loadModel("SessionModel");
+		$objFund = $this->loadModel("FundacionModel");
 		//Cargar literalmente todos los modelos porque hay selects pero hasta para regalar
 		$this->loadView("admin/adReporte.phtml","Administrador | Reportes del Sistema");
 	}
@@ -240,14 +243,15 @@ class AdminController extends GeneralController{
 
     public function consultaData(){
         if(!isset($_POST['username']) && !isset($_POST['password'])){
-            die("No se enviaron datos");
+            $error = "No se enviaron datos";
+			header("location: ".BASE_URL);
         }
         $user = $_POST['username'];
         $contra = $_POST['password'];
         $objAdmin = $this->loadModel("AdminModel");
         $dataAdmin = $objAdmin->consultarAdmin($user, $contra);
             if ($dataAdmin != true){
-                die("NO COINCIDE");
+                die(header("location: ". BASE_URL));
             }
             //lo mismo de aca abajo hacer en login normal y register
             $_SESSION['usuario'] = $dataAdmin[0]['nombre'];
@@ -258,6 +262,11 @@ class AdminController extends GeneralController{
 
     public function registraUsuario(){
         $objAdmin = $this->loadModel("AdminModel");
+		if($_POST['rol'] == "0"){
+			//se podrian almacenar en Session y en estandar view se monta eso y que sea una paginita
+			$_SESSION['Error'] = "Error no selecciono un Rol adecuado";
+			header("location: ".BASE_URL. "admin/agregaUsuarios");
+		}
         if (isset($_POST['Agregar'])){
             $cedula = $_POST['cedula'];
             $nombre = $_POST['nombre'];
@@ -306,6 +315,9 @@ class AdminController extends GeneralController{
 
     public function agregaRazaAnimal(){
         $objAdmin = $this->loadModel("AdminModel");
+		if($_POST['tipoAnimal'] == "0"){
+			return header("location: ".BASE_URL."admin/razasAnimal");
+		}
         if(isset($_POST['accion']) && $_POST['accion'] == 'Modificar'){
             $identificador = $_POST['identificador'];
             $nombre = $_POST['nombreRaza'];
@@ -323,6 +335,11 @@ class AdminController extends GeneralController{
 
     public function agregaAnimal(){//ahora si
         $objFund = $this->loadModel("AdminModel");
+		if($_POST['raza'] == "0"){
+			$Error = "No selecciono una raza valida";
+			return header("location: " .BASE_URL."admin/animales?error=".$Error);
+		}
+		
         if (isset($_POST['accion']) && $_POST['accion'] == 'Agregar'){
             $nombre = $_POST['nombre'];
             $fechanac= $_POST['fecha'];

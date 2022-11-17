@@ -109,7 +109,22 @@ if (isset($_SESSION)){
       </ul>
     </div>
   </nav>
-
+	<?php if(isset($_SESSION['Error']) && $_SESSION['Error'] != ""){
+		//http://iwokloco-appweb.blogspot.com/2014/03/php-borrar-una-variable-de-la-sesion.html
+		//si esto funciona ojala
+		$error = $_SESSION['Error'];
+		unset($_SESSION['Error']);
+		//$_SESSION['Error'] = "";
+		?>
+		<div>
+			<p>
+				Tarjeta de Error <br>
+				<?=$error?>
+			</p>
+		</div>
+		
+		
+	<?php } ?>
 
   <!-- Contenido Pirncipal -->
     <main>

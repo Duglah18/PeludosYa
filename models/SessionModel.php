@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 class SessionModel extends ConexionBD{
     public function consultarVeterinarios($id_veterinario, $pagina, $qty){
@@ -164,6 +164,15 @@ class SessionModel extends ConexionBD{
     }
 
     public function registraPeticionAdopcion($idAnimal, $user){
+		//Validacion de si el animal q se esta pidiendo ya fue adoptado
+		$objVerificacion = $this->ObtenData("SELECT a.id_animal, a.visible
+																							FROM animal a
+																							INNER JOIN adopcion f ON a.id_animal = f.animal_id
+																							WHERE id_animal = '$idAnimal' AND f.estado = 3");
+		if($objVerificacion){
+			return "Este Animal Ya fue adoptado"; //se verifica si la adopcion esta completada si es asi
+		}
+		
         $data['fecha_adopcion'] = "Now()";
         $data['animal_id'] = mysqli_real_escape_string($this->conectar(),$idAnimal);
         $data['cedula_usuario'] = mysqli_real_escape_string($this->conectar(),$user);

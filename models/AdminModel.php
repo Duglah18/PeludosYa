@@ -13,18 +13,24 @@ class AdminModel extends ConexionBD{
         if ($pagina <= 0){ $pagina = 1; }
         $desde = ($pagina - 1) * $qty;
         $resultados = $this->obtenData("SELECT a.id_animal, a.nombre, a.anio_nac, a.img, 
-                                                a.fecha_ingreso, b.nombre as nomraza, c.nombre as nomtipo,
-                                                e.nombre as nomalbergue, d.nombre as nombreUser, a.visible, CASE WHEN f.animal_id IS NULL THEN 0 ELSE 
-												SUM(f.id_animal) END AS NumeroPeticiones
-                                        FROM animal a
-                                        INNER JOIN raza b ON a.raza_id = b.id_raza
-                                        INNER JOIN tipo_animal c ON c.id_tipo = b.id_tipo_animal
-                                        INNER JOIN albergue e ON e.id_albergue = a.albergue_id
-                                        INNER JOIN usuarios d ON d.cedula = e.cedula_usuario
-										LEFT JOIN adopcion f ON a.id_animal = f.animal_id
-                                        WHERE (d.cedula = CASE WHEN '$cedula_user' = '' THEN d.cedula ELSE '$cedula_user' END)
-                                        ORDER BY a.id_animal DESC, a.visible ASC
-                                        LIMIT $desde,$qty");
+																									a.fecha_ingreso, b.nombre as nomraza, c.nombre as nomtipo,
+																									e.nombre as nomalbergue, d.nombre as nombreUser, a.visible, 
+																									CASE WHEN f.animal_id IS NULL THEN 0 ELSE SUM(f.id_animal) END AS NumeroPeticiones
+																							FROM animal a
+																								INNER JOIN raza b 
+																													ON a.raza_id = b.id_raza
+																								INNER JOIN tipo_animal c 
+																													ON c.id_tipo = b.id_tipo_animal
+																								INNER JOIN albergue e 
+																													ON e.id_albergue = a.albergue_id
+																								INNER JOIN usuarios d 
+																													ON d.cedula = e.cedula_usuario
+																								LEFT JOIN adopcion f 
+																													ON a.id_animal = f.animal_id
+																							WHERE 
+																										(d.cedula = CASE WHEN '$cedula_user' = '' THEN d.cedula ELSE '$cedula_user' END)
+																							ORDER BY a.id_animal DESC, a.visible ASC
+																							LIMIT $desde,$qty");
         /*Inciso: CASE ES COMO SWITCH O IF EN SQL (TRANSACT SQL) EN ESTE CASO SI LLEGA VACIO $cedula_user ENTONCES
         MOSTRARA TODOS LOS CONTENIDOS DE LA TABLA PQ NO LO APLIQUE ANTES? PS DE PANA LO APRENDI HACE
         POCO RELATIVAMENTE */
@@ -42,12 +48,16 @@ class AdminModel extends ConexionBD{
 		/	Cambio: 
 		/-----------------------------------------------------------------------------------*/
         $resultados = $this->obtenData("SELECT COUNT(*) AS TotalAnimales
-                                        FROM animal a
-                                        INNER JOIN raza b ON a.raza_id = b.id_raza
-                                        INNER JOIN tipo_animal c ON c.id_tipo = b.id_tipo_animal
-                                        INNER JOIN albergue e ON e.id_albergue = a.albergue_id
-                                        INNER JOIN usuarios d ON d.cedula = e.cedula_usuario
-                                        WHERE (d.cedula = CASE WHEN '$usuario' = '' THEN d.cedula ELSE '$usuario' END)");
+																				FROM animal a
+																					INNER JOIN raza b 
+																										ON a.raza_id = b.id_raza
+																					INNER JOIN tipo_animal c 
+																										ON c.id_tipo = b.id_tipo_animal
+																					INNER JOIN albergue e
+																										ON e.id_albergue = a.albergue_id
+																					INNER JOIN usuarios d 
+																										ON d.cedula = e.cedula_usuario
+																				WHERE (d.cedula = CASE WHEN '$usuario' = '' THEN d.cedula ELSE '$usuario' END)");
         return $resultados[0]['TotalAnimales'];
     }
 	
@@ -59,10 +69,12 @@ class AdminModel extends ConexionBD{
 		/-----------------------------------------------------------------------------------*/
         if($pagina <= 0){ $pagina = 1; }
         $desde = ($pagina - 1) * $qty;
-        $resultado = $this->obtenData("SELECT id_veterinario, nombre, tlf, direccion, img, visible, usuario_Rveterinario
-                          FROM veterinario
-                          WHERE id_veterinario = CASE WHEN '$id_veterinario' = '' THEN id_veterinario ELSE '$id_veterinario' END
-                          LIMIT $desde, $qty");
+        $resultado = $this->obtenData("SELECT id_veterinario, nombre, tlf, direccion, 
+		º																						 img, visible, usuario_Rveterinario
+																			  FROM veterinario
+																			  WHERE 
+																			  (id_veterinario = CASE WHEN '$id_veterinario' = '' THEN id_veterinario ELSE '$id_veterinario' END)
+																			  LIMIT $desde, $qty");
         return $resultado;
     }
 
@@ -72,7 +84,8 @@ class AdminModel extends ConexionBD{
 		/	Razon:
 		/	Cambio: 
 		/-----------------------------------------------------------------------------------*/
-        $resultado = $this->obtenData("SELECT COUNT(*) AS TotalVeterinarios FROM veterinario");
+        $resultado = $this->obtenData("SELECT COUNT(*) AS TotalVeterinarios 
+																			   FROM veterinario");
         return $resultado[0]['TotalVeterinarios'];
     }
 
@@ -85,8 +98,9 @@ class AdminModel extends ConexionBD{
         $user = mysqli_real_escape_string($this->conectar(),$user);
         $contrasenia = mysqli_real_escape_string($this->conectar(),$contrasenia);
         $resultado = $this->obtenData("SELECT cedula, nombre, contrasenia, rol_id 
-                                        FROM usuarios 
-                                        WHERE nombre = '$user' AND contrasenia = '$contrasenia' AND rol_id = 1");
+																			  FROM usuarios 
+																			  WHERE 
+																			  (nombre = '$user' AND contrasenia = '$contrasenia' AND rol_id = 1)");
         if ($resultado) {
             return $resultado;
         } else {
@@ -101,10 +115,11 @@ class AdminModel extends ConexionBD{
 		/	Cambio: 
 		/-----------------------------------------------------------------------------------*/
         $idusuario = mysqli_real_escape_string($this->conectar(),$idusuario);
-        $resultado = $this->obtenData("SELECT cedula, nombre, contrasenia, rol_id, direccion, contrasenia,
-                                              activo, telefono, detalles
-                                        FROM usuarios
-                                        WHERE (cedula = CASE WHEN '$idusuario' = '' THEN cedula ELSE '$idusuario' END)");
+        $resultado = $this->obtenData("SELECT cedula, nombre, contrasenia, rol_id, direccion, 
+																								 contrasenia, activo, telefono, detalles
+																			  FROM usuarios
+																			  WHERE 
+																			  (cedula = CASE WHEN '$idusuario' = '' THEN cedula ELSE '$idusuario' END)");
         return $resultado;
     }
 
@@ -114,7 +129,8 @@ class AdminModel extends ConexionBD{
 		/	Razon:
 		/	Cambio: 
 		/-----------------------------------------------------------------------------------*/
-        $resultados = $this->obtenData("SELECT id_albergue, nombre FROM albergue");
+        $resultados = $this->obtenData("SELECT id_albergue, nombre
+																				 FROM albergue");
         if ($resultados){
             return $resultados;
         } else {
@@ -139,16 +155,22 @@ class AdminModel extends ConexionBD{
         if($pagina <= 0){ $pagina = 1; }
         $desde = ($pagina - 1) * $qty;
         $resultados = $this->obtenData("SELECT a.id_adopcion, a.fecha_adopcion, b.nombre as nombreanimal, 
-                                        d.nombre as nombreusuario, c.nombre as nombrealbergue,
-                                        e.nombre_estado
-                                        FROM adopcion a
-                                        INNER JOIN animal b ON a.animal_id = b.id_animal
-                                        INNER JOIN albergue c ON b.albergue_id = c.id_albergue
-                                        INNER JOIN usuarios d ON c.cedula_usuario = d.cedula
-                                        INNER JOIN tipo_estado_adopcion e ON a.estado = e.id_tipo_estado
-                                        WHERE c.id_albergue = CASE WHEN '$albergueEsp' = '' THEN c.id_albergue ELSE '$albergueEsp' END 
-										AND a.estado = CASE WHEN '$filtro' = '' THEN a.estado ELSE '$filtro' END 
-                                        LIMIT $desde,$qty");
+																									d.nombre as nombreusuario, c.nombre as nombrealbergue,
+																									e.nombre_estado
+																				FROM adopcion a
+																					INNER JOIN animal b 
+																										ON a.animal_id = b.id_animal
+																					INNER JOIN albergue c 
+																										ON b.albergue_id = c.id_albergue
+																					INNER JOIN usuarios d 
+																										ON c.cedula_usuario = d.cedula
+																					INNER JOIN tipo_estado_adopcion e 
+																										ON a.estado = e.id_tipo_estado
+																				WHERE 
+																				(c.id_albergue = CASE WHEN '$albergueEsp' = '' THEN c.id_albergue ELSE '$albergueEsp' END) 
+																				AND
+																				(a.estado = CASE WHEN '$filtro' = '' THEN a.estado ELSE '$filtro' END)
+																				LIMIT $desde,$qty");
         if (!$resultados){
             return false;
         } 
@@ -163,13 +185,19 @@ class AdminModel extends ConexionBD{
 		/-----------------------------------------------------------------------------------*/
         mysqli_real_escape_string($this->conectar(),$albergueEsp);
         $resultados = $this->obtenData("SELECT COUNT(*) AS TotalAdopciones
-                                        FROM adopcion a
-                                        INNER JOIN animal b ON a.animal_id = b.id_animal
-                                        INNER JOIN albergue c ON b.albergue_id = c.id_albergue
-                                        INNER JOIN usuarios d ON c.cedula_usuario = d.cedula
-                                        INNER JOIN tipo_estado_adopcion e ON a.estado = e.id_tipo_estado
-                                        WHERE c.id_albergue = CASE WHEN '$albergueEsp' = '' THEN c.id_albergue ELSE '$albergueEsp' END
-										AND a.estado = CASE WHEN '$filtro' = '' THEN a.estado ELSE '$filtro' END");
+																				FROM adopcion a
+																					INNER JOIN animal b 
+																										ON a.animal_id = b.id_animal
+																					INNER JOIN albergue c 
+																										ON b.albergue_id = c.id_albergue
+																					INNER JOIN usuarios d 
+																										ON c.cedula_usuario = d.cedula
+																					INNER JOIN tipo_estado_adopcion e 
+																										ON a.estado = e.id_tipo_estado
+																				WHERE 
+																				(c.id_albergue = CASE WHEN '$albergueEsp' = '' THEN c.id_albergue ELSE '$albergueEsp' END)
+																				AND 
+																				(a.estado = CASE WHEN '$filtro' = '' THEN a.estado ELSE '$filtro' END)");
 
         return $resultados[0]['TotalAdopciones'];
     }
@@ -180,7 +208,8 @@ class AdminModel extends ConexionBD{
 		/	Razon:
 		/	Cambio: 
 		/-----------------------------------------------------------------------------------*/
-        $resultado = $this->obtenData("SELECT id_rol, nombre FROM rol");
+        $resultado = $this->obtenData("SELECT id_rol, nombre 
+																			   FROM rol");
         if ($resultado) {
             return $resultado;
         } else {
@@ -198,17 +227,15 @@ class AdminModel extends ConexionBD{
         if($pagina <= 0){ $pagina = 1; }
         $desde = ($pagina - 1) * $qty;
         return $this->obtenData("SELECT usuarios.cedula, usuarios.nombre, usuarios.direccion, 
-                                        usuarios.activo, rol.nombre as nombrerol, usuarios.telefono,
-                                        usuarios.detalles
-                                FROM usuarios 
-                                INNER JOIN rol ON usuarios.rol_id = rol.id_rol
-								WHERE 
-												(usuarios.activo = CASE WHEN '$filtro' = '' THEN usuarios.activo ELSE '$filtro' END)
-                                ORDER BY usuarios.activo DESC, usuarios.rol_id ASC
-                                LIMIT $desde, $qty");
-                                //tristemente el array no capta algo tipo usuarios a = a.nombre asi que
-                                //como el nombre del rol y el nombre del usuario tienen el mismo campo con mismo nombre entonces
-                                //simplemente hice que el nombre de rol se reconociera como as 
+																					  usuarios.activo, rol.nombre as nombrerol, usuarios.telefono,
+																					  usuarios.detalles
+																	FROM usuarios 
+																		INNER JOIN rol 
+																							ON usuarios.rol_id = rol.id_rol
+																	WHERE 
+																					(usuarios.activo = CASE WHEN '$filtro' = '' THEN usuarios.activo ELSE '$filtro' END)
+																	ORDER BY usuarios.activo DESC, usuarios.rol_id ASC
+																	LIMIT $desde, $qty");
     }
 
     public function TotalUsuarios($filtro){
@@ -218,9 +245,10 @@ class AdminModel extends ConexionBD{
 		/	Cambio: $filtro
 		/-----------------------------------------------------------------------------------*/
         $resultado = $this->obtenData("SELECT COUNT(*) AS TotalUsuarios
-                                FROM usuarios 
-                                INNER JOIN rol ON usuarios.rol_id = rol.id_rol
-								WHERE usuarios.activo = CASE WHEN '$filtro' = '' THEN usuarios.activo ELSE '$filtro' END");
+																			  FROM usuarios 
+																				  INNER JOIN rol ON usuarios.rol_id = rol.id_rol
+																			   WHERE 
+																			   (usuarios.activo = CASE WHEN '$filtro' = '' THEN usuarios.activo ELSE '$filtro' END)");
         return $resultado[0]['TotalUsuarios'];
     }
 
@@ -232,11 +260,13 @@ class AdminModel extends ConexionBD{
 		/-----------------------------------------------------------------------------------*/
         $id_animal = mysqli_real_escape_string($this->conectar(),$id_animal);
         return $this->obtenData("SELECT a.id_animal, a.nombre, a.anio_nac, a.img, a.descripcion, 
-                                    a.fecha_ingreso, a.raza_id, a.tamanio_id, a.albergue_id, a.visible, 
-                                    b.id_tipo_animal
-                                FROM animal a
-                                INNER JOIN raza b ON a.raza_id = b.id_raza
-                                WHERE a.id_animal = CASE WHEN '$id_animal' = '' THEN a.id_animal ELSE '$id_animal'END");
+																					 a.fecha_ingreso, a.raza_id, a.tamanio_id, a.albergue_id, 
+																					 a.visible, b.id_tipo_animal
+																   FROM animal a
+																		INNER JOIN raza b 
+																							ON a.raza_id = b.id_raza
+																    WHERE 
+																		(a.id_animal = CASE WHEN '$id_animal' = '' THEN a.id_animal ELSE '$id_animal' END)");
     }//Resolver el problema de si esta adoptado
 	//he de suponer que mi yo pasado se preguntaba sobre lo de si esta adoptado o no en vista de usuarios
 	//pero este no es el de usuarios
@@ -251,9 +281,10 @@ class AdminModel extends ConexionBD{
 		if($pagina <= 0){ $pagina = 1; }
         $desde = ($pagina - 1) * $qty;
         return $this->obtenData("SELECT id_tipo, nombre
-                                FROM tipo_animal 
-                                WHERE id_tipo = CASE WHEN '$id_tipo' = '' THEN id_tipo ELSE '$id_tipo' END
-								LIMIT $desde, $qty");
+																   FROM tipo_animal 
+																   WHERE
+																	(id_tipo = CASE WHEN '$id_tipo' = '' THEN id_tipo ELSE '$id_tipo' END)
+																   LIMIT $desde, $qty");
     }
 
 	public function TotallistaTiposAnimal(){
@@ -276,11 +307,14 @@ class AdminModel extends ConexionBD{
         $id_raza = mysqli_real_escape_string($this->conectar(),$id_raza);
         if($pagina <= 0){ $pagina = 1; }
         $desde = ($pagina - 1) * $qty;
-        return $this->obtenData("SELECT raza.id_raza, raza.nombre, tipo_animal.nombre as nombreTipo, id_tipo_animal as id_tipo_2
-                                FROM raza
-                                INNER JOIN tipo_animal ON tipo_animal.id_tipo = raza.id_tipo_animal
-                                WHERE raza.id_raza = CASE WHEN '$id_raza' = '' THEN raza.id_raza ELSE '$id_raza' END
-                                LIMIT $desde, $qty");
+        return $this->obtenData("SELECT raza.id_raza, raza.nombre, 
+																					tipo_animal.nombre as nombreTipo, id_tipo_animal as id_tipo_2
+																   FROM raza
+																		INNER JOIN tipo_animal 
+																							ON tipo_animal.id_tipo = raza.id_tipo_animal
+																   WHERE 
+																   (raza.id_raza = CASE WHEN '$id_raza' = '' THEN raza.id_raza ELSE '$id_raza' END)
+																   LIMIT $desde, $qty");
     }
 
     public function TotallistaRazas(){
@@ -290,7 +324,7 @@ class AdminModel extends ConexionBD{
 		/	Cambio: 
 		/-----------------------------------------------------------------------------------*/
         $resultados = $this->obtenData("SELECT COUNT(*) AS TotalRazasAnimal
-                                        FROM raza");
+																				 FROM raza");
         return $resultados[0]['TotalRazasAnimal'];
     }
 
@@ -300,7 +334,8 @@ class AdminModel extends ConexionBD{
 		/	Razon:
 		/	Cambio: 
 		/-----------------------------------------------------------------------------------*/
-        $resultados = $this->obtenData("SELECT id_tipo, nombre FROM tipo_animal");
+        $resultados = $this->obtenData("SELECT id_tipo, nombre 
+																				 FROM tipo_animal");
         if ($resultados){
             return $resultados;
         } else {
@@ -315,8 +350,10 @@ class AdminModel extends ConexionBD{
 		/	Cambio: 
 		/-----------------------------------------------------------------------------------*/
         $id_tipo = mysqli_real_escape_string($this->conectar(),$id_tipo);
-        $resultados = $this->obtenData("SELECT id_raza, nombre FROM raza 
-                                        WHERE id_tipo_animal = CASE WHEN '$id_tipo' = '' THEN id_tipo_animal ELSE '$id_tipo' END");
+        $resultados = $this->obtenData("SELECT id_raza, nombre 
+																				 FROM raza 
+																				 WHERE 
+																				 (id_tipo_animal = CASE WHEN '$id_tipo' = '' THEN id_tipo_animal ELSE '$id_tipo' END)");
         if ($resultados){
             return $resultados;
         } else {
@@ -330,7 +367,8 @@ class AdminModel extends ConexionBD{
 		/	Razon:
 		/	Cambio: 
 		/-----------------------------------------------------------------------------------*/
-        $resultados = $this->obtenData("SELECT id_tamanio, nombre FROM tamanio");
+        $resultados = $this->obtenData("SELECT id_tamanio, nombre 
+																				 FROM tamanio");
         if ($resultados){
             return $resultados;
         } else {
@@ -353,8 +391,8 @@ class AdminModel extends ConexionBD{
         $data['activo'] = mysqli_real_escape_string($this->conectar(),$estado);
         $data['telefono'] = mysqli_real_escape_string($this->conectar(),$tlf);
         $verificar = $this->obtenData("SELECT cedula, nombre, contrasenia, activo, rol_id
-                                        FROM usuarios
-                                        WHERE cedula = '$rif'");
+																			FROM usuarios
+																			WHERE cedula = '$rif'");
         if($verificar){//se verifica si existe un usuario con esa ced y si es asi retorna falso
             return false;
         }
@@ -469,8 +507,8 @@ class AdminModel extends ConexionBD{
         return $bitacora;
     }
 
-    public function registraVeterinario($nombre,$telefono,$direccion,$img,
-                                        $adminregistra){
+    public function registraVeterinario($nombre,$telefono,$direccion,
+																					  $img, $adminregistra){
 		/*-----------------------------------------------------------------------------------/
 		/	Fecha de cambio: 
 		/	Razon:

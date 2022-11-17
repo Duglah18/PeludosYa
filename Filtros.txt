@@ -14,4 +14,4 @@ X completado, = Realizado para probar, () Aun sin realizar
 	-Animales: Tipo de animal(), Razasanimal(), Busqueda por id()
 	-Albergues: Por fundaciones(Dueños)() ordenar primero los activos y luego los no activos
 	-Usuarios: ID(), Nombre(), estado(X), detalles es diferente de lo usual()
-	-Adopciones: Estado(X), Fecha(=)--Rehacer
+	-Adopciones: Estado(X)

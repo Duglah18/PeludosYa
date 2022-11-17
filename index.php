@@ -1,6 +1,6 @@
 <?php
 session_start();
-
+require_once "includes/Multicells.php";
 require_once "config/autoload.php";
 
 define("URL_ASSETS", "http://" . $_SERVER['HTTP_HOST'] . "/proyecto_con_isra/PeludosYa/assets");
