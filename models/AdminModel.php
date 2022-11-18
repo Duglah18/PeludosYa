@@ -13,24 +13,24 @@ class AdminModel extends ConexionBD{
         if ($pagina <= 0){ $pagina = 1; }
         $desde = ($pagina - 1) * $qty;
         $resultados = $this->obtenData("SELECT a.id_animal, a.nombre, a.anio_nac, a.img, 
-																									a.fecha_ingreso, b.nombre as nomraza, c.nombre as nomtipo,
-																									e.nombre as nomalbergue, d.nombre as nombreUser, a.visible, 
-																									CASE WHEN f.animal_id IS NULL THEN 0 ELSE SUM(f.id_animal) END AS NumeroPeticiones
-																							FROM animal a
-																								INNER JOIN raza b 
-																													ON a.raza_id = b.id_raza
-																								INNER JOIN tipo_animal c 
-																													ON c.id_tipo = b.id_tipo_animal
-																								INNER JOIN albergue e 
-																													ON e.id_albergue = a.albergue_id
-																								INNER JOIN usuarios d 
-																													ON d.cedula = e.cedula_usuario
-																								LEFT JOIN adopcion f 
-																													ON a.id_animal = f.animal_id
-																							WHERE 
-																										(d.cedula = CASE WHEN '$cedula_user' = '' THEN d.cedula ELSE '$cedula_user' END)
-																							ORDER BY a.id_animal DESC, a.visible ASC
-																							LIMIT $desde,$qty");
+																				a.fecha_ingreso, b.nombre as nomraza, c.nombre as nomtipo,
+																				e.nombre as nomalbergue, d.nombre as nombreUser, a.visible, 
+																				CASE WHEN f.animal_id IS NULL THEN 0 ELSE SUM(f.id_animal) END AS NumeroPeticiones
+																		FROM animal a
+																			INNER JOIN raza b 
+																								ON a.raza_id = b.id_raza
+																			INNER JOIN tipo_animal c 
+																								ON c.id_tipo = b.id_tipo_animal
+																			INNER JOIN albergue e 
+																								ON e.id_albergue = a.albergue_id
+																			INNER JOIN usuarios d 
+																								ON d.cedula = e.cedula_usuario
+																			LEFT JOIN adopcion f 
+																								ON a.id_animal = f.animal_id
+																		WHERE 
+																					(d.cedula = CASE WHEN '$cedula_user' = '' THEN d.cedula ELSE '$cedula_user' END)
+																		ORDER BY a.id_animal DESC, a.visible ASC
+																		LIMIT $desde,$qty");
         /*Inciso: CASE ES COMO SWITCH O IF EN SQL (TRANSACT SQL) EN ESTE CASO SI LLEGA VACIO $cedula_user ENTONCES
         MOSTRARA TODOS LOS CONTENIDOS DE LA TABLA PQ NO LO APLIQUE ANTES? PS DE PANA LO APRENDI HACE
         POCO RELATIVAMENTE */

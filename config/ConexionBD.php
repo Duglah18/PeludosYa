@@ -1,7 +1,15 @@
 <?php 
-
+//Conexion de La Base de Datos
 class ConexionBD {
-
+	
+	//Función de Conexión con la Base de Datos
+	/*****************************************************************
+	*	Pertenece: Conexion BD
+	*	Nombre: conectar
+	*	Función: Conexión con la Base de Datos
+	*	Entradas: Ninguna
+	*	Salidas: Conexion de la Base de Datos correcta o fallida.
+	*****************************************************************/
     public function conectar(){
         $__server = "localhost";
         $__user = "root";
@@ -14,6 +22,14 @@ class ConexionBD {
         return $__conex;
     }
 
+	//Función de Consulta a la Base de Datos, para no repetir muchas veces mysqli_query
+	/*****************************************************************
+	*	Pertenece: Conexion BD
+	*	Nombre: obtenData
+	*	Función: Consultar a la base de Datos lo indicado por entrada
+	*	Entradas: Consulta SQL SELECT String
+	*	Salidas: lista solicitada en un arreglo
+	*****************************************************************/
     public function obtenData($consult){
         $__conn = $this->conectar();
         $__respuesta = mysqli_query($__conn, $consult) or die ("error");
@@ -26,7 +42,15 @@ class ConexionBD {
         }
         return $__data;
     }
-
+	
+	//Función de Inserción en la Base de Datos, Se forma la instrucción automáticamente.
+	/*****************************************************************
+	*	Pertenece: Conexion BD
+	*	Nombre: grabaData
+	*	Función: Insertar en la Base de Datos lo ingresado
+	*	Entradas: Tabla a insertar(String), Datos a insertar(Array)
+	*	Salidas: Retorna el id ingresado o false
+	*****************************************************************/
     public function grabaData($tabla,$data){
         $columnas = array_keys($data);
         $sql = "INSERT INTO " . $tabla . "(";
@@ -55,6 +79,14 @@ class ConexionBD {
         return false;
     }
 
+	//Función de Actualización en la Base de Datos, Se forma la instrucción automáticamente.
+	/*****************************************************************
+	*	Pertenece: Conexion BD
+	*	Nombre: actualizaData
+	*	Función: Actualiza datos de la Base de Datos por lo ingresado
+	*	Entradas: Tabla a actualizar (string), Datos (Array), filtro donde se actualizara (string)
+	*	Salidas: verdadero o falso.
+	*****************************************************************/
     public function actualizaData($tabla, $data, $filtro){
         $columnas = array_keys($data);
         $sql = "UPDATE ". $tabla . " SET ";
@@ -71,6 +103,14 @@ class ConexionBD {
         return false;
     }
 
+	//Función que crea un Query de Inserción para guardar en bitacora.
+	/*****************************************************************
+	*	Pertenece: Conexion BD
+	*	Nombre: creaCadenaInsert
+	*	Función: Crear un SQL de Inserción para Bitacora
+	*	Entradas: Datos(Array), Tabla(string)
+	*	Salidas: consulta Sql formada
+	*****************************************************************/
     public function creaCadenaInsert($data, $tabla){
         $columnas = array_keys($data);
         $sql = "INSERT INTO " . $tabla . "(";
@@ -94,6 +134,14 @@ class ConexionBD {
         return $sql;
     }
 
+	//Función que crea un Query de Actualización para guardar en bitacora.
+	/*****************************************************************
+	*	Pertenece: Conexion BD
+	*	Nombre: creaCadenaUpdate
+	*	Función: Crear un SQL de Actualización para Bitacora
+	*	Entradas: Tabla(string), Datos(Array),filtro(string)
+	*	Salidas: consulta Sql formada
+	*****************************************************************/
     public function creaCadenaUpdate($tabla, $data, $filtro){
         $columnas = array_keys($data);
         $sql = "UPDATE ". $tabla . " SET ";

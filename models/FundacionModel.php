@@ -119,7 +119,8 @@ class FundacionModel extends ConexionBD{
         $desde = ($pagina - 1) * $qty;
         $resultados = $this->obtenData("SELECT a.id_animal, a.nombre, a.anio_nac, a.img, 
                                                 a.fecha_ingreso, b.nombre as nomraza, c.nombre as nomtipo,
-                                                e.nombre as nomalbergue, d.nombre as nombreUser, a.visible
+                                                e.nombre as nomalbergue, d.nombre as nombreUser, a.visible,
+                                                CASE WHEN f.estado IN ('1','2') OR f.estado IS NULL  THEN 'No' ELSE 'Si' END AS Adoptado
                                         FROM animal a
                                         INNER JOIN raza b ON a.raza_id = b.id_raza
                                         INNER JOIN tipo_animal c ON c.id_tipo = b.id_tipo_animal
@@ -283,9 +284,9 @@ class FundacionModel extends ConexionBD{
         $anteriorUser = $this->obtenData("SELECT a.cedula, a.detalles FROM usuarios a 
                                             INNER JOIN adopcion b ON a.cedula = b.cedula_usuario
                                             WHERE b.id_adopcion = '$identificador'");
-        if ($anterior[0][0] == $estadonuevo){
-            return false;
-        }
+        // if ($anterior[0][0] == $estadonuevo){
+            // return false;
+        // } Era para verificar si recargabas pero ya 
         $data['estado'] = $estadonuevo;
         $actualiza = $this->actualizaData('adopcion',$data, "id_adopcion = " . $identificador);
         $modifica = $anteriorUser[0]['cedula'];

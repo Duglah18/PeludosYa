@@ -5,28 +5,52 @@ class SessionController extends GeneralController{
 	/	-Filtros de busqueda Animal 
 	/	-Filtros de busqueda Veterinario
 	/	-Probar Modificar usuario propio
-	/	-Revisar en vistas si en algun lugar se muestra la fecha desordenada
 	/	-Validaciones? 
 	==========TAREAS PARA FINALIZAR ESTE MODULO==========*/
 	
 	
     #Region Load views
+	/*****************************************************************
+	*	Pertenece: SessionController
+	*	Nombre: Comprobador
+	*	Función: Comprobar si alguien se encuentra logueado
+	*	Entradas: Session
+	*	Salidas: Retorno a Pág. Principal.
+	*****************************************************************/
     public function Comprobador(){//aqui esta inverso a los demas
         if(isset($_SESSION['usuario'])){
             return header("location:" . BASE_URL);
         }
     }
-
+	
+	/******************************************************************
+	*	Pertenece: SessionController
+	*	Nombre: login
+	*	Función: Mostrar Vista 
+	*	Salidas: Vista login
+	******************************************************************/
     public function login(){
         $this->Comprobador();
         $this->loadView("session/login.phtml","Login");
     }
 
+	/******************************************************************
+	*	Pertenece: SessionController
+	*	Nombre: register
+	*	Función: Mostrar Vista
+	*	Salidas: Vista register
+	******************************************************************/
     public function register(){
         $this->Comprobador();
         $this->loadView("session/register.phtml","Register");
     }
     
+	/******************************************************************
+	*	Pertenece: SessionController
+	*	Nombre: catalogoAnimales
+	*	Función: Mostrar Vista
+	*	Salidas: Vista catalogo animales
+	******************************************************************/
     public function catalogoAnimales(){
         $objSess = $this->loadModel("SessionModel");
         $objAdmin = $this->loadModel("AdminModel");
@@ -44,6 +68,12 @@ class SessionController extends GeneralController{
         $this->loadView("catalogo.phtml", "Ver Peluditos",$data);
     }
 
+	/******************************************************************
+	*	Pertenece: SessionController
+	*	Nombre: catalogoVeterinarios
+	*	Función: Mostrar Vista
+	*	Salidas: Vista Veterinarios
+	******************************************************************/
     public function catalogoVeterinarios(){
         //el mismo metodo ya existe en admin asi q mejor no creo otro metodo en session y ya
         $objSess = $this->loadModel("SessionModel");
@@ -56,24 +86,42 @@ class SessionController extends GeneralController{
         $data['veterinarios'] = $objSess->consultarVeterinarios('',$pagina,$qty);
         $this->loadView("veterinarios.phtml","Ver Veterinarios",$data);
     }
-
+	
+	/******************************************************************
+	*	Pertenece: SessionController
+	*	Nombre: mascota
+	*	Función: Mostrar Vista
+	*	Salidas: Vista mascota Detallada
+	******************************************************************/
     public function mascota(){
         $objSess = $this->loadModel("SessionModel");
         $identity = (isset($_GET['idanimal']))? $_GET['idanimal'] : "";
         $data['animal'] = $objSess->ObtenAnimalSelecc($identity);
         //el titulo se podria cambiar y poner el nombre del animal a ver
-        $this->loadView("mascota.phtml", "Animal Detallado", $data);
+        $this->loadView("mascota.phtml", "Peludo " .$data['animal'][0]['nombre'], $data);
     }
-
+	
+	/******************************************************************
+	*	Pertenece: SessionController
+	*	Nombre: veterinario
+	*	Función: Mostrar Vista
+	*	Salidas: Vista veterinario
+	******************************************************************/
     public function veterinario(){
         $objSess = $this->loadModel("SessionModel");
         //aca si creare un metodo
         $identity = (isset($_GET['idveterinario']))? $_GET['idveterinario'] : "";
         $data['veterinario'] = $objSess->ObtenVeterinarioSelecc($identity);
         //el titulo se podria cambiar y poner el nombre del animal a ver
-        $this->loadView("veterinario.phtml", "Veterinario Detallado", $data);
+        $this->loadView("veterinario.phtml", "Veterinario " . $data['veterinario'][0]['nombre'], $data);
     }
-	//Creado en la oficina 11/11/2022
+	
+	/******************************************************************
+	*	Pertenece: SessionController
+	*	Nombre: verUsuario
+	*	Función: Mostrar Vista
+	*	Salidas: Vista Usuario
+	******************************************************************/
 	public function verUsuario(){
 		$objSess = $this->loadModel("SessionModel");
 		if (!isset($_GET['id_user'])){
@@ -92,6 +140,12 @@ class SessionController extends GeneralController{
 		//a futuro lo puedes cambiar a cualquier otra cosa como que le saque su nombre o algo;
 	}
 	
+	/******************************************************************
+	*	Pertenece: SessionController
+	*	Nombre: modifica_user
+	*	Función: Mostrar Vista
+	*	Salidas: Vista Modificar mi usuario
+	******************************************************************/
 	public function modifica_user(){
 		if (!isset($_POST['accion']) || !isset($_POST['cedula']) || !isset($_POST['nombre']) || 
 			!isset($_POST['direccion']) || !isset($_POST['contrasenia']) || !isset($_POST['telefono'])){
@@ -117,7 +171,24 @@ class SessionController extends GeneralController{
     #Endregion
 
     #Regiond Metods with Functions
+	/*****************************************************************
+	*	Pertenece: SessionController
+	*	Nombre: login_user
+	*	Función: Logueo del Usuario si esta logueado o no
+	*	Entradas: Cedula, contraseña
+	*	Salidas: Vista principal, vista admin
+	*****************************************************************/
     public function login_user(){
+		if(!isset($_POST['cedula']) || !isset($_POST['pass'])){
+			$_SESSION['Error'] = "Ha ocurrido un error";
+			return header("location: ".BASE_URL."session/login");
+		}
+		
+		if($_POST['cedula'] == "" || $_POST['pass'] == ""){
+			$_SESSION['Error'] = "Ha ocurrido un error";
+			return header("location: ".BASE_URL."session/login");
+		}
+		
         $cedula = $_POST['cedula'];
         $contrasenia = $_POST['pass'];
         $objUser = $this->loadModel("SessionModel");
@@ -160,7 +231,23 @@ class SessionController extends GeneralController{
         }
     }
 
+	/*****************************************************************
+	*	Pertenece: SessionController
+	*	Nombre: register_user
+	*	Función: usuario a registrarse
+	*	Entradas: cedula, nombre, direccion, contrasenia, telefono
+	*	Salidas: Vista principal usuario registrado y logueado
+	*****************************************************************/
     public function register_user(){//funcion para registrarse como usuario
+		if (!isset($_POST['cedula']) || !isset($_POST['nombre']) || !isset($_POST['direccion']) || !isset($_POST['contrasenia']) || !isset($_POST['telefono'])){
+			$_SESSION['Error'] = "Ha ocurrido un error";
+			return header("location: ".BASE_URL."session/register");
+		}
+		if($_POST['cedula'] == "" || $_POST['nombre'] == "" || $_POST['direccion'] == "" || $_POST['contrasenia'] == "" || $_POST['telefono'] == ""){
+			$_SESSION['Error'] = "Ha ocurrido un error";
+			return header("location: ".BASE_URL."session/register");
+		}
+		
         $cedu = $_POST['cedula'];
         $nom = $_POST['nombre'];
         $dirc = $_POST['direccion'];
@@ -180,7 +267,14 @@ class SessionController extends GeneralController{
             return $this->loadView("home.phtml","Inicio", $data);
         }
     }
-
+	
+	/*****************************************************************
+	*	Pertenece: SessionController
+	*	Nombre: adopcion_peticion
+	*	Función: Pedir en adopcion a un animal
+	*	Entradas: ID usuario, Id animal
+	*	Salidas: Vista adopcion realizada
+	*****************************************************************/
     public function adopcion_peticion(){
         if($_POST['usuario'] == "" || $_POST['idanimal'] == ""){
         //si usuario no existe o esta vacio ps xD
@@ -206,6 +300,13 @@ class SessionController extends GeneralController{
         }
     }
 	
+	/*****************************************************************
+	*	Pertenece: SessionController
+	*	Nombre: modificaUsuario
+	*	Función: Modifica usuario propio
+	*	Entradas: Cedula, nombre, direccion, contrasenia, telefono
+	*	Salidas: Vista ver usuario
+	*****************************************************************/
 	public function modificarmiUsuario(){
 		if(!isset($_POST['cedula'])){
 			$Error = "No se especifico a quien modificar"; //esto funcionaria? sino por get se puede

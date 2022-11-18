@@ -31,6 +31,7 @@ if($albergues == false){ ?>
             <th>Raza</th>
             <th>Animal</th>
             <th>Albergue</th>
+            <th>Adoptado</th>
             <th>Movimiento</th>
             <th>Visible</th>
         </tr>
@@ -46,6 +47,7 @@ if($albergues == false){ ?>
             <td><?= $animal['nomraza'] ?></td>
             <td><?= $animal['nomtipo'] ?></td>
             <td><?= $animal['nomalbergue'] ?></td>
+            <td><?= $animal['Adoptado'] ?></td>
             <td><?= $activo = $animal['visible'] != 1? "No visible": "visible"?></td>
             <td>
                 <form action="<?=BASE_URL?>fundacion/agregaAnimal" method="POST">

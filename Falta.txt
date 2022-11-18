@@ -6,4 +6,3 @@ Lista de Falta del Sistema (Back-End):
 
 -Filtros (La neta no se si de verdad hacer esto, podria hacerle almenos un filtro a fundacion q creo q no tiene)
 Aunque para los filtros tendria q meterle mas mano a las pantallas 
-

@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 class FundacionController extends GeneralController{
     /*==========TAREAS PARA FINALIZAR ESTE MODULO==========
@@ -6,16 +6,30 @@ class FundacionController extends GeneralController{
 	/	-Filtros de busqueda
 	/	-Revisar en vistas si en algun lugar se muestra la fecha desordenada
 	/	-En la vista de Ver a los animales colocar cantidad de pedidos de adopciones
-	-Modificado el ver la fecha de ingreso de animales en ver animales fundacion
+	/	-Modificado el ver la fecha de ingreso de animales en ver animales fundacion
 	==========TAREAS PARA FINALIZAR ESTE MODULO==========*/
 	
 	#Region Views
+	/*****************************************************************
+	*	Pertenece: FundacionController
+	*	Nombre: Comprobador
+	*	Función: Comprobar si alguien se encuentra logueado o si tiene el rol requerido
+	*	Entradas: Session y Rol
+	*	Salidas: Retorno a Pág. Principal.
+	*****************************************************************/
     public function Comprobador(){
         if(!isset($_SESSION['usuario']) || $_SESSION['rol'] != 3){
            return header("location:" . BASE_URL);
         }
     }
-
+	
+	/******************************************************************
+	*	Pertenece: FundacionController
+	*	Nombre: agregaAlberg
+	*	Función: Mostrar Vista
+	*	Entradas: (Modifica): ID albergue
+	*	Salidas: vista Agrega Albergue propio
+	******************************************************************/
     public function agregaAlberg(){
         $this->Comprobador();
         $objFund = $this->loadModel("FundacionModel");
@@ -28,7 +42,13 @@ class FundacionController extends GeneralController{
             $this->loadView("fundacion/agalbergue.phtml","Agregar Albergue",$data);
         }
     }
-
+	
+	/******************************************************************
+	*	Pertenece: FundacionController
+	*	Nombre: albergues
+	*	Función: Mostrar Vista
+	*	Salidas: Vista Albergues propios
+	******************************************************************/
     public function albergues(){
         $this->Comprobador();
         $objFund = $this->loadModel("FundacionModel");
@@ -41,7 +61,13 @@ class FundacionController extends GeneralController{
         $data['userfund'] = $objFund->consultaAlbergue($_SESSION['iduser'],$pagina,$qty);
         $this->loadview("fundacion/veralbergues.phtml","Ver albergues",$data);
     }
-
+	
+	/******************************************************************
+	*	Pertenece: FundacionController
+	*	Nombre: animales
+	*	Función: Mostrar Vista
+	*	Salidas: Vista Animales propios
+	******************************************************************/
     public function animales(){
         $this->Comprobador();
         $objFund = $this->loadModel("FundacionModel");
@@ -55,7 +81,14 @@ class FundacionController extends GeneralController{
         $data['albergues'] = $objFund->consultaAlbergue($_SESSION['iduser'],$pagina,$qty);
         $this->loadView("fundacion/veranimales.phtml","Ver Animales",$data);
     }
-
+	
+	/******************************************************************
+	*	Pertenece: FundacionController
+	*	Nombre: agregaAnimal
+	*	Función: Mostrar Vista
+	*	Entradas: (modificar): ID animal
+	*	Salidas: Vista Agrega Animal
+	******************************************************************/
     public function agregaAnimal(){
         $this->Comprobador();
         $objFund = $this->loadModel("FundacionModel");
@@ -79,7 +112,13 @@ class FundacionController extends GeneralController{
             $this->loadView("fundacion/agAnimal.phtml","Agregar Animal",$data);
         }
     }
-    
+	
+	/******************************************************************
+	*	Pertenece: FundacionController
+	*	Nombre: verAdopciones
+	*	Función: Mostrar Vista
+	*	Salidas: Vista Adopciones De sus albergues
+	******************************************************************/
     public function verAdopciones(){
         $this->Comprobador();
         $objFund = $this->loadModel("FundacionModel");
@@ -92,19 +131,16 @@ class FundacionController extends GeneralController{
         $data['adopciones'] = $objFund->consultaAdopciones($_SESSION['iduser'],$pagina,$qty);
         $this->loadView("fundacion/adopciones.phtml","Ver Adopciones",$data);
     }
-
-    public function modificaAdopcion(){
-        $this->Comprobador();
-        if(!isset($_POST['accion'])){
-            return $this->verAdopciones();
-        }
-        $objFund = $this->loadModel("FundacionModel");
-        $data['adopcion'] = $objFund->consultaAdopcionEspecifica($_POST['modificacion']);
-        $data['estado_adop'] = $objFund->consultaEstadosAdopciones();
-        $this->loadView("fundacion/modAdopcion.phtml","Modifica La Adopcion",$data);
-    }
     #endregion
+	
     #Region Metods/functions
+	/*****************************************************************
+	*	Pertenece: FundacionController
+	*	Nombre: registraFundacion
+	*	Función: Registra/modificaAlbergue
+	*	Entradas: nombre, cedula propietario, direccion, activo
+	*	Salidas: Ver albergues
+	*****************************************************************/
     public function registraFundacion(){//funciona 9/10/2022
         $objFund = $this->loadModel("FundacionModel");
         if(!isset($_POST['accion'])){//es mejor asi
@@ -136,7 +172,14 @@ class FundacionController extends GeneralController{
             }
         }
     }
-
+	
+	/*****************************************************************
+	*	Pertenece: FundacionController
+	*	Nombre: registraAnimal
+	*	Función: registrar/modificar Animal
+	*	Entradas: Nombre, fechanacimiento, raza, albergue
+	*	Salidas: ver Animales
+	*****************************************************************/
     public function registraAnimal(){//ahora si
         $objFund = $this->loadModel("FundacionModel");
         $objAdmin = $this->loadModel("AdminModel");
@@ -210,14 +253,28 @@ class FundacionController extends GeneralController{
             return header("location: ".BASE_URL."fundacion/animales");
         }
     }
+	
+	//MODIFICADO 18/11/2022
+	/*****************************************************************
+	*	Pertenece: FundacionController
+	*	Nombre: destinoAdopcion
+	*	Función: decide el destino de la adopcion si se completo o cancelo
+	*	Entradas: accion, razon, usuario, eleccion
+	*	Salidas: Ver adopciones
+	*****************************************************************/
     public function destinoAdopcion(){
         $objFund = $this->loadModel("FundacionModel");
-        if(isset($_GET['accion']) == ""){
-            return $this->verAdopciones();
-        }
+		
         if(!isset($_GET['accion']) || !isset($_GET['modificacion'])){
+			$_SESSION['Error'] = "No se enviaron Parametros";
             return $this->verAdopciones();
         }
+		
+		if($_GET['accion'] == "" || $_GET['accion'] != "Completada" || $_GET['accion'] != "Cancelada"){
+			$_SESSION['Error'] = "No se enviaron los parametros correctos";
+            return $this->verAdopciones();
+        }
+		
         $eleccion = $_GET['modificacion'];
         if($_GET['accion'] == 'Completada'){
             $accion = 3;
@@ -230,7 +287,14 @@ class FundacionController extends GeneralController{
         $objFund->decisionAdopcion($eleccion, $accion, $razon,$_GET['usuario']);
         return header("location: ".BASE_URL."fundacion/verAdopciones");
     }
-
+	
+	/*****************************************************************
+	*	Pertenece: FundacionController
+	*	Nombre: inactivaPeludos
+	*	Función: Desactiva/Activa Visibilidad Animales
+	*	Entradas: accion, decision, id animal
+	*	Salidas: ver animales
+	*****************************************************************/
     public function inactivaPeludos(){
         $this->Comprobador();
         $objAdmin = $this->loadModel("FundacionModel");
@@ -247,7 +311,14 @@ class FundacionController extends GeneralController{
         $objAdmin->DecisionActivacionPeludos($id_peludo, $decision, $_SESSION['iduser']);
         return header("location: ".BASE_URL."fundacion/animales");
     }
-
+	
+	/*****************************************************************
+	*	Pertenece: FundacionController
+	*	Nombre: inactivaAlbergue
+	*	Función: Desactiva/Activa Visibilidad Albergue
+	*	Entradas: id albergue, decision, usuario
+	*	Salidas: ver albergues
+	*****************************************************************/
     public function inactivaAlbergue(){
         $this->Comprobador();
         $objAdmin = $this->loadModel("FundacionModel");

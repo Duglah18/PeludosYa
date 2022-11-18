@@ -10,14 +10,25 @@ class AdminController extends GeneralController{
 	/	-En la vista de Ver a los animales colocar cantidad de pedidos de adopciones
 	==========TAREAS PARA FINALIZAR ESTE MODULO==========*/
 	
-	
     #Region Views
+	/*****************************************************************
+	*	Pertenece: AdminController
+	*	Nombre: Comprobador
+	*	Función: Comprobar si alguien se encuentra logueado o si tiene el rol requerido
+	*	Salidas: Retorno a Pág. Principal.
+	*****************************************************************/
     public function Comprobador(){
         if(!isset($_SESSION['usuario']) || $_SESSION['rol'] != "1"){
             return header("location: ".BASE_URL);
         }
     }
 
+	/*****************************************************************
+	*	Pertenece: AdminController
+	*	Nombre: index
+	*	Función: Mostrar Vista
+	*	Salidas: Vista login Admin
+	*****************************************************************/
     public function index(){
         if (isset($_SESSION['usuario'])){
             $objAdmin = $this->loadModel("AdminModel");
@@ -30,6 +41,12 @@ class AdminController extends GeneralController{
         }
     }
 
+	/*****************************************************************
+	*	Pertenece: AdminController
+	*	Nombre: animales
+	*	Función: Mostrar Vista
+	*	Salidas: Vista Animales
+	*****************************************************************/
     public function animales(){
         $this->Comprobador();
         $objAdmin = $this->loadModel("AdminModel");//probar ya que modifique y ahora tambien existen estos metodos en adminModel
@@ -44,6 +61,12 @@ class AdminController extends GeneralController{
         $this->loadView("admin/veranimales.phtml","Administrador | Ver Animales",$data);
     }
 
+	/*****************************************************************
+	*	Pertenece: AdminController
+	*	Nombre: albergues
+	*	Función: Mostrar Vista
+	*	Salidas: Vista Albergues
+	*****************************************************************/
     public function albergues(){
         $this->Comprobador();
         $objAdmin = $this->loadModel("FundacionModel");
@@ -57,7 +80,13 @@ class AdminController extends GeneralController{
         //atras envie nada para que me arroje todo
         $this->loadView("admin/veralbergues.phtml","Administrador | Ver Albergues",$data);
     }
-
+	
+	/*****************************************************************
+	*	Pertenece: AdminController
+	*	Nombre: adopciones
+	*	Función: Mostrar Vista
+	*	Salidas: Vista adopciones
+	*****************************************************************/
     public function adopciones(){
         $this->Comprobador();
         $objAdmin = $this->loadmodel("AdminModel");
@@ -87,6 +116,13 @@ class AdminController extends GeneralController{
     }
 
     //Vista Agregar animales Admin
+	/*****************************************************************
+	*	Pertenece: AdminController
+	*	Nombre: agregaAnimales
+	*	Función: Mostrar Vista
+	*	Entradas: (Modificar): Id de animal y accion = Modificar
+	*	Salidas: Vista agrega/modifica Animal
+	*****************************************************************/
     public function agregaAnimales(){
         $this->Comprobador();
         $objAdmin = $this->loadModel("AdminModel");
@@ -111,7 +147,14 @@ class AdminController extends GeneralController{
     }
     
     //Vista Agregar usuarios Admin
-    public function agregaUsuarios(){
+    /*****************************************************************
+	*	Pertenece: AdminController
+	*	Nombre: agregaUsuarios
+	*	Función: Mostrar Vista
+	*	Entradas: (Modificar): Id de Usuario y accion = Modificar
+	*	Salidas: Vista agrega/modifica Usuario
+	*****************************************************************/
+	public function agregaUsuarios(){
         $this->Comprobador();
         $objAdmin = $this->loadModel("AdminModel");
         if(isset($_POST['accion']) && $_POST['accion'] == 'Modificar'){
@@ -123,7 +166,14 @@ class AdminController extends GeneralController{
         $this->loadView("admin/agusaurios.phtml","Administrador | Agrega usuarios", $data);
         }
     }
-
+	
+	/*****************************************************************
+	*	Pertenece: AdminController
+	*	Nombre: agregaVeterinarios
+	*	Función: Mostrar Vista
+	*	Entradas: (Modificar): Id de Veterinario, accion = Modificar
+	*	Salidas: Vista agrega/modifica Veterinario
+	*****************************************************************/
     public function agregaVeterinarios(){
         $this->Comprobador();
         $objAdmin = $this->loadmodel("AdminModel");
@@ -148,7 +198,14 @@ class AdminController extends GeneralController{
             $this->loadView("admin/agVeterinario.phtml", "Administrador | Agrega Veterinarios como Admin",$data);
         }
     }
-
+	
+	/*****************************************************************
+	*	Pertenece: AdminController
+	*	Nombre: agregaAlbergueAdmin
+	*	Función: Mostrar Vista
+	*	Entradas: (Modifica): id de albergue, accion = Modificar
+	*	Salidas: Vista agrega/modifica Albergue 
+	*****************************************************************/
     public function agregaAlbergueAdmin(){
         $this->Comprobador();
         //este model es para cargar el select
@@ -163,7 +220,12 @@ class AdminController extends GeneralController{
         }
     }
 	
-	//mostrar a los Usuarios
+	/*****************************************************************
+	*	Pertenece: AdminController
+	*	Nombre: mostrarData
+	*	Función: Mostrar Vista
+	*	Salidas: Vista Usuarios del sistema
+	*****************************************************************/
     public function mostrarData(){
         $this->Comprobador();
         $objAdmin = $this->loadModel("AdminModel");
@@ -179,8 +241,14 @@ class AdminController extends GeneralController{
         $this->loadView("admin/adIndex.phtml", "Administrador | Ver Usuarios",$data);
     }
 
-	//Vista de los Tipos de Animal
-    public function tipoAnimal(){
+    /*****************************************************************
+	*	Pertenece: AdminController
+	*	Nombre: tipoAnimal
+	*	Función: Mostrar Vista
+	*	Entradas: (Modifica): id tipo animal, accion = Modificar
+	*	Salidas: Vista Ver/Agrega/Modifica Tipo Animal 
+	*****************************************************************/
+	public function tipoAnimal(){
         $this->Comprobador();
         $objAdmin = $this->loadModel("AdminModel");
         if (isset($_POST['accion']) && $_POST['accion'] == 'Modificar'){
@@ -204,7 +272,13 @@ class AdminController extends GeneralController{
         $this->loadView("admin/adTAnimal.phtml", "Administrador | Tipos de Animal", $data);
     }
 
-	//Vista de las razas Animal
+	/*****************************************************************
+	*	Pertenece: AdminController
+	*	Nombre: razasAnimal
+	*	Función: Mostrar Vista
+	*	Entradas: (Modifica): id raza, accion = Modificar
+	*	Salidas: Vista Ver/Agrega/Modifica Razas Animal 
+	*****************************************************************/
     public function razasAnimal(){
         $this->Comprobador();
         $objAdmin = $this->loadModel("AdminModel");
@@ -229,7 +303,12 @@ class AdminController extends GeneralController{
         $this->loadView("admin/adRazas.phtml", "Administrador | Razas de Animal", $data);
     }
 	
-	//Reportes del sistema Vista
+	/*****************************************************************
+	*	Pertenece: AdminController
+	*	Nombre: Reportes
+	*	Función: Mostrar Vista
+	*	Salidas: Vista Cargar Reportes
+	*****************************************************************/
 	public function Reportes(){
 		$this->Comprobador();
 		$objAdmin = $this->loadModel("AdminModel");
@@ -238,9 +317,15 @@ class AdminController extends GeneralController{
 		//Cargar literalmente todos los modelos porque hay selects pero hasta para regalar
 		$this->loadView("admin/adReporte.phtml","Administrador | Reportes del Sistema");
 	}
-
     #endregion
 
+	/*****************************************************************
+	*	Pertenece: AdminController
+	*	Nombre: consultaData
+	*	Función: Comprobar el login del Admin
+	*	Entradas: Nombre, Contraseña
+	*	Salidas: Vista ver Usuarios, Admin logueado
+	*****************************************************************/
     public function consultaData(){
         if(!isset($_POST['username']) && !isset($_POST['password'])){
             $error = "No se enviaron datos";
@@ -259,7 +344,14 @@ class AdminController extends GeneralController{
             $_SESSION['iduser'] = $dataAdmin[0]['cedula'];
             header("location: ". BASE_URL. "admin/mostrarData");
     }
-
+	
+	/*****************************************************************
+	*	Pertenece: AdminController
+	*	Nombre: registraUsuario
+	*	Función: Registra/Modifica Usuario desde Admin
+	*	Entradas: (Modifica): id Usuario, Modificar | (Agregar): Agrega ||= Cedula, nombre, rol, direccion, telefono
+	*	Salidas: Vista Ver usuarios
+	*****************************************************************/
     public function registraUsuario(){
         $objAdmin = $this->loadModel("AdminModel");
 		if($_POST['rol'] == "0"){
@@ -278,7 +370,7 @@ class AdminController extends GeneralController{
             $objAdmin->registrarUsuario("usuarios",$cedula,$nombre,$rol,$direccion,
                                         $contrasenia, "1", $tlf, $_SESSION['iduser']);
             if($objAdmin == false){
-                $error = "Usuario ya en el sistema";
+                $error = "Ha ocurrido un error";
                 header("location: ".BASE_URL. "admin/mostrarData?error=".$error);
             }
             //mientras carga mostrarData agregar una pantalla de carga
@@ -297,7 +389,14 @@ class AdminController extends GeneralController{
             header("location: ".BASE_URL. "admin/mostrarData");
         }
     }
-
+	
+	/*****************************************************************
+	*	Pertenece: AdminController
+	*	Nombre: agregaTipoanimal
+	*	Función: Agrega/Modifica Tipo Animal Admin
+	*	Entradas: (Agrega): datos | (Modifica): Id tipo, nombre nuevo
+	*	Salidas: Vista tipoAnimal
+	*****************************************************************/
     public function agregaTipoanimal(){
         $objAdmin = $this->loadModel("AdminModel");
         if(isset($_POST['accion']) && $_POST['accion'] == 'Modificar'){
@@ -312,7 +411,14 @@ class AdminController extends GeneralController{
             header("location: ".BASE_URL."admin/tipoAnimal");
         }
     }
-
+	
+	/*****************************************************************
+	*	Pertenece: AdminController
+	*	Nombre: agregaRazaAnimal
+	*	Función: Agrega/Modifica Razas de animal 
+	*	Entradas: (Agrega): Datos animal | (Modifica): Id raza, nuevos datos
+	*	Salidas: Vista RazasAnimal
+	*****************************************************************/
     public function agregaRazaAnimal(){
         $objAdmin = $this->loadModel("AdminModel");
 		if($_POST['tipoAnimal'] == "0"){
@@ -332,7 +438,14 @@ class AdminController extends GeneralController{
             header("location: ".BASE_URL."admin/razasAnimal");
         }
     }
-
+	
+	/*****************************************************************
+	*	Pertenece: AdminController
+	*	Nombre: agregaAnimal
+	*	Función: agrega/modifica Animal Admin
+	*	Entradas: (Agrega): Datos Animal | (Modifica): Id, nuevos datos
+	*	Salidas: Vista animales
+	*****************************************************************/
     public function agregaAnimal(){//ahora si
         $objFund = $this->loadModel("AdminModel");
 		if($_POST['raza'] == "0"){
@@ -398,6 +511,14 @@ class AdminController extends GeneralController{
             header("location: ".BASE_URL."admin/animales");
         }
     }
+	
+	/*****************************************************************
+	*	Pertenece: AdminController
+	*	Nombre: registraVeterinario
+	*	Función: Agrega/Modifica Veterinario Admin
+	*	Entradas: (Agregar): Nombre, telefono, direccion, img | (Modifica): Id, Nuevos Datos
+	*	Salidas: Vista Agrega Veterinarios
+	*****************************************************************/
     public function registraVeterinario(){
         //creo que esto puede servir
         $objAdmin = $this->loadModel("AdminModel");
@@ -447,12 +568,20 @@ class AdminController extends GeneralController{
                                                 $nombreArchivo, $adminRegistrando);
                 header("location: ".BASE_URL."admin/agregaVeterinarios");
             } else {
+				$_SESSION['Error'] = "Ocurrio un error al agregar al Veterinario";
                 header("location: ".BASE_URL."admin/agregaVeterinarios");
                 //añadir variable de error por get 
             }
         }
     }
 
+	/*****************************************************************
+	*	Pertenece: AdminController
+	*	Nombre: inactivaUsuario
+	*	Función: Bloquear/Desbloquear Usuario
+	*	Entradas: ID usuario, Decision
+	*	Salidas: Vista Mostrar Usuarios
+	*****************************************************************/
     public function inactivaUsuario(){
         $this->Comprobador();
         $objAdmin = $this->loadModel("AdminModel");
@@ -470,6 +599,13 @@ class AdminController extends GeneralController{
         return header("location: ".BASE_URL."admin/mostrarData");
     }
 
+	/*****************************************************************
+	*	Pertenece: AdminController
+	*	Nombre: inactivaVeterinario
+	*	Función: Activa/Desactiva visibilidad para los demas usuarios a veterinario
+	*	Entradas: Id, Decision
+	*	Salidas: Ver Veterinarios
+	*****************************************************************/
     public function inactivaVeterinario(){
         $this->Comprobador();
         $objAdmin = $this->loadModel("AdminModel");
@@ -486,7 +622,14 @@ class AdminController extends GeneralController{
         $objAdmin->DecisionActivacionVeterinario($id_veterinario, $decision, $_SESSION['iduser']);
         return header("location: ".BASE_URL."admin/agregaVeterinarios");
     }
-
+	
+	/*****************************************************************
+	*	Pertenece: AdminController
+	*	Nombre: inactivaPeludos
+	*	Función: Activa/Desactiva visibilidad para los demas usuarios a Peludos
+	*	Entradas: Id, Decision
+	*	Salidas: Ver Animales
+	*****************************************************************/
     public function inactivaPeludos(){
         $this->Comprobador();
         $objAdmin = $this->loadModel("AdminModel");
@@ -503,7 +646,14 @@ class AdminController extends GeneralController{
         $objAdmin->DecisionActivacionPeludos($id_peludo, $decision, $_SESSION['iduser']);
         return header("location: ".BASE_URL."admin/animales");
     }
-
+	
+	/*****************************************************************
+	*	Pertenece: AdminController
+	*	Nombre: inactivaAlbergue
+	*	Función: Activa/Desactiva visibilidad para los demas usuarios albergue
+	*	Entradas: Id, Decision
+	*	Salidas: Vista Alergues
+	*****************************************************************/
     public function inactivaAlbergue(){
         $this->Comprobador();
         $objAdmin = $this->loadModel("AdminModel");

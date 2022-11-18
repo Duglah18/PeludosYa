@@ -45,6 +45,7 @@
     </style>
 </head>
 <body>
+<!--Vista que se muestra si ocurre un fallo al buscar algo incorrecto en el Proyecto como un controlador inexistente-->
     <div class="container-404">
         <h1>Error 404</h1>
         <p>

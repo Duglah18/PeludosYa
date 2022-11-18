@@ -1,11 +1,23 @@
 <?php 
-//este sera el controlador de la pag de home de la pag la 1era pag q se visitara
-//si no introduces nada en la URL ps
 class HomeController extends GeneralController{
-    public function home()
+    
+	/******************************************************************
+	*	Pertenece: HomeController
+	*	Nombre: home
+	*	Función: Mostrar Vista
+	*	Salidas: Vista Principal 
+	******************************************************************/
+	public function home()
     {
       $this->loadView("home.phtml","Inicio");
     }
+	
+	/******************************************************************
+	*	Pertenece: HomeController
+	*	Nombre: destroy_session
+	*	Función: Mostrar Vista
+	*	Salidas: Cerrar Sesion
+	******************************************************************/
     public function destroy_session(){
       if(isset($_SESSION['usuario'])){
         $objAdmin = $this->loadModel("AdminModel");
