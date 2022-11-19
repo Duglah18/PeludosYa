@@ -282,7 +282,11 @@ class FundacionController extends GeneralController{
         }
         elseif($_GET['accion'] == 'Cancelada'){
             $accion = 2;
-            $razon = $_GET['razoncancelado'];
+            if($_GET['razoncancelado'] != ""){
+                $razon = $_GET['razoncancelado'];
+            } else {
+                $razon = "Registro Usuario";
+            }
         }
         $objFund->decisionAdopcion($eleccion, $accion, $razon,$_GET['usuario']);
         return header("location: ".BASE_URL."fundacion/verAdopciones");

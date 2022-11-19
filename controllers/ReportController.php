@@ -59,38 +59,37 @@ class ReportController extends GeneralController{
 		$objReports = $this->LoadModel("ReportModel");
 		$columna = isset($_POST['Columna'])? $_POST['Columna']: 0;
 		$filtro = isset($_POST['Filtro'])? $_POST['Filtro']:"";
-		$desde = isset($_POST['Desde'])?$_POST['Desde']:0;
-		$hasta = isset($_POST['Hasta'])?$_POST['Hasta']:0;
-		$estatus = 0;
+		$desde = isset($_POST['Desde'])?$_POST['Desde']: date('Y-m-d');;
+		$hasta = isset($_POST['Hasta'])?$_POST['Hasta']: date('Y-m-d');;
+		$estatus = isset($_POST['estatus'])?$_POST['estatus']:0;
 		
-		// $animales = $objReports->Animales($columna, $filtro,$desde, $hasta, $estatus);
-		$animales = $objReports->Animales();
-		$numTotalAnimales = $objReports->TotalAnimales($columna, $filtro,$desde, $hasta, $estatus);
-		//como voy a hacer para mostrarlo si esto es despues de la tabla :v
-		//y en la tabla no puede llamarse a esta funcion creo
-		//aunque creo que se puede por como tambien se le puede enviar POST
-		
+		$animales = $objReports->Animales($columna, $filtro, $desde, $hasta, $estatus);
+		$numTotalAnimales = $objReports->TotalAnimales($columna, $filtro, $desde, $hasta, $estatus);
+		$TotalAdoptados = $objReports->TotalAnimales(9,3);
+		$adopcionescanceladas = $objReports->TotalesAdopciones(2);
+
 		/*----------Inicio del Documento PDF----------*/
 		$pdf = new PDF_MC_Table('L','mm',array(350,200));
 		$pdf->AliasNbPages();
 		$pdf->AddPage();
 		$pdf->SetFont('Times','',12);
+
 		
 		//Colocar el tamaño de las columnas de las celdas de la tabla (10)
-		$pdf->SetWidths(Array(15,35,20,35,45,35,35,35,35,34));
+		$pdf->SetWidths(Array(15,40,20,55,30,35,30,20,50,35));
 		
 		//Colocar la altura de la linea
 		$pdf->SetLineHeight(5);
-		
 		if($animales != false){
 			foreach ($animales as $animal){
 				$pdf->Row(Array(
 					$animal['id_animal'],
 					utf8_decode($animal['nombre']),
 					$animal['anio_nac'],
-					utf8_decode($animal['img']),
+					//utf8_decode($animal['img']),
 					utf8_decode($animal['descripcion']),
-					$fecha = date("d-m-Y",strtotime($animal['fecha_ingreso'])),
+					$animal['EstadoAdop'],
+					$animal['fecha_ingreso'] = date("d-m-Y",strtotime($animal['fecha_ingreso'])),
 					utf8_decode($animal['nombreRaza']),
 					utf8_decode($animal['nombreTamano']),
 					utf8_decode($animal['nombreAlbergue']),
@@ -100,7 +99,14 @@ class ReportController extends GeneralController{
 		} else {
 			$pdf->Cell(0,10,"No existen Datos en la Base de Datos Que correspondan a su busqueda.",1,1,'C');
 		}
-		
+
+		$pdf->SetXY(10, 30);
+		$pdf->Cell(50, 10, "Peludos Totales: ". $numTotalAnimales, 0, 1, 'L');
+		$pdf->SetXY(10, 35);
+		$pdf->Cell(50, 10, "Peludos Adoptados Totales en todo el sistema: " . $TotalAdoptados, 0, 1, 'L');
+		$pdf->SetXY(10, 40);
+		$pdf->Cell(50, 10, "Adopciones Canceladas En todo el sistema: " . $adopcionescanceladas[0]['TotalCanceladas'], 0, 1, 'L');
+
 		return $pdf->Output();
 	}
 	
@@ -116,11 +122,12 @@ class ReportController extends GeneralController{
 		$this->Combrueba();
 		
 		$objReports = $this->LoadModel("ReportModel");
-		$columna = $_POST['Columna'];
+		$columna = isset($_POST['Columna'])? $_POST['Columna']:0;
 		$filtro = isset($_POST['Filtro'])? $_POST['Filtro']:"";
+		$visibilidad = isset($_POST['Visible'])?$_POST['Visible']:0;
 		
-		$veterinarios = $objReports->Veterinarios($columna,$filtro);
-		$totalVeterinarios = $objReports->TotalVeterinarios($columna,$filtro);
+		$veterinarios = $objReports->Veterinarios($columna,$filtro,$visibilidad);
+		$totalVeterinarios = $objReports->TotalVeterinarios($columna,$filtro,$visibilidad);
 		
 		/*----------Inicio del Documento PDF----------*/
 		$pdf = new PDF_MC_Table('L','mm',array(350,200));
@@ -129,7 +136,7 @@ class ReportController extends GeneralController{
 		$pdf->SetFont('Times','',12);
 		
 		//Colocar el tamaño de las columnas de las celdas de la tabla (7)
-		$pdf->SetWidths(Array(15,35,20,35,35,45,34));
+		$pdf->SetWidths(Array(30,65,45,65,65,60));
 		
 		//Colocar la altura de la linea
 		$pdf->SetLineHeight(5);
@@ -148,6 +155,14 @@ class ReportController extends GeneralController{
 		}else {
 			$pdf->Cell(0,10,"No existen Datos en la Base de Datos Que correspondan a su busqueda.",1,1,'C');
 		}
+		
+		$pdf->SetXY(10, 30);
+		$pdf->Cell(50, 10, "Veterinarios Totales: ".$totalVeterinarios, 0, 1, 'L');
+		$pdf->SetXY(10, 35);
+		$pdf->Cell(50, 10, "Peludos Adoptados Totales: " . $visibilidad, 0, 1, 'L');
+		$pdf->SetXY(10, 40);
+		$pdf->Cell(50, 10, "Adopciones Canceladas: ", 0, 1, 'L');
+
 		
 		return $pdf->Output();
 	}
@@ -196,6 +211,13 @@ class ReportController extends GeneralController{
 		} else {
 			$pdf->Cell(0,10,"No existen Datos en la Base de Datos Que correspondan a su busqueda.",1,1,'C');
 		}
+
+		$pdf->SetXY(10, 30);
+		$pdf->Cell(50, 10, "Peludos Totales: ", 0, 1, 'L');
+		$pdf->SetXY(10, 35);
+		$pdf->Cell(50, 10, "Peludos Adoptados Totales: ", 0, 1, 'L');
+		$pdf->SetXY(10, 40);
+		$pdf->Cell(50, 10, "Adopciones Canceladas: ", 0, 1, 'L');
 		
 		return $pdf->Output();
 	}
@@ -245,6 +267,13 @@ class ReportController extends GeneralController{
 			$pdf->Cell(0,10,"No existen Datos en la Base de Datos Que correspondan a su busqueda.",1,1,'C');
 		}
 		
+		$pdf->SetXY(10, 30);
+		$pdf->Cell(50, 10, "Peludos Totales: ", 0, 1, 'L');
+		$pdf->SetXY(10, 35);
+		$pdf->Cell(50, 10, "Peludos Adoptados Totales: ", 0, 1, 'L');
+		$pdf->SetXY(10, 40);
+		$pdf->Cell(50, 10, "Adopciones Canceladas: ", 0, 1, 'L');
+
 		return $pdf->Output();
 	}
 	
@@ -291,6 +320,13 @@ class ReportController extends GeneralController{
 			$pdf->Cell(0,10,"No existen Datos en la Base de Datos Que correspondan a su busqueda.",1,1,'C');
 		}
 		
+		$pdf->SetXY(10, 30);
+		$pdf->Cell(50, 10, "Peludos Totales: ", 0, 1, 'L');
+		$pdf->SetXY(10, 35);
+		$pdf->Cell(50, 10, "Peludos Adoptados Totales: ", 0, 1, 'L');
+		$pdf->SetXY(10, 40);
+		$pdf->Cell(50, 10, "Adopciones Canceladas: ", 0, 1, 'L');
+
 		return $pdf->Output();
 	}
 }

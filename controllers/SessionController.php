@@ -196,8 +196,8 @@ class SessionController extends GeneralController{
         if ($validar != true){//verifica si existe en la Bd el usuario
             //aca deberia regresarte al login y decirte:
             //campos erroneos o algo invalidos o algo erroneo
-            $Error = "El usuario o la contraseña son incorrectos";
-            return header("location: ".BASE_URL."?error=". $Error);
+            $_SESSION['Error'] = "El usuario o la contraseña son incorrectos";
+            return header("location: ".BASE_URL);
         }
         if ($validar[0]['activo'] < 1){//verifica si no esta baneado
             //aca deberia regresarte al login y decirte:

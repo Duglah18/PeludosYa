@@ -8,25 +8,36 @@ class PDF_MC_Table extends FPDF {
 	// Cabecera de página
 	function Header(){
 		// Logo
-		$this->Image(URL_ASSETS."/logo.png",10,8,33);//Logo polipropeludos
-		// Arial bold 15
+		// $this->imag
+		$this->Image(URL_ASSETS."/blue.png", null, null, 60);//Logo polipropeludos
+
+		// Arial bold 12
+		$this->SetFont('Arial','B',12);
+
+		//Fecha y usuario
+		$this->SetXY(135, 10);
+		$this->Cell(200, 10,'Usuario: ' . $_SESSION['usuario'], 0, 0, 'R');
+		$this->SetXY(235, 15);
+		$this->Cell(100, 10,'Fecha: '.date('d/m/Y'), 0, 0, 'R');
+		
+		// Arial bold 18
 		$this->SetFont('Arial','B',18);
 		// Movernos a la derecha
+		$this->SetXY(0, 20);
+    	$this->Cell(0, 10, 'Reportes Peludos Ya', 0, 1, 'C');
 		$this->Cell(80);
 		// Título
-		$this->Cell(175,10,isset($_POST['Reporte'])? $_POST['Reporte']: "Title",1,0,'C');
+		$this->SetFont('Arial','BIU',18);
+		$this->SetXY(0, 30);
+		$this->Cell(0,10,isset($_POST['Reporte'])? ($_POST['Reporte'] == "Animales"? "Peludos": $_POST['Reporte']): "Title",0,0,'C');
 		// Salto de línea
 		$this->Ln(20);
 		//Se pudo haber hecho esto pero bueno:
 		//http://www.fpdf.org/en/script/script50.php
 		//sacado de: https://tucafejava.blogspot.com/2018/06/personaliza-tus-reportes-pdf-desde-php.html
 		//prueba
-		// $this->SetY(12);
-		// $this->Cell($ancho + $horizontal, 10,'Usuario: http://tucafejava.blogspot.com', 0, 0, 'R');
-		// $this->SetY(15);
-		// $this->Cell($ancho + $horizontal, 10,'Fecha: '.date('d/m/Y'), 0, 0, 'R');
-		// $this->SetY(18);
-		// $this->Cell($ancho + $horizontal, 10,'Hora: '.date('H:i:s'), 0, 0, 'R');
+		
+		
 		
 		//Preguntar a la profesora si es mejor que se repita siempre el header o no 
 		//usa un switch para colcar la parte de arriba de la tabla la cabecera dependiendo del tipo de consulta
@@ -36,27 +47,28 @@ class PDF_MC_Table extends FPDF {
 				$this->SetTitle('Reportes de Peludos');
 			
 				$this->Cell(15, 5, "ID", 1, 0,'C', 0);
-				$this->Cell(35, 5, "Nombre", 1, 0,'C', 0);
+				$this->Cell(40, 5, "Nombre", 1, 0,'C', 0);
 				$this->Cell(20, 5, utf8_decode("Año Nac."), 1, 0,'C', 0);
-				$this->Cell(35, 5, "Img", 1, 0,'C', 0);
-				$this->Cell(45, 5, "Descripcion", 1, 0,'C', 0);
+				//$this->Cell(35, 5, "Img", 1, 0,'C', 0);
+				$this->Cell(55, 5, "Descripcion", 1, 0,'C', 0);
+				$this->Cell(30,5, "Adoptado", 1, 0, 'C', 0);
 				$this->Cell(35, 5, "Fecha Ingreso", 1, 0,'C', 0);
-				$this->Cell(35, 5, "Raza", 1, 0,'C', 0);
-				$this->Cell(35, 5, utf8_decode("Tamaño"), 1, 0,'C', 0);
-				$this->Cell(35, 5, "Albergue", 1, 0,'C', 0);
-				$this->Cell(34, 5, "Visible", 1, 1,'C', 0);
+				$this->Cell(30, 5, "Raza", 1, 0,'C', 0);
+				$this->Cell(20, 5, utf8_decode("Tamaño"), 1, 0,'C', 0);
+				$this->Cell(50, 5, "Albergue", 1, 0,'C', 0);
+				$this->Cell(35, 5, "Disponible", 1, 1,'C', 0);
 				break;
 			case "Veterinarios":
 				$this->SetTitle('Reportes de Veterinarios');
 				
-				$this->Cell(15, 5, "ID", 1, 0,'C', 0);
-				$this->Cell(35, 5, "Nombre", 1, 0,'C', 0);
-				$this->Cell(20, 5, utf8_decode("Teléfono"), 1, 0,'C', 0);
-				$this->Cell(35, 5, utf8_decode("Dirección"), 1, 0,'C', 0);
-				$this->Cell(35, 5, "Img", 1, 0,'C', 0);
-				$this->Cell(45, 5, "Usuario Registro", 1, 0,'C', 0);
-				$this->Cell(34, 5, "Visible", 1, 1,'C', 0);
+				$this->Cell(30, 5, "ID", 1, 0,'C', 0);
+				$this->Cell(65, 5, "Nombre", 1, 0,'C', 0);
+				$this->Cell(45, 5, utf8_decode("Teléfono"), 1, 0,'C', 0);
+				$this->Cell(65, 5, utf8_decode("Dirección"), 1, 0,'C', 0);
+				$this->Cell(65, 5, "Usuario Que lo Registro", 1, 0,'C', 0);
+				$this->Cell(60, 5, "Visible", 1, 1,'C', 0);
 				break;
+				//20,65,45,60,45,60,30
 			case "Usuarios":
 				$this->SetTitle('Reportes de Usuarios');
 				
@@ -145,7 +157,7 @@ class PDF_MC_Table extends FPDF {
 			// width of the current col
 			$w=$this->widths[$i];
 			// alignment of the current col. if unset, make it left.
-			$a=isset($this->aligns[$i]) ? $this->aligns[$i] : 'L';//para centrar el contenido o colcoarlo  a la izquierda
+			$a=isset($this->aligns[$i]) ? $this->aligns[$i] : 'C';//para centrar el contenido o colcoarlo  a la izquierda
 			//Save the current position
 			$x=$this->GetX();
 			$y=$this->GetY();

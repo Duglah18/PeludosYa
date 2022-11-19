@@ -17,9 +17,9 @@ echo "Pagina para la toma de decision acerca de que tipo de reporte se quiere pr
     </div>
 
     <div id="Animales" class="col s12">
-	<form action="<?=BASE_URL?>report/Bitacora_Animales" method="POST">
+	<form action="<?=BASE_URL?>report/Bitacora_Animales" target="_blank" method="POST">
 			<label>Animales</label>
-			<select id="opciones" name="Columna">
+			<select id="opciones" name="Columna" class="col s6">
 				<option value="0">ID de Animal</option>
 				<option value="1">Nombre</option>
 				<option value="2">Año Nacimiento</option>
@@ -31,27 +31,52 @@ echo "Pagina para la toma de decision acerca de que tipo de reporte se quiere pr
 				<option value="8">Tipo de animal</option><!--Otro Select-->
 				<option value="9">Estado</option><!--Otro Select-->
 			</select>
-			<input name="Filtro"></input>
+			<div id="generico">
+			<input name="Filtro" class="col s6"></input>
+			</div>
+			<div id="fecha">
+			<br>
+			<label for="">Desde</label>
+			<input type="date" value="<?= date('Y-m-d'); ?>" name="Desde" class="col s6"> 
+			<br>
+			<label for="">Hasta</label>
+			<br>
+			<input type="date" value="<?= date('Y-m-d'); ?>" name="Hasta" class="col s6">
+			</div>
+			<div id="estatus">
+			<select name="estatus" class="col s6">
+				<option value="0">Todos</option>
+				<option value="1">En progreso</option>
+				<option value="2">Cancelado</option>
+				<option value="3">Completado</option>
+			</select>
+			</div>
 			<button name="Reporte" value="Animales">Generar Reporte</button>
 		</form>
 	</div>
 
     <div id="Veterinarios" class="col s12">
-	<form action="<?=BASE_URL?>report/Bitacora_Veterinarios" method="POST">
+	<form action="<?=BASE_URL?>report/Bitacora_Veterinarios" target="_blank" method="POST">
 		<label>Veterinarios</label>
-		<select  name="Columna">
+		<select name="Columna">
 				<option value="0">ID Veterinario</option>
 				<option value="1">Nombre</option>
 				<option value="2">Visibilidad</option>
 				<option value="3">Quien lo Registro</option>
 			</select>
 			<input name="Filtro"></input>
+			<label>Visibilidad veterinarios</label>
+		<select name="Visible">
+				<option value="3">Todos</option>
+				<option value="1">Visibles</option>
+				<option value="0">Ocultos</option>
+		</select>
 			<button name="Reporte" value="Veterinarios">Generar Reporte</button>
-		</form>
+	</form>
 	</div>
 
     <div id="Usuarios" class="col s12">
-	<form action="<?=BASE_URL?>report/Bitacora_Usuarios" method="POST">
+	<form action="<?=BASE_URL?>report/Bitacora_Usuarios" target="_blank" method="POST">
 			<label>Usuarios</label>
 			<select name="Columna">
 				<option value="0">Cedula</option>
@@ -65,7 +90,7 @@ echo "Pagina para la toma de decision acerca de que tipo de reporte se quiere pr
 	</div>
 
     <div id="Movimientos" class="col s12">
-	<form action="<?=BASE_URL?>report/Bitacora_Movimientos" method="POST">
+	<form action="<?=BASE_URL?>report/Bitacora_Movimientos" target="_blank" method="POST">
 		<label>Movimientos</label>
 		<select name="Columna">
 				<option value="0">ID Bitacora</option>
@@ -80,7 +105,7 @@ echo "Pagina para la toma de decision acerca de que tipo de reporte se quiere pr
 	</div>
 	
 	<div id="Bitacora" class="col s12">
-	<form action="<?=BASE_URL?>report/Bitacora_General" method="POST">
+	<form action="<?=BASE_URL?>report/Bitacora_General" target="_blank" method="POST">
 		<label>Bitacora</label>
 		<select name="Columna">
 				<option value="0">ID Bitacora</option>
@@ -98,186 +123,4 @@ echo "Pagina para la toma de decision acerca de que tipo de reporte se quiere pr
   
   
   
-  <!--De una u otra forma vamos a necesitar el script de ocultar o mostrar inputs-->
-  
-  <script>
-	  let opciones  = document.getElementById("opciones")
-	  let cajaTexto = document.getElementById("color")
-	  
-	  opciones.addEventListener("change", () => {
-		let eleccion = opciones.options[opciones.selectedIndex].text
-		
-		if(eleccion === "Negro") {
-		  cajaTexto.style.display = "none"
-		} else {
-		  cajaTexto.style.display = "inline"
-		}
-	  })
-  </script>
-  
-  
-  <!--
-	Re-Adaptar
-	
-	 <form method="POST">
-    
-         <select id="opciones" name="opcion">
-            <option>---</option>
-            <option>Negro</option>
-            <option>Color</option>
-         </select>
-    
-         <input id="color" name="color" type="text"></input>
-    
-    <button type="submit">Guardar</button>
-    </form>
-    
-    <script>
-      let opciones  = document.getElementById("opciones")
-      let cajaTexto = document.getElementById("color")
-      
-      opciones.addEventListener("change", () => {
-        let eleccion = opciones.options[opciones.selectedIndex].text
-        
-        if(eleccion === "Negro") {
-          cajaTexto.style.display = "none"
-        } else {
-          cajaTexto.style.display = "inline"
-        }
-      })
-	  
-	  
-
-    El js si sirve puede funcionar para los filtros
-         <select id="opciones" name="opcion">
-			<option>Ninguno</option>
-            <option>Animales</option>
-            <option>Veterinarios</option>
-            <option>Usuarios</option>
-			<option>Movimientos</option>
-         </select>
-		 
-    <div id="Animales" style="display: none">
-		<form action="<?=BASE_URL?>report/Bitacora_Animales" method="POST">
-			<label>Animales</label>
-			<select name="Columna">
-				<option value="0">ID de Animal</option>
-				<option value="1">Nombre</option>
-				<option value="2">Año Nacimiento</option>
-				<option value="3">Fecha Ingreso</option>
-				<option value="4">Raza</option>
-				<option value="5">Tamaño</option>
-				<option value="6">ID de albergue</option>
-				<option value="7">Nombre de Albergue</option>
-				<option value="8">Tipo de animal</option>
-				<option value="9">Estado</option>
-			</select>
-			<input name="Filtro"></input>
-			<button>Generar Reporte</button>
-		</form>
-	</div>
-	
-	<div id="Veterinarios" style="display: none">
-		<form action="" method="POST">
-		<label>Veterinarios</label>
-		<select  name="Columna">
-				<option value="0">ID Veterinario</option>
-				<option value="1">Nombre</option>
-				<option value="2">Visibilidad</option>
-				<option value="3">Quien lo Registro</option>
-			</select>
-			<input name="Filtro"></input>
-			<button>Generar Reporte</button>
-		</form>
-		</div>
-		
-		<div id="Usuarios" style="display: none">
-		<form action="" method="POST">
-			<label>Usuarios</label>
-			<select name="Columna">
-				<option value="0">Cedula</option>
-				<option value="1">Nombre</option>
-				<option value="2">Rol</option>
-				<option value="3">Activo</option>
-			</select>
-			<input name="Filtro"></input>
-			<button>Generar Reporte</button>
-		</form>
-		</div>
-		
-		<div id="Movimientos" style="display: none">
-		<form action="" method="POST">
-		<label>Movimientos</label>
-		<select name="Columna">
-				<option value="0">ID Bitacora</option>
-				<option value="1">Usuario Accion</option>
-				<option value="2">Modulo afectado</option>
-				<option value="3">Accion Realizada</option>
-				<option value="4">Fecha Accion</option>
-			</select>
-			<input name="Filtro"></input>
-			<button>Generar Reporte</button>
-		</form>
-		</div>
-		
-		<a href="" class="btn" name="Todo">Ver Bitacora Completa</a>
-
-    
-    <script>
-      let opciones  = document.getElementById("opciones")
-	  
-	  let Animales = document.getElementById("Animales")
-	  let Veterinarios = document.getElementById("Veterinarios")
-	  let Usuarios = document.getElementById("Usuarios")
-	  let Movimientos = document.getElementById("Movimientos")
-      
-      opciones.addEventListener("change", () => {
-        let eleccion = opciones.options[opciones.selectedIndex].text
-		
-		switch (eleccion){
-			case "Ninguno":
-							Animales.style.display="none"
-							Veterinarios.style.display = "none"
-							Usuarios.style.display = "none"
-							Movimientos.style.display = "none"
-			break;
-			
-			case "Animales":
-							Animales.style.display="inline"
-							Veterinarios.style.display = "none"
-							Usuarios.style.display = "none"
-							Movimientos.style.display = "none"
-			break;
-			
-			case "Veterinarios":
-							Animales.style.display="none"
-							Veterinarios.style.display = "inline"
-							Usuarios.style.display = "none"
-							Movimientos.style.display = "none"
-			break;
-			
-			case "Usuarios":
-							Animales.style.display="none"
-							Veterinarios.style.display = "none"
-							Usuarios.style.display = "inline"
-							Movimientos.style.display = "none"
-			break;
-			
-			case "Movimientos":
-							Animales.style.display="none"
-							Veterinarios.style.display = "none"
-							Usuarios.style.display = "none"
-							Movimientos.style.display = "inline"
-			break;
-			
-			default:
-							Animales.style.display="none"
-							Veterinarios.style.display = "none"
-							Usuarios.style.display = "none"
-							Movimientos.style.display = "none"
-			break;
-		}
-      })
-    </script>
-	  
-  -->
+ 

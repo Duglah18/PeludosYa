@@ -39,43 +39,38 @@ https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3D
 		//https://codigoroot.net/blog/obtener-fecha-y-hora-en-php-con-date/#:~:text=Obtener%20fecha%20actual%20php%20con%20formato%20(Dia%2FMes%2FA%C3%B1o)&text=%24fechaActual%20%3D%20date('d%2Fm%2Fy')%3B
 		
 	$resultados =  $this->ObtenData("SELECT a.id_animal, a.nombre, a.anio_nac, a.img, a.descripcion,
-							a.fecha_ingreso, b.nombre as nombreRaza, c.nombre AS nombreTamano,
-							d.nombre AS nombreAlbergue, e.nombre AS nombreTipoAnimal,
-							COUNT(f.animal_id) AS totalAdopciones, a.visible
-					FROM animal a
-					INNER JOIN raza b 
-							ON a.raza_id = b.id_raza
-					INNER JOIN tamanio c 
-							ON a.tamanio_id = c.id_tamanio
-					INNER JOIN albergue d 
-							ON a.albergue_id = d.id_albergue
-					INNER JOIN tipo_animal e 
-							ON b.id_tipo_animal = e.id_tipo
-					LEFT JOIN adopcion f 
-							ON a.id_animal = f.animal_id
-					WHERE (
-							($columna = 0 AND a.id_animal = CASE WHEN '$filtro' = '' THEN a.id_animal ELSE '$filtro' END) OR 
-							($columna = 1 AND a.nombre LIKE '$filtro' + '%') OR
-							($columna = 2 AND a.anio_nac BETWEEN '$desde' AND '$hasta') OR 
-							($columna = 3 AND a.fecha_ingreso BETWEEN '$desde' AND '$hasta') OR 
-							($columna = 4 AND b.id_raza = CASE WHEN '$filtro' = 0 THEN b.id_raza ELSE '$filtro' END) OR 
-							($columna = 5 AND c.id_tamanio = CASE WHEN '$filtro' = 0 THEN c.id_tamanio ELSE '$filtro' END) OR
-							($columna = 6 AND a.albergue_id = CASE WHEN '$filtro' = 0 THEN a.albergue_id ELSE '$filtro' END AND f.estado = CASE WHEN $estatus = 0 THEN f.estado ELSE $estatus END) OR
-							($columna = 7 AND d.nombre LIKE '$filtro' + '%') OR
-							($columna = 8 AND  e.id_tipo = '$filtro')
-							)
-					GROUP BY a.id_animal, a.nombre, a.anio_nac, a.img, a.descripcion,
-					a.fecha_ingreso, b.nombre, c.nombre,
-					d.nombre, e.nombre");//Estas buscando menores numeros de adopcion que estas ingresando o cuantos?
-		return $resultados;//Se podria colocar un and como en los ejemplos
-	}// OR ($columna = 9 AND COUNT(f.animal_id) AS totalAdopciones  < '$filtro')Problema
+											a.fecha_ingreso, b.nombre as nombreRaza, c.nombre AS nombreTamano,
+											d.nombre AS nombreAlbergue, e.nombre AS nombreTipoAnimal,
+											a.visible, CASE WHEN f.estado IN ('1','2') OR f.estado IS NULL THEN 'No' ELSE 'Si' END AS EstadoAdop
+									FROM animal a
+									INNER JOIN raza b 
+											ON a.raza_id = b.id_raza
+									INNER JOIN tamanio c 
+											ON a.tamanio_id = c.id_tamanio
+									INNER JOIN albergue d 
+											ON a.albergue_id = d.id_albergue
+									INNER JOIN tipo_animal e 
+											ON b.id_tipo_animal = e.id_tipo
+									LEFT JOIN adopcion f 
+											ON a.id_animal = f.animal_id
+									WHERE (
+											($columna = 0 AND a.id_animal = CASE WHEN '$filtro' = '' THEN a.id_animal ELSE '$filtro' END) OR 
+											($columna = 1 AND a.nombre LIKE '$filtro%') OR
+											($columna = 2 AND a.anio_nac  = '$filtro') OR 
+											($columna = 3 AND a.fecha_ingreso BETWEEN '$desde' AND '$hasta') OR 
+											($columna = 4 AND b.nombre LIKE CASE WHEN '$filtro' = '' THEN b.nombre ELSE '$filtro%' END) OR 
+											($columna = 5 AND c.nombre LIKE CASE WHEN '$filtro' = '' THEN c.nombre ELSE '$filtro%' END) OR
+											($columna = 6 AND a.albergue_id = CASE WHEN '$filtro' = '' THEN a.albergue_id ELSE '$filtro' END AND f.estado = CASE WHEN '$estatus' = 0 THEN f.estado ELSE '$estatus' END) OR
+											($columna = 7 AND d.nombre LIKE '$filtro' + '%') OR
+											($columna = 8 AND e.nombre LIKE '$filtro%') OR
+											($columna = 9 AND f.estado = CASE WHEN '$estatus' = 0 THEN f.estado ELSE '$estatus' END)
+											)");
+		return $resultados;
+	}
 	//https://es.stackoverflow.com/questions/351356/si-el-select-tiene-valor-negro-ocultar-input
 	
-	public function TotalAnimales($columna, $filtro, $desde = 2022, $hasta = 2022){
-		$resultados = $resultados =  $this->ObtenData("SELECT a.id_animal, a.nombre, a.anio_nac, a.img, a.descripcion,
-															a.fecha_ingreso, b.nombre as nombreRaza, c.nombre AS nombreTamano,
-															d.nombre AS nombreAlbergue, e.nombre AS nombreTipoAnimal,
-															COUNT(f.animal_id) AS totalAdopciones
+	public function TotalAnimales($columna = 0, $filtro = "", $desde = "2022", $hasta = "2022", $estatus = 0){
+		$resultados = $resultados =  $this->ObtenData("SELECT COUNT(*) AS TotalAnimales
 														FROM animal a
 														INNER JOIN raza b ON a.raza_id = b.id_raza
 														INNER JOIN tamanio c ON a.tamanio_id = c.id_tamanio
@@ -83,20 +78,18 @@ https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3D
 														INNER JOIN tipo_animal e ON b.id_tipo_animal = e.id_tipo
 														LEFT JOIN adopcion f ON a.id_animal = f.animal_id
 														WHERE (
-																($columna = 0 AND a.id_animal = CASE WHEN '$filtro' = '' THEN a.id_animal ELSE '$filtro' END) OR 
-																($columna = 1 AND a.nombre LIKE '$filtro' + '%') OR
-																($columna = 2 AND a.anio_nac BETWEEN '$desde' AND '$hasta') OR 
-																($columna = 3 AND a.fecha_ingreso BETWEEN '$desde' AND '$hasta') OR 
-																($columna = 4 AND b.raza_id = CASE WHEN '$filtro' = 0 THEN b.raza_id ELSE '$filtro' END) OR --Raza--Aca se implementa un combobox si se puede si no ps vere
-																($columna = 5 AND c.id_tamanio = CASE WHEN '$filtro' = 0 THEN c.id_tamanio ELSE '$filtro' END) OR --Tamanio
-																($columna = 6 AND a.albergue_id = CASE WHEN '$filtro' = 0 THEN a.albergue_id ELSE '$filtro' END) OR --Albergue podria ser codigo --si saliera un cmb podria sacarle una consulta
-																($columna = 7 AND d.nombre LIKE '$filtro' + '%') OR --Albergue nombre
-																($columna = 8 AND  e.id_tipo = '$filtro') OR --Tipo Animal
-																(($columna = 9 AND totalAdopciones  < '$filtro') --Numero de adopciones
+															($columna = 0 AND a.id_animal = CASE WHEN '$filtro' = '' THEN a.id_animal ELSE '$filtro' END) OR 
+															($columna = 1 AND a.nombre LIKE '$filtro%') OR
+															($columna = 2 AND a.anio_nac  = '$filtro') OR 
+															($columna = 3 AND a.fecha_ingreso BETWEEN '$desde' AND '$hasta') OR 
+															($columna = 4 AND b.nombre LIKE CASE WHEN '$filtro' = '' THEN b.nombre ELSE '$filtro%' END) OR 
+															($columna = 5 AND c.nombre LIKE CASE WHEN '$filtro' = '' THEN c.nombre ELSE '$filtro%' END) OR
+															($columna = 6 AND a.albergue_id = CASE WHEN '$filtro' = '' THEN a.albergue_id ELSE '$filtro' END AND f.estado = CASE WHEN '$estatus' = 0 THEN f.estado ELSE '$estatus' END) OR
+															($columna = 7 AND d.nombre LIKE '$filtro' + '%') OR
+															($columna = 8 AND e.nombre LIKE '$filtro%') OR
+															($columna = 9 AND f.estado = CASE WHEN '$estatus' = 0 THEN f.estado ELSE '$estatus' END)
 															  )
-														GROUP BY a.id_animal, a.nombre, a.anio_nac, a.img, a.descripcion,
-														a.fecha_ingreso, b.nombre, c.nombre,
-														d.nombre, e.nombre");
+														");
 									
 		return $resultados[0]['TotalAnimales'];
 	}
@@ -142,6 +135,14 @@ https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3D
 														($columna = 7 AND d.nombre LIKE '$filtro' + '%') OR --Albergue nombre
 														($columna = 8 AND e.id_tipo = '$filtro')--Tipo Animal
 													  )");
+	}
+	
+	public function TotalesAdopciones($filtro, $desde = 2022, $hasta = 2022, $estatus = 0){
+		return $resultados =  $this->ObtenData("SELECT COUNT(*) AS TotalCanceladas
+																	FROM adopcion a
+																	WHERE (
+																			estado = CASE WHEN '$filtro' = '' THEN estado ELSE '$filtro' END
+																		)");
 	}
 	
 	public function Usuarios($columna, $filtro){//deberias hacerle unos inners
@@ -233,28 +234,27 @@ https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3D
 	}
 	//las columnas son basicamente el select que va a tener el buscar reporte veterinario
 	//no especificamos en que direccion tiene asi que sera dificil hacerle un buscar
-	public function Veterinarios($columna, $filtro){
-		$this->ObtenData("SELECT id_veterinario, nombre, tlf, direccion, img, visible, usuario_Rveterinario
-						FROM veterinario
-						WHERE (
-								($columna = 0 AND id_veterinario = CASE WHEN $filtro = '' THEN id_veterinario ELSE '$filtro' END) OR
-								($columna = 1 AND nombre LIKE '$filtro' + '%' ) OR
-								($columna = 2 AND tlf = CASE WHEN '$filtro' = '' THEN tlf ELSE '$filtro' END) OR
-								($columna = 3 AND visible = CASE WHEN '$filtro' = '' THEN visible ELSE CASE WHEN '$filtro' LIKE  'visible' THEN 1 ELSE 0 END END) OR 
-								($columna = 4 AND usuario_Rveterinario = CASE WHEN '$filtro' = '' THEN usuario_Rveterinario ELSE '$filtro' END)
-							  )");
+	public function Veterinarios($columna = 0, $filtro = "",$visibilidad = 3){
+		return $this->ObtenData("SELECT id_veterinario, nombre, tlf, direccion, img, visible, usuario_Rveterinario
+								FROM veterinario
+								WHERE (
+										($columna = 0 AND id_veterinario = CASE WHEN '$filtro' = '' THEN id_veterinario ELSE '$filtro' END) OR
+										($columna = 1 AND nombre LIKE '$filtro%') OR
+										($columna = 2 AND visible = CASE WHEN '$visibilidad' = '3' THEN visible ELSE '$visibilidad' END) OR 
+										($columna = 3 AND usuario_Rveterinario = CASE WHEN '$filtro' = '' THEN usuario_Rveterinario ELSE '$filtro' END)
+									)");
 	}
 	//me parecio muy tonto buscar a un veterinario por su tlf 
 	//Linea borrada ($columna = 2 AND tlf = CASE WHEN '$filtro' = '' THEN tlf ELSE '$filtro' END) OR Fecha: 16/11/2022
-	public function TotalVeterinarios($columna, $filtro){
+	public function TotalVeterinarios($columna = 0, $filtro = "",$visibilidad = 3){
 		$resultados = $this->ObtenData("SELECT COUNT(*) AS TotalVeterinarios
-									FROM veterinario
-									WHERE (
-											($columna = 0 AND id_veterinario = CASE WHEN $filtro = '' THEN id_veterinario ELSE '$filtro' END) OR
-											($columna = 1 AND nombre LIKE '$filtro' + '%' ) OR
-											($columna = 2 AND visible = CASE WHEN '$filtro' = '' THEN visible ELSE CASE WHEN '$filtro' LIKE  'visible' THEN 1 ELSE 0 END END) OR 
+										FROM veterinario
+										WHERE (
+											($columna = 0 AND id_veterinario = CASE WHEN '$filtro' = '' THEN id_veterinario ELSE '$filtro' END) OR
+											($columna = 1 AND nombre LIKE '$filtro%') OR
+											($columna = 2 AND visible = CASE WHEN '$visibilidad' = '3' THEN visible ELSE '$visibilidad' END) OR 
 											($columna = 3 AND usuario_Rveterinario = CASE WHEN '$filtro' = '' THEN usuario_Rveterinario ELSE '$filtro' END)
-										  )");
+											)");
 		return $resultados [0]['TotalVeterinarios'];
 	}
 	

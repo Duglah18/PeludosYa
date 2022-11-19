@@ -11,6 +11,7 @@ if($adopciones == false) { ?>
                     <th>ID</th>
                     <th>Fecha de peticion</th>
                     <th>Animal</th>
+                    <th>Adoptado</th>
                     <th>Usuario</th>
 					<th>Historial</th><!--¿Han sido cancelada alguna vez una de sus peticiones de adopcion?-->
                     <th>Contacto</th>
@@ -25,6 +26,7 @@ if($adopciones == false) { ?>
                 <td><?= $adopcion['id_adopcion']; ?></td>
                 <td><?= $fecha = date("d-m-Y",strtotime($adopcion['fecha_adopcion'])); ?></td><!--ORDENA LA FECHA -->
                 <td><?= $adopcion['nombreanimal']; ?></td>
+                <td><?= $adocion['']; ?></td>
                 <td><?= $adopcion['nombreusuario']; ?></td>
 				<td><?= $detalle =  $adopcion['detalles'] == "Registro Usuario"? "Sin problemas Aparentes":$adopcion['detalles'] ?></td><!--Si ha sido marcado con anterioridad al intentar adoptar una mascota-->
                 <td><?= $adopcion['telefono']; ?></td>
