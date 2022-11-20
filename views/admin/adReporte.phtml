@@ -8,11 +8,11 @@ echo "Pagina para la toma de decision acerca de que tipo de reporte se quiere pr
 <div class="row">
     <div class="col s12">
       <ul class="tabs">
-        <li class="tab col s3"><a class="active" href="#Animales">Animales</a></li>
-        <li class="tab col s3"><a href="#Veterinarios">Veterinarios</a></li>
-        <li class="tab col s3"><a href="#Usuarios">Usuarios</a></li>
-        <li class="tab col s3"><a href="#Movimientos">Movimientos</a></li>
-        <li class="tab col s3"><a href="#Bitacora">Bitacora</a></li>
+        <li class="tab col s2"><a class="active" href="#Animales">Animales</a></li>
+        <li class="tab col s2"><a href="#Veterinarios">Veterinarios</a></li>
+        <li class="tab col s2"><a href="#Usuarios">Usuarios</a></li>
+        <li class="tab col s2"><a href="#Movimientos">Inicios de Sesión</a></li>
+        <li class="tab col s2"><a href="#Bitacora">Bitacora</a></li>
       </ul>
     </div>
 
@@ -23,13 +23,13 @@ echo "Pagina para la toma de decision acerca de que tipo de reporte se quiere pr
 				<option value="0">ID de Animal</option>
 				<option value="1">Nombre</option>
 				<option value="2">Año Nacimiento</option>
-				<option value="3">Fecha Ingreso</option><!--Vendria bien un Dtp Una wea de estas de tiempo ps o mas bien 2 pq se necesitan 2 para comparar-->
-				<option value="4">Raza</option><!--Otro Combo o select para mostrar las razas-->
-				<option value="5">Tamaño</option><!--Lo anterior-->
+				<option value="3">Fecha Ingreso</option>
+				<option value="4">Raza</option>
+				<option value="5">Tamaño</option>
 				<option value="6">ID de albergue</option>
 				<option value="7">Nombre de Albergue</option>
-				<option value="8">Tipo de animal</option><!--Otro Select-->
-				<option value="9">Estado</option><!--Otro Select-->
+				<option value="8">Tipo de animal</option>
+				<option value="9">Estado</option>
 			</select>
 			<div id="generico">
 			<input name="Filtro" class="col s6"></input>
@@ -84,7 +84,23 @@ echo "Pagina para la toma de decision acerca de que tipo de reporte se quiere pr
 				<option value="2">Rol</option>
 				<option value="3">Activo</option>
 			</select>
+
 			<input name="Filtro"></input>
+			<label>Buscar por Rol</label>
+			<select name="busquedaRol">
+				<option value="0">Todos</option>
+			<?php foreach($roles as $rol){ ?>
+				<option value="<?= $rol['id_rol']?>"><?= $rol['nombre']?></option>
+			<?php } ?>
+			</select>
+			<br>
+			<label>Buscar por Activo</label>
+			<select name="busquedaAct">
+				<option value="2">Todos</option>
+				<option value="1">Activos</option>
+				<option value="0">Bloqueados</option>
+			</select>
+				
 			<button name="Reporte" value="Usuarios">Generar Reporte</button>
 		</form>
 	</div>
@@ -99,7 +115,24 @@ echo "Pagina para la toma de decision acerca de que tipo de reporte se quiere pr
 				<option value="3">Accion Realizada</option>
 				<option value="4">Fecha Accion</option>
 			</select>
+			<br>
+			<label>Busqueda</label>
 			<input name="Filtro"></input>
+			<br>
+			<label>Acciones realizadas</label>
+			<select name="accion">
+				<option value="Todos">Todos</option>
+				<option value="Logueandose">Iniciar sesión</option>
+				<option value="Cerrar Sesion">Cerrar Sesión</option>
+			</select>
+			<div id="fecha">
+			<label for="">Desde</label>
+			<input type="date" value="<?= date('Y-m-d'); ?>" name="Desde" class="col s6"> 
+			<br>
+			<label for="">Hasta</label>
+			<br>
+			<input type="date" value="<?= date('Y-m-d'); ?>" name="Hasta" class="col s6">
+			</div>
 			<button name="Reporte" value="Movimientos">Generar Reporte</button>
 		</form>
 	</div>
@@ -115,6 +148,23 @@ echo "Pagina para la toma de decision acerca de que tipo de reporte se quiere pr
 				<option value="4">Fecha Accion</option>
 			</select>
 			<input name="Filtro"></input>
+			<div id="fecha">
+			<label for="">Desde</label>
+			<input type="date" value="<?= date('Y-m-d'); ?>" name="Desde" class="col s6"> 
+			<br>
+			<label for="">Hasta</label>
+			<br>
+			<input type="date" value="<?= date('Y-m-d'); ?>" name="Hasta" class="col s6">
+			</div>
+			<br>
+			<label for="">Accion</label>
+			<select name="acciones">
+				<option value="Todos">Todos</option>
+				<option value="INSERT">Insercion</option>
+				<option value="UPDATE">Actualizacion</option>
+				<option value="Logueandose">Login</option>
+				<option value="Cerrar Sesion">Cerrar Sesion</option>
+			</select>
 			<button name="Reporte" value="Bitacora">Generar Reporte</button>
 		</form>
 	</div>

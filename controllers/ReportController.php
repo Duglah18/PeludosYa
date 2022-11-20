@@ -59,14 +59,18 @@ class ReportController extends GeneralController{
 		$objReports = $this->LoadModel("ReportModel");
 		$columna = isset($_POST['Columna'])? $_POST['Columna']: 0;
 		$filtro = isset($_POST['Filtro'])? $_POST['Filtro']:"";
-		$desde = isset($_POST['Desde'])?$_POST['Desde']: date('Y-m-d');;
-		$hasta = isset($_POST['Hasta'])?$_POST['Hasta']: date('Y-m-d');;
+		$desde = isset($_POST['Desde'])?$_POST['Desde']: date('Y-m-d');
+		$hasta = isset($_POST['Hasta'])?$_POST['Hasta']: date('Y-m-d');
 		$estatus = isset($_POST['estatus'])?$_POST['estatus']:0;
 		
 		$animales = $objReports->Animales($columna, $filtro, $desde, $hasta, $estatus);
 		$numTotalAnimales = $objReports->TotalAnimales($columna, $filtro, $desde, $hasta, $estatus);
 		$TotalAdoptados = $objReports->TotalAnimales(9,3);
 		$adopcionescanceladas = $objReports->TotalesAdopciones(2);
+
+		$_SESSION['numtotAnimales'] = $numTotalAnimales;
+		$_SESSION['TotAdop'] = $TotalAdoptados;
+		$_SESSION['AdopCanc'] = $adopcionescanceladas[0][0];
 
 		/*----------Inicio del Documento PDF----------*/
 		$pdf = new PDF_MC_Table('L','mm',array(350,200));
@@ -100,13 +104,7 @@ class ReportController extends GeneralController{
 			$pdf->Cell(0,10,"No existen Datos en la Base de Datos Que correspondan a su busqueda.",1,1,'C');
 		}
 
-		$pdf->SetXY(10, 30);
-		$pdf->Cell(50, 10, "Peludos Totales: ". $numTotalAnimales, 0, 1, 'L');
-		$pdf->SetXY(10, 35);
-		$pdf->Cell(50, 10, "Peludos Adoptados Totales en todo el sistema: " . $TotalAdoptados, 0, 1, 'L');
-		$pdf->SetXY(10, 40);
-		$pdf->Cell(50, 10, "Adopciones Canceladas En todo el sistema: " . $adopcionescanceladas[0]['TotalCanceladas'], 0, 1, 'L');
-
+		
 		return $pdf->Output();
 	}
 	
@@ -128,7 +126,7 @@ class ReportController extends GeneralController{
 		
 		$veterinarios = $objReports->Veterinarios($columna,$filtro,$visibilidad);
 		$totalVeterinarios = $objReports->TotalVeterinarios($columna,$filtro,$visibilidad);
-		
+		$_SESSION['TotVeter'] = $totalVeterinarios;
 		/*----------Inicio del Documento PDF----------*/
 		$pdf = new PDF_MC_Table('L','mm',array(350,200));
 		$pdf->AliasNbPages();
@@ -156,14 +154,6 @@ class ReportController extends GeneralController{
 			$pdf->Cell(0,10,"No existen Datos en la Base de Datos Que correspondan a su busqueda.",1,1,'C');
 		}
 		
-		$pdf->SetXY(10, 30);
-		$pdf->Cell(50, 10, "Veterinarios Totales: ".$totalVeterinarios, 0, 1, 'L');
-		$pdf->SetXY(10, 35);
-		$pdf->Cell(50, 10, "Peludos Adoptados Totales: " . $visibilidad, 0, 1, 'L');
-		$pdf->SetXY(10, 40);
-		$pdf->Cell(50, 10, "Adopciones Canceladas: ", 0, 1, 'L');
-
-		
 		return $pdf->Output();
 	}
 	
@@ -178,12 +168,15 @@ class ReportController extends GeneralController{
 		$this->Combrueba();
 		
 		$objReports = $this->LoadModel("ReportModel");
-		$columna = $_POST['Columna'];
+		$columna = isset($_POST['Columna'])? $_POST['Columna']:0;
 		$filtro = isset($_POST['Filtro'])? $_POST['Filtro']:"";
-		
-		$Usuarios = $objReports->Usuarios($columna, $filtro);
-		$TotalUsuarios = $objReports->TotalUsuarios($columna, $filtro);
-		
+		$rol = isset($_POST['busquedaRol'])? $_POST['busquedaRol']: 0;
+		$activos = isset($_POST['busquedaAct'])? $_POST['busquedaAct']: 2;
+
+		$Usuarios = $objReports->Usuarios($columna, $filtro, $rol,$activos);
+		$TotalUsuarios = $objReports->TotalUsuarios($columna, $filtro, $rol,$activos);
+		$_SESSION['Num'] = $TotalUsuarios[0]['TotalUsuarios'];
+
 		/*----------Inicio del Documento PDF----------*/
 		$pdf = new PDF_MC_Table('L','mm',array(350,200));
 		$pdf->AliasNbPages();
@@ -191,7 +184,7 @@ class ReportController extends GeneralController{
 		$pdf->SetFont('Times','',12);
 		
 		//Colocar el tamaño de las columnas de las celdas de la tabla (7)
-		$pdf->SetWidths(Array(25,35,35,35,45,45,34));
+		$pdf->SetWidths(Array(35,60,35,60,45,55,40));
 		
 		//Colocar la altura de la linea
 		$pdf->SetLineHeight(5);
@@ -211,13 +204,6 @@ class ReportController extends GeneralController{
 		} else {
 			$pdf->Cell(0,10,"No existen Datos en la Base de Datos Que correspondan a su busqueda.",1,1,'C');
 		}
-
-		$pdf->SetXY(10, 30);
-		$pdf->Cell(50, 10, "Peludos Totales: ", 0, 1, 'L');
-		$pdf->SetXY(10, 35);
-		$pdf->Cell(50, 10, "Peludos Adoptados Totales: ", 0, 1, 'L');
-		$pdf->SetXY(10, 40);
-		$pdf->Cell(50, 10, "Adopciones Canceladas: ", 0, 1, 'L');
 		
 		return $pdf->Output();
 	}
@@ -233,14 +219,20 @@ class ReportController extends GeneralController{
 		$this->Combrueba();
 		
 		$objReports = $this->LoadModel("ReportModel");
-		$columna = $_POST['Columna'];
+		$accion = isset($_POST['accion'])? $_POST['accion']:"Todos";
+		$columna = isset($_POST['Columna'])? $_POST['Columna']: 0;
 		$filtro = isset($_POST['Filtro'])? $_POST['Filtro']:"";
-		$desde = isset($_POST['Desde'])?$_POST['Desde']:0;
-		$hasta = isset($_POST['Hasta'])?$_POST['Hasta']:0;
+		$desde = isset($_POST['Desde'])?$_POST['Desde']:date('Y-m-d');
+		$hasta = isset($_POST['Hasta'])?$_POST['Hasta']:date('Y-m-d');
 		
-		$Movimientos = $$objReports->Movimientos($columna, $filtro,$desde, $hasta);
-		$TotalMovimientos = $objReports->ContadorMovimientos($columna, $filtro,$desde, $hasta);
-		
+		$Movimientos = $objReports->Movimientos($columna, $filtro,$desde, $hasta, $accion);
+		$TotalMovimientos = $objReports->ContadorMovimientos($columna, $filtro,$desde, $hasta, "", $accion);
+		$TotalCierres = $objReports->ContadorMovimientos(2,'Cerrar Sesion',$desde, $hasta, $filtro,$accion);
+		$TotalLogins = $objReports->ContadorMovimientos(2,'Usuario Logueandose',$desde, $hasta, $filtro,$accion);
+
+		$_SESSION['num'] = $TotalMovimientos[0]['TotalMovimientos'];
+		$_SESSION['closes'] = $TotalCierres[0]['TotalMovimientos'];
+		$_SESSION['logins'] = $TotalLogins[0]['TotalMovimientos'];
 		/*----------Inicio del Documento PDF----------*/
 		$pdf = new PDF_MC_Table('L','mm',array(350,200));
 		$pdf->AliasNbPages();
@@ -248,7 +240,7 @@ class ReportController extends GeneralController{
 		$pdf->SetFont('Times','',12);
 		
 		//Colocar el tamaño de las columnas de las celdas de la tabla (5)
-		$pdf->SetWidths(Array(15,35,35,35,35));
+		$pdf->SetWidths(Array(35,50,60,75,45));
 		
 		///Colocar la altura de la linea
 		$pdf->SetLineHeight(5);
@@ -264,16 +256,8 @@ class ReportController extends GeneralController{
 				));
 			}
 		} else {
-			$pdf->Cell(0,10,"No existen Datos en la Base de Datos Que correspondan a su busqueda.",1,1,'C');
+			$pdf->Cell(0,10,"No existen Datos en la Base de Datos Que correspondan a su busqueda. ",1,1,'C');
 		}
-		
-		$pdf->SetXY(10, 30);
-		$pdf->Cell(50, 10, "Peludos Totales: ", 0, 1, 'L');
-		$pdf->SetXY(10, 35);
-		$pdf->Cell(50, 10, "Peludos Adoptados Totales: ", 0, 1, 'L');
-		$pdf->SetXY(10, 40);
-		$pdf->Cell(50, 10, "Adopciones Canceladas: ", 0, 1, 'L');
-
 		return $pdf->Output();
 	}
 	
@@ -288,12 +272,15 @@ class ReportController extends GeneralController{
 		$this->Combrueba();
 		
 		$objReports = $this->LoadModel("ReportModel");
-		$columna = $_POST['Columna'];
+		$columna = isset($_POST['Columna'])?$_POST['Columna']:0;
 		$filtro = isset($_POST['Filtro'])? $_POST['Filtro']:"";
+		$desde =isset($_POST['Desde'])? $_POST['Desde']:"";
+		$hasta = isset($_POST['Hasta'])? $_POST['Hasta']:"";
+		$acciones = isset($_POST['acciones'])? $_POST['acciones']: "Todos";
 		//Creo que lo que manda la pagina de reportes es nada :V porque no hay formulario pero podemos hacerlo
-		$Bitacoras = $objReports->Bitacora($columna, $filtro);
-		$TotalBitacoras = $objReports->TotalBitacora($columna, $filtro);
-		
+		$Bitacoras = $objReports->Bitacora($columna, $filtro, $desde, $hasta,$acciones);
+		$TotalBitacoras = $objReports->TotalBitacora($columna, $filtro,$desde,$hasta,$acciones);
+		$_SESSION['num'] = $TotalBitacoras[0]['totalBitacora'];
 		/*----------Inicio del Documento PDF----------*/
 		$pdf = new PDF_MC_Table('L','mm',array(350,200));
 		$pdf->AliasNbPages();
@@ -301,7 +288,7 @@ class ReportController extends GeneralController{
 		$pdf->SetFont('Times','',12);
 		
 		//Colocar el tamaño de las columnas de las celdas de la tabla (10)
-		$pdf->SetWidths(Array(15,35,20,35,45,35,35,35,35,34));
+		$pdf->SetWidths(Array(30,35,45,70,55,55,40));
 		
 		///Colocar la altura de la linea
 		$pdf->SetLineHeight(5);
@@ -313,6 +300,8 @@ class ReportController extends GeneralController{
 					utf8_decode($bitacora['usuario_bit']),
 					utf8_decode($bitacora['modulo_afectado']),
 					utf8_decode($bitacora['accion_realizada']),
+					utf8_decode($bitacora['valor_anterior']),
+					utf8_decode($bitacora['valor_actual']),
 					$fecha = date("d-m-Y",strtotime($bitacora['fecha_accion']))
 				));
 			}
@@ -320,13 +309,6 @@ class ReportController extends GeneralController{
 			$pdf->Cell(0,10,"No existen Datos en la Base de Datos Que correspondan a su busqueda.",1,1,'C');
 		}
 		
-		$pdf->SetXY(10, 30);
-		$pdf->Cell(50, 10, "Peludos Totales: ", 0, 1, 'L');
-		$pdf->SetXY(10, 35);
-		$pdf->Cell(50, 10, "Peludos Adoptados Totales: ", 0, 1, 'L');
-		$pdf->SetXY(10, 40);
-		$pdf->Cell(50, 10, "Adopciones Canceladas: ", 0, 1, 'L');
-
 		return $pdf->Output();
 	}
 }

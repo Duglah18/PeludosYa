@@ -37,15 +37,21 @@ class PDF_MC_Table extends FPDF {
 		//sacado de: https://tucafejava.blogspot.com/2018/06/personaliza-tus-reportes-pdf-desde-php.html
 		//prueba
 		
-		
-		
 		//Preguntar a la profesora si es mejor que se repita siempre el header o no 
 		//usa un switch para colcar la parte de arriba de la tabla la cabecera dependiendo del tipo de consulta
 		$this->SetFont('Arial','B',12);
 		switch($_POST['Reporte']){
 			case "Animales":
 				$this->SetTitle('Reportes de Peludos');
-			
+				
+				$this->SetXY(10, 30);
+				$this->Cell(50, 10, "Peludos Totales: ". $_SESSION['numtotAnimales'], 0, 1, 'L');
+				$this->SetXY(10, 35);
+				$this->Cell(50, 10, "Peludos Adoptados Totales en todo el sistema: " . $_SESSION['TotAdop'], 0, 1, 'L');
+				$this->SetXY(10, 40);
+				$this->Cell(50, 10, "Adopciones Canceladas En todo el sistema: " . $_SESSION['AdopCanc'], 0, 1, 'L');
+
+
 				$this->Cell(15, 5, "ID", 1, 0,'C', 0);
 				$this->Cell(40, 5, "Nombre", 1, 0,'C', 0);
 				$this->Cell(20, 5, utf8_decode("Año Nac."), 1, 0,'C', 0);
@@ -60,7 +66,10 @@ class PDF_MC_Table extends FPDF {
 				break;
 			case "Veterinarios":
 				$this->SetTitle('Reportes de Veterinarios');
-				
+					
+				$this->SetXY(10, 30);
+				$this->Cell(50, 10, "Veterinarios Totales: ".$_SESSION['TotVeter'], 0, 1, 'L');
+
 				$this->Cell(30, 5, "ID", 1, 0,'C', 0);
 				$this->Cell(65, 5, "Nombre", 1, 0,'C', 0);
 				$this->Cell(45, 5, utf8_decode("Teléfono"), 1, 0,'C', 0);
@@ -72,31 +81,50 @@ class PDF_MC_Table extends FPDF {
 			case "Usuarios":
 				$this->SetTitle('Reportes de Usuarios');
 				
-				$this->Cell(25, 5, "Cedula", 1, 0,'C', 0);
-				$this->Cell(35, 5, "Nombre", 1, 0,'C', 0);
+				$this->SetXY(10, 30);
+				$this->Cell(50, 10, "Usuarios Totales: " . $_SESSION['Num'], 0, 1, 'L');
+				$this->SetXY(10, 35);
+				$this->Cell(50, 10, "Peludos Adoptados Totales: ", 0, 1, 'L');
+				$this->SetXY(10, 40);
+				$this->Cell(50, 10, "Adopciones Canceladas: ", 0, 1, 'L');
+
+				$this->Cell(35, 5, "Cedula", 1, 0,'C', 0);
+				$this->Cell(60, 5, "Nombre", 1, 0,'C', 0);
 				$this->Cell(35, 5, "Rol", 1, 0,'C', 0);
-				$this->Cell(35, 5, utf8_decode("Dirección"), 1, 0,'C', 0);
+				$this->Cell(60, 5, utf8_decode("Dirección"), 1, 0,'C', 0);
 				$this->Cell(45, 5, utf8_decode("Teléfono"), 1, 0,'C', 0);
-				$this->Cell(45, 5, "Detalles", 1, 0,'C', 0);
-				$this->Cell(34, 5, "Activo", 1, 1,'C', 0);
+				$this->Cell(55, 5, "Detalles", 1, 0,'C', 0);
+				$this->Cell(40, 5, "Activo", 1, 1,'C', 0);
 				break;
 			case "Movimientos":
 				$this->SetTitle('Reportes de Movimientos');
+
+				$this->SetXY(10, 30);
+				$this->Cell(50, 10, "Movimientos Totales Mostrando: " . $_SESSION['num'], 0, 1, 'L');
+				$this->SetXY(10, 35);
+				$this->Cell(50, 10, "Cierres de Session Totales: " . $_SESSION['closes'], 0, 1, 'L');
+				$this->SetXY(10, 40);
+				$this->Cell(50, 10, "Logueos Totales: " . $_SESSION['logins'], 0, 1, 'L');
 				
-				$this->Cell(15, 5, "ID", 1, 0,'C', 0);
-				$this->Cell(35, 5, utf8_decode("Usuario Acción"), 1, 0,'C', 0);
-				$this->Cell(35, 5, utf8_decode("Módulo"), 1, 0,'C', 0);
-				$this->Cell(35, 5, utf8_decode("Acción"), 1, 0,'C', 0);
-				$this->Cell(35, 5, "Fecha", 1, 1,'C', 0);
+				$this->Cell(35, 5, "ID", 1, 0,'C', 0);
+				$this->Cell(50, 5, utf8_decode("Usuario Acción"), 1, 0,'C', 0);
+				$this->Cell(60, 5, utf8_decode("Módulo"), 1, 0,'C', 0);
+				$this->Cell(75, 5, utf8_decode("Acción"), 1, 0,'C', 0);
+				$this->Cell(45, 5, "Fecha", 1, 1,'C', 0);
 				break;
 			case "Bitacora":
 				$this->SetTitle('Reportes de Bitacoras');
 				
-				$this->Cell(15, 5, "ID", 1, 0,'C', 0);
+				$this->SetXY(10, 30);
+				$this->Cell(50, 10, "Registros Totales: " . $_SESSION['num'], 0, 1, 'L');
+
+				$this->Cell(30, 5, "ID", 1, 0,'C', 0);
 				$this->Cell(35, 5, utf8_decode("Usuario Acción"), 1, 0,'C', 0);
-				$this->Cell(35, 5, utf8_decode("Módulo"), 1, 0,'C', 0);
-				$this->Cell(35, 5, utf8_decode("Acción"), 1, 0,'C', 0);
-				$this->Cell(35, 5, "Fecha", 1, 1,'C', 0);
+				$this->Cell(45, 5, utf8_decode("Módulo"), 1, 0,'C', 0);
+				$this->Cell(70, 5, utf8_decode("Acción"), 1, 0,'C', 0);
+				$this->Cell(55, 5, utf8_decode("Valor Anterior"), 1, 0,'C', 0);
+				$this->Cell(55, 5, utf8_decode("Valor Actual"), 1, 0,'C', 0);
+				$this->Cell(40, 5, "Fecha", 1, 1,'C', 0);
 				break;
 			default: echo "a";
 				break;

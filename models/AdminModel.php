@@ -209,7 +209,7 @@ class AdminModel extends ConexionBD{
 		/	Cambio: 
 		/-----------------------------------------------------------------------------------*/
         $resultado = $this->obtenData("SELECT id_rol, nombre 
-																			   FROM rol");
+										FROM rol");
         if ($resultado) {
             return $resultado;
         } else {

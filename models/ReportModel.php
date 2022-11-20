@@ -145,26 +145,27 @@ https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3D
 																		)");
 	}
 	
-	public function Usuarios($columna, $filtro){//deberias hacerle unos inners
-		return $this->ObtenData("SELECT cedula, nombre, b.nombre AS RolNom, direccion, activo, telefono, detalles
+	public function Usuarios($columna, $filtro, $roles, $activos){//deberias hacerle unos inners
+		return $this->ObtenData("SELECT cedula, a.nombre, b.nombre AS RolNom, direccion, activo, telefono, detalles
 								FROM usuarios a
 								INNER JOIN rol b ON a.rol_id = b.id_rol
 								WHERE(
 										($columna = 0 AND cedula = CASE WHEN '$filtro' = '' THEN cedula ELSE '$filtro' END ) OR 
-										($columna = 1 AND nombre LIKE '$filtro' + %) OR 
-										($columna = 2 AND rol_id = '$filtro') OR 
-										($columna = 3 AND activo = '$filtro')
-									)");//Se le puede agregar otra funcionalidad de fecha para saber en fecha determinada algo
+										($columna = 1 AND a.nombre LIKE '$filtro%') OR 
+										($columna = 2 AND rol_id = CASE WHEN '$roles' = 0 THEN rol_id ELSE '$roles' END) OR 
+										($columna = 3 AND activo = CASE WHEN '$activos' = 2 THEN activo ELSE '$activos' END)
+									)
+									ORDER BY activo DESC");//Se le puede agregar otra funcionalidad de fecha para saber en fecha determinada algo
 	}
 	
-	public function TotalUsuarios($columna, $filtro){
+	public function TotalUsuarios($columna, $filtro, $roles, $activos){
 		return $this->ObtenData("SELECT COUNT(*) AS TotalUsuarios
-						FROM usuarios
+						FROM usuarios a
 						WHERE(
-								($columna = 0 AND cedula = CASE WHEN '$filtro' = '' THEN cedula ELSE '$filtro' END ) OR 
-								($columna = 1 AND nombre LIKE '$filtro' + %) OR 
-								($columna = 2 AND rol_id = '$filtro') OR 
-								($columna = 3 AND activo = '$filtro')
+							($columna = 0 AND cedula = CASE WHEN '$filtro' = '' THEN cedula ELSE '$filtro' END ) OR 
+										($columna = 1 AND a.nombre LIKE '$filtro%') OR 
+										($columna = 2 AND rol_id = CASE WHEN '$roles' = 0 THEN rol_id ELSE '$roles' END) OR 
+										($columna = 3 AND activo = CASE WHEN '$activos' = 2 THEN activo ELSE '$activos' END)
 							)");
 	}
 	
@@ -180,28 +181,28 @@ https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3D
 	}
 	//supongo que sera una consulta sobre logins y registers
 	//creo que esto se puede ampliar a INSERTS Y UPDATES
-	public function Movimientos($columna, $filtro, $desde, $hasta){
+	public function Movimientos($columna, $filtro, $desde, $hasta, $accion){
 		return $this->ObtenData("SELECT id_bitacora, usuario_bit, modulo_afectado, accion_realizada, fecha_accion
 						FROM bitacoras
 						WHERE(
 								($columna = 0 AND id_bitacora = CASE WHEN '$filtro' = '' THEN id_bitacora ELSE '$filtro' END) OR
-								($columna = 1 AND usuario_bit =CASE WHEN '$filtro' = '' THEN usuario_bit ELSE '$filtro' END) OR
+								($columna = 1 AND usuario_bit = CASE WHEN '$filtro' = '' THEN usuario_bit ELSE '$filtro' END) OR
 								($columna = 2 AND modulo_afectado = '$filtro') OR 
-								($columna = 3 AND accion_realizada = '$filtro') OR
-								($columna = 4 AND fecha_accion BETWEEN $desde, $hasta)
-							 ) 
+								($columna = 3 AND accion_realizada = CASE WHEN '$accion' = 'Todos' THEN accion_realizada ELSE '$accion' END) OR
+								($columna = 4 AND fecha_accion BETWEEN '$desde' AND '$hasta')
+							 )
 							 AND (modulo_afectado = 'Usuario Logueandose' OR modulo_afectado = 'Cerrar Sesion')");
 		
 	}
 	
-	public function ContadorMovimientos($columna, $filtro, $desde, $hasta){
+	public function ContadorMovimientos($columna, $filtro, $desde, $hasta, $usuario = "", $accion){
 		return $this->ObtenData("SELECT COUNT(*) AS TotalMovimientos
 						FROM bitacoras
 						WHERE(
 								($columna = 0 AND id_bitacora = CASE WHEN '$filtro' = '' THEN id_bitacora ELSE '$filtro' END) OR
 								($columna = 1 AND usuario_bit =CASE WHEN '$filtro' = '' THEN usuario_bit ELSE '$filtro' END) OR
-								($columna = 2 AND modulo_afectado = '$filtro') OR 
-								($columna = 3 AND accion_realizada = '$filtro') OR
+								($columna = 2 AND modulo_afectado = '$filtro' AND usuario_bit = CASE WHEN '$usuario' = '' THEN usuario_bit ELSE '$usuario' END) OR 
+								($columna = 3 AND accion_realizada = CASE WHEN '$accion' = 'Todos' THEN accion_realizada ELSE '$accion' END) OR
 								($columna = 4 AND fecha_accion BETWEEN '$desde' AND '$hasta')
 							 ) 
 							 AND (modulo_afectado = 'Usuario Logueandose' OR modulo_afectado = 'Cerrar Sesion')");
@@ -209,26 +210,26 @@ https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3D
 	
 	//esto podria ser por Accion, si fue un UPDATE o un INSERT
 	//ademas creo q hay que castear eso como DATE
-	public function Bitacora($columna, $filtro, $desde = "", $hasta = ""){
-		return $this->ObtenData("SELECT id_bitacora, usuario_bit, modulo_afectado, accion_realizada, fecha_accion
+	public function Bitacora($columna, $filtro, $desde = "", $hasta = "", $acciones){
+		return $this->ObtenData("SELECT id_bitacora, usuario_bit, modulo_afectado, accion_realizada, valor_anterior, valor_actual,fecha_accion
 						FROM bitacoras
 						WHERE(
 								($columna = 0 AND id_bitacora = CASE WHEN '$filtro' = '' THEN id_bitacora ELSE '$filtro' END) OR
 								($columna = 1 AND usuario_bit =CASE WHEN '$filtro' = '' THEN usuario_bit ELSE '$filtro' END) OR
-								($columna = 2 AND modulo_afectado = '$filtro') OR 
-								($columna = 3 AND accion_realizada = '$filtro') OR
+								($columna = 2 AND modulo_afectado LIKE '$filtro%') OR 
+								($columna = 3 AND accion_realizada LIKE CASE WHEN '$acciones' = 'Todos' THEN accion_realizada ELSE '$acciones%' END) OR
 								($columna = 4 AND fecha_accion BETWEEN '$desde' AND '$hasta')
 							 )");
 	}
 	
-	public function TotalBitacora($columna, $filtro, $desde, $hasta){
+	public function TotalBitacora($columna, $filtro, $desde="", $hasta="", $acciones){
 		return $this->ObtenData("SELECT COUNT(*) AS totalBitacora
 						FROM bitacoras
 						WHERE(
 								($columna = 0 AND id_bitacora = CASE WHEN '$filtro' = '' THEN id_bitacora ELSE '$filtro' END) OR
 								($columna = 1 AND usuario_bit =CASE WHEN '$filtro' = '' THEN usuario_bit ELSE '$filtro' END) OR
-								($columna = 2 AND modulo_afectado = '$filtro') OR 
-								($columna = 3 AND accion_realizada = '$filtro') OR
+								($columna = 2 AND modulo_afectado LIKE '$filtro%') OR 
+								($columna = 3 AND accion_realizada LIKE CASE WHEN '$acciones' = 'Todos' THEN accion_realizada ELSE '$acciones%' END) OR
 								($columna = 4 AND fecha_accion BETWEEN '$desde' AND '$hasta')
 							 )");
 	}

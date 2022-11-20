@@ -314,8 +314,10 @@ class AdminController extends GeneralController{
 		$objAdmin = $this->loadModel("AdminModel");
 		$objSess = $this->loadModel("SessionModel");
 		$objFund = $this->loadModel("FundacionModel");
+
+        $data['roles'] = $objAdmin->ConsultaRoles();
 		//Cargar literalmente todos los modelos porque hay selects pero hasta para regalar
-		$this->loadView("admin/adReporte.phtml","Administrador | Reportes del Sistema");
+		$this->loadView("admin/adReporte.phtml","Administrador | Reportes del Sistema",$data);
 	}
     #endregion
 
