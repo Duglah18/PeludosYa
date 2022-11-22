@@ -38,6 +38,7 @@ class ReportController extends GeneralController{
 	*****************************************************************/
 	public function Combrueba(){
 		if(!isset($_SESSION['usuario']) || $_SESSION['rol'] != "1"){
+			$_SESSION['Error'] = "Usted no posee el nivel suficiente para entrar aquí";
             return header("location: ".BASE_URL);
         }
 	}
@@ -51,26 +52,26 @@ class ReportController extends GeneralController{
 	******************************************************************/
 	public function Bitacora_Animales(){
 		$this->Combrueba();
-		
-		if($_POST['Columna'] < 0 || $_POST['Columna'] > 9){
-			return header("location: " .BASE_URL. "admin/Reportes");
-		}
-		
+	
 		$objReports = $this->LoadModel("ReportModel");
-		$columna = isset($_POST['Columna'])? $_POST['Columna']: 0;
-		$filtro = isset($_POST['Filtro'])? $_POST['Filtro']:"";
+
+		$nombre = isset($_POST['NombreAnimal'])? $_POST['NombreAnimal']:"";
+		$anio_nac = isset($_POST['Ano_nac'])? $_POST['Ano_nac']: "";
+		$raza = isset($_POST['raza'])?$_POST['raza']:0;
+		$tamano = isset($_POST['tamano'])?$_POST['tamano']:0;
 		$desde = isset($_POST['Desde'])?$_POST['Desde']: date('Y-m-d');
 		$hasta = isset($_POST['Hasta'])?$_POST['Hasta']: date('Y-m-d');
 		$estatus = isset($_POST['estatus'])?$_POST['estatus']:0;
-		
-		$animales = $objReports->Animales($columna, $filtro, $desde, $hasta, $estatus);
-		$numTotalAnimales = $objReports->TotalAnimales($columna, $filtro, $desde, $hasta, $estatus);
-		$TotalAdoptados = $objReports->TotalAnimales(9,3);
-		$adopcionescanceladas = $objReports->TotalesAdopciones(2);
+		$albergue = isset($_POST['albergue'])?$_POST['albergue']:0;
+		$tipoanimal = isset($_POST['tipoanimal'])?$_POST['tipoanimal']:0;
+		$animales = $objReports->Animales($nombre,$anio_nac,$raza, $tamano, $desde, $hasta, $estatus, $albergue, $tipoanimal);
+		$numTotalAnimales = $objReports->TotalAnimales($nombre,$anio_nac,$raza, $tamano, $desde, $hasta, $estatus, $albergue, $tipoanimal);
+		//$TotalAdoptados = $objReports->TotalAnimales(9,3);//modificar
+		//$adopcionescanceladas = $objReports->TotalesAdopciones(2);//modificar
 
 		$_SESSION['numtotAnimales'] = $numTotalAnimales;
-		$_SESSION['TotAdop'] = $TotalAdoptados;
-		$_SESSION['AdopCanc'] = $adopcionescanceladas[0][0];
+		// $_SESSION['TotAdop'] = $TotalAdoptados;
+		// $_SESSION['AdopCanc'] = $adopcionescanceladas[0][0];
 
 		/*----------Inicio del Documento PDF----------*/
 		$pdf = new PDF_MC_Table('L','mm',array(350,200));
@@ -78,7 +79,7 @@ class ReportController extends GeneralController{
 		$pdf->AddPage();
 		$pdf->SetFont('Times','',12);
 
-		
+		// $pdf->Cell(0,10,$nombre. " ".$anio_nac. " ".$raza. " ".$tamano. " ".$desde. " ".$hasta. " ".$estatus. " ".$albergue. " ".$tipoanimal,1,50);
 		//Colocar el tamaño de las columnas de las celdas de la tabla (10)
 		$pdf->SetWidths(Array(15,40,20,55,30,35,30,20,50,35));
 		

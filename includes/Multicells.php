@@ -46,10 +46,10 @@ class PDF_MC_Table extends FPDF {
 				
 				$this->SetXY(10, 30);
 				$this->Cell(50, 10, "Peludos Totales: ". $_SESSION['numtotAnimales'], 0, 1, 'L');
-				$this->SetXY(10, 35);
-				$this->Cell(50, 10, "Peludos Adoptados Totales en todo el sistema: " . $_SESSION['TotAdop'], 0, 1, 'L');
-				$this->SetXY(10, 40);
-				$this->Cell(50, 10, "Adopciones Canceladas En todo el sistema: " . $_SESSION['AdopCanc'], 0, 1, 'L');
+				// $this->SetXY(10, 35);
+				// $this->Cell(50, 10, "Peludos Adoptados Totales en todo el sistema: " . $_SESSION['TotAdop'], 0, 1, 'L');
+				// $this->SetXY(10, 40);
+				// $this->Cell(50, 10, "Adopciones Canceladas En todo el sistema: " . $_SESSION['AdopCanc'], 0, 1, 'L');
 
 
 				$this->Cell(15, 5, "ID", 1, 0,'C', 0);

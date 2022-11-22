@@ -14,8 +14,7 @@ class AdminModel extends ConexionBD{
         $desde = ($pagina - 1) * $qty;
         $resultados = $this->obtenData("SELECT a.id_animal, a.nombre, a.anio_nac, a.img, 
 																				a.fecha_ingreso, b.nombre as nomraza, c.nombre as nomtipo,
-																				e.nombre as nomalbergue, d.nombre as nombreUser, a.visible, 
-																				CASE WHEN f.animal_id IS NULL THEN 0 ELSE SUM(f.id_animal) END AS NumeroPeticiones
+																				e.nombre as nomalbergue, d.nombre as nombreUser, a.visible
 																		FROM animal a
 																			INNER JOIN raza b 
 																								ON a.raza_id = b.id_raza
@@ -70,7 +69,7 @@ class AdminModel extends ConexionBD{
         if($pagina <= 0){ $pagina = 1; }
         $desde = ($pagina - 1) * $qty;
         $resultado = $this->obtenData("SELECT id_veterinario, nombre, tlf, direccion, 
-		º																						 img, visible, usuario_Rveterinario
+									    img, visible, usuario_Rveterinario
 																			  FROM veterinario
 																			  WHERE 
 																			  (id_veterinario = CASE WHEN '$id_veterinario' = '' THEN id_veterinario ELSE '$id_veterinario' END)
@@ -98,9 +97,9 @@ class AdminModel extends ConexionBD{
         $user = mysqli_real_escape_string($this->conectar(),$user);
         $contrasenia = mysqli_real_escape_string($this->conectar(),$contrasenia);
         $resultado = $this->obtenData("SELECT cedula, nombre, contrasenia, rol_id 
-																			  FROM usuarios 
-																			  WHERE 
-																			  (nombre = '$user' AND contrasenia = '$contrasenia' AND rol_id = 1)");
+									  FROM usuarios 
+									  WHERE 
+									  (nombre = '$user' AND contrasenia = '$contrasenia' AND rol_id = 1)");
         if ($resultado) {
             return $resultado;
         } else {
@@ -308,13 +307,13 @@ class AdminModel extends ConexionBD{
         if($pagina <= 0){ $pagina = 1; }
         $desde = ($pagina - 1) * $qty;
         return $this->obtenData("SELECT raza.id_raza, raza.nombre, 
-																					tipo_animal.nombre as nombreTipo, id_tipo_animal as id_tipo_2
-																   FROM raza
-																		INNER JOIN tipo_animal 
-																							ON tipo_animal.id_tipo = raza.id_tipo_animal
-																   WHERE 
-																   (raza.id_raza = CASE WHEN '$id_raza' = '' THEN raza.id_raza ELSE '$id_raza' END)
-																   LIMIT $desde, $qty");
+								    tipo_animal.nombre as nombreTipo, id_tipo_animal as id_tipo_2
+                                    FROM raza
+                                        INNER JOIN tipo_animal 
+                                                            ON tipo_animal.id_tipo = raza.id_tipo_animal
+                                    WHERE 
+                                    (raza.id_raza = CASE WHEN '$id_raza' = '' THEN raza.id_raza ELSE '$id_raza' END)
+                                    LIMIT $desde, $qty");
     }
 
     public function TotallistaRazas(){

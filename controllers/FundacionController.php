@@ -19,7 +19,8 @@ class FundacionController extends GeneralController{
 	*****************************************************************/
     public function Comprobador(){
         if(!isset($_SESSION['usuario']) || $_SESSION['rol'] != 3){
-           return header("location:" . BASE_URL);
+           $_SESSION['Error'] = "Usted no posee el nivel suficiente para entrar aquí";
+		   return header("location:" . BASE_URL);
         }
     }
 	
@@ -142,11 +143,27 @@ class FundacionController extends GeneralController{
 	*	Salidas: Ver albergues
 	*****************************************************************/
     public function registraFundacion(){//funciona 9/10/2022
+		$this->Comprobador();
         $objFund = $this->loadModel("FundacionModel");
-        if(!isset($_POST['accion'])){//es mejor asi
+        if(!isset($_POST['accion'])){
+			$_SESSION['Error'] = "Ocurrio un error inesperado";
             return header("location: ".BASE_URL);
         }
+		if(!isset($_POST['']) || !isset($_POST['']) || !isset($_POST['']) || !isset($_POST[''])){
+			$_SESSION['Error'] = "No se enviaron datos";
+			return header("location: ".BASE_URL."admin/albergues");
+		}
+		
+		if($_POST['nombre'] == "" || $_POST['direccion'] == "" || $_POST['cedula_user'] == ""){
+			$_SESSION['Error'] = "Los datos introducidos no son validos";
+			return header("location: ".BASE_URL."admin/albergues");
+		}
+		
         if($_POST['accion'] == 'Modificar'){
+			if (!isset($_POST['identificador'])){
+				$_SESSION['Error'] = "No se envio un identificador de Albergue para modificar";
+				return header("location: ".BASE_URL."admin/albergues");
+			}
             $id_albergue = $_POST['identificador'];
             $Nombre = $_POST['nombre'];
             $direccion = $_POST['direccion'];
@@ -157,18 +174,27 @@ class FundacionController extends GeneralController{
             if($_SESSION['rol'] == "1"){//revisa esto
                 // $objAdmin = $this->loadModel("FundacionModel");
                 // $data['alberguesAdmin'] = $objAdmin->consultaAlbergue('');
-                header("location: ".BASE_URL."admin/albergues");
+				$_SESSION['Correct'] = "Se ha modificado el albergue con exito";
+                return header("location: ".BASE_URL."admin/albergues");
             } 
+			$_SESSION['Correct'] = "Se ha modificado el albergue con exito";
             header("location: ".BASE_URL."fundacion/albergues");
         } elseif ($_POST['accion'] == 'Agregar') {
             $Nombre = $_POST['nombre'];
             $direccion = $_POST['direccion'];
             $cedula = $_POST['cedula_user'];
-            $objFund->registraAlbergue("albergue",$cedula,$Nombre,$direccion,1);
+            $registrando = $objFund->registraAlbergue("albergue",$cedula,$Nombre,$direccion,1);
+			if(is_bool($registrando) && $registrando  == false){
+				$_SESSION['Error'] = "Ha ocurrido un error al registrar el albergue";
+				return header("location: " .BASE_URL."admin/albergues");
+			}
+			
             if($_SESSION['rol'] == "1"){
-                header("location: ".BASE_URL."admin/albergues");
+				$_SESSION['Correct'] = "Se ha insertado el albergue con exito";
+                return header("location: ".BASE_URL."admin/albergues");
             } else {
-                header("location: ".BASE_URL."fundacion/albergues");
+				$_SESSION['Correct'] = "Se ha insertado el albergue con exito";
+                return header("location: ".BASE_URL."fundacion/albergues");
             }
         }
     }
@@ -181,18 +207,27 @@ class FundacionController extends GeneralController{
 	*	Salidas: ver Animales
 	*****************************************************************/
     public function registraAnimal(){//ahora si
+		$this->Comprobador();
         $objFund = $this->loadModel("FundacionModel");
         $objAdmin = $this->loadModel("AdminModel");
         if(!isset($_POST['accion'])|| !isset($_POST['nombre']) || !isset($_POST['raza']) || !isset($_POST['descrip'])){
            $Error = "No se enviaron Datos";
+		   $_SESSION['Error'] = "No se enviaron Datos";
 		   return header("location: ".BASE_URL."fundacion/animales");
-        
 		}
-		
-		if (!is_int($_POST['fecha']) || $_POST['fecha'] < 0 ){
+		//ps no se q fecha ponerle de limite
+		//y tampoco pudo haber nacido un año en el futuro
+		//Hacer que la fecha sea entero
+		if (!is_int($_POST['fecha']) || $_POST['fecha'] < 0 || $_POST['fecha'] < 2009 || $_POST['fecha'] > intval(date('Y'))){
 			$Error = "Año de Nacimiento Incorrecto";
+			$_SESSION['Error'] = "Año de Nacimiento Incorrecto";
 			return header("location: ".BASE_URL."fundacion/animales?error=".$Error);
 			
+		}
+		
+		if($_POST['nombre'] == "" || $_POST['raza'] == "0" || $_POST['fecha'] == ""){
+			$_SESSION['Error'] = "Ha ocurrido un error";
+			return header("location: ".BASE_URL."fundacion/animales");
 		}
 		
         if ($_POST['accion'] == 'Agregar'){
@@ -217,6 +252,7 @@ class FundacionController extends GeneralController{
             $objFund->registraAnimal('animal', $nombre, $fechanac, $nombreArchivo, $descrip, 
                                         $fecha_ing, $raza_id,$tamanio_id, $albergue_id, 
                                         $visible, $_SESSION['iduser']);
+			$_SESSION['Correct'] = "Se ha insertado el Peludo con exito";
             return header("location: ".BASE_URL."fundacion/animales");
         } elseif ($_POST['accion'] == 'Modificar') {
             $id_animal = $_POST['id_animal'];
@@ -250,6 +286,7 @@ class FundacionController extends GeneralController{
             $objAdmin->modificaAnimal('animal', $id_animal,$nombre, $fechanac, 
                                         $nombreArchivo, $descrip, $raza_id,$tamanio_id, $albergue_id,
                                          $visible, $_SESSION['iduser']);
+			$_SESSION['Correct'] = "Se ha Modificado al Peludo con exito";
             return header("location: ".BASE_URL."fundacion/animales");
         }
     }
@@ -263,6 +300,7 @@ class FundacionController extends GeneralController{
 	*	Salidas: Ver adopciones
 	*****************************************************************/
     public function destinoAdopcion(){
+		$this->Comprobador();
         $objFund = $this->loadModel("FundacionModel");
 		
         if(!isset($_GET['accion']) || !isset($_GET['modificacion'])){
@@ -289,6 +327,7 @@ class FundacionController extends GeneralController{
             }
         }
         $objFund->decisionAdopcion($eleccion, $accion, $razon,$_GET['usuario']);
+		$_SESSION['Correct'] = "Se realizo la modificacion con exito";
         return header("location: ".BASE_URL."fundacion/verAdopciones");
     }
 	
@@ -313,6 +352,7 @@ class FundacionController extends GeneralController{
         }
 
         $objAdmin->DecisionActivacionPeludos($id_peludo, $decision, $_SESSION['iduser']);
+		$_SESSION['Correct'] = "Se realizo la modificacion con exito";
         return header("location: ".BASE_URL."fundacion/animales");
     }
 	
@@ -337,6 +377,7 @@ class FundacionController extends GeneralController{
         }
 
         $objAdmin->DecisionActivacionAlbergues($id_albergue, $decision, $_SESSION['iduser']);
+		$_SESSION['Correct'] = "Se realizo la modificacion con exito";
         return header("location: ".BASE_URL."fundacion/albergues");
     }
     #endregion

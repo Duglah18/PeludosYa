@@ -1,0 +1,74 @@
+<?php 
+    //paginador
+    //Total Registro y por_pagina llegan por el controlador
+    $total_paginas = ceil($totalregistro / $por_pagina);
+?>
+<!--Tipos de animal(), Razas()-->
+<br>
+<div class="container">
+    <div class="card-panel indigo darken-4 center-align" style="height: 150px; border-radius: 100px;">
+        <h3 class="container">Fundaciones que pueden nos acompañan</h3>
+    </div>
+</div>
+
+<?php if($fundaciones != false){ ?>
+    <table>
+        <thead>
+                <tr>
+                    <th>Rif</th>
+                    <th>Nombre</th>
+                    <th>Dirección</th>
+                    <th>Telefono</th>
+                </tr>
+        </thead>
+       <tbody>
+        <?php foreach($fundaciones as $fundacion){ ?>
+            <tr>
+                    <td><?= $fundacion['cedula']; ?></td>
+                    <td><?= $fundacion['nombre']; ?></td>
+                    <td><?= $fundacion['direccion']; ?></td>
+                    <td><?= $fundacion['telefono']; ?></td><!--quitar esto obviamente-->
+            </tr>
+        <?php } ?>
+       </tbody>
+</table>
+<div class="col-md-12 center text-center cyan lighten-2"><!--Paginador-->
+    <ul class="pagination">
+        <?php if($pagina != 1){ ?>
+            <!-- PA q sirve esto? <?= $fun ?> -->
+            <li class="waves-effect blue-text"><a href="<?=BASE_URL?>session/catalogoFundaciones?pagina=1<?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
+            <li class="waves-effect"><a href="<?=BASE_URL?>session/catalogoFundaciones?pagina=<?=$pagina - 1?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_left</i></a></li>
+        <?php
+        }else{ ?>
+            <li class="disabled"><a href=""><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
+            <li class="disabled"><a href=""><i class="material-icons">chevron_left</i></a></li>
+    <?php
+        } ?>
+        
+        
+        <?php for($i = 1; $i <= $total_paginas; $i++){ 
+            if ($i == $pagina){ ?>
+                <li class="active"><a href="<?=BASE_URL?>session/catalogoFundaciones?pagina=<?=$i?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><?=$i?></a></li>
+           <?php } else{
+            ?>
+            <li class="waves-effect"><a href="<?=BASE_URL?>session/catalogoFundaciones?pagina=<?=$i?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><?=$i?></a></li>
+        <?php 
+            }
+        } ?>
+
+        <?php if($pagina != $total_paginas){ ?>
+        <li class="waves-effect"><a href="<?=BASE_URL?>session/catalogoFundaciones?pagina=<?=$pagina + 1?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_right</i></a></li>
+        <li class="waves-effect"><a href="<?=BASE_URL?>session/catalogoFundaciones?pagina=<?=$total_paginas?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
+        <?php
+        }else{ ?>
+            <li class="disabled"><a href=""><i class="material-icons">chevron_right</i></a></li>
+            <li class="disabled"><a href=""><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
+    <?php
+        } ?>
+    </ul>
+</div>
+<?php } else { ?>
+
+    <h1>Aun no se encuentran Peluditos para adoptar Disponibles</h1>
+
+<?php } ?>

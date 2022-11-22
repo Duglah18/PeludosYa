@@ -25,7 +25,7 @@ class HomeController extends GeneralController{
         session_destroy();
         header("refresh: ". 0);
         $this->loadView("home.phtml","inicio");
-      }//literalmente sin lo de abajo la pag no carga al recargarse xD
+      }
       $this->loadView("home.phtml","inicio");
     }
 }

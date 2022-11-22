@@ -34,7 +34,9 @@ https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3D
 	*/
 	//CASE WHEN ISNULL(f.animal_id) THEN 0 ELSE SUM(f.animal_id) END AS TotalAdopciones replanteate esta linea de la forma 
 	//anterior podria funcionar ya lo implemente pruebalo
-	public function Animales($columna = 0, $filtro = "", $desde = "2022", $hasta = "2022", $estatus = 0){
+	//definir el desde y hasta en date q se vuelve string pero solo el año aqui
+	//$nombre,$anio_nac,$raza, $tamano, $desde, $hasta, $estatus, $albergue
+	public function Animales($nombre = "", $anio_nac = "", $raza = 0, $tamano = 0, $desde = "2021-01-01", $hasta = "2022-11-22", $estatus = 0, $albergue = 0, $tipoanimal = 0){
 		//estatus serviria para buscar en albergue esos animales adoptados no adoptados o en proceso
 		//https://codigoroot.net/blog/obtener-fecha-y-hora-en-php-con-date/#:~:text=Obtener%20fecha%20actual%20php%20con%20formato%20(Dia%2FMes%2FA%C3%B1o)&text=%24fechaActual%20%3D%20date('d%2Fm%2Fy')%3B
 		
@@ -53,23 +55,24 @@ https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3D
 											ON b.id_tipo_animal = e.id_tipo
 									LEFT JOIN adopcion f 
 											ON a.id_animal = f.animal_id
-									WHERE (
-											($columna = 0 AND a.id_animal = CASE WHEN '$filtro' = '' THEN a.id_animal ELSE '$filtro' END) OR 
-											($columna = 1 AND a.nombre LIKE '$filtro%') OR
-											($columna = 2 AND a.anio_nac  = '$filtro') OR 
-											($columna = 3 AND a.fecha_ingreso BETWEEN '$desde' AND '$hasta') OR 
-											($columna = 4 AND b.nombre LIKE CASE WHEN '$filtro' = '' THEN b.nombre ELSE '$filtro%' END) OR 
-											($columna = 5 AND c.nombre LIKE CASE WHEN '$filtro' = '' THEN c.nombre ELSE '$filtro%' END) OR
-											($columna = 6 AND a.albergue_id = CASE WHEN '$filtro' = '' THEN a.albergue_id ELSE '$filtro' END AND f.estado = CASE WHEN '$estatus' = 0 THEN f.estado ELSE '$estatus' END) OR
-											($columna = 7 AND d.nombre LIKE '$filtro' + '%') OR
-											($columna = 8 AND e.nombre LIKE '$filtro%') OR
-											($columna = 9 AND f.estado = CASE WHEN '$estatus' = 0 THEN f.estado ELSE '$estatus' END)
-											)");
+									WHERE 	(
+											(a.nombre LIKE CASE WHEN '$nombre' = '' THEN a.nombre ELSE '%$nombre%' END) AND
+											(a.anio_nac  = CASE WHEN '$anio_nac' = '' THEN a.anio_nac ELSE '$anio_nac' END) AND 
+											(b.id_raza = CASE WHEN '$raza' = 0 THEN b.id_raza ELSE '$raza' END) AND 
+											(c.id_tamanio = CASE WHEN '$tamano' = 0 THEN c.id_tamanio ELSE '$tamano' END) AND 
+											(a.albergue_id = CASE WHEN '$albergue' = 0 THEN a.albergue_id ELSE '$albergue' END) AND
+											(e.id_tipo = CASE WHEN '$tipoanimal' = 0 THEN e.id_tipo ELSE '$tipoanimal' END) AND 
+											(CASE WHEN '$estatus' = 0 THEN f.estado IN ('1','2','3') OR f.estado IS NULL ELSE 
+											CASE WHEN '$estatus' = 1 THEN f.estado IN ('1','2') OR f.estado IS NULL ELSE f.estado = 3 END END) AND
+											(a.fecha_ingreso BETWEEN '$desde' AND '$hasta')
+											)
+											ORDER BY a.id_animal");
+											//Anotacion no aparecer 3 porque esos salen que fueron ingresados el 00-00-0000
 		return $resultados;
 	}
 	//https://es.stackoverflow.com/questions/351356/si-el-select-tiene-valor-negro-ocultar-input
 	
-	public function TotalAnimales($columna = 0, $filtro = "", $desde = "2022", $hasta = "2022", $estatus = 0){
+	public function TotalAnimales($nombre = "", $anio_nac = "", $raza = 0, $tamano = 0, $desde = "2021-01-01", $hasta = "2022-11-22", $estatus = 0, $albergue = 0, $tipoanimal = 0){
 		$resultados = $resultados =  $this->ObtenData("SELECT COUNT(*) AS TotalAnimales
 														FROM animal a
 														INNER JOIN raza b ON a.raza_id = b.id_raza
@@ -78,18 +81,16 @@ https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3D
 														INNER JOIN tipo_animal e ON b.id_tipo_animal = e.id_tipo
 														LEFT JOIN adopcion f ON a.id_animal = f.animal_id
 														WHERE (
-															($columna = 0 AND a.id_animal = CASE WHEN '$filtro' = '' THEN a.id_animal ELSE '$filtro' END) OR 
-															($columna = 1 AND a.nombre LIKE '$filtro%') OR
-															($columna = 2 AND a.anio_nac  = '$filtro') OR 
-															($columna = 3 AND a.fecha_ingreso BETWEEN '$desde' AND '$hasta') OR 
-															($columna = 4 AND b.nombre LIKE CASE WHEN '$filtro' = '' THEN b.nombre ELSE '$filtro%' END) OR 
-															($columna = 5 AND c.nombre LIKE CASE WHEN '$filtro' = '' THEN c.nombre ELSE '$filtro%' END) OR
-															($columna = 6 AND a.albergue_id = CASE WHEN '$filtro' = '' THEN a.albergue_id ELSE '$filtro' END AND f.estado = CASE WHEN '$estatus' = 0 THEN f.estado ELSE '$estatus' END) OR
-															($columna = 7 AND d.nombre LIKE '$filtro' + '%') OR
-															($columna = 8 AND e.nombre LIKE '$filtro%') OR
-															($columna = 9 AND f.estado = CASE WHEN '$estatus' = 0 THEN f.estado ELSE '$estatus' END)
-															  )
-														");
+															(a.nombre LIKE CASE WHEN '$nombre' = '' THEN a.nombre ELSE '%$nombre%' END) AND
+															(a.anio_nac  = CASE WHEN '$anio_nac' = '' THEN a.anio_nac ELSE '$anio_nac' END) AND 
+															(b.id_raza = CASE WHEN '$raza' = 0 THEN b.id_raza ELSE '$raza' END) AND 
+															(c.id_tamanio = CASE WHEN '$tamano' = 0 THEN c.id_tamanio ELSE '$tamano' END) AND 
+															(a.albergue_id = CASE WHEN '$albergue' = 0 THEN a.albergue_id ELSE '$albergue' END) AND
+															(e.id_tipo = CASE WHEN '$tipoanimal' = 0 THEN e.id_tipo ELSE '$tipoanimal' END) AND 
+															(CASE WHEN $estatus = 0 THEN f.estado IN ('1','2','3') OR f.estado IS NULL ELSE 
+															CASE WHEN '$estatus' = 1 THEN f.estado IN ('1','2') OR f.estado IS NULL ELSE f.estado = 3 END END) AND
+															(a.fecha_ingreso BETWEEN '$desde' AND '$hasta')
+															)");
 									
 		return $resultados[0]['TotalAnimales'];
 	}

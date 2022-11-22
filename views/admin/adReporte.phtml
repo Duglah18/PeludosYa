@@ -3,7 +3,10 @@
 echo "Pagina para la toma de decision acerca de que tipo de reporte se quiere presentar";
 
 ?>
-
+<!--
+	Ahora modificar y que sean especificos osea con and en lugar de or y un catalogo de fundaciones
+	en el usuario normal 
+-->
 <!--Podrias hacer que los reportes salgan en una ventana nueva para no tener que salir del sistema-->
 <div class="row">
     <div class="col s12">
@@ -15,42 +18,56 @@ echo "Pagina para la toma de decision acerca de que tipo de reporte se quiere pr
         <li class="tab col s2"><a href="#Bitacora">Bitacora</a></li>
       </ul>
     </div>
-
+<!--$data['Razas'] =  $objAdmin->listaRazas('', 1, 10000);
+        $data['tamanos'] = $objAdmin->consultaTamanoAnimal();
+        $data['albergues'] = $objAdmin->consultaAlbergues();//id_albergue, nombre
+        $data['tiposAni'] = $objSess->consultaTipoAnimal();-->
     <div id="Animales" class="col s12">
 	<form action="<?=BASE_URL?>report/Bitacora_Animales" target="_blank" method="POST">
-			<label>Animales</label>
-			<select id="opciones" name="Columna" class="col s6">
-				<option value="0">ID de Animal</option>
-				<option value="1">Nombre</option>
-				<option value="2">Año Nacimiento</option>
-				<option value="3">Fecha Ingreso</option>
-				<option value="4">Raza</option>
-				<option value="5">Tamaño</option>
-				<option value="6">ID de albergue</option>
-				<option value="7">Nombre de Albergue</option>
-				<option value="8">Tipo de animal</option>
-				<option value="9">Estado</option>
+			<label>Animales</label><br>
+			<label for="">Nombre</label>
+			<input type="text" name="NombreAnimal" class="col s6">
+			<label for="">Año de Nacimiento</label>
+			<input name="Ano_nac" class="col s6"><br>
+			<label for="">Tipo Animal</label>
+			<select name="tipoanimal" id="">
+				<option value="0">Todos</option>
+				<?php foreach($tiposAni as $tipoani){ ?>
+					<option value="<?=$tipoani['id_tipo']?>"><?= $tipoani['nombre']?></option>
+				<?php } ?>
 			</select>
-			<div id="generico">
-			<input name="Filtro" class="col s6"></input>
-			</div>
-			<div id="fecha">
-			<br>
+			<label for="">Raza</label>
+			<select name="raza" id="">
+				<option value="0">Todos</option>
+				<?php foreach($Razas as $raza){ ?>
+					<option value="<?=$raza['id_raza']?>"><?= $raza['nombre']?></option>
+				<?php } ?>
+			</select>
+			<label for="">Tamaño</label>
+			<select name="tamano" id="">
+				<option value="0">Todos</option>
+				<?php foreach($tamanos as $tamano){ ?>
+					<option value="<?=$tamano['id_tamanio']?>"><?= $tamano['nombre']?></option>
+				<?php } ?>
+			</select>
+			<label for="">Albergue</label>
+			<select name="albergue" id="">
+				<option value="0">Todos</option>
+				<?php foreach($albergues as $albergue){ ?>
+					<option value="<?=$albergue['id_albergue']?>"><?= $albergue['nombre']?></option>
+				<?php } ?>
+			</select>
 			<label for="">Desde</label>
 			<input type="date" value="<?= date('Y-m-d'); ?>" name="Desde" class="col s6"> 
 			<br>
 			<label for="">Hasta</label>
 			<br>
 			<input type="date" value="<?= date('Y-m-d'); ?>" name="Hasta" class="col s6">
-			</div>
-			<div id="estatus">
 			<select name="estatus" class="col s6">
 				<option value="0">Todos</option>
-				<option value="1">En progreso</option>
-				<option value="2">Cancelado</option>
-				<option value="3">Completado</option>
+				<option value="1">No adoptados</option>
+				<option value="3">Adoptados</option>
 			</select>
-			</div>
 			<button name="Reporte" value="Animales">Generar Reporte</button>
 		</form>
 	</div>

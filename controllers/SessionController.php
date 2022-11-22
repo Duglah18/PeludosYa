@@ -23,6 +23,13 @@ class SessionController extends GeneralController{
         }
     }
 	
+	public function ComprobarLogueo(){
+		if(!isset($_SESSION['usuario'])){
+			$_SESSION['Error'] = "No esta logueado";
+			return header("location: " .BASE_URL);
+		}
+	}
+	
 	/******************************************************************
 	*	Pertenece: SessionController
 	*	Nombre: login
@@ -67,6 +74,24 @@ class SessionController extends GeneralController{
         $data['animales'] =$objSess->obtenAnimales($pagina, $qty,$filtro);
         $this->loadView("catalogo.phtml", "Ver Peluditos",$data);
     }
+
+	/******************************************************************
+	*	Pertenece: SessionController
+	*	Nombre: catalogoFundaciones
+	*	Función: Mostrar Vista
+	*	Salidas: Vista Fundaciones
+	******************************************************************/
+	public function catalogoFundaciones(){
+		$objSess = $this->loadModel("SessionModel");
+		$pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
+        $pagina = $pagina < 0? 1: $pagina;
+        $qty = 5;
+        $data['pagina'] = $pagina;
+        $data['por_pagina'] = $qty;
+        $data['totalregistro'] = $objSess->TotalconsultaFundaciones();
+        $data['fundaciones'] =$objSess->consultaFundaciones($pagina, $qty);
+        $this->loadView("fundaciones.phtml", "Ver Fundaciones",$data);
+	}
 
 	/******************************************************************
 	*	Pertenece: SessionController
@@ -123,6 +148,7 @@ class SessionController extends GeneralController{
 	*	Salidas: Vista Usuario
 	******************************************************************/
 	public function verUsuario(){
+		$this->ComprobarLogueo();
 		$objSess = $this->loadModel("SessionModel");
 		if (!isset($_GET['id_user'])){
 			//error no estas mandando ningun usuario a ver detalladamente
@@ -147,6 +173,7 @@ class SessionController extends GeneralController{
 	*	Salidas: Vista Modificar mi usuario
 	******************************************************************/
 	public function modifica_user(){
+		$this->ComprobarLogueo();
 		if (!isset($_POST['accion']) || !isset($_POST['cedula']) || !isset($_POST['nombre']) || 
 			!isset($_POST['direccion']) || !isset($_POST['contrasenia']) || !isset($_POST['telefono'])){
 		//error no llega nada
@@ -179,6 +206,7 @@ class SessionController extends GeneralController{
 	*	Salidas: Vista principal, vista admin
 	*****************************************************************/
     public function login_user(){
+		$this->Comprobador();
 		if(!isset($_POST['cedula']) || !isset($_POST['pass'])){
 			$_SESSION['Error'] = "Ha ocurrido un error";
 			return header("location: ".BASE_URL."session/login");
@@ -203,6 +231,7 @@ class SessionController extends GeneralController{
             //aca deberia regresarte al login y decirte:
             //tu cuenta se encuentra bloqueada
             $Error = "Usuario Bloqueado.";
+			$_SESSION['Error'] = "Su usuario se encuentra bloqueado";
             return header("location: ".BASE_URL."?error=". $Error);
         } 
         switch($validar[0]['rol_id']){
@@ -226,6 +255,7 @@ class SessionController extends GeneralController{
                 break;
             default: 
                 $Error = "Ha ocurrido un error";
+				$_SESSION['Error'] = "Ha ocurrido un error al loguearte.";
                 return header("location: ".BASE_URL."?error=". $Error);    
                 break;
         }
@@ -239,6 +269,7 @@ class SessionController extends GeneralController{
 	*	Salidas: Vista principal usuario registrado y logueado
 	*****************************************************************/
     public function register_user(){//funcion para registrarse como usuario
+		$this->Comprobador();
 		if (!isset($_POST['cedula']) || !isset($_POST['nombre']) || !isset($_POST['direccion']) || !isset($_POST['contrasenia']) || !isset($_POST['telefono'])){
 			$_SESSION['Error'] = "Ha ocurrido un error";
 			return header("location: ".BASE_URL."session/register");
@@ -256,14 +287,16 @@ class SessionController extends GeneralController{
         $objUser = $this->loadModel("SessionModel");
         //este verifica y registra
         $verificacion = $objUser->registerUser($cedu,$nom,$dirc,$contra,$telefono);
-        if ($verificacion = "Usuario ya registrado"){
+        if ($verificacion == "Usuario ya registrado"){
             $data['error'] = "Este usuario ya esta Registrado";
+			$_SESSION['Error'] = "Usuario ya registrado en el sistema.";
             return $this->loadView("session/register.phtml","Register",$data);
         } else {
             $_SESSION['usuario'] = $verificacion[0]['nombre'];
             $_SESSION['iduser'] = $verificacion[0]['cedula'];
             $_SESSION['rol'] = $verificacion[0]['rol_id'];
             $data['user'] = $objUser->loginUser($cedu, $contra);
+			$_SESSION['Correct'] = "Se ha registrado satisfactoriamente.";
             return $this->loadView("home.phtml","Inicio", $data);
         }
     }
@@ -276,9 +309,11 @@ class SessionController extends GeneralController{
 	*	Salidas: Vista adopcion realizada
 	*****************************************************************/
     public function adopcion_peticion(){
-        if($_POST['usuario'] == "" || $_POST['idanimal'] == ""){
+		$this->ComprobarLogueo();
+        if(!isset($_POST['usuario']) || !isset($_POST['idanimal']) || $_POST['usuario'] == "" || $_POST['idanimal'] == ""){
         //si usuario no existe o esta vacio ps xD
-            header("location: ".BASE_URL."session/catalogoAnimales?error");
+			$_SESSION['Error'] = "Ocurrio un Error.";
+            return header("location: ".BASE_URL."session/catalogoAnimales?error");
         //aca se cargaria otra vista enviando mensaje de error
         } else {
             $usuario = $_POST['usuario'];
@@ -288,14 +323,15 @@ class SessionController extends GeneralController{
             $resultado = $objSess->registraPeticionAdopcion($idAnimal, $usuario);
 			if($resultado == "Este Animal Ya fue adoptado"){//validacion de si ese animal ya esta adoptado
 				$_SESSION['Error']  = "Este Animal Ya fue adoptado";
-				header("location: ".BASE_URL);
+				return header("location: ".BASE_URL);
 			}
             if ($resultado){  
+			//aqui creo q si vuelves a recargar pag si se va a registrar de nuevo la peticion
                 $data['peticion'] = $objSess->retornaResponsable($usuario);
-                $this->loadView("peticion.phtml","Peticion Realizada",$data);
+                return $this->loadView("peticion.phtml","Peticion Realizada",$data);
             } else {
 				$_SESSION['Error'] = "Ocurrio un error Intentelo de nuevo mas tarde";
-				header("location: ".BASE_URL);
+				return header("location: ".BASE_URL);
 			}
         }
     }
@@ -308,9 +344,15 @@ class SessionController extends GeneralController{
 	*	Salidas: Vista ver usuario
 	*****************************************************************/
 	public function modificarmiUsuario(){
-		if(!isset($_POST['cedula'])){
+		$this->ComprobarLogueo();
+		if(!isset($_POST['cedula']) || !isset($_POST['nombre']) || !isset($_POST['direccion']) || !isset($_POST['contrasenia']) || !isset($_POST['telefono'])){
 			$Error = "No se especifico a quien modificar"; //esto funcionaria? sino por get se puede
+			$_SESSION['Error'] = "Ocurrio un error.";
 			return header("location: ".BASE_URL."?error=".$Error);
+		}
+		if($_POST['nombre'] == "" ||$_POST['direccion'] == "" || $_POST['contrasenia'] == "" || $_POST['telefono'] == ""){
+			$_SESSION['Error'] = "No se enviaron datos para modificar";
+			return header("location: ".BASE_URL);
 		}
         $objSess = $this->loadModel("SessionModel");
         $Nombre = $_POST['nombre'];
@@ -318,7 +360,8 @@ class SessionController extends GeneralController{
         $contrasenia = $_POST['contrasenia'];
         $telefono = $_POST['telefono'];
         $objSess->modificaUsuario($_SESSION['iduser'], $Nombre, $Direccion,$contrasenia, $telefono);
-        header("location: ".BASE_URL."session/verUsuario");
+		$_SESSION['Correct'] = "Se ha actualizado tu usuario con exito";
+        return header("location: ".BASE_URL."session/verUsuario");
 	}
     #Endregion
 }

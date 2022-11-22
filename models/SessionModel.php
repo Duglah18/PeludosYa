@@ -55,6 +55,24 @@ class SessionModel extends ConexionBD{
         return $numTotal[0]['TotalAnimales'];
     }
 
+    
+    public function consultaFundaciones($pagina, $qty){
+        if($pagina <= 0){ $pagina = 1; }
+        $desde = ($pagina - 1) * $qty;
+        $retorno = $this->obtenData("SELECT cedula, nombre, direccion, telefono
+                                        FROM usuarios
+                                        WHERE rol_id = 3 AND activo = 1
+                                        LIMIT $desde,$qty");
+        return $retorno;
+    }
+
+    public function TotalconsultaFundaciones(){
+        $retorno = $this->obtenData("SELECT COUNT(*) AS TotalconsultaFundaciones
+                                        FROM usuarios
+                                        WHERE rol_id = 3 AND activo = 1");
+        return $retorno[0]['TotalconsultaFundaciones'];
+    }
+
     public function ObtenAnimalSelecc($id){
         $id = mysqli_real_escape_string($this->conectar(),$id);
         $resultado = $this->obtenData("SELECT a.id_animal, a.nombre, a.anio_nac, a.img, a.descripcion, a.fecha_ingreso, 
@@ -142,6 +160,7 @@ class SessionModel extends ConexionBD{
 
         }
     }
+
 	//Creado en la oficina 11/11/2022
 	public function consultaUsuarioEspecifico($identify){
         $identify = mysqli_real_escape_string($this->conectar(),$identify);

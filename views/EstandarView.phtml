@@ -31,6 +31,7 @@ if (isset($_SESSION)){
       <?php if($role != "1"){ ?>
       <li><a href='<?= BASE_URL; ?>session/catalogoAnimales'>Peluditos</a></li>
       <?php if($role != "3"){ ?><li><a href='<?= BASE_URL; ?>session/catalogoVeterinarios'> Veterinarios</a></li><?php } ?>
+      <li><a href='<?= BASE_URL; ?>session/catalogoFundaciones'>Fundaciones</a></li>
       <?php } ?>
       <!-- Botones NavBar-->
         <?php if (isset($_SESSION)){ ?>
