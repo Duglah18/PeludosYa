@@ -327,6 +327,14 @@ class AdminModel extends ConexionBD{
         return $resultados[0]['TotalRazasAnimal'];
     }
 
+    public function consultaRazas(){
+        return $this->obtenData("SELECT raza.id_raza, raza.nombre, 
+                                tipo_animal.nombre as nombreTipo, id_tipo_animal as id_tipo_2
+                                FROM raza
+                                INNER JOIN tipo_animal 
+                                        ON tipo_animal.id_tipo = raza.id_tipo_animal");
+    }
+
     public function consultaTipoAnimal(){
 		/*-----------------------------------------------------------------------------------/
 		/	Fecha de cambio: 

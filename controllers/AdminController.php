@@ -314,12 +314,10 @@ class AdminController extends GeneralController{
 		$objSess = $this->loadModel("SessionModel");
 		$objFund = $this->loadModel("FundacionModel");
         /*------Peludos-----*/
-        $data['Razas'] =  $objAdmin->listaRazas('', 1, 10000);
+        $data['Razas'] =  $objAdmin->consultaRazas();
         $data['tamanos'] = $objAdmin->consultaTamanoAnimal();
         $data['albergues'] = $objAdmin->consultaAlbergues();//id_albergue, nombre
         $data['tiposAni'] = $objAdmin->consultaTipoAnimal();
-        /*------Veterinarios-----*/
-
         /*------Usuarios-----*/
         $data['roles'] = $objAdmin->ConsultaRoles();
 

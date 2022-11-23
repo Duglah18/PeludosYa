@@ -121,12 +121,13 @@ class ReportController extends GeneralController{
 		$this->Combrueba();
 		
 		$objReports = $this->LoadModel("ReportModel");
-		$columna = isset($_POST['Columna'])? $_POST['Columna']:0;
-		$filtro = isset($_POST['Filtro'])? $_POST['Filtro']:"";
-		$visibilidad = isset($_POST['Visible'])?$_POST['Visible']:0;
-		
-		$veterinarios = $objReports->Veterinarios($columna,$filtro,$visibilidad);
-		$totalVeterinarios = $objReports->TotalVeterinarios($columna,$filtro,$visibilidad);
+
+		$nombre = isset($_POST['nombre'])? $_POST['nombre']:"";
+		$visibilidad = isset($_POST['Visible'])?$_POST['Visible']:3;
+		$usuarioRegistro = isset($_POST['admin'])? $_POST['admin']:"";
+
+		$veterinarios = $objReports->Veterinarios($nombre, $visibilidad, $usuarioRegistro);
+		$totalVeterinarios = $objReports->TotalVeterinarios($nombre, $visibilidad, $usuarioRegistro);
 		$_SESSION['TotVeter'] = $totalVeterinarios;
 		/*----------Inicio del Documento PDF----------*/
 		$pdf = new PDF_MC_Table('L','mm',array(350,200));
@@ -169,13 +170,14 @@ class ReportController extends GeneralController{
 		$this->Combrueba();
 		
 		$objReports = $this->LoadModel("ReportModel");
-		$columna = isset($_POST['Columna'])? $_POST['Columna']:0;
-		$filtro = isset($_POST['Filtro'])? $_POST['Filtro']:"";
+
+		$cedula = isset($_POST['cedula'])? $_POST['cedula']:"";
+		$nombre = isset($_POST['nombre'])? $_POST['nombre']:"";
 		$rol = isset($_POST['busquedaRol'])? $_POST['busquedaRol']: 0;
 		$activos = isset($_POST['busquedaAct'])? $_POST['busquedaAct']: 2;
 
-		$Usuarios = $objReports->Usuarios($columna, $filtro, $rol,$activos);
-		$TotalUsuarios = $objReports->TotalUsuarios($columna, $filtro, $rol,$activos);
+		$Usuarios = $objReports->Usuarios($cedula, $nombre, $rol,$activos);
+		$TotalUsuarios = $objReports->TotalUsuarios($cedula, $nombre, $rol,$activos);
 		$_SESSION['Num'] = $TotalUsuarios[0]['TotalUsuarios'];
 
 		/*----------Inicio del Documento PDF----------*/
@@ -220,16 +222,17 @@ class ReportController extends GeneralController{
 		$this->Combrueba();
 		
 		$objReports = $this->LoadModel("ReportModel");
-		$accion = isset($_POST['accion'])? $_POST['accion']:"Todos";
-		$columna = isset($_POST['Columna'])? $_POST['Columna']: 0;
-		$filtro = isset($_POST['Filtro'])? $_POST['Filtro']:"";
+
+		$usuarioMov = isset($_POST['usuario'])? $_POST['usuario']: "";
+		$modulo = isset($_POST['modulo'])? $_POST['modulo']: "";
+		$accion = isset($_POST['accion'])? $_POST['accion']: "";
 		$desde = isset($_POST['Desde'])?$_POST['Desde']:date('Y-m-d');
 		$hasta = isset($_POST['Hasta'])?$_POST['Hasta']:date('Y-m-d');
 		
-		$Movimientos = $objReports->Movimientos($columna, $filtro,$desde, $hasta, $accion);
-		$TotalMovimientos = $objReports->ContadorMovimientos($columna, $filtro,$desde, $hasta, "", $accion);
-		$TotalCierres = $objReports->ContadorMovimientos(2,'Cerrar Sesion',$desde, $hasta, $filtro,$accion);
-		$TotalLogins = $objReports->ContadorMovimientos(2,'Usuario Logueandose',$desde, $hasta, $filtro,$accion);
+		$Movimientos = $objReports->Movimientos($usuarioMov, $modulo, $accion,$desde, $hasta);
+		$TotalMovimientos = $objReports->ContadorMovimientos($usuarioMov, $modulo, $accion,$desde, $hasta);
+		$TotalCierres = $objReports->ContadorMovimientos("",'Cerrar Sesion', "", $accion,$desde, $hasta);
+		$TotalLogins = $objReports->ContadorMovimientos("",'Usuario Logueandose', "", $accion,$desde, $hasta);
 
 		$_SESSION['num'] = $TotalMovimientos[0]['TotalMovimientos'];
 		$_SESSION['closes'] = $TotalCierres[0]['TotalMovimientos'];
@@ -273,14 +276,15 @@ class ReportController extends GeneralController{
 		$this->Combrueba();
 		
 		$objReports = $this->LoadModel("ReportModel");
-		$columna = isset($_POST['Columna'])?$_POST['Columna']:0;
-		$filtro = isset($_POST['Filtro'])? $_POST['Filtro']:"";
-		$desde =isset($_POST['Desde'])? $_POST['Desde']:"";
-		$hasta = isset($_POST['Hasta'])? $_POST['Hasta']:"";
-		$acciones = isset($_POST['acciones'])? $_POST['acciones']: "Todos";
+		$usuarioMov = isset($_POST['usuario'])? $_POST['usuario']: "";
+		$modulo = isset($_POST['modulo'])? $_POST['modulo']: "";
+		$accion = isset($_POST['accion'])? $_POST['accion']: "";
+		$desde = isset($_POST['Desde'])?$_POST['Desde']:date('Y-m-d');
+		$hasta = isset($_POST['Hasta'])?$_POST['Hasta']:date('Y-m-d');
+		
 		//Creo que lo que manda la pagina de reportes es nada :V porque no hay formulario pero podemos hacerlo
-		$Bitacoras = $objReports->Bitacora($columna, $filtro, $desde, $hasta,$acciones);
-		$TotalBitacoras = $objReports->TotalBitacora($columna, $filtro,$desde,$hasta,$acciones);
+		$Bitacoras = $objReports->Bitacora($usuarioMov, $modulo, $accion,$desde, $hasta);
+		$TotalBitacoras = $objReports->TotalBitacora($usuarioMov, $modulo, $accion,$desde, $hasta);
 		$_SESSION['num'] = $TotalBitacoras[0]['totalBitacora'];
 		/*----------Inicio del Documento PDF----------*/
 		$pdf = new PDF_MC_Table('L','mm',array(350,200));
@@ -304,6 +308,55 @@ class ReportController extends GeneralController{
 					utf8_decode($bitacora['valor_anterior']),
 					utf8_decode($bitacora['valor_actual']),
 					$fecha = date("d-m-Y",strtotime($bitacora['fecha_accion']))
+				));
+			}
+		} else {
+			$pdf->Cell(0,10,"No existen Datos en la Base de Datos Que correspondan a su busqueda.",1,1,'C');
+		}
+		
+		return $pdf->Output();
+	}
+
+	/******************************************************************
+	*	Pertenece: ReportController
+	*	Nombre: Bitacora_Albergues
+	*	Función: Mostrar Reporte General del Sistema
+	*	Entradas: Filtro de busqueda, columna a buscar
+	*	Salidas: Reporte General
+	******************************************************************/
+	public function Bitacora_Albergues(){
+		$this->Combrueba();
+		
+		$objReports = $this->LoadModel("ReportModel");
+
+		$nombre = isset($_POST['nombre'])? $_POST['nombre']:"";
+		$rifpropietario = isset($_POST['cedulaUser'])? $_POST['cedulaUser']:"";
+		$activo = isset($_POST['Activo'])? $_POST['Activo']:2;
+		
+		//Creo que lo que manda la pagina de reportes es nada :V porque no hay formulario pero podemos hacerlo
+		$Albergues = $objReports->Albergues($nombre, $rifpropietario, $activo);
+		$TotalAlbergues = $objReports->TotalAlbergues($nombre, $rifpropietario, $activo);
+		$_SESSION['num'] = $TotalAlbergues[0]['totalalbergues'];
+		/*----------Inicio del Documento PDF----------*/
+		$pdf = new PDF_MC_Table('L','mm',array(350,200));
+		$pdf->AliasNbPages();
+		$pdf->AddPage();
+		$pdf->SetFont('Times','',12);
+		
+		//Colocar el tamaño de las columnas de las celdas de la tabla (10)
+		$pdf->SetWidths(Array(35,70,70,75,45));
+		
+		///Colocar la altura de la linea
+		$pdf->SetLineHeight(5);
+		
+		if($Albergues != false){
+			foreach ($Albergues as $albergue){
+				$pdf->Row(Array(
+					$albergue['id_albergue'],
+					utf8_decode($albergue['nombre']),
+					utf8_decode($albergue['direccion']),
+					utf8_decode($albergue['cedula_usuario']),
+					utf8_decode($albergue['activo'] = 1? "Si": "No")
 				));
 			}
 		} else {

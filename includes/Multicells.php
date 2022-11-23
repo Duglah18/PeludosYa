@@ -29,7 +29,7 @@ class PDF_MC_Table extends FPDF {
 		// Título
 		$this->SetFont('Arial','BIU',18);
 		$this->SetXY(0, 30);
-		$this->Cell(0,10,isset($_POST['Reporte'])? ($_POST['Reporte'] == "Animales"? "Peludos": $_POST['Reporte']): "Title",0,0,'C');
+		$this->Cell(0,10,isset($_POST['Reporte'])? $_POST['Reporte']: "Title",0,0,'C');
 		// Salto de línea
 		$this->Ln(20);
 		//Se pudo haber hecho esto pero bueno:
@@ -40,9 +40,10 @@ class PDF_MC_Table extends FPDF {
 		//Preguntar a la profesora si es mejor que se repita siempre el header o no 
 		//usa un switch para colcar la parte de arriba de la tabla la cabecera dependiendo del tipo de consulta
 		$this->SetFont('Arial','B',12);
+		$this->SetTitle("Reportes de ".$_POST['Reporte']);
 		switch($_POST['Reporte']){
-			case "Animales":
-				$this->SetTitle('Reportes de Peludos');
+			case "Peludos":
+				//$this->SetTitle('Reportes de Peludos');
 				
 				$this->SetXY(10, 30);
 				$this->Cell(50, 10, "Peludos Totales: ". $_SESSION['numtotAnimales'], 0, 1, 'L');
@@ -65,7 +66,7 @@ class PDF_MC_Table extends FPDF {
 				$this->Cell(35, 5, "Disponible", 1, 1,'C', 0);
 				break;
 			case "Veterinarios":
-				$this->SetTitle('Reportes de Veterinarios');
+				//$this->SetTitle('Reportes de Veterinarios');
 					
 				$this->SetXY(10, 30);
 				$this->Cell(50, 10, "Veterinarios Totales: ".$_SESSION['TotVeter'], 0, 1, 'L');
@@ -79,7 +80,7 @@ class PDF_MC_Table extends FPDF {
 				break;
 				//20,65,45,60,45,60,30
 			case "Usuarios":
-				$this->SetTitle('Reportes de Usuarios');
+				//$this->SetTitle('Reportes de Usuarios');
 				
 				$this->SetXY(10, 30);
 				$this->Cell(50, 10, "Usuarios Totales: " . $_SESSION['Num'], 0, 1, 'L');
@@ -96,24 +97,20 @@ class PDF_MC_Table extends FPDF {
 				$this->Cell(55, 5, "Detalles", 1, 0,'C', 0);
 				$this->Cell(40, 5, "Activo", 1, 1,'C', 0);
 				break;
-			case "Movimientos":
-				$this->SetTitle('Reportes de Movimientos');
+			case "Albergues":
+				//$this->SetTitle('Reportes de Movimientos');
 
 				$this->SetXY(10, 30);
 				$this->Cell(50, 10, "Movimientos Totales Mostrando: " . $_SESSION['num'], 0, 1, 'L');
-				$this->SetXY(10, 35);
-				$this->Cell(50, 10, "Cierres de Session Totales: " . $_SESSION['closes'], 0, 1, 'L');
-				$this->SetXY(10, 40);
-				$this->Cell(50, 10, "Logueos Totales: " . $_SESSION['logins'], 0, 1, 'L');
 				
 				$this->Cell(35, 5, "ID", 1, 0,'C', 0);
-				$this->Cell(50, 5, utf8_decode("Usuario Acción"), 1, 0,'C', 0);
-				$this->Cell(60, 5, utf8_decode("Módulo"), 1, 0,'C', 0);
-				$this->Cell(75, 5, utf8_decode("Acción"), 1, 0,'C', 0);
-				$this->Cell(45, 5, "Fecha", 1, 1,'C', 0);
+				$this->Cell(70, 5, utf8_decode("Nombre Albergue"), 1, 0,'C', 0);
+				$this->Cell(70, 5, utf8_decode("Dirección"), 1, 0,'C', 0);
+				$this->Cell(75, 5, utf8_decode("Fundacion Propietaria"), 1, 0,'C', 0);
+				$this->Cell(45, 5, "Activo", 1, 1,'C', 0);
 				break;
 			case "Bitacora":
-				$this->SetTitle('Reportes de Bitacoras');
+				//$this->SetTitle('Reportes de Bitacoras');
 				
 				$this->SetXY(10, 30);
 				$this->Cell(50, 10, "Registros Totales: " . $_SESSION['num'], 0, 1, 'L');

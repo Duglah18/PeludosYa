@@ -14,14 +14,11 @@ echo "Pagina para la toma de decision acerca de que tipo de reporte se quiere pr
         <li class="tab col s2"><a class="active" href="#Animales">Animales</a></li>
         <li class="tab col s2"><a href="#Veterinarios">Veterinarios</a></li>
         <li class="tab col s2"><a href="#Usuarios">Usuarios</a></li>
-        <li class="tab col s2"><a href="#Movimientos">Inicios de Sesión</a></li>
-        <li class="tab col s2"><a href="#Bitacora">Bitacora</a></li>
+        <li class="tab col s2"><a href="#Albergues">Albergues</a></li>
+        <li class="tab col s2"><a href="#General">Bitacoras</a></li>
       </ul>
     </div>
-<!--$data['Razas'] =  $objAdmin->listaRazas('', 1, 10000);
-        $data['tamanos'] = $objAdmin->consultaTamanoAnimal();
-        $data['albergues'] = $objAdmin->consultaAlbergues();//id_albergue, nombre
-        $data['tiposAni'] = $objSess->consultaTipoAnimal();-->
+
     <div id="Animales" class="col s12">
 	<form action="<?=BASE_URL?>report/Bitacora_Animales" target="_blank" method="POST">
 			<label>Animales</label><br>
@@ -68,41 +65,34 @@ echo "Pagina para la toma de decision acerca de que tipo de reporte se quiere pr
 				<option value="1">No adoptados</option>
 				<option value="3">Adoptados</option>
 			</select>
-			<button name="Reporte" value="Animales">Generar Reporte</button>
+			<button name="Reporte" value="Peludos">Generar Reporte</button>
 		</form>
 	</div>
 
     <div id="Veterinarios" class="col s12">
-	<form action="<?=BASE_URL?>report/Bitacora_Veterinarios" target="_blank" method="POST">
-		<label>Veterinarios</label>
-		<select name="Columna">
-				<option value="0">ID Veterinario</option>
-				<option value="1">Nombre</option>
-				<option value="2">Visibilidad</option>
-				<option value="3">Quien lo Registro</option>
+		<form action="<?=BASE_URL?>report/Bitacora_Veterinarios" target="_blank" method="POST">
+			<label>Veterinarios</label><br>
+				<label for="">Nombre</label>
+				<input type="text" name="nombre">
+				<label for="">Admin que lo Registro</label>
+				<input type="text" name="admin">
+				<label>Visibilidad veterinarios</label>
+			<select name="Visible">
+					<option value="3">Todos</option>
+					<option value="1">Visibles</option>
+					<option value="0">Ocultos</option>
 			</select>
-			<input name="Filtro"></input>
-			<label>Visibilidad veterinarios</label>
-		<select name="Visible">
-				<option value="3">Todos</option>
-				<option value="1">Visibles</option>
-				<option value="0">Ocultos</option>
-		</select>
-			<button name="Reporte" value="Veterinarios">Generar Reporte</button>
-	</form>
+				<button name="Reporte" value="Veterinarios">Generar Reporte</button>
+		</form>
 	</div>
 
     <div id="Usuarios" class="col s12">
 	<form action="<?=BASE_URL?>report/Bitacora_Usuarios" target="_blank" method="POST">
-			<label>Usuarios</label>
-			<select name="Columna">
-				<option value="0">Cedula</option>
-				<option value="1">Nombre</option>
-				<option value="2">Rol</option>
-				<option value="3">Activo</option>
-			</select>
-
-			<input name="Filtro"></input>
+			<label>Usuarios</label><br>
+			<label for="">Cedula</label>
+			<input name="cedula">
+			<label for="">Nombre</label>
+			<input name="nombre">
 			<label>Buscar por Rol</label>
 			<select name="busquedaRol">
 				<option value="0">Todos</option>
@@ -122,72 +112,43 @@ echo "Pagina para la toma de decision acerca de que tipo de reporte se quiere pr
 		</form>
 	</div>
 
-    <div id="Movimientos" class="col s12">
-	<form action="<?=BASE_URL?>report/Bitacora_Movimientos" target="_blank" method="POST">
-		<label>Movimientos</label>
-		<select name="Columna">
-				<option value="0">ID Bitacora</option>
-				<option value="1">Usuario Accion</option>
-				<option value="2">Modulo afectado</option>
-				<option value="3">Accion Realizada</option>
-				<option value="4">Fecha Accion</option>
-			</select>
-			<br>
-			<label>Busqueda</label>
-			<input name="Filtro"></input>
-			<br>
-			<label>Acciones realizadas</label>
-			<select name="accion">
-				<option value="Todos">Todos</option>
-				<option value="Logueandose">Iniciar sesión</option>
-				<option value="Cerrar Sesion">Cerrar Sesión</option>
-			</select>
-			<div id="fecha">
-			<label for="">Desde</label>
-			<input type="date" value="<?= date('Y-m-d'); ?>" name="Desde" class="col s6"> 
-			<br>
-			<label for="">Hasta</label>
-			<br>
-			<input type="date" value="<?= date('Y-m-d'); ?>" name="Hasta" class="col s6">
-			</div>
-			<button name="Reporte" value="Movimientos">Generar Reporte</button>
-		</form>
-	</div>
-	
-	<div id="Bitacora" class="col s12">
-	<form action="<?=BASE_URL?>report/Bitacora_General" target="_blank" method="POST">
-		<label>Bitacora</label>
-		<select name="Columna">
-				<option value="0">ID Bitacora</option>
-				<option value="1">Usuario Accion</option>
-				<option value="2">Modulo afectado</option>
-				<option value="3">Accion Realizada</option>
-				<option value="4">Fecha Accion</option>
-			</select>
-			<input name="Filtro"></input>
-			<div id="fecha">
-			<label for="">Desde</label>
-			<input type="date" value="<?= date('Y-m-d'); ?>" name="Desde" class="col s6"> 
-			<br>
-			<label for="">Hasta</label>
-			<br>
-			<input type="date" value="<?= date('Y-m-d'); ?>" name="Hasta" class="col s6">
-			</div>
-			<br>
-			<label for="">Accion</label>
-			<select name="acciones">
-				<option value="Todos">Todos</option>
-				<option value="INSERT">Insercion</option>
-				<option value="UPDATE">Actualizacion</option>
-				<option value="Logueandose">Login</option>
-				<option value="Cerrar Sesion">Cerrar Sesion</option>
-			</select>
-			<button name="Reporte" value="Bitacora">Generar Reporte</button>
+	<div id="General" class="col s12">
+		<form action="<?=BASE_URL?>report/Bitacora_General" target="_blank" method="POST">
+			<label>Bitacoras</label><br>
+				<label for="">Usuario Acciones</label>
+				<input type="text" name="usuario">
+				<label for="">Modulo Afectado</label>
+				<input type="text" name="modulo">
+				<label for="">Accion Realizada</label>
+				<input type="text" name="accion">
+				<label>Visibilidad veterinarios</label>
+				<label for="">Desde</label>
+				<input type="date" value="<?= date('Y-m-d'); ?>" name="Desde" class="col s6"> 
+				<br>
+				<label for="">Hasta</label>
+				<br>
+				<input type="date" value="<?= date('Y-m-d'); ?>" name="Hasta" class="col s6">
+				<button name="Reporte" value="Bitacora">Generar Reporte</button>
 		</form>
 	</div>
 
+    <div id="Albergues" class="col s12">
+		<form action="<?=BASE_URL?>report/Bitacora_Albergues" target="_blank" method="POST">
+			<label>Albergues</label><br>
+			<label for="">Nombre</label>
+			<input type="text" name="nombre">
+			<br>
+			<label>Fundacion propietario</label>
+			<input type="text" name="cedulaUser" id="">
+			<div id="fecha">
+			<select name="Activo" id="">
+				<option value="2">Todos</option>
+				<option value="1">Activo</option>
+				<option value="0">Inactivo</option>
+			</select>
+			<button name="Reporte" value="Albergues">Generar Reporte</button>
+		</form>
+	</div>
+	
+	
   </div>
-  
-  
-  
- 
