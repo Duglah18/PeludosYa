@@ -28,4 +28,12 @@ function getFooter($document)//retorna el foot de una vista
   require_once($include);
 }
 
+function getDashboard($document){
+	$include = "";
+	switch($document){
+		case "admin": $include = "includes/Dashboards/dashboardAdmin.phtml"; break;
+	}
+	require_once($include);
+}
+
 ?>

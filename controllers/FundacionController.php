@@ -218,6 +218,7 @@ class FundacionController extends GeneralController{
 		//ps no se q fecha ponerle de limite
 		//y tampoco pudo haber nacido un año en el futuro
 		//Hacer que la fecha sea entero
+		/*Validacion del año de nacimiento del peludo*/
 		if (!is_int($_POST['fecha']) || $_POST['fecha'] < 0 || $_POST['fecha'] < 2009 || $_POST['fecha'] > intval(date('Y'))){
 			$Error = "Año de Nacimiento Incorrecto";
 			$_SESSION['Error'] = "Año de Nacimiento Incorrecto";

@@ -5,6 +5,7 @@ session_start();
 //Autoload de las clases y Funcionalidad de Reportes.
 require_once "includes/Multicells.php";
 require_once "config/autoload.php";
+require_once "helpers/helpers.php";
 
 /*----Url para el manejo de direcciones en la Página----*/
 //URL para buscar los assets del proyecto para las vistas

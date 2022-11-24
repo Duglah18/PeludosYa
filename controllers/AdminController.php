@@ -511,6 +511,12 @@ class AdminController extends GeneralController{
 			$_SESSION['Error'] = "Ocurrio un error";
 			return header("location: " .BASE_URL."admin/animales");
 		}
+		/*Validacion del año de nacimiento del peludo*/
+		if (!is_int($_POST['fecha']) || $_POST['fecha'] < 0 || $_POST['fecha'] < 2009 || $_POST['fecha'] > intval(date('Y'))){
+			$_SESSION['Error'] = "Año de Nacimiento Incorrecto";
+			return header("location: ".BASE_URL."admin/animales");
+			
+		}
 		
         if (isset($_POST['accion']) && $_POST['accion'] == 'Agregar'){
             $nombre = $_POST['nombre'];

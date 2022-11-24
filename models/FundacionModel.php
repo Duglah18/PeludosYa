@@ -325,7 +325,7 @@ class FundacionModel extends ConexionBD{
                                         WHERE id_animal = '$id_peludo'");
         $data['visible'] = $decision;
 
-        $modificaActivacionUsuario = $this->actualizaData('animal', $data, "id_animal = " . $id_peludo);
+        $modificaActivacionUsuario = $this->actualizaData('animal', $data, "id_animal = '$id_peludo'");
 
         $nuevo = $this->obtenData("SELECT id_animal, visible
                                     FROM animal 
@@ -352,7 +352,7 @@ class FundacionModel extends ConexionBD{
                                         WHERE id_albergue = '$id_albergue'");
         $data['activo'] = $decision;
 
-        $modificaActivacionUsuario = $this->actualizaData('albergue', $data, "id_albergue = " . $id_albergue);
+        $modificaActivacionUsuario = $this->actualizaData('albergue', $data, "id_albergue = '$id_albergue'");
 
         $nuevo = $this->obtenData("SELECT id_albergue, activo
                                     FROM albergue 

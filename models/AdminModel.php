@@ -13,23 +13,23 @@ class AdminModel extends ConexionBD{
         if ($pagina <= 0){ $pagina = 1; }
         $desde = ($pagina - 1) * $qty;
         $resultados = $this->obtenData("SELECT a.id_animal, a.nombre, a.anio_nac, a.img, 
-																				a.fecha_ingreso, b.nombre as nomraza, c.nombre as nomtipo,
-																				e.nombre as nomalbergue, d.nombre as nombreUser, a.visible
-																		FROM animal a
-																			INNER JOIN raza b 
-																								ON a.raza_id = b.id_raza
-																			INNER JOIN tipo_animal c 
-																								ON c.id_tipo = b.id_tipo_animal
-																			INNER JOIN albergue e 
-																								ON e.id_albergue = a.albergue_id
-																			INNER JOIN usuarios d 
-																								ON d.cedula = e.cedula_usuario
-																			LEFT JOIN adopcion f 
-																								ON a.id_animal = f.animal_id
-																		WHERE 
-																					(d.cedula = CASE WHEN '$cedula_user' = '' THEN d.cedula ELSE '$cedula_user' END)
-																		ORDER BY a.id_animal DESC, a.visible ASC
-																		LIMIT $desde,$qty");
+												a.fecha_ingreso, b.nombre as nomraza, c.nombre as nomtipo,
+												e.nombre as nomalbergue, d.nombre as nombreUser, a.visible
+										FROM animal a
+											INNER JOIN raza b 
+																ON a.raza_id = b.id_raza
+											INNER JOIN tipo_animal c 
+																ON c.id_tipo = b.id_tipo_animal
+											INNER JOIN albergue e 
+																ON e.id_albergue = a.albergue_id
+											INNER JOIN usuarios d 
+																ON d.cedula = e.cedula_usuario
+											LEFT JOIN adopcion f 
+																ON a.id_animal = f.animal_id
+										WHERE 
+													(d.cedula = CASE WHEN '$cedula_user' = '' THEN d.cedula ELSE '$cedula_user' END)
+										ORDER BY a.id_animal DESC, a.visible ASC
+										LIMIT $desde,$qty");
         /*Inciso: CASE ES COMO SWITCH O IF EN SQL (TRANSACT SQL) EN ESTE CASO SI LLEGA VACIO $cedula_user ENTONCES
         MOSTRARA TODOS LOS CONTENIDOS DE LA TABLA PQ NO LO APLIQUE ANTES? PS DE PANA LO APRENDI HACE
         POCO RELATIVAMENTE */
@@ -47,16 +47,16 @@ class AdminModel extends ConexionBD{
 		/	Cambio: 
 		/-----------------------------------------------------------------------------------*/
         $resultados = $this->obtenData("SELECT COUNT(*) AS TotalAnimales
-																				FROM animal a
-																					INNER JOIN raza b 
-																										ON a.raza_id = b.id_raza
-																					INNER JOIN tipo_animal c 
-																										ON c.id_tipo = b.id_tipo_animal
-																					INNER JOIN albergue e
-																										ON e.id_albergue = a.albergue_id
-																					INNER JOIN usuarios d 
-																										ON d.cedula = e.cedula_usuario
-																				WHERE (d.cedula = CASE WHEN '$usuario' = '' THEN d.cedula ELSE '$usuario' END)");
+										FROM animal a
+											INNER JOIN raza b 
+																ON a.raza_id = b.id_raza
+											INNER JOIN tipo_animal c 
+																ON c.id_tipo = b.id_tipo_animal
+											INNER JOIN albergue e
+																ON e.id_albergue = a.albergue_id
+											INNER JOIN usuarios d 
+																ON d.cedula = e.cedula_usuario
+										WHERE (d.cedula = CASE WHEN '$usuario' = '' THEN d.cedula ELSE '$usuario' END)");
         return $resultados[0]['TotalAnimales'];
     }
 	
@@ -70,10 +70,10 @@ class AdminModel extends ConexionBD{
         $desde = ($pagina - 1) * $qty;
         $resultado = $this->obtenData("SELECT id_veterinario, nombre, tlf, direccion, 
 									    img, visible, usuario_Rveterinario
-																			  FROM veterinario
-																			  WHERE 
-																			  (id_veterinario = CASE WHEN '$id_veterinario' = '' THEN id_veterinario ELSE '$id_veterinario' END)
-																			  LIMIT $desde, $qty");
+									  FROM veterinario
+									  WHERE 
+									  (id_veterinario = CASE WHEN '$id_veterinario' = '' THEN id_veterinario ELSE '$id_veterinario' END)
+									  LIMIT $desde, $qty");
         return $resultado;
     }
 
@@ -342,7 +342,7 @@ class AdminModel extends ConexionBD{
 		/	Cambio: 
 		/-----------------------------------------------------------------------------------*/
         $resultados = $this->obtenData("SELECT id_tipo, nombre 
-																				 FROM tipo_animal");
+										FROM tipo_animal");
         if ($resultados){
             return $resultados;
         } else {
@@ -358,9 +358,9 @@ class AdminModel extends ConexionBD{
 		/-----------------------------------------------------------------------------------*/
         $id_tipo = mysqli_real_escape_string($this->conectar(),$id_tipo);
         $resultados = $this->obtenData("SELECT id_raza, nombre 
-																				 FROM raza 
-																				 WHERE 
-																				 (id_tipo_animal = CASE WHEN '$id_tipo' = '' THEN id_tipo_animal ELSE '$id_tipo' END)");
+										 FROM raza 
+										 WHERE 
+										 (id_tipo_animal = CASE WHEN '$id_tipo' = '' THEN id_tipo_animal ELSE '$id_tipo' END)");
         if ($resultados){
             return $resultados;
         } else {
@@ -375,13 +375,77 @@ class AdminModel extends ConexionBD{
 		/	Cambio: 
 		/-----------------------------------------------------------------------------------*/
         $resultados = $this->obtenData("SELECT id_tamanio, nombre 
-																				 FROM tamanio");
+										FROM tamanio");
         if ($resultados){
             return $resultados;
         } else {
             return false;
         }
     }
+	/*--------Validaciones--------*/
+	public function ValidarUsuario($cedula, $nombre, $telefono){
+		//Recibe su cedula, nombre y telefono ninguno debe estar en  el sistema del nombre no estoy muy seguro
+		$cedula = mysqli_real_escape_string($this->conectar(), $cedula);
+		$nombre = mysqli_real_escape_string($this->conectar(), $nombre);
+		$telefono = mysqli_real_escape_string($this->conectar(), $telefono);
+		
+		$verificar = $this->obtenData("SELECT cedula, nombre
+										FROM usuarios
+										WHERE cedula = '$cedula' OR nombre = '$nombre' OR telefono = '$telefono'");
+		return $verificar;
+	}
+	
+	public function ValidarAnimal($nombre, $raza, $tamanio, $albergue){
+		//recibe nombre, raza, tamaño y albergue en el mismo albergue no debe existir 
+		//el mismo animal 
+		$nombre = mysqli_real_escape_string($this->conectar(), $nombre);
+		$raza = mysqli_real_escape_string($this->conectar(), $raza);
+		$tamanio = mysqli_real_escape_string($this->conectar(), $tamanio);
+		$albergue = mysqli_real_escape_string($this->conectar(), $albergue);
+		
+		$validacion = $this->obtenData("SELECT id_animal, nombre 
+										FROM animal
+										WHERE nombre = '$nombre' AND raza_id = '$raza' AND albergue_id = '$albergue'");
+										//no se si sea necesario verificar el tamaño
+		return $validacion;
+	}
+	
+	public function ValidarTipoAnimal($nombre){
+		//Esto regresara el Nombre del tipo de animal que existe
+		$nombre = mysqli_real_escape_string($this->conectar(), $nombre);
+		
+		$validacion = $this->obtenData("SELECT id_tipo, nombre
+										FROM tipo_animal 
+										WHERE nombre = '$nombre'");
+		return $validacion;
+	}
+	
+	public function ValidarRazaAnimal($nombre, $tipoanimal){
+		//recibe el nombre a ingresar ademas del tipo de animal al que se le agregara esa raza
+		//Esto regresara el nombre de la raza si existe y el nombre del tipo de animal que lo posee
+		$nombre = mysqli_real_escape_string($this->conectar(), $nombre);
+		$tipoanimal = mysqli_real_escape_string($this->conectar(), $tipoanimal);
+	
+		$validacion = $this->obtenData("SELECT a.id_raza, a.nombre, b.nombre as TipoAnimal
+										FROM raza a
+										INNER JOIN tipo_animal b ON a.id_tipo_animal = b.id_tipo
+										WHERE a.nombre = '$nombre' AND b.id_tipo_animal = '$tipoanimal'");
+		return $validacion;
+	}
+	
+	public function ValidarVeterinario($nombre, $telefono){
+		//Recibe el nombre y su telefono
+		//no creo que se pueda tener el mismo telefono en 2 veterinarios
+		$nombre = mysqli_real_escape_string($this->conectar(), $nombre);
+		$telefono = mysqli_real_escape_string($this->conectar(), $telefono);
+	
+		$validacion = $this->obtenData("SELECT id_veterinario, nombre, tlf, direccion, 
+									    img, visible, usuario_Rveterinario
+										  FROM veterinario
+										  WHERE nombre = '$nombre' OR tlf = '$telefono'");
+		return $validacion;
+
+	}
 
     public function registrarUsuario($tabla, $rif, $nombre, $rol, $direccion, 
                                     $contrasenia, $estado, $tlf, $usuario_ingresando){
@@ -515,7 +579,7 @@ class AdminModel extends ConexionBD{
     }
 
     public function registraVeterinario($nombre,$telefono,$direccion,
-																					  $img, $adminregistra){
+										 $img, $adminregistra){
 		/*-----------------------------------------------------------------------------------/
 		/	Fecha de cambio: 
 		/	Razon:
@@ -666,7 +730,7 @@ class AdminModel extends ConexionBD{
 
         $arra['usuario_bit'] = $usuario_modificando;
         $arra['modulo_afectado'] = 'Modifica Veterinario Admin';
-        $arra['accion_realizada'] = $this->creaCadenaUpdate('veterinario',$data, "id_veterinario = " . $id_veterinario);
+        $arra['accion_realizada'] = $this->creaCadenaUpdate('veterinario',$data, "id_veterinario = '$id_veterinario'");
         $arra['valor_anterior'] = implode(";", $anterior[0]);
         $arra['valor_actual'] = implode("; ",$nuevo[0]);
         $arra['fecha_accion'] ='Now()';
@@ -727,7 +791,7 @@ class AdminModel extends ConexionBD{
 
         $arra['usuario_bit'] = $usuario_modificando;
         $arra['modulo_afectado'] = 'Modifica Raza Animal Admin';
-        $arra['accion_realizada'] = $this->creaCadenaUpdate('raza',$data, "id_raza = " . $id_raza);
+        $arra['accion_realizada'] = $this->creaCadenaUpdate('raza',$data, "id_raza = '$id_raza'");
         $arra['valor_anterior'] = implode(";", $anterior[0]);
         $arra['valor_actual'] = implode("; ",$nuevo[0]);
         $arra['fecha_accion'] ='Now()';
@@ -747,7 +811,7 @@ class AdminModel extends ConexionBD{
                                         WHERE cedula = '$id_usuario'");
         $data['activo'] = $decision;
 
-        $modificaActivacionUsuario = $this->actualizaData('usuarios', $data, "cedula = " . $id_usuario);
+        $modificaActivacionUsuario = $this->actualizaData('usuarios', $data, "cedula = '$id_usuario'");
 
         $nuevo = $this->obtenData("SELECT cedula, activo
                                     FROM usuarios 
@@ -779,7 +843,7 @@ class AdminModel extends ConexionBD{
                                         WHERE id_veterinario = '$id_veterinario'");
         $data['visible'] = $decision;
 
-        $modificaActivacionUsuario = $this->actualizaData('veterinario', $data, "id_veterinario = " . $id_veterinario);
+        $modificaActivacionUsuario = $this->actualizaData('veterinario', $data, "id_veterinario = '$id_veterinario'");
 
         $nuevo = $this->obtenData("SELECT id_veterinario, visible
                                     FROM veterinario 
@@ -811,7 +875,7 @@ class AdminModel extends ConexionBD{
                                         WHERE id_animal = '$id_peludo'");
         $data['visible'] = $decision;
 
-        $modificaActivacionUsuario = $this->actualizaData('animal', $data, "id_animal = " . $id_peludo);
+        $modificaActivacionUsuario = $this->actualizaData('animal', $data, "id_animal = '$id_peludo'");
 
         $nuevo = $this->obtenData("SELECT id_animal, visible
                                     FROM animal 
@@ -843,7 +907,7 @@ class AdminModel extends ConexionBD{
                                         WHERE id_albergue = '$id_albergue'");
         $data['activo'] = $decision;
 
-        $modificaActivacionUsuario = $this->actualizaData('albergue', $data, "id_albergue = " . $id_albergue);
+        $modificaActivacionUsuario = $this->actualizaData('albergue', $data, "id_albergue = '$id_albergue'");
 
         $nuevo = $this->obtenData("SELECT id_albergue, activo
                                     FROM albergue 
