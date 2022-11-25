@@ -1,3 +1,25 @@
+<div class="row" style="padding-top: 5%; padding-bottom: 5%;">
+<div class="col s10 white offset-s1">
+<div class="row" style="padding-left: 15px; padding-right: 15px;">
+    <div class="card  col s3 black-text transparent z-depth-0">
+        <h3>Menu Principal</h3>
+        <hr style="border-top: 8px solid; border-radius: 5px;">
+        <ul>
+        <li><a href="<?= BASE_URL;?>admin/tipoAnimal">Tipos de Animales</a></li>
+          <li><a href="<?= BASE_URL;?>admin/razasAnimal">Razas de Animales</a></li>
+          <li><a href="<?= BASE_URL;?>admin/agregaVeterinarios">Veterinarios</a></li>
+          <li><a href="<?= BASE_URL;?>admin/animales">Peludos</a></li>
+          <li><a href="<?= BASE_URL;?>admin/mostrarData">Usuarios</a></li>
+          <li><a href="<?= BASE_URL;?>admin/albergues">Albergues</a></li>
+          <li><a href="<?= BASE_URL;?>admin/adopciones">Adopciones</a></li>
+          <li><a href="<?= BASE_URL;?>admin/Reportes">Reportes</a></li>
+        </ul>
+    </div>
+
+
+<div class="card col s9 black-text transparent z-depth-0">
+<div class="card-title center-align"><h3>Gestión de Razas</h3></div>
+<hr style="border-top: 8px solid; border-radius: 5px;">
 <?php 
 if (isset($error)){
     echo $error;
@@ -11,57 +33,72 @@ $visible = isset($vtrModificar[0]['visible'])? $vtrModificar[0]['visible']: "";
 
 $total_paginas = ceil($totalregistro / $por_pagina);
 ?>
-<div class="card text-center">
-      <div class="card-body">
-        <h4 class="card-title">Title</h4>
-        <p class="card-text">
-          Pagina para registrar Veterinarios Desde Admin.
-        </p><?php if($identificador != ""){ echo "<label for=''> Se esta modificando el veterinario: " . $identificador . "</label> <br>"; } ?>
-        <form action="<?=BASE_URL;?>admin/registraVeterinario" method="post" enctype="multipart/form-data">
-        
-        <input type="hidden" name="vetIdentificador" value="<?= $identificador?>">
-        <label for="">Nombre Veterinario</label>
-        <input type="text" name="nombre" value="<?=$nombre?>">
-        <label for="">Telefono</label>
-        <input type="tel" name="telefono" value="<?=$telefono?>"><br>
-        <label for="">Direccion</label >
-        <input type="text" name="direccion" value="<?=$direccion?>"><br>
-        <label for="">Imagen</label>
-        <?php if($img != ""){ echo "<label for=''> Se esta modificando la siguiente Imagen: " . $img . "</label> <br>"; } ?>
-        <input type="hidden" value="<?=$img?>" name="imgmodificar">
-        <input type="file" name="img"><br>
-        <input type="hidden" name="admin" value="<?=$id_user;?>">
-        <?php 
-        if ($visible != ""){ ?>
-        <input type="hidden" name="visible" value="<?=$visible?>">
-        <?php
-        }
-        ?>
-        <button name="accion" value="<?php if(isset($_POST['accion'])=="Modificar"){ echo "Modificar"; } else {echo"Agregar";} ?>">Aceptar</button>
-        </form>
-      </div>
+
+<div class="text-center col s6 offset-s3"  style="padding-bottom: 20px;">
+
+    <div class="black-text center-align col s12" for="filtro">
+        <?php if(isset($_POST['accion'])=="Modificar"){ ?>
+            <h5 class="light"> Modificar al veterinario: Nro° <?=$identificador?> </h5>
+        <?php } else { ?>
+            <h5 class="light"> Registrar veterinarios</h5>
+        <?php } ?>
     </div>
 
-    <table class="highlight centered">
-        <!--
-            print_r($dataAdmin);
-        aca se reciben los datos de la consulta de admin 
-        por la var que se creo en Admincontroller(consultaData)
-        la del array $data['dataAdmin']
-        se pasa por su nombre gracias a que al generar la vista en el metodo
-        loadview lo pasamos por alli por la variable $$key
-        esta en el general controller se puede mostrar de manera de tabla asi:
-        -->
-        <thead>
+    <form action="<?=BASE_URL;?>admin/registraVeterinario" method="post" enctype="multipart/form-data">
+        
+        <input type="hidden" name="vetIdentificador" value="<?= $identificador?>">
+
+        <div class="input-field tooltipped col s6" data-position="top" data-tooltip="Nombre del veterinario">
+        <i class="indigo-text material-icons prefix">person</i>
+        <label for="">Nombre Veterinario</label>
+        <input type="text" name="nombre" value="<?=$nombre?>">
+        </div>
+
+        <div class="input-field tooltipped col s6" data-position="top" data-tooltip="Nro° de telefono del veterinario">
+        <i class="indigo-text material-icons prefix">phone</i>
+        <label for="">Telefono</label>
+        <input type="tel" name="telefono" value="<?=$telefono?>">
+        </div>
+    
+        <div class="input-field tooltipped col s6" data-position="top" data-tooltip="Dirección del consultorio del veterinario">
+        <i class="indigo-text material-icons prefix">home</i>
+        <label for="">Direccion</label >
+        <input type="text" name="direccion" value="<?=$direccion?>">
+        </div>
+
+        <div class="file-field input-field tooltipped col s6" data-position="top" data-tooltip="Foto del veterinario">
+            <div class="btn indigo">
+                <span>Buscar..</span>
+            <input type="file" name="img">
+            </div>
+            <div class="file-path-wrapper">
+            <input class="file-path validate" type="text">
+            </div>
+        </div>
+
+        <input type="hidden" name="admin" value="<?=$id_user;?>">
+        <?php 
+        if ($visible != "") { ?>
+        <input type="hidden" name="visible" value="<?=$visible?>">
+        <?php } ?>
+
+        <button class="tooltipped btn indigo col s2 offset-s5"  data-position="bottom" data-tooltip="Registrar" name="accion" value="<?php if(isset($_POST['accion'])=="Modificar"){ echo "Modificar"; } else {echo"Agregar";} ?>"><i class="large material-icons">send</i></button>
+    </form>
+
+</div>
+
+
+<table class="centered">
+        <thead class="card indigo white-text">
             <tr>
                 <th scope="col">ID</th>
                 <th scope="col">Nombre</th>
                 <th scope="col">Telefono</th>
                 <th scope="col">Direccion</th>
                 <th scope="col">Imagen</th>
-                <th scope="col">Visible</th>
-                <th scope="col">Admin Q lo Registro</th>
-                <th scope="col">Botones</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Registrado por</th>
+                <th scope="col">Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -82,12 +119,17 @@ $total_paginas = ceil($totalregistro / $por_pagina);
             <td>
                 <form action="<?=BASE_URL?>admin/agregaVeterinarios" method="POST">
                     <input type="hidden" name="modificacion" value="<?=$Veterinarios[$i]['id_veterinario'] ?>">
-                    <button name="accion" value="Modificar">Modificar</button>
+                    <button class="btn tooltipped blue" data-position="bottom" data-tooltip="Modificar Usuario" name="accion" value="Modificar">
+                        <i class="large material-icons">edit</i>
+                    </button>
                 </form>
                 <form action="<?=BASE_URL?>admin/inactivaVeterinario" method="POST">
                     <input type="hidden" name="modificacion" value="<?=$Veterinarios[$i]['id_veterinario'] ?>">
                     <input type="hidden" name="decision" value="<?=$Veterinarios[$i]['visible'] ?>">
-                    <button name="accion" <?= $Veterinarios[$i]['visible'] != 1? "value='Activar'": "value='Inactivar'" ?>><?= $Veterinarios[$i]['visible'] != 1? "Mostrar": "Ocultar" ?></button>
+                    <button class="btn tooltipped red"  data-position="bottom" data-tooltip="Bloquear/Desbloquear Usuario" name="accion" <?= $Veterinarios[$i]['visible'] != 1? "value='Activar'": "value='Inactivar'" ?>>
+                        <?php if($Veterinarios[$i]['visible'] != 1) { ?> <i class="large material-icons">lock_open</i> 
+                        <?php } else { ?> <i class="large material-icons">lock</i> <?php }?>
+                    </button>
                 </form>
             </td>
             </tr>
@@ -98,7 +140,7 @@ $total_paginas = ceil($totalregistro / $por_pagina);
             ?>
         </tbody>
     </table>
-    <div class="col-md-12 center text-center cyan lighten-2"><!--Paginador-->
+    <div class="col-md-12 center text-center"><!--Paginador-->
     <ul class="pagination">
         <?php if($pagina != 1){ ?>
             <li class="waves-effect blue-text"><a href="<?=BASE_URL?>admin/agregaVeterinarios?pagina=1"><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
@@ -113,7 +155,7 @@ $total_paginas = ceil($totalregistro / $por_pagina);
         
         <?php for($i = 1; $i <= $total_paginas; $i++){ 
             if ($i == $pagina){ ?>
-                <li class="active"><a href="<?=BASE_URL?>admin/agregaVeterinarios?pagina=<?=$i?>"><?=$i?></a></li>
+                <li class="active indigo"><a href="<?=BASE_URL?>admin/agregaVeterinarios?pagina=<?=$i?>"><?=$i?></a></li>
            <?php } else{
             ?>
             <li class="waves-effect"><a href="<?=BASE_URL?>admin/agregaVeterinarios?pagina=<?=$i?>"><?=$i?></a></li>
@@ -132,3 +174,7 @@ $total_paginas = ceil($totalregistro / $por_pagina);
         } ?>
     </ul>
 </div>
+</div>
+</div>
+</div>
+</div> 

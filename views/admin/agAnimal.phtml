@@ -1,3 +1,25 @@
+<div class="row" style="padding-top: 5%; padding-bottom: 5%;">
+<div class="col s10 white offset-s1">
+<div class="row" style="padding-left: 15px; padding-right: 15px;">
+    <div class="card  col s3 black-text transparent z-depth-0">
+        <h3>Menu Principal</h3>
+        <hr style="border-top: 8px solid; border-radius: 5px;">
+        <ul>
+        <li><a href="<?= BASE_URL;?>admin/tipoAnimal">Tipos de Animales</a></li>
+          <li><a href="<?= BASE_URL;?>admin/razasAnimal">Razas de Animales</a></li>
+          <li><a href="<?= BASE_URL;?>admin/agregaVeterinarios">Veterinarios</a></li>
+          <li><a href="<?= BASE_URL;?>admin/animales">Peludos</a></li>
+          <li><a href="<?= BASE_URL;?>admin/mostrarData">Usuarios</a></li>
+          <li><a href="<?= BASE_URL;?>admin/albergues">Albergues</a></li>
+          <li><a href="<?= BASE_URL;?>admin/adopciones">Adopciones</a></li>
+          <li><a href="<?= BASE_URL;?>admin/Reportes">Reportes</a></li>
+        </ul>
+    </div>
+
+<div class="card col s9 black-text transparent z-depth-0">
+  <div class="card-title center-align"><h3>Registro de Mascotas</h3></div>
+  <hr style="border-top: 8px solid; border-radius: 5px;">
+
 <?php
 $id_animal = (isset($animales[0]['id_animal']))? $animales[0]['id_animal'] :"";
 $tipoanimalSelecc = (isset($animales[0]['id_tipo_animal']))? $animales[0]['id_tipo_animal'] :"";
@@ -10,15 +32,12 @@ $tamanio_mod = (isset($animales[0]['tamanio_id']))? $animales[0]['tamanio_id'] :
 $Albergue = (isset($animales[0]['albergue_id']))? $animales[0]['albergue_id'] :"";
 $visible = (isset($animales[0]['visible']))? $animales[0]['visible']:"";
 ?>
-<div class="card text-center">
-<label for="">Tipo animal</label>
+<div class="card-title center-align"><h5>Paso N°1 - Elige el tipo de animal a registrar</h5></div>
+<div class="input-field col s12 tooltipped" data-position="top" data-tooltip="Nombre de la persona o fundación">
 <form action="<?= BASE_URL?>admin/agregaAnimales" method="POST">
+<i class="indigo-text material-icons prefix">image</i>
         <select name="tipoanimal" id="tipo_animal">
           <option value="0">Selecciona</option>
-          <!--=============================================
-            Este es el usuario de fundacion al que se le 
-            añadira el albergue nuevo
-          ==============================================-->
         <?php 
           foreach ($tipoanimal as $key) {?>
           <option <?php if($tipoanimalSelecc == $key['id_tipo']){ echo"selected"; } ?> value="<?= $key['id_tipo']; ?>"><?= $key['nombre']; ?></option>
@@ -26,95 +45,101 @@ $visible = (isset($animales[0]['visible']))? $animales[0]['visible']:"";
           }
         ?>
         </select>
-        <button <?php if($tipoanimalSelecc != ""){ echo "disabled";} ?> >Seleccionar Animal</button>
+        <button class="btn indigo" <?php if($tipoanimalSelecc != ""){ echo "disabled";} ?> >Seleccionar Animal</button>
         </form>
         </div>
-<div class="card text-center">
-      <div class="card-body">
-        <h4 class="card-title">Title</h4>
-        <p class="card-text">
-          Pagina para registrar animales Desde Admin.
-          Estos inputs se mantendran debido a que el admin no tiene albergue
-        </p>
-        <form action="<?=BASE_URL;?>admin/agregaAnimal" method="post" enctype="multipart/form-data">
-        <input type="hidden" value="<?= $id_animal;?>" name="id_animal">
-        <?php if($id_animal != ""){ ?><label for="">Animal Modificando: <?=$id_animal?></label><?php }?>
+
+<div class="card-title center-align"><h5>Paso N°2 - Completa los datos de registro</h5></div>
+
+<form action="<?=BASE_URL;?>admin/agregaAnimal" method="post" enctype="multipart/form-data">
+
+  <input type="hidden" value="<?= $id_animal;?>" name="id_animal">
+    <?php if($id_animal != ""){ ?><label for="">Animal Modificando: <?=$id_animal?></label><?php }?>
+
+      <div class="input-field col s12 tooltipped" data-position="top" data-tooltip="Nombre de la persona o fundación">
+      <i class="indigo-text material-icons prefix">account_circle</i>
         <label for="">Nombre Animal</label>
         <input type="text" value="<?= $Nombre;?>" name="nombre" >
+      </div>
+
+      <div class="input-field col s12 tooltipped" data-position="top" data-tooltip="Nombre de la persona o fundación">
+      <i class="indigo-text material-icons prefix">block</i>
         <label for="">Año de nacimiento</label>
-        <input type="text" value="<?= $anio_nac?>" name="fecha"><br>
-        <label for="">Imagen Original: <?=$img?></label><br>
-        <label for="">Imagen</label>
-        <input type="hidden" value="<?=$img?>" name="imgmodificar">
-        <input type="file" name="img"><br><!--No hay forma creo ahora mismo de poner lo q recibo de img-->
+        <input type="text" value="<?= $anio_nac?>" name="fecha">
+      </div>
+
+      <div class="file-field input-field col s12 tooltipped" data-position="top" data-tooltip="Nombre de la persona o fundación">
+        <div class="btn indigo">
+                <span>Buscar..</span>
+            <input type="file" name="img">
+            </div>
+            <div class="file-path-wrapper">
+            <input class="file-path validate" type="text">
+          </div>
+      </div>
+
+      <div class="input-field col s12 tooltipped" data-position="top" data-tooltip="Nombre de la persona o fundación">
+      <i class="indigo-text material-icons prefix">account_circle</i>
         <label for="">Descripcion</label>
         <input type="text" value="<?= $Descripcion?>" name="descrip" >
+      </div>
         
-        <br>
+      <div class="input-field col s12 tooltipped" data-position="top" data-tooltip="Nombre de la persona o fundación">
+      <i class="indigo-text material-icons prefix">account_circle</i>
         <?php if(isset($raza)){ ?>
-        <label for="">Raza</label>
-        <label for="">Usted Selecciono (aca escribir que animal seleccionaste)</label>
         <select name="raza" id="">
           <option value="0">Selecciona</option>
-          <!--=============================================
-            Este es el usuario de fundacion al que se le 
-            añadira el albergue nuevo
-          ==============================================-->
-        <?php 
-          foreach ($raza as $key) {?>
+            <?php foreach ($raza as $key) { ?>
           <option <?php if($Raza == $key['id_raza']){ echo"selected"; } ?> value="<?= $key['id_raza']; ?>"><?= $key['nombre']; ?></option>
-          <?php
-          }
-        ?>
+            <?php } ?>
         </select>
+        <label for="">Raza</label>
         <?php } else {
           echo "
           <select name='raza'>
             <option value='0'>Seleccione un Animal</option>
           </select>";
           }?>
-        <br>
-        <label for="">Tamaño</label>
+      </div>
+        
+      <div class="input-field col s12 tooltipped" data-position="top" data-tooltip="Nombre de la persona o fundación">
+      <i class="indigo-text material-icons prefix">account_circle</i>
         <select name="tamano" id="">
           <option value="0">Selecciona</option>
-          <!--=============================================
-            Este es el usuario de fundacion al que se le 
-            añadira el albergue nuevo
-          ==============================================-->
-        <?php 
-          foreach ($tamano as $key) {?>
+        <?php foreach ($tamano as $key) { ?>
           <option <?php if($tamanio_mod == $key['id_tamanio']){ echo"selected"; } ?> value="<?= $key['id_tamanio']; ?>"><?= $key['nombre']; ?></option>
-          <?php
-          }
-        ?>
+          <?php } ?>
         </select>
-        <br>
-        <label for="">Albergue</label>
+        <label for="">Tamaño</label>
+      </div>
+
+      <div class="input-field col s12 tooltipped" data-position="top" data-tooltip="Nombre de la persona o fundación">
+      <i class="indigo-text material-icons prefix">account_circle</i>
         <select name="albergue" id="">
           <option value="0">Selecciona</option>
-          <!--=============================================
-            Este es el usuario de fundacion al que se le 
-            añadira el albergue nuevo
-          ==============================================-->
-        <?php 
-          foreach ($albergues as $key) {
-           ?>
+        <?php foreach ($albergues as $key) { ?>
           <option <?php if($Albergue == $key['id_albergue']){ echo"selected"; } ?> value="<?= $key['id_albergue']; ?>"><?= $key['nombre']; ?></option>
-          <?php
-
-          }
-        ?>
+          <?php } ?>
         </select>
-        <br>
+        <label for="">Albergue</label>
+      </div>
+
         <?php
           if(isset($_POST['accion'])=="Modificar"){?>
           <input type="hidden" name="visible" value="<?= $visible?>">
-        <?php
-          }
-        ?>
+        <?php } ?>
+
+        <div class="card-title center-align"><h5>¡Sin elegir tipo de animal primero, no se podra completar el registro!</h5></div>
+        <br>
+
+        <!-- <label for="">Imagen Original: <?=$img?></label> <input type="hidden" value="<?=$img?>" name="imgmodificar">-->
 
         <!--No se mostrara si la adopcion se esta procesando porque esta no es su ventana-->
-        <button name="accion" value="<?php if(isset($_POST['accion'])=="Modificar"){ echo "Modificar"; } else {echo"Agregar";} ?>">Aceptar</button>
+        <a href="<?= BASE_URL;?>admin/animales"><input class="btn indigo col s2" type="button" value="Volver"></a>
+          <button class="col s2 offset-s8 btn indigo" name="<?php if(isset($_POST['accion'])=="Modificar"){ echo "Modificar"; } else {echo"Agregar";} ?>">Aceptar</button>
         </form>
-      </div>
+
     </div>
+</div>
+</div>
+</div>

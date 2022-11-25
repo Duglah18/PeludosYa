@@ -149,7 +149,7 @@ class FundacionController extends GeneralController{
 			$_SESSION['Error'] = "Ocurrio un error inesperado";
             return header("location: ".BASE_URL);
         }
-		if(!isset($_POST['']) || !isset($_POST['']) || !isset($_POST['']) || !isset($_POST[''])){
+		if(!isset($_POST['nombre']) || !isset($_POST['direccion']) || !isset($_POST['cedula_user'])){
 			$_SESSION['Error'] = "No se enviaron datos";
 			return header("location: ".BASE_URL."admin/albergues");
 		}

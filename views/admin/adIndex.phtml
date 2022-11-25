@@ -1,29 +1,59 @@
-<?php
-    $total_paginas = ceil($totalregistro / $por_pagina);
-?>
-	<!--Agregado el 16/11/20222 Para filtrar por estado de usuarios facilitar al admin-->
-	<form action="<?=BASE_URL?>admin/mostrarData" method="GET">
-		<label for="">Filtra por Estado</label>
-		<select name="filtro" id="">
-            <option value="">Todos</option>
-			<option <?php if($filtro == "1"){ echo "selected"; } ?> value="1">Activo</option>
-			<option <?php if($filtro == "0"){ echo "selected"; } ?> value="0">Bloqueado</option>
-		</select>
-		<button>Buscar</button>
-	</form>
-    
-    <a href="<?= BASE_URL;?>admin/agregaUsuarios"><input type="button" value="Agrega Usuario"></a>
-    <table class="highlight centered">
-        <thead>
-            <tr>
-                <th scope="col">Cedula</th>
-                <th scope="col">Nombre</th>
-                <th scope="col">rol ID</th>
-                <th scope="col">direcc</th>
-                <th scope="col">Telefono</th>
-                <th scope="col">Activo</th>
-                <th scope="col">Detalles</th>
-                <th scope="col">Botones</th>
+<div class="row" style="padding-top: 5%; padding-bottom: 5%;">
+<div class="col s10 white offset-s1">
+<div class="row" style="padding-left: 15px; padding-right: 15px;">
+    <div class="card  col s3 black-text transparent z-depth-0">
+        <h3>Menu Principal</h3>
+        <hr style="border-top: 8px solid; border-radius: 5px;">
+        <ul>
+        <li><a href="<?= BASE_URL;?>admin/tipoAnimal">Tipos de Animales</a></li>
+          <li><a href="<?= BASE_URL;?>admin/razasAnimal">Razas de Animales</a></li>
+          <li><a href="<?= BASE_URL;?>admin/agregaVeterinarios">Veterinarios</a></li>
+          <li><a href="<?= BASE_URL;?>admin/animales">Peludos</a></li>
+          <li><a href="<?= BASE_URL;?>admin/mostrarData">Usuarios</a></li>
+          <li><a href="<?= BASE_URL;?>admin/albergues">Albergues</a></li>
+          <li><a href="<?= BASE_URL;?>admin/adopciones">Adopciones</a></li>
+          <li><a href="<?= BASE_URL;?>admin/Reportes">Reportes</a></li>
+        </ul>
+    </div>
+
+
+<div class="card col s9 black-text transparent z-depth-0">
+<div class="card-title center-align"><h3>Gestión de Usuarios</h3></div>
+<hr style="border-top: 8px solid; border-radius: 5px;">
+<?php $total_paginas = ceil($totalregistro / $por_pagina); ?>
+
+<div class="col s12"  style="padding-bottom: 20px;">
+    <div class="center-align col s6 ">
+        <form action="<?=BASE_URL?>admin/mostrarData" method="GET">
+            <label class="black-text" for="filtro"><h5 class="light">Busqueda por Estado (Activo/Bloqueado)</h5></label>
+            <div class="col s10">
+            <select name="filtro" id="">
+                <option value="">Todos</option>
+                <option <?php if($filtro == "1"){ echo "selected"; } ?> value="1">Activo</option>
+                <option <?php if($filtro == "0"){ echo "selected"; } ?> value="0">Bloqueado</option>
+            </select>
+            </div>
+            <button class="tooltipped col s2 btn indigo" data-position="right" data-tooltip="Buscar"><i class="large material-icons">search</i></button>
+        </form>
+    </div>
+
+    <div class="center-align col s6">
+        <h5 class="light">Registro de Usuarios</h5>
+        <a href="<?= BASE_URL;?>admin/agregaUsuarios"><input class="btn indigo" type="button" value="Ir al Modulo"></a>
+    </div>
+</div>   
+
+    <table class="centered">
+        <thead class="card indigo white-text">
+            <tr >
+                <th>N° de Cedula / RIF</th>
+                <th>Nombre</th>
+                <th>Rol</th>
+                <th>Dirección</th>
+                <th>Telefono</th>
+                <th>Estado</th>
+                <th>Etiquetas</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -42,26 +72,31 @@
             <td>
                 <form action="<?=BASE_URL?>admin/agregaUsuarios" method="POST">
                     <input type="hidden" name="modificacion" value="<?=$dataAdmin[$i]['cedula'] ?>">
-                    <button name="accion" value="Modificar">Modificar</button>
+                    <button class="btn tooltipped blue" data-position="bottom" data-tooltip="Modificar Usuario" name="accion" value="Modificar">
+                        <i class="large material-icons">edit</i>
+                    </button>
                 </form>
                 <form action="<?=BASE_URL?>admin/inactivaUsuario" method="POST">
                     <input type="hidden" name="modificacion" value="<?=$dataAdmin[$i]['cedula'] ?>">
                     <input type="hidden" name="decision" value="<?=$dataAdmin[$i]['activo'] ?>">
-                    <button name="accion" <?= $dataAdmin[$i]['activo'] != 1? "value='Activar'": "value='Inactivar'" ?>><?= $dataAdmin[$i]['activo'] != 1? "Desbloquear": "Bloquear" ?></button>
+                    <button class="btn tooltipped red"  data-position="bottom" data-tooltip="Bloquear/Desbloquear Usuario" name="accion" <?= $dataAdmin[$i]['activo'] != 1? "value='Activar'": "value='Inactivar'" ?>>
+                        <?php if($dataAdmin[$i]['activo'] != 1) { ?> <i class="large material-icons">lock_open</i> 
+                        <?php } else { ?> <i class="large material-icons">lock</i> <?php }?>
+                    </button>
                 </form>
             </td>
             </tr>
-            <!-- // como el parametro de si esta activo el usuario o bloqueado es un numero
-            //se comprueba con codigo si es esta activo (1) o si esta bloqueado (0 o en este caso cualquier cosa) -->
         <?php 
             }
         ?>
         </tbody>
     </table>
-    <div class="col-md-12 center text-center cyan lighten-2"><!--Paginador-->
-    <ul class="pagination">
+
+
+<div class="col-md-12 center text-center"><!--Paginador-->
+    <ul class="pagination ">
         <?php if($pagina != 1){ ?>
-            <li class="waves-effect blue-text"><a href="<?=BASE_URL?>admin/mostrarData?pagina=1<?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
+            <li class="waves-effect blue-text "><a href="<?=BASE_URL?>admin/mostrarData?pagina=1<?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
             <li class="waves-effect"><a href="<?=BASE_URL?>admin/mostrarData?pagina=<?=$pagina - 1?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_left</i></a></li>
         <?php
         }else{ ?>
@@ -73,7 +108,7 @@
         
         <?php for($i = 1; $i <= $total_paginas; $i++){ 
             if ($i == $pagina){ ?>
-                <li class="active"><a href="<?=BASE_URL?>admin/mostrarData?pagina=<?=$i?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><?=$i?></a></li>
+                <li class="active indigo"><a href="<?=BASE_URL?>admin/mostrarData?pagina=<?=$i?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><?=$i?></a></li>
            <?php } else{
             ?>
             <li class="waves-effect"><a href="<?=BASE_URL?>admin/mostrarData?pagina=<?=$i?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><?=$i?></a></li>
@@ -90,5 +125,10 @@
             <li class="disabled"><a href=""><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
     <?php
         } ?>
-    </ul>
+   </ul>
+</div>
+
+    </div> 
+</div>
+</div>
 </div>

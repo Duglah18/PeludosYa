@@ -1,32 +1,120 @@
-<?php 
-if(isset($_GET['error'])){
-        echo "<h1>". $_GET['error'] ."</h1>";
-}
+<?php if(isset($_GET['error'])){ echo "<h1>". $_GET['error'] ."</h1>";}?>
 
-?>
-        
-        <h1>Esta seria la vista inicial de la pag. cuando no introduzcas nada por URL</h1>
-        <h2>Bienvenidos a la vista principal</h2>
-        <h2>Agregar (Agregar)</h2>
+<div style="padding-top: 20px; padding-left: 40px; padding-right: 40px;">
+
+<div id="index-banner" class="black-text parallax-container" style="border-radius: 20px; padding-top: 25px; ">
+<div class="indigo container" style="border-radius: 30px;">
+    <div class="section no-pad-bot">
+      <div class="row">
+
+        <h2 class="header center white-text">¡Adopta, cuida y cambia una vida!</h2>
+
+        <div class="row center">
+          <h5 class="header col s12 white-text light">Nos esforzamos a diario por la proteccion y cuidado de nuestros mejores compañeros</h5>
+          <h5 class="header col s12 white-text light">¡Ingresa en nuestros catalogos de adopcion, fundaciones y veterinarios!</h5>
+        </div>
+
+        <div class="col s12">
+
+        <div class=" col s2 offset-s2" style="border-radius: 20px; ">
+        <div class="card-image" >
+        <img class="responsive-img" style="padding-bottom: 5px; " src="<?=URL_BASE;?>img/veterinarios/12.png" alt="Mascotas">
+        </div>
+        </div>
+
+        <div class=" col s2 offset-s1" style="border-radius: 20px; ">
+        <div class="card-image" >
+        <img class="responsive-img" style="padding-bottom: 5px; " src="<?=URL_BASE;?>img/veterinarios/12.png" alt="Veterinarios">
+        </div>
+        </div>
+
+        <div class=" col s2 offset-s1" style="border-radius: 20px; ">
+        <div class="card-image" >
+        <img class="responsive-img" style="padding-bottom: 5px; " src="<?=URL_BASE;?>img/veterinarios/12.png" alt="Albergues">
+        </div>
+        </div>
+
+
+        </div>
+
+      </div>
+    </div>
+    </div>
+    <div class="parallax"><img src="<?=URL_BASE;?>img/veterinarios/1.jpg" alt="Unsplashed background img 1"></div>
+  </div>
+
+<div style="padding-top: 50px; padding-bottom: 50px;">
+<div class="card logon-card indigo" style="border-radius: 25px; padding-left: 10px;">
+<div class="row">
+<div class="col s2">
+<img class="responsive-img" style="width: 75%;" src="<?=URL_BASE;?>img/veterinarios/1.png" alt="Albergues">
+</div>
+        <div class="col s8 center-align">
+        <p>
+        <h4>¿Que puedes encontrar dentro de Peludos Ya?</h4>
+        <hr style="border-top: 8px solid; border-radius: 5px;">
         <ul>
-                <li><p>Mascotas /YA</p></li>
-                <li><p>Mascota Detallado (Hacerle diseño)</p></li>
-                <li><p>Solicitud Animal (Hacerle Diseño)</p></li>
-                <li><p>Ver Veterinarios (Hacerle Diseño)</p></li>
-                <li><p>Login Con Session (Ya o eso creo)</p></li>
-                <li><p>Terminar Register (Ya o eso creo)</p></li>
-                <li><p>Ver las peticiones de adopcion como fundacion (hacerle diseño)</p></li>
-                <li><p>
-                        Acomodar el registrar albergue en fundacion pq ellos
-                        no deberia poder escojer a que usuario asignarselo.(YA)
-                </p></li>
-                <li><p>
-                        Borrar fundacion.phtml pq esa era la vista donde llegabas cuando logueabas pero ya na
-                        y el de vendedor o eso creo
-                </p></li>
-                <li><p>Ver productos Tienda</p></li>
-                <li><p>
-                        que las vistas reciban errores
-                        y si reciben pues se muestren si llegan
-                </p></li>
+        <li><span>¡Docenas de mascotas de distintas especies esperando por ti para brindarles un nuevo hogar!</span></li>
+        <li><span>¡Una extensa variedad de veterinarios seleccionados que puedan brindar los mejores cuidados para tu peludito, sea adoptado o uno que este contigo!</span></li>
+        <li><span>¡Contacto con fundaciones de rescate y resguardo animal para informaciones acerca de como dar en adopción, de consejos o donativos!</span></li>
         </ul>
+        </p>
+        </div>
+  <div class="col s2">
+  <img class="responsive-img" style="width: 75%;" src="<?=URL_BASE;?>img/veterinarios/2.png" alt="Albergues">
+  </div>
+
+</div>
+</div>
+</div>
+
+<div class="card indigo" style="border-radius: 25px;">
+<div class="row">
+
+        <div class="col s8">
+
+                <div class="card col s4" style="border-radius: 50px; ">
+                <div class="card-image" >
+                <img class="responsive-img" style="border-radius: 50px;" src="<?=URL_BASE;?>img/veterinarios/imagen.jpg" alt="Foto Animal">
+                </div>
+                <div style="padding-bottom: 10px;">
+                <div class="card-action center-align indigo darken-3" style="border-radius: 100px;">
+                <span>Mascotas</span>
+                </div>
+                </div>
+                </div>
+
+                <div class="card col s4" style="border-radius: 50px; ">
+                <div class="card-image" >
+                <img class="responsive-img" style="border-radius: 50px;" src="<?=URL_BASE;?>img/veterinarios/imagen.jpg" alt="Foto Animal">
+                </div>
+                <div style="padding-bottom: 10px;">
+                <div class="card-action center-align indigo darken-3" style="border-radius: 100px;">
+                <span>Mascotas</span>
+                </div>
+                </div>
+                </div>
+
+                <div class="card col s4" style="border-radius: 50px; ">
+                <div class="card-image" >
+                <img class="responsive-img" style="border-radius: 50px;" src="<?=URL_BASE;?>img/veterinarios/imagen.jpg" alt="Foto Animal">
+                </div>
+                <div style="padding-bottom: 10px;">
+                <div class="card-action center-align indigo darken-3" style="border-radius: 100px;">
+                <span>Mascotas</span>
+                </div>
+                </div>
+                </div>
+
+        </div>
+
+        <div class="col s4">
+        <p>
+        <h5>¿Quieres ver lo que ofrece nuestra pagina web?</h5>
+        </p>
+        </div>
+
+</div>
+</div>
+
+</div>

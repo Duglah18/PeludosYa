@@ -14,9 +14,99 @@ body {
    padding-top: 20px;
 
   }
+
+  .item-square {
+    max-width: 256px; 
+    height: 256px;
+  }
   
   .center-icons{
     display: flex; 
     align-items: center;
   }
-      
+
+  .form-center{
+    padding-left: 10%; 
+    padding-top: 10%; 
+    padding-bottom: 10%; 
+    padding-right: 10%;
+  }
+
+  .catalog-center{
+    padding-left: 5%; 
+    padding-top: 15%; 
+    padding-bottom: 5%; 
+    padding-right: 5%;
+  }
+
+  .align{
+    display: flex; 
+    align-items: center;
+  }
+  
+  .nav-center{
+    padding-top: 20px; 
+  }
+
+  .nav-center-content{
+    padding-left: 20px;
+    padding-right: 20px;  
+  }
+
+  .corner{
+    border-radius: 10px;
+  }
+
+  .style-background{
+    background: rgba(255, 255, 255, .20);
+  }
+
+  .style-card{
+    border-radius: 10px;
+    background: rgba(255, 255, 255, .5);
+    position: relative;
+  }
+
+  .style-card::before{
+    content:'';
+    position: absolute;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, .20);
+    inset: 0;
+    transform: rotate(-2deg);
+    z-index: -1;
+  }
+
+  .login-card{
+    border-radius: 10px;
+    background: rgba(255, 255, 255, .5);
+    position: relative;
+  }
+
+  .login-card::before{
+    content:'';
+    position: absolute;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, .20);
+    inset: 0;
+    transform: rotate(-5deg);
+    z-index: -1;
+  }
+
+  .logon-card{
+    border-radius: 10px;
+    background: rgba(255, 255, 255, .5);
+    position: relative;
+  }
+
+  .logon-card::before{
+    content:'';
+    position: absolute;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, .20);
+    inset: 0;
+    transform: rotate(-2deg);
+    z-index: -1;
+  }
+
+  

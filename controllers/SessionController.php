@@ -152,18 +152,17 @@ class SessionController extends GeneralController{
 		$objSess = $this->loadModel("SessionModel");
 		if (!isset($_GET['id_user'])){
 			//error no estas mandando ningun usuario a ver detalladamente
-            $Error = "No Se envio ningun Usuario";
-            header("location: ".BASE_URL."?error=". $Error);
+			$_SESSION['Error'] = "No se envio ningun Usuario";
+            header("location: ".BASE_URL);
 		}
 		$buscar = $objSess->consultaUsuarioEspecifico($_SESSION['iduser']);
 		if ($buscar == "No existe"){
 			//error este usuario no existe
-            $Error ="El usuario enviado es Inexistente";
-            header("location: ".BASE_URL."?error=". $Error);
+			$_SESSION['Error'] = "El usuario enviado es Inexistente";
+            header("location: ".BASE_URL);
 		}
 		$data['datosUsuario'] = $buscar;
 		$this->loadView("session/usuario.phtml", "Ver mi Usuario", $data);
-		//a futuro lo puedes cambiar a cualquier otra cosa como que le saque su nombre o algo;
 	}
 	
 	/******************************************************************
@@ -177,8 +176,8 @@ class SessionController extends GeneralController{
 		if (!isset($_POST['accion']) || !isset($_POST['cedula']) || !isset($_POST['nombre']) || 
 			!isset($_POST['direccion']) || !isset($_POST['contrasenia']) || !isset($_POST['telefono'])){
 		//error no llega nada
-			$Error = "NO SE ESTAN ENVIANDO DATOS";
-			header("location: ".BASE_URL."?error=". $Error);
+			$_SESSION['Error'] = "No se enviaron Datos";
+			header("location: ".BASE_URL);
 		}
 		$cedula = $_POST['cedula'];
 		$nombre = $_POST['nombre'];
@@ -187,8 +186,8 @@ class SessionController extends GeneralController{
 		$telefono = $_POST['telefono'];
 		
 		if($cedula == "" || $nombre == "" || $Direccion == "" || $contra == "" || $telefono == ""){
-			$Error = "NO SE ESTAN ENVIANDO DATOS";
-            return header("location: ".BASE_URL."?error=". $Error);
+			$_SESSION['Error'] = "Ninguno de los datos no pueden estar vacios";
+            return header("location: ".BASE_URL);
 		}
 		$fusion = $cedula . ";" . $nombre . ";" . $Direccion . ";" . $contra . ";" . $telefono;
 		$fusion = explode(";", $fusion);
@@ -346,9 +345,8 @@ class SessionController extends GeneralController{
 	public function modificarmiUsuario(){
 		$this->ComprobarLogueo();
 		if(!isset($_POST['cedula']) || !isset($_POST['nombre']) || !isset($_POST['direccion']) || !isset($_POST['contrasenia']) || !isset($_POST['telefono'])){
-			$Error = "No se especifico a quien modificar"; //esto funcionaria? sino por get se puede
 			$_SESSION['Error'] = "Ocurrio un error.";
-			return header("location: ".BASE_URL."?error=".$Error);
+			return header("location: ".BASE_URL);
 		}
 		if($_POST['nombre'] == "" ||$_POST['direccion'] == "" || $_POST['contrasenia'] == "" || $_POST['telefono'] == ""){
 			$_SESSION['Error'] = "No se enviaron datos para modificar";

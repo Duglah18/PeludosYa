@@ -1,3 +1,31 @@
+<div class="row" style="padding-top: 5%; padding-bottom: 5%;">
+<div class="col s10 white offset-s1">
+<div class="row" style="padding-left: 15px; padding-right: 15px;">
+    <div class="card  col s3 black-text transparent z-depth-0">
+        <h3>Menu Principal</h3>
+        <hr style="border-top: 8px solid; border-radius: 5px;">
+        <ul>
+        <li><a href="<?= BASE_URL;?>admin/tipoAnimal">Tipos de Animales</a></li>
+          <li><a href="<?= BASE_URL;?>admin/razasAnimal">Razas de Animales</a></li>
+          <li><a href="<?= BASE_URL;?>admin/agregaVeterinarios">Veterinarios</a></li>
+          <li><a href="<?= BASE_URL;?>admin/animales">Peludos</a></li>
+          <li><a href="<?= BASE_URL;?>admin/mostrarData">Usuarios</a></li>
+          <li><a href="<?= BASE_URL;?>admin/albergues">Albergues</a></li>
+          <li><a href="<?= BASE_URL;?>admin/adopciones">Adopciones</a></li>
+          <li><a href="<?= BASE_URL;?>admin/Reportes">Reportes</a></li>
+        </ul>
+    </div>
+
+
+<div class="card col s9 black-text transparent z-depth-0">
+<div class="card-title center-align"><h3>Gestión de Mascotas</h3></div>
+<hr style="border-top: 8px solid; border-radius: 5px;">
+
+    <div class="center-align col s12" style="padding-bottom: 20px;">
+        <h5 class="light">Registro de Mascotas</h5>
+        <a href="<?= BASE_URL;?>admin/agregaAnimales"><input class="btn indigo" type="button" value="Ir al Modulo"></a>
+    </div>
+
 <?php
     //paginador
     //Total Registro y por_pagina llegan por el controlador
@@ -7,20 +35,19 @@ if(isset($_GET['error'])){
 }
 ?>  
 
-<a href="<?= BASE_URL;?>admin/agregaAnimales"><input type="button" value="Agrega Animales"></a>
-<table class="highlight centered">
-    <thead>
+<table class="centered">
+        <thead class="card indigo white-text">
         <tr>
             <th>ID</th>
             <th>Nombre</th>
-            <th>Año Nac.</th>
-            <th>img</th>
-            <th>Fecha Ing</th>
+            <th>Año Nacimiento</th>
+            <th>Foto</th>
+            <th>Fecha Ingreso</th>
             <th>Raza</th>
-            <th>Animal</th>
+            <th>Tipo Animal</th>
             <th>Albergue</th>
-            <th>Fundacion</th>
-            <th>Visible</th>
+            <th>Fundacion Responsable</th>
+            <th>Estado</th>
             <th>Acciones</th>
         </tr>
     </thead>
@@ -36,16 +63,21 @@ if(isset($_GET['error'])){
             <td><?= $animal['nomtipo'] ?></td>
             <td><?= $animal['nomalbergue'] ?></td> 
             <td><?= $animal['nombreUser'] ?></td>
-            <td><?= $activo = $animal['visible'] != 1? "No visible": "visible"?></td>
+            <td><?= $activo = $animal['visible'] != 1? "Disponible": "No Disponible"?></td>
             <td>
                 <form action="<?=BASE_URL?>admin/agregaAnimales" method="POST">
                     <input type="hidden" name="modificacion" value="<?=$animal['id_animal'] ?>">
-                    <button name="accion" value="Modificar">Modificar</button>
+                    <button class="btn tooltipped blue" data-position="bottom" data-tooltip="Modificar Usuario" name="accion" value="Modificar">
+                        <i class="large material-icons">edit</i>
+                    </button>
                 </form>
                 <form action="<?=BASE_URL?>admin/inactivaPeludos" method="POST">
                     <input type="hidden" name="modificacion" value="<?=$animal['id_animal'] ?>">
                     <input type="hidden" name="decision" value="<?=$animal['visible'] ?>">
-                    <button name="accion" <?= $animal['visible'] != 1? "value='Activar'": "value='Inactivar'" ?>><?= $animal['visible'] != 1? "Mostrar": "Ocultar" ?></button>
+                    <button class="btn tooltipped red"  data-position="bottom" data-tooltip="Bloquear/Desbloquear Usuario" name="accion" <?= $animal['visible'] != 1? "value='Activar'": "value='Inactivar'" ?>>
+                        <?php if($animal['visible'] != 1) { ?> <i class="large material-icons">lock_open</i> 
+                        <?php } else { ?> <i class="large material-icons">lock</i> <?php }?>
+                    </button>
                 </form>
             </td>
         </tr>
@@ -53,7 +85,7 @@ if(isset($_GET['error'])){
     </tbody>
 </table>
 
-<div class="col-md-12 center text-center cyan lighten-2"><!--Paginador-->
+<div class="col-md-12 center text-center"><!--Paginador-->
     <ul class="pagination">
         <?php if($pagina != 1){ ?>
             <li class="waves-effect blue-text"><a href="<?=BASE_URL?>admin/animales?pagina=1"><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
@@ -68,7 +100,7 @@ if(isset($_GET['error'])){
         
         <?php for($i = 1; $i <= $total_paginas; $i++){ 
             if ($i == $pagina){ ?>
-                <li class="active"><a href="<?=BASE_URL?>admin/animales?pagina=<?=$i?>"><?=$i?></a></li>
+                <li class="active indigo"><a href="<?=BASE_URL?>admin/animales?pagina=<?=$i?>"><?=$i?></a></li>
            <?php } else{
             ?>
             <li class="waves-effect"><a href="<?=BASE_URL?>admin/animales?pagina=<?=$i?>"><?=$i?></a></li>
@@ -86,4 +118,8 @@ if(isset($_GET['error'])){
     <?php
         } ?>
     </ul>
+</div>
+</div> 
+</div>
+</div>
 </div>

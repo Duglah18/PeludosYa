@@ -1,35 +1,32 @@
-  <div class="page-header">
-  <div class="position-absolute fixed-top ms-auto w-50 h-100 rounded-3 z-index-0 d-none d-sm-none d-md-block me-n4" style="background-image: url(<?= URL_ASSETS;?>img/examples/blog2.jpg); background-size: contain, cover; background-repeat: no-repeat;">
-  </div>
-  <div class="container py-7">
-    <div class="row">
-      <div class="col-lg-7 d-flex justify-content-center flex-column">
-        <div class="card card-body d-flex justify-content-center shadow-lg p-7 blur align-items-center">
-          <h3 class="text-center">Ingresa</h3>
-          <form role="form" id="contact-form" method="post" autocomplete="off" action="<?= BASE_URL;?>session/login_user">
-            <div class="card-body">
-              <div class="row">
-                <div class="mb-4">
-                  <div class="input-group input-group-static mb-4">
-                    <label>Cedula</label>
-                    <input name="cedula" class="form-control" placeholder="ej. 26456789" aria-label="First Name..." type="text">
-                  </div>
-                </div>
-                <div class="mb-4">
-                  <div class="input-group input-group-static mb-4">
-                    <label>Contraseña</label>
-                    <input name="pass" type="password" class="form-control" placeholder="•••••••••••••" aria-label="Last Name...">
-                  </div>
-                </div>
-              </div>
-                <div class="col-md-12">
-                  <button type="submit" class="btn bg-gradient-dark w-100 me-2">Enviar</button>
-                </div>
-              </div>
-            </div>
-          </form>
-        </div>
+<div class="row form-center">
+  <div class="col s6 offset-s3 container login-card card indigo darken-3" style=" border-radius: 10px;">
+    <form role="form" id="contact-form" method="post" autocomplete="off" action="<?= BASE_URL;?>session/login_user">
+
+    <div class="card-title center-align">
+      <h3>Inicio de Sesión</h3>
+    </div>
+
+    <div class="card-action">
+
+      <h5>Ingrese su numero de cedula: </h5>
+      <div class="input-field col s12 ">
+        <i class="material-icons prefix">account_circle</i>
+        <input name="cedula" id="cedula" type="text" class="form-control" style="border-radius: 5px;">
+        <label for="cedula">Cedula:  </label>
       </div>
+
+      <h5>Ingrese su contraseña personal: </h5>
+      <div class="input-field col s12">
+        <i class="material-icons prefix">password</i>
+        <input name="pass" id="password" type="password" class="form-control" style="border-radius: 5px;">
+        <label for="password">Contraseña: </label>
+      </div>
+
+      <div class="center">
+        <button type="submit" class="btn indigo lighten-1">Enviar</button>
+      </div>
+
+      </form>
     </div>
   </div>
 </div>

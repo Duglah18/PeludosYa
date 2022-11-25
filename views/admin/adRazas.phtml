@@ -1,15 +1,78 @@
+<div class="row" style="padding-top: 5%; padding-bottom: 5%;">
+<div class="col s10 white offset-s1">
+<div class="row" style="padding-left: 15px; padding-right: 15px;">
+    <div class="card  col s3 black-text transparent z-depth-0">
+        <h3>Menu Principal</h3>
+        <hr style="border-top: 8px solid; border-radius: 5px;">
+        <ul>
+        <li><a href="<?= BASE_URL;?>admin/tipoAnimal">Tipos de Animales</a></li>
+          <li><a href="<?= BASE_URL;?>admin/razasAnimal">Razas de Animales</a></li>
+          <li><a href="<?= BASE_URL;?>admin/agregaVeterinarios">Veterinarios</a></li>
+          <li><a href="<?= BASE_URL;?>admin/animales">Peludos</a></li>
+          <li><a href="<?= BASE_URL;?>admin/mostrarData">Usuarios</a></li>
+          <li><a href="<?= BASE_URL;?>admin/albergues">Albergues</a></li>
+          <li><a href="<?= BASE_URL;?>admin/adopciones">Adopciones</a></li>
+          <li><a href="<?= BASE_URL;?>admin/Reportes">Reportes</a></li>
+        </ul>
+    </div>
+
+
+<div class="card col s9 black-text transparent z-depth-0">
+<div class="card-title center-align"><h3>Gestión de Razas</h3></div>
+<hr style="border-top: 8px solid; border-radius: 5px;">
+
 <?php
 $identificador = isset($buscarazas[0]['id_raza'])? $buscarazas[0]['id_raza']: "";
 $nombre = isset($buscarazas[0]['nombre'])? $buscarazas[0]['nombre']: "";
 $tipo = isset($buscarazas[0]['id_tipo_2'])? $buscarazas[0]['id_tipo_2']: "";
 $total_paginas = ceil($totalregistro / $por_pagina);
 ?>
-    <table class="highlight centered">
-        <thead>
+
+<div class="text-center col s6 offset-s3"  style="padding-bottom: 20px;">
+    <form action="<?= BASE_URL?>admin/agregaRazaAnimal" method="POST">
+        <div class="black-text center-align col s12" for="filtro">
+            <?php if(isset($_POST['accion'])=="Modificar"){ ?>
+                <h5 class="light"> Modificar raza de animal</h5> <?php } else { ?>
+                <h5 class="light"> Agregar raza de animal</h5> <?php } ?>
+        </div>
+
+        <div class="input-field tooltipped col s6" data-position="top" data-tooltip="Nombre del raza de animal">
+            <label class="black-text" for="">Nombre</label>
+            <input class="validate" type="text" name="nombreRaza" value="<?= $nombre?>">
+            <span class="helper-text black-text">ID: <?=$identificador?></span>
+            <input type="hidden" name="identificador" value="<?=$identificador?>">
+        </div>
+
+        <div class="input-field tooltipped col s6" data-position="top" data-tooltip="Nombre del tipo de animal">
+        <select name="tipoanimal">
+          <option value="0">Selecciona</option>
+        <?php 
+          foreach ($tiposAnimales as $key) {?>
+          <option <?php if($tipo == $key['id_tipo']){ echo"selected"; } ?> value="<?= $key['id_tipo']; ?>"><?= $key['nombre'] ?> </option>
+          <?php
+          }
+        ?>
+        </select>
+        </div>
+        
+        <div class="col s12">
+        <?php if(isset($_POST['accion']) == "Modificar") { ?>
+        <a href="<?= BASE_URL;?>admin/razasAnimal">
+            <input class="btn indigo col s2 offset-s2" type="button" value="Volver">
+        </a> 
+        <?php } ?>
+        <button class="tooltipped btn indigo col s2 offset-s4"  data-position="bottom" data-tooltip="Registrar" name="accion" value="<?php if(isset($_POST['accion'])=="Modificar"){ echo "Modificar"; } else {echo"Agregar";} ?>"><i class="large material-icons">chevron_right</i></button>
+        </div>
+    </form>
+</div>
+
+<table class="centered">
+        <thead class="card indigo white-text">
             <tr>
                 <th scope="col">ID</th>
                 <th scope="col">Nombre</th>
                 <th scope="col">Tipo Animal</th>
+                <th scope="col">Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -23,8 +86,10 @@ $total_paginas = ceil($totalregistro / $por_pagina);
             <td><?= $dataRazas[$i]['nombreTipo'] ?></td>
             <td>
                 <form action="<?=BASE_URL?>admin/razasAnimal" method="POST">
-                    <input type="hidden" name="modificacion" value="<?=$dataRazas[$i]['id_raza'] ?>">
-                    <button name="accion" value="Modificar">Modificar</button>
+                <input type="hidden" name="modificacion" value="<?=$dataRazas[$i]['id_raza'] ?>">
+                    <button class="btn tooltipped blue" data-position="bottom" data-tooltip="Modificar Usuario" name="accion" value="Modificar">
+                        <i class="large material-icons">edit</i>
+                    </button>
                 </form>
             </td>
             </tr> 
@@ -33,7 +98,7 @@ $total_paginas = ceil($totalregistro / $por_pagina);
         ?>
         </tbody>
     </table>
-    <div class="col-md-12 center text-center cyan lighten-2"><!--Paginador-->
+    <div class="col-md-12 center text-center"><!--Paginador-->
     <ul class="pagination">
         <?php if($pagina != 1){ ?>
             <li class="waves-effect blue-text"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=1"><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
@@ -48,7 +113,7 @@ $total_paginas = ceil($totalregistro / $por_pagina);
         
         <?php for($i = 1; $i <= $total_paginas; $i++){ 
             if ($i == $pagina){ ?>
-                <li class="active"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$i?>"><?=$i?></a></li>
+                <li class="active indigo"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$i?>"><?=$i?></a></li>
            <?php } else { ?>
             <li class="waves-effect"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$i?>"><?=$i?></a></li>
         <?php 
@@ -66,30 +131,7 @@ $total_paginas = ceil($totalregistro / $por_pagina);
         } ?>
     </ul>
 </div>
-
-    <div class="card text-center">
-    <form action="<?= BASE_URL?>admin/agregaRazaAnimal" method="POST">
-        <label for="">Este es el formulario para registrar tipos de animal</label>
-        <br>
-        <label for="">ID <?= $identificador?></label>
-        <input type="hidden" name="identificador" value="<?=$identificador?>">
-        <br>
-        <label for="">Nombre</label>
-        <input type="text" name="nombreRaza" value="<?=$nombre?>">
-        <br>
-        <select name="tipoanimal">
-          <option value="0">Selecciona</option>
-          <!--=============================================
-            Este es el usuario de fundacion al que se le 
-            añadira el albergue nuevo
-          ==============================================-->
-        <?php 
-          foreach ($tiposAnimales as $key) {?>
-          <option <?php if($tipo == $key['id_tipo']){ echo"selected"; } ?> value="<?= $key['id_tipo']; ?>"><?= $key['nombre'] ?> </option>
-          <?php
-          }
-        ?>
-        </select>
-        <button name="accion" value="<?php if(isset($_POST['accion'])=="Modificar"){ echo "Modificar"; } else {echo"Agregar";} ?>">Aceptar</button>
-    </form>
     </div>
+</div>
+</div>
+</div> 
