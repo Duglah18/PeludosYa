@@ -63,7 +63,7 @@ if(isset($_GET['error'])){
             <td><?= $animal['nomtipo'] ?></td>
             <td><?= $animal['nomalbergue'] ?></td> 
             <td><?= $animal['nombreUser'] ?></td>
-            <td><?= $activo = $animal['visible'] != 1? "Disponible": "No Disponible"?></td>
+            <td><?= $activo = $animal['visible'] == 1? "Disponible": "No Disponible"?></td>
             <td>
                 <form action="<?=BASE_URL?>admin/agregaAnimales" method="POST">
                     <input type="hidden" name="modificacion" value="<?=$animal['id_animal'] ?>">

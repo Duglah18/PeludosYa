@@ -338,7 +338,6 @@ class AdminController extends GeneralController{
 	*****************************************************************/
     public function consultaData(){
         if(!isset($_POST['username']) || !isset($_POST['password'])){
-            $error = "No se enviaron datos";
 			$_SESSION['Error'] = "Error.";
 			header("location: ".BASE_URL);
         }
@@ -382,6 +381,13 @@ class AdminController extends GeneralController{
 			$_SESSION['Error'] = "Error no se han enviado datos a ingresar";
 			header("location: ".BASE_URL. "admin/agregaUsuarios");
 		}
+
+        $igualdad =$objAdmin->ValidarUsuario($_POST['nombre'],$_POST['telefono']);
+		
+        if($igualdad){
+            $_SESSION['Error'] = "Ya existe un usuario que ya posee ese nombre exacto o telefono.";
+            return header("location: " .BASE_URL."admin/agregaUsuarios");
+        }
 		
         if (isset($_POST['Agregar'])){
             $cedula = $_POST['cedula'];
@@ -426,10 +432,24 @@ class AdminController extends GeneralController{
 	*****************************************************************/
     public function agregaTipoanimal(){
         $objAdmin = $this->loadModel("AdminModel");
+
+        if(!isset($_POST['nombreTipo'])){
+            $_SESSION['Error'] = "No ingreso un nombre para el Tipo de Animal";
+			return header("location: ".BASE_URL."admin/tipoAnimal");
+        }
+
 		if(isset($_POST['nombreTipo']) && $_POST['nombreTipo'] == ""){
 			$_SESSION['Error'] = "No ingreso un nombre para el Tipo de Animal";
 			return header("location: ".BASE_URL."admin/tipoAnimal");
 		}
+
+        $igualdad =$objAdmin->ValidarTipoAnimal($_POST['nombreTipo']);
+		
+        if($igualdad){
+            $_SESSION['Error'] = "Ya existe un tipo de animal con ese nombre.";
+            return header("location: " .BASE_URL."admin/tipoAnimal");
+        }
+
         if(isset($_POST['accion']) && $_POST['accion'] == 'Modificar'){
             $identificador = $_POST['identificador'];
             $nombre = $_POST['nombreTipo'];
@@ -456,6 +476,12 @@ class AdminController extends GeneralController{
 	*****************************************************************/
     public function agregaRazaAnimal(){
         $objAdmin = $this->loadModel("AdminModel");
+
+        if(!isset($_POST['nombreRaza']) || !isset($_POST['tipoAnimal'])){
+            $_SESSION['Error'] = "No ingreso un nombre para la Raza o tipo de animal";
+			return header("location: ".BASE_URL."admin/razasAnimal");
+        }
+
 		if(isset($_POST['nombreRaza']) && $_POST['nombreRaza'] == ""){
 			$_SESSION['Error'] = "No ingreso un nombre para la Raza";
 			return header("location: ".BASE_URL."admin/razasAnimal");
@@ -464,6 +490,14 @@ class AdminController extends GeneralController{
 			$_SESSION['Error'] = "No selecciono un Tipo de Animal Valido";
 			return header("location: ".BASE_URL."admin/razasAnimal");
 		}
+
+        $igualdad =$objAdmin->ValidarRazaAnimal($_POST['nombreRaza'], $_POST['tipoAnimal']);
+		
+        if($igualdad){
+            $_SESSION['Error'] = "Ya existe una Raza de animal con ese nombre en ese tipo de animal.";
+            return header("location: " .BASE_URL."admin/razasAnimal");
+        }
+
         if(isset($_POST['accion']) && $_POST['accion'] == 'Modificar'){
             $identificador = $_POST['identificador'];
             $nombre = $_POST['nombreRaza'];
@@ -511,13 +545,21 @@ class AdminController extends GeneralController{
 			$_SESSION['Error'] = "Ocurrio un error";
 			return header("location: " .BASE_URL."admin/animales");
 		}
+        
 		/*Validacion del año de nacimiento del peludo*/
-		if (!is_int($_POST['fecha']) || $_POST['fecha'] < 0 || $_POST['fecha'] < 2009 || $_POST['fecha'] > intval(date('Y'))){
+		if ($_POST['fecha'] < 2009 || $_POST['fecha'] > intval(date('Y'))){
 			$_SESSION['Error'] = "Año de Nacimiento Incorrecto";
 			return header("location: ".BASE_URL."admin/animales");
 			
 		}
+        
+        $igualdad =$objFund->ValidarAnimal($_POST['nombre'], $_POST['albergue']);
 		
+        if($igualdad){
+            $_SESSION['Error'] = "Ya existe un animal con este nombre en el albergue seleccionado.";
+            return header("location: " .BASE_URL."admin/animales");
+        }
+
         if (isset($_POST['accion']) && $_POST['accion'] == 'Agregar'){
             $nombre = $_POST['nombre'];
             $fechanac= $_POST['fecha'];
@@ -586,9 +628,9 @@ class AdminController extends GeneralController{
 	*	Salidas: Vista Agrega Veterinarios
 	*****************************************************************/
     public function registraVeterinario(){
-        //creo que esto puede servir
-		//Hacer una validacion de si existe lo que se va a modificar antes de ingresar y antes de insertar
-		//Verificar si existe un registro parecido al ingresado
+
+        $objAdmin = $this->loadModel("AdminModel");
+       
 		if(!isset($_POST['nombre']) ||!isset($_POST['telefono']) || !isset($_POST['direccion'])){
 			$_SESSION['Error'] = "Ocurrio un error al enviar los datos.";
 			return header("location: " .BASE_URL. "admin/agregaVeterinarios");
@@ -597,8 +639,15 @@ class AdminController extends GeneralController{
 			$_SESSION['Error'] = "Los datos no estan permitidos.";
 			return header("location: " .BASE_URL. "admin/agregaVeterinarios");
 		}
+
+        $igualdad =$objAdmin->ValidarVeterinario($_POST['nombre']);
 		
-        $objAdmin = $this->loadModel("AdminModel");
+        if($igualdad){
+            $_SESSION['Error'] = "Ya existe un Veterinario con ese nombre.";
+            return header("location: " .BASE_URL."admin/agregaVeterinarios");
+        }
+		
+        
         $nombre = $_POST['nombre'];
         $telefono = $_POST['telefono'];
         $direccion = $_POST['direccion'];

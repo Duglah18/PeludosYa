@@ -383,29 +383,26 @@ class AdminModel extends ConexionBD{
         }
     }
 	/*--------Validaciones--------*/
-	public function ValidarUsuario($cedula, $nombre, $telefono){
+	public function ValidarUsuario($nombre, $telefono){
 		//Recibe su cedula, nombre y telefono ninguno debe estar en  el sistema del nombre no estoy muy seguro
-		$cedula = mysqli_real_escape_string($this->conectar(), $cedula);
 		$nombre = mysqli_real_escape_string($this->conectar(), $nombre);
 		$telefono = mysqli_real_escape_string($this->conectar(), $telefono);
 		
 		$verificar = $this->obtenData("SELECT cedula, nombre
 										FROM usuarios
-										WHERE cedula = '$cedula' OR nombre = '$nombre' OR telefono = '$telefono'");
+										WHERE nombre = '$nombre' OR telefono = '$telefono'");
 		return $verificar;
 	}
 	
-	public function ValidarAnimal($nombre, $raza, $tamanio, $albergue){
+	public function ValidarAnimal($nombre, $albergue){
 		//recibe nombre, raza, tamaño y albergue en el mismo albergue no debe existir 
 		//el mismo animal 
 		$nombre = mysqli_real_escape_string($this->conectar(), $nombre);
-		$raza = mysqli_real_escape_string($this->conectar(), $raza);
-		$tamanio = mysqli_real_escape_string($this->conectar(), $tamanio);
 		$albergue = mysqli_real_escape_string($this->conectar(), $albergue);
 		
 		$validacion = $this->obtenData("SELECT id_animal, nombre 
 										FROM animal
-										WHERE nombre = '$nombre' AND raza_id = '$raza' AND albergue_id = '$albergue'");
+										WHERE nombre = '$nombre' AND albergue_id = '$albergue'");
 										//no se si sea necesario verificar el tamaño
 		return $validacion;
 	}
@@ -426,26 +423,33 @@ class AdminModel extends ConexionBD{
 		$nombre = mysqli_real_escape_string($this->conectar(), $nombre);
 		$tipoanimal = mysqli_real_escape_string($this->conectar(), $tipoanimal);
 	
-		$validacion = $this->obtenData("SELECT a.id_raza, a.nombre, b.nombre as TipoAnimal
+		$validacion = $this->obtenData("SELECT a.id_raza, a.nombre
 										FROM raza a
-										INNER JOIN tipo_animal b ON a.id_tipo_animal = b.id_tipo
-										WHERE a.nombre = '$nombre' AND b.id_tipo_animal = '$tipoanimal'");
+										WHERE a.nombre = '$nombre' AND a.id_tipo_animal = '$tipoanimal'");
 		return $validacion;
 	}
 	
-	public function ValidarVeterinario($nombre, $telefono){
+	public function ValidarVeterinario($nombre){
 		//Recibe el nombre y su telefono
 		//no creo que se pueda tener el mismo telefono en 2 veterinarios
 		$nombre = mysqli_real_escape_string($this->conectar(), $nombre);
-		$telefono = mysqli_real_escape_string($this->conectar(), $telefono);
 	
 		$validacion = $this->obtenData("SELECT id_veterinario, nombre, tlf, direccion, 
 									    img, visible, usuario_Rveterinario
 										  FROM veterinario
-										  WHERE nombre = '$nombre' OR tlf = '$telefono'");
+										  WHERE nombre = '$nombre'");
 		return $validacion;
 
 	}
+
+    public function ValidarAlbergue($nombre){
+        $nombre = mysqli_real_escape_string($this->conectar(), $nombre);
+	
+		$validacion = $this->obtenData("SELECT id_albergue, nombre
+										  FROM albergue
+										  WHERE nombre = '$nombre'");
+		return $validacion;
+    }
 
     public function registrarUsuario($tabla, $rif, $nombre, $rol, $direccion, 
                                     $contrasenia, $estado, $tlf, $usuario_ingresando){

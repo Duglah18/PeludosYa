@@ -218,25 +218,34 @@ class ReportController extends GeneralController{
 	*	Entradas: Filtro de busqueda, columna a buscar, desde, hasta
 	*	Salidas: Reporte de Movimientos
 	******************************************************************/
-	public function Bitacora_Movimientos(){
+	public function Bitacora_Adoptados(){
 		$this->Combrueba();
 		
 		$objReports = $this->LoadModel("ReportModel");
 
-		$usuarioMov = isset($_POST['usuario'])? $_POST['usuario']: "";
-		$modulo = isset($_POST['modulo'])? $_POST['modulo']: "";
-		$accion = isset($_POST['accion'])? $_POST['accion']: "";
+		$nombreAnimal = isset($_POST['peludo'])? $_POST['peludo']:"";
+		$raza = isset($_POST['raza'])? $_POST['raza']:0;
+		$tamano = isset($_POST['tamano'])? $_POST['tamano']:0;
+		$albergue = isset($_POST['albergue'])? $_POST['albergue']:0;
+		$anio_nac = isset($_POST['ano_nac'])? $_POST['ano_nac']:"";
+		$tipoanimal= isset($_POST['tipoanimal'])? $_POST['tipoanimal']:0;
 		$desde = isset($_POST['Desde'])?$_POST['Desde']:date('Y-m-d');
 		$hasta = isset($_POST['Hasta'])?$_POST['Hasta']:date('Y-m-d');
-		
-		$Movimientos = $objReports->Movimientos($usuarioMov, $modulo, $accion,$desde, $hasta);
-		$TotalMovimientos = $objReports->ContadorMovimientos($usuarioMov, $modulo, $accion,$desde, $hasta);
-		$TotalCierres = $objReports->ContadorMovimientos("",'Cerrar Sesion', "", $accion,$desde, $hasta);
-		$TotalLogins = $objReports->ContadorMovimientos("",'Usuario Logueandose', "", $accion,$desde, $hasta);
+		$estatus = isset($_POST['estatus'])? $_POST['estatus']:0;
+		//$nombreAnimal = "", $raza = 0, $tamano = 0, $albergue = 0, $Anio_nac = "", $tipoAnimal = 0, 
+		//$desde = "2021-01-01", $hasta = "2022-11-26", $estatus = 0
+		$Adoptados = $objReports->AnimalesAdoptados($nombreAnimal, $raza, $tamano, $albergue, $anio_nac,
+													$tipoanimal,$desde,$hasta,$estatus);
+		$TotalAdoptados = $objReports->TotalesAdopciones($nombreAnimal, $raza, $tamano, $albergue, $anio_nac,
+														$tipoanimal,$desde,$hasta,$estatus);
+		$TotalAdoptadosCompletados = $objReports->TotalesAdopciones($nombreAnimal, $raza, $tamano, $albergue, $anio_nac,
+																	$tipoanimal,$desde,$hasta,3);
+		$TotalAdoptadosCancelados = $objReports->TotalesAdopcionesCanceladas($nombreAnimal, $raza, $tamano, $albergue, $anio_nac,
+																	$tipoanimal,$desde,$hasta);
 
-		$_SESSION['num'] = $TotalMovimientos[0]['TotalMovimientos'];
-		$_SESSION['closes'] = $TotalCierres[0]['TotalMovimientos'];
-		$_SESSION['logins'] = $TotalLogins[0]['TotalMovimientos'];
+		$_SESSION['num'] = $TotalAdoptados[0]['TotalAdoptados'];
+		$_SESSION['Completados'] = $TotalAdoptadosCompletados[0]['TotalAdoptados'];
+		$_SESSION['Cancelados'] = $TotalAdoptadosCancelados[0]['TotalAdoptados'];
 		/*----------Inicio del Documento PDF----------*/
 		$pdf = new PDF_MC_Table('L','mm',array(350,200));
 		$pdf->AliasNbPages();
@@ -244,24 +253,28 @@ class ReportController extends GeneralController{
 		$pdf->SetFont('Times','',12);
 		
 		//Colocar el tamaño de las columnas de las celdas de la tabla (5)
-		$pdf->SetWidths(Array(35,50,60,75,45));
-		
+		$pdf->SetWidths(Array(30,55,50,40,40,40,35,40));
+		//utf8_decode($Adoptado['nombreAlbergue']),
 		///Colocar la altura de la linea
 		$pdf->SetLineHeight(5);
-		
-		if($Movimientos != false){
-			foreach ($Movimientos as $movimiento){
+
+		if($Adoptados != false){
+			foreach ($Adoptados as $Adoptado){
 				$pdf->Row(Array(
-					$movimiento['id_bitacora'],
-					utf8_decode($movimiento['usuario_bit']),
-					utf8_decode($movimiento['modulo_afectado']),
-					utf8_decode($movimiento['accion_realizada']),
-					$fecha = date("d-m-Y",strtotime($movimiento['fecha_accion']))
+					$Adoptado['id_adopcion'],
+					utf8_decode($Adoptado['nombreUsuario']),
+					utf8_decode($Adoptado['nombreAnimal']),
+					utf8_decode($Adoptado['razaNombre']),
+					utf8_decode($Adoptado['TipoAnimal']),
+					utf8_decode($Adoptado['anio_nac']),
+					utf8_decode($Adoptado['estadoAdopcion']),
+					$Adoptado['fecha_adopcion'] = date("d-m-Y", strtotime($Adoptado['fecha_adopcion']))
 				));
 			}
 		} else {
 			$pdf->Cell(0,10,"No existen Datos en la Base de Datos Que correspondan a su busqueda. ",1,1,'C');
 		}
+		
 		return $pdf->Output();
 	}
 	

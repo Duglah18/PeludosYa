@@ -145,6 +145,7 @@ class FundacionController extends GeneralController{
     public function registraFundacion(){//funciona 9/10/2022
 		$this->Comprobador();
         $objFund = $this->loadModel("FundacionModel");
+        $objAdmin = $this->loadModel("AdminModel");
         if(!isset($_POST['accion'])){
 			$_SESSION['Error'] = "Ocurrio un error inesperado";
             return header("location: ".BASE_URL);
@@ -158,6 +159,16 @@ class FundacionController extends GeneralController{
 			$_SESSION['Error'] = "Los datos introducidos no son validos";
 			return header("location: ".BASE_URL."admin/albergues");
 		}
+
+        $igualdad =$objAdmin->ValidarAlbergue($_POST['nombre']);
+
+        if($igualdad){
+            $_SESSION['Error'] = "Ya existe un Albergue con ese nombre.";
+            if($_SESSION['rol'] == "1"){
+                return header("location: ".BASE_URL."admin/albergues");
+            } 
+            return header("location: " .BASE_URL."fundacion/albergues");
+        }
 		
         if($_POST['accion'] == 'Modificar'){
 			if (!isset($_POST['identificador'])){
@@ -219,7 +230,7 @@ class FundacionController extends GeneralController{
 		//y tampoco pudo haber nacido un año en el futuro
 		//Hacer que la fecha sea entero
 		/*Validacion del año de nacimiento del peludo*/
-		if (!is_int($_POST['fecha']) || $_POST['fecha'] < 0 || $_POST['fecha'] < 2009 || $_POST['fecha'] > intval(date('Y'))){
+		if ($_POST['fecha'] < 0 || $_POST['fecha'] < 2009 || $_POST['fecha'] > intval(date('Y'))){
 			$Error = "Año de Nacimiento Incorrecto";
 			$_SESSION['Error'] = "Año de Nacimiento Incorrecto";
 			return header("location: ".BASE_URL."fundacion/animales?error=".$Error);
@@ -230,6 +241,13 @@ class FundacionController extends GeneralController{
 			$_SESSION['Error'] = "Ha ocurrido un error";
 			return header("location: ".BASE_URL."fundacion/animales");
 		}
+
+        $igualdad =$objAdmin->ValidarAnimal($_POST['nombre'],$_POST['albergue']);
+		
+        if($igualdad){
+            $_SESSION['Error'] = "Ya existe un Animal con ese nombre en ese albergue.";
+            return header("location: " .BASE_URL."fundacion/animales");
+        }
 		
         if ($_POST['accion'] == 'Agregar'){
             $nombre = $_POST['nombre'];

@@ -11,7 +11,8 @@ echo "Pagina para la toma de decision acerca de que tipo de reporte se quiere pr
 <div class="row">
     <div class="col s12">
       <ul class="tabs">
-        <li class="tab col s2"><a class="active" href="#Animales">Animales</a></li>
+        <li class="tab col s2"><a class="active" href="#Animales">Peludos</a></li>
+		<li class="tab col s2"><a href="#Adoptados">Peludos Adoptados</a></li>
         <li class="tab col s2"><a href="#Veterinarios">Veterinarios</a></li>
         <li class="tab col s2"><a href="#Usuarios">Usuarios</a></li>
         <li class="tab col s2"><a href="#Albergues">Albergues</a></li>
@@ -21,7 +22,7 @@ echo "Pagina para la toma de decision acerca de que tipo de reporte se quiere pr
 
     <div id="Animales" class="col s12">
 	<form action="<?=BASE_URL?>report/Bitacora_Animales" target="_blank" method="POST">
-			<label>Animales</label><br>
+			<label>Peludos</label><br>
 			<label for="">Nombre</label>
 			<input type="text" name="NombreAnimal" class="col s6">
 			<label for="">Año de Nacimiento</label>
@@ -66,6 +67,64 @@ echo "Pagina para la toma de decision acerca de que tipo de reporte se quiere pr
 				<option value="3">Adoptados</option>
 			</select>
 			<button name="Reporte" value="Peludos">Generar Reporte</button>
+		</form>
+	</div>
+
+	<div id="Adoptados" class="col s12">
+		<form action="<?=BASE_URL?>report/Bitacora_Adoptados" target="_blank" method="POST">
+			<label>Peludos Adoptados</label><br>
+			<label for="">Nombre Peludo</label><!--text-->
+			<input type="text" name="peludo">
+			<br>
+			<label for="">Raza</label><!--Select-->
+			<select name="raza">
+				<option value="0">Todos</option>
+				<?php foreach($Razas as $raza){ ?>
+					<option value="<?=$raza['id_raza']?>"><?= $raza['nombre']?></option>
+				<?php } ?>
+			</select>
+			<br>
+			<label for="">Tamaño</label><!--Select-->
+			<select name="tamano">
+				<option value="0">Todos</option>
+				<?php foreach($tamanos as $tamano){ ?>
+					<option value="<?=$tamano['id_tamanio']?>"><?= $tamano['nombre']?></option>
+				<?php } ?>
+			</select>
+			<br>
+			<label for="">Albergue</label><!--Select-->
+			<select name="albergue">
+				<option value="0">Todos</option>
+				<?php foreach($albergues as $albergue){ ?>
+					<option value="<?=$albergue['id_albergue']?>"><?= $albergue['nombre']?></option>
+				<?php } ?>
+			</select>
+			<br>
+			<label for="">Año Nacimiento</label> <!--text-->
+			<input type="text" name="ano_nac">
+			<br>
+			<label for="">Tipo de Animal</label> <!--Select-->
+			<select name="tipoanimal">
+				<option value="0">Todos</option>
+				<?php foreach($tiposAni as $tipoani){ ?>
+					<option value="<?=$tipoani['id_tipo']?>"><?= $tipoani['nombre']?></option>
+				<?php } ?>
+			</select>
+			<br>
+			<label for="">Desde</label>
+				<input type="date" value="<?= date('Y-m-d'); ?>" name="Desde" class="col s6"> 
+				<br>
+				<label for="">Hasta</label>
+				<br>
+				<input type="date" value="<?= date('Y-m-d'); ?>" name="Hasta" class="col s6">
+			<label for="">Estatus</label> <!--Select-->
+			<select name="estatus" class="col s6">
+				<option value="0">Todos</option>
+				<option value="1">No adoptados</option>
+				<option value="3">Adoptados</option>
+			</select>
+			<br>
+			<button name="Reporte" value="Peludos Adoptados">Generar Reporte</button>
 		</form>
 	</div>
 
@@ -140,7 +199,6 @@ echo "Pagina para la toma de decision acerca de que tipo de reporte se quiere pr
 			<br>
 			<label>Fundacion propietario</label>
 			<input type="text" name="cedulaUser" id="">
-			<div id="fecha">
 			<select name="Activo" id="">
 				<option value="2">Todos</option>
 				<option value="1">Activo</option>

@@ -123,6 +123,25 @@ class PDF_MC_Table extends FPDF {
 				$this->Cell(55, 5, utf8_decode("Valor Actual"), 1, 0,'C', 0);
 				$this->Cell(40, 5, "Fecha", 1, 1,'C', 0);
 				break;
+			case "Peludos Adoptados":
+					//$this->SetTitle('Reportes de Bitacoras');
+					
+					$this->SetXY(10, 30);
+					$this->Cell(50, 10, "Adopciones Mostradas: " . $_SESSION['num'], 0, 1, 'L');
+					$this->SetXY(10, 35);
+					$this->Cell(50, 10, "Adopciones Completadas Mostradas: " . $_SESSION['Completados'], 0, 1, 'L');
+					$this->SetXY(10, 40);
+					$this->Cell(50, 10, "Adopciones Canceladas Mostradas: " . $_SESSION['Cancelados'], 0, 1, 'L');
+
+					$this->Cell(30, 5, "ID", 1, 0,'C', 0);
+					$this->Cell(55, 5, utf8_decode("Usuario Petición"), 1, 0,'C', 0);
+					$this->Cell(50, 5, utf8_decode("Animal de Petición"), 1, 0,'C', 0);
+					$this->Cell(40, 5, utf8_decode("Raza"), 1, 0,'C', 0);
+					$this->Cell(40, 5, utf8_decode("Tipo Animal"), 1, 0,'C', 0);
+					$this->Cell(40, 5, utf8_decode("Año de Nacimiento"), 1, 0,'C', 0);
+					$this->Cell(35, 5, utf8_decode("Estado"), 1, 0,'C', 0);
+					$this->Cell(40, 5, "Fecha", 1, 1,'C', 0);
+					break;
 			default: echo "a";
 				break;
 		}

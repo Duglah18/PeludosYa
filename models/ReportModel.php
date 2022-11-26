@@ -114,38 +114,76 @@ https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3D
 	//creo que este esta de mas si en lo anterior puedo hacerlo no ?
 	//esta tiene un error en lo del case del select
 	//esta no deberia existir la anterior de animales general ya cumple su proposito
-	public function AnimalesAdoptados($columna, $filtro, $desde = 2022, $hasta = 2022, $estatus = 0){
-		return $resultados =  $this->ObtenData("SELECT a.id_animal, a.nombre, a.anio_nac, a.img, a.descripcion,
-														a.fecha_ingreso, b.nombre as nombreRaza, c.nombre AS nombreTamano,
-														d.nombre AS nombreAlbergue, e.nombre AS nombreTipoAnimal,
-														CASE WHEN ISNULL(f.animal_id) THEN 0 ELSE SUM(f.animal_id) END AS TotalAdopciones
-												FROM animal a
-												INNER JOIN raza b ON a.raza_id = b.id_raza
-												INNER JOIN tamanio c ON a.tamanio_id = c.id_tamanio
-												INNER JOIN albergue d ON a.albergue_id = d.id_albergue
-												INNER JOIN tipo_animal e ON b.id_tipo_animal = e.id_tipo
-												INNER JOIN adopcion f ON a.id_animal = f.animal_id
+	public function AnimalesAdoptados($nombreAnimal = "", $raza = 0, $tamano = 0, $albergue = 0, $Anio_nac = "", $tipoAnimal = 0, $desde = "2021-01-01", $hasta = "2022-11-26", $estatus = 0){
+		return $resultados =  $this->ObtenData("SELECT a.id_adopcion, b.nombre AS nombreAnimal, d.nombre AS nombreUsuario, c.nombre AS razaNombre,
+													   e.nombre AS nombreTamano, g.nombre AS nombreAlbergue, f.nombre AS TipoAnimal, h.nombre_estado AS estadoAdopcion,
+													   a.fecha_adopcion, b.anio_nac
+												FROM adopcion a
+												INNER JOIN animal b ON a.animal_id = b.id_animal
+												INNER JOIN raza c ON b.raza_id = c.id_raza
+												INNER JOIN usuarios d ON a.cedula_usuario = d.cedula
+												INNER JOIN tamanio e ON b.tamanio_id = e.id_tamanio
+												INNER JOIN tipo_animal f ON c.id_tipo_animal = f.id_tipo
+												INNER JOIN albergue g ON b.albergue_id = g.id_albergue
+												INNER JOIN tipo_estado_adopcion h ON a.estado = h.id_tipo_estado
 												WHERE (
-														($columna = 0 AND a.id_animal = CASE WHEN '$filtro' = '' THEN a.id_animal ELSE '$filtro' END) OR 
-														($columna = 1 AND a.nombre LIKE '$filtro' + '%') OR
-														($columna = 2 AND a.anio_nac BETWEEN $desde AND $hasta) OR 
-														($columna = 3 AND a.fecha_ingreso BETWEEN $desde AND $hasta) OR 
-														($columna = 4 AND b.raza_id = CASE WHEN $filtro = 0 THEN b.raza_id ELSE $filtro END) OR --Raza--Aca se implementa un combobox si se puede si no ps vere
-														($columna = 5 AND c.id_tamanio = CASE WHEN $filtro = 0 THEN c.id_tamanio ELSE $filtro END) OR --Tamanio
-														($columna = 6 AND a.albergue_id = CASE WHEN $filtro = 0 THEN a.albergue_id ELSE $filtro END) OR --Albergue podria ser codigo --si saliera un cmb podria sacarle una consulta
-														($columna = 7 AND d.nombre LIKE '$filtro' + '%') OR --Albergue nombre
-														($columna = 8 AND e.id_tipo = '$filtro')--Tipo Animal
+														(b.nombre LIKE CASE WHEN '$nombreAnimal' = '' THEN b.nombre ELSE '%$nombreAnimal%' END) AND
+														(a.fecha_adopcion BETWEEN '$desde' AND '$hasta') AND 
+														(b.raza_id = CASE WHEN '$raza' = 0 THEN b.raza_id ELSE '$raza' END) AND 
+														(e.id_tamanio = CASE WHEN '$tamano' = 0 THEN e.id_tamanio ELSE '$tamano' END) AND 
+														(b.albergue_id = CASE WHEN '$albergue' = 0 THEN b.albergue_id ELSE '$albergue' END) AND
+														(b.anio_nac = CASE WHEN '$Anio_nac' = '' THEN b.anio_nac ELSE '$Anio_nac' END) AND
+														(c.id_tipo_animal = CASE WHEN '$tipoAnimal' = 0 THEN c.id_tipo_animal ELSE '$tipoAnimal' END) AND
+														(CASE WHEN $estatus = 0 THEN a.estado IN ('1','2','3') OR a.estado IS NULL ELSE 
+															CASE WHEN '$estatus' = 1 THEN a.estado IN ('1','2') OR a.estado IS NULL ELSE a.estado = 3 END END)
+													  )");
+	}
+
+	public function TotalesAdopciones($nombreAnimal = "", $raza = 0, $tamano = 0, $albergue = 0, $Anio_nac = "", $tipoAnimal = 0, $desde = "2021-01-01", $hasta = "2022-11-22", $estatus = 0){
+		return $resultados =  $this->ObtenData("SELECT COUNT(*) AS TotalAdoptados
+												FROM adopcion a
+												INNER JOIN animal b ON a.animal_id = b.id_animal
+												INNER JOIN raza c ON b.raza_id = c.id_raza
+												INNER JOIN usuarios d ON a.cedula_usuario = d.cedula
+												INNER JOIN tamanio e ON b.tamanio_id = e.id_tamanio
+												INNER JOIN tipo_animal f ON c.id_tipo_animal = f.id_tipo
+												INNER JOIN albergue g ON b.albergue_id = g.id_albergue
+												INNER JOIN tipo_estado_adopcion h ON a.estado = h.id_tipo_estado
+												WHERE (
+														(b.nombre LIKE CASE WHEN '$nombreAnimal' = '' THEN b.nombre ELSE '%$nombreAnimal%' END) AND
+														(a.fecha_adopcion BETWEEN '$desde' AND '$hasta') AND 
+														(b.raza_id = CASE WHEN '$raza' = 0 THEN b.raza_id ELSE '$raza' END) AND 
+														(e.id_tamanio = CASE WHEN '$tamano' = 0 THEN e.id_tamanio ELSE '$tamano' END) AND 
+														(b.albergue_id = CASE WHEN '$albergue' = 0 THEN b.albergue_id ELSE '$albergue' END) AND
+														(b.anio_nac = CASE WHEN '$Anio_nac' = '' THEN b.anio_nac ELSE '$Anio_nac' END) AND
+														(c.id_tipo_animal = CASE WHEN '$tipoAnimal' = 0 THEN c.id_tipo_animal ELSE '$tipoAnimal' END) AND
+														(CASE WHEN $estatus = 0 THEN a.estado IN ('1','2','3') OR a.estado IS NULL ELSE 
+														CASE WHEN '$estatus' = 1 THEN a.estado IN ('1','2') OR a.estado IS NULL ELSE a.estado = 3 END END)
 													  )");
 	}
 	
-	public function TotalesAdopciones($filtro, $desde = 2022, $hasta = 2022, $estatus = 0){
-		return $resultados =  $this->ObtenData("SELECT COUNT(*) AS TotalCanceladas
-																	FROM adopcion a
-																	WHERE (
-																			estado = CASE WHEN '$filtro' = '' THEN estado ELSE '$filtro' END
-																		)");
+	public function TotalesAdopcionesCanceladas($nombreAnimal = "", $raza = 0, $tamano = 0, $albergue = 0, $Anio_nac = "", $tipoAnimal = 0, $desde = "2021-01-01", $hasta = "2022-11-22"){
+		return $resultados =  $this->ObtenData("SELECT COUNT(*) AS TotalAdoptados
+												FROM adopcion a
+												INNER JOIN animal b ON a.animal_id = b.id_animal
+												INNER JOIN raza c ON b.raza_id = c.id_raza
+												INNER JOIN usuarios d ON a.cedula_usuario = d.cedula
+												INNER JOIN tamanio e ON b.tamanio_id = e.id_tamanio
+												INNER JOIN tipo_animal f ON c.id_tipo_animal = f.id_tipo
+												INNER JOIN albergue g ON b.albergue_id = g.id_albergue
+												INNER JOIN tipo_estado_adopcion h ON a.estado = h.id_tipo_estado
+												WHERE (
+														(b.nombre LIKE CASE WHEN '$nombreAnimal' = '' THEN b.nombre ELSE '%$nombreAnimal%' END) AND
+														(a.fecha_adopcion BETWEEN '$desde' AND '$hasta') AND 
+														(b.raza_id = CASE WHEN '$raza' = 0 THEN b.raza_id ELSE '$raza' END) AND 
+														(e.id_tamanio = CASE WHEN '$tamano' = 0 THEN e.id_tamanio ELSE '$tamano' END) AND 
+														(b.albergue_id = CASE WHEN '$albergue' = 0 THEN b.albergue_id ELSE '$albergue' END) AND
+														(b.anio_nac = CASE WHEN '$Anio_nac' = '' THEN b.anio_nac ELSE '$Anio_nac' END) AND
+														(c.id_tipo_animal = CASE WHEN '$tipoAnimal' = 0 THEN c.id_tipo_animal ELSE '$tipoAnimal' END) AND
+														(a.estado = 2)
+													  )");
 	}
-	
+
 	public function Usuarios($cedula = "", $nombre = "", $roles = 0, $activos = 2){//deberias hacerle unos inners
 		return $this->ObtenData("SELECT cedula, a.nombre, b.nombre AS RolNom, direccion, activo, telefono, detalles
 								FROM usuarios a
