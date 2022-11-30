@@ -377,19 +377,20 @@ class AdminController extends GeneralController{
 			header("location: ".BASE_URL. "admin/agregaUsuarios");
 		}
 		
-		if($_POST['cedula'] == "" || $_POST['nombre'] == "" || $_POST['rol'] == "" || $_POST['direccion'] == "" || $_POST['telefono'] == ""){
+		if($_POST['cedula'] == "" || $_POST['nombre'] == "" || $_POST['rol'] == "" || $_POST['direccion'] == "" || $_POST['telefono'] == "" || $_POST['contrasenia'] == ""){
 			$_SESSION['Error'] = "Error no se han enviado datos a ingresar";
 			header("location: ".BASE_URL. "admin/agregaUsuarios");
 		}
 
-        $igualdad =$objAdmin->ValidarUsuario($_POST['nombre'],$_POST['telefono']);
-		
-        if($igualdad){
-            $_SESSION['Error'] = "Ya existe un usuario que ya posee ese nombre exacto o telefono.";
-            return header("location: " .BASE_URL."admin/agregaUsuarios");
-        }
-		
         if (isset($_POST['Agregar'])){
+
+            $igualdad =$objAdmin->ValidarUsuario($_POST['nombre'],$_POST['telefono']);
+		
+            if($igualdad){
+                $_SESSION['Error'] = "Ya existe un usuario que ya posee ese nombre exacto o telefono.";
+                return header("location: " .BASE_URL."admin/agregaUsuarios");
+            }
+
             $cedula = $_POST['cedula'];
             $nombre = $_POST['nombre'];
             $rol = $_POST['rol'];
@@ -408,6 +409,14 @@ class AdminController extends GeneralController{
 			$_SESSION['Correct'] = "Se realizo agrego al usuario con exito";
             return header("location: ".BASE_URL. "admin/mostrarData");//solucion a recargar la pagina !!!!
         } elseif (isset($_POST['Modificar'])){//usa redireccionamiento header
+
+            $igualdad =$objAdmin->ValidarModificacionUsuario($_POST['nombre'],$_POST['telefono'], $_POST['cedula']);
+		
+            if($igualdad){
+                $_SESSION['Error'] = "Ya existe un usuario que ya posee ese nombre exacto o telefono.";
+                return header("location: " .BASE_URL."admin/agregaUsuarios");
+            }
+
             $cedula = $_POST['cedula'];
             $nombre = $_POST['nombre'];
             $rol = $_POST['rol'];
@@ -477,7 +486,7 @@ class AdminController extends GeneralController{
     public function agregaRazaAnimal(){
         $objAdmin = $this->loadModel("AdminModel");
 
-        if(!isset($_POST['nombreRaza']) || !isset($_POST['tipoAnimal'])){
+        if(!isset($_POST['nombreRaza']) || !isset($_POST['tipoanimal'])){
             $_SESSION['Error'] = "No ingreso un nombre para la Raza o tipo de animal";
 			return header("location: ".BASE_URL."admin/razasAnimal");
         }
@@ -486,12 +495,12 @@ class AdminController extends GeneralController{
 			$_SESSION['Error'] = "No ingreso un nombre para la Raza";
 			return header("location: ".BASE_URL."admin/razasAnimal");
 		}
-		if($_POST['tipoAnimal'] == "0"){
+		if($_POST['tipoanimal'] == "0"){
 			$_SESSION['Error'] = "No selecciono un Tipo de Animal Valido";
 			return header("location: ".BASE_URL."admin/razasAnimal");
 		}
 
-        $igualdad =$objAdmin->ValidarRazaAnimal($_POST['nombreRaza'], $_POST['tipoAnimal']);
+        $igualdad =$objAdmin->ValidarRazaAnimal($_POST['nombreRaza'], $_POST['tipoanimal']);
 		
         if($igualdad){
             $_SESSION['Error'] = "Ya existe una Raza de animal con ese nombre en ese tipo de animal.";
@@ -553,14 +562,15 @@ class AdminController extends GeneralController{
 			
 		}
         
-        $igualdad =$objFund->ValidarAnimal($_POST['nombre'], $_POST['albergue']);
-		
-        if($igualdad){
-            $_SESSION['Error'] = "Ya existe un animal con este nombre en el albergue seleccionado.";
-            return header("location: " .BASE_URL."admin/animales");
-        }
-
         if (isset($_POST['accion']) && $_POST['accion'] == 'Agregar'){
+            
+            $igualdad =$objFund->ValidarAnimal($_POST['nombre'], $_POST['albergue']);
+		
+            if($igualdad){
+                $_SESSION['Error'] = "Ya existe un animal con este nombre en el albergue seleccionado.";
+                return header("location: " .BASE_URL."admin/animales");
+            }
+    
             $nombre = $_POST['nombre'];
             $fechanac= $_POST['fecha'];
             /*----------------------Empezamos el tratamiento de img----------------------------*/
@@ -585,6 +595,14 @@ class AdminController extends GeneralController{
 			$_SESSION['Correct'] = "Se realizo agrego al Peludo con exito";
             return header("location: ".BASE_URL."admin/animales");
         } elseif (isset($_POST['accion']) && $_POST['accion'] == 'Modificar'){
+
+            $igualdad =$objFund->ValidarModificacionAnimal($_POST['nombre'], $_POST['albergue'], $_POST['id_animal']);
+		
+            if($igualdad){
+                $_SESSION['Error'] = "Ya existe un animal con este nombre en el albergue seleccionado.";
+                return header("location: " .BASE_URL."admin/animales");
+            }
+
             $id_animal = $_POST['id_animal'];
             $nombre = $_POST['nombre'];
             $fechanac= $_POST['fecha'];
@@ -640,18 +658,22 @@ class AdminController extends GeneralController{
 			return header("location: " .BASE_URL. "admin/agregaVeterinarios");
 		}
 
-        $igualdad =$objAdmin->ValidarVeterinario($_POST['nombre']);
-		
-        if($igualdad){
-            $_SESSION['Error'] = "Ya existe un Veterinario con ese nombre.";
-            return header("location: " .BASE_URL."admin/agregaVeterinarios");
-        }
-		
-        
         $nombre = $_POST['nombre'];
         $telefono = $_POST['telefono'];
         $direccion = $_POST['direccion'];
         if (isset($_POST['accion']) && $_POST['accion'] == 'Modificar'){
+            if (!isset($_POST['vetIdentificador'])){
+                $_SESSION['Error'] = "No se envio un veterinario a modificar.";
+			    return header("location: " .BASE_URL. "admin/agregaVeterinarios");
+            }
+
+            $igualdad =$objAdmin->ValidarModificacionVeterinario($_POST['nombre'], $_POST['vetIdentificador']);
+            
+            if($igualdad){
+                $_SESSION['Error'] = "Ya existe un Veterinario con ese nombre.";
+                return header("location: " .BASE_URL."admin/agregaVeterinarios");
+            }
+
             $visible = isset($_POST['visible'])?$_POST['visible']:"";
 			if($visible == ""){
 				$_SESSION['Error'] = "Ocurrio un error";
@@ -685,6 +707,14 @@ class AdminController extends GeneralController{
             return header("location: ".BASE_URL."admin/agregaVeterinarios");
         } elseif(isset($_POST['accion']) && $_POST['accion'] == 'Agregar') {
             if ($nombre != "" && $telefono != "" && $direccion != ""){
+
+                $igualdad =$objAdmin->ValidarVeterinario($_POST['nombre']);
+                
+                if($igualdad){
+                    $_SESSION['Error'] = "Ya existe un Veterinario con ese nombre.";
+                    return header("location: " .BASE_URL."admin/agregaVeterinarios");
+                }
+
                 /*----------------------Tratamiento de Img------------------------------------------*/
                 $fecha_paratmp = new DateTime();
                 $imgtxt = (isset($_FILES['img']['name']))? $_FILES['img']['name']:"";

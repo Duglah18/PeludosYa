@@ -393,6 +393,19 @@ class AdminModel extends ConexionBD{
 										WHERE nombre = '$nombre' OR telefono = '$telefono'");
 		return $verificar;
 	}
+
+    public function ValidarModificacionUsuario($nombre, $telefono, $cedula){
+		//Recibe su cedula, nombre y telefono ninguno debe estar en  el sistema del nombre no estoy muy seguro
+		$nombre = mysqli_real_escape_string($this->conectar(), $nombre);
+		$telefono = mysqli_real_escape_string($this->conectar(), $telefono);
+		$cedula = mysqli_real_escape_string($this->conectar(), $cedula);
+
+		$verificar = $this->obtenData("SELECT cedula, nombre
+										FROM usuarios
+										WHERE nombre = '$nombre' OR telefono = '$telefono'
+                                        AND cedula <> '$cedula'");
+		return $verificar;
+	}
 	
 	public function ValidarAnimal($nombre, $albergue){
 		//recibe nombre, raza, tamaño y albergue en el mismo albergue no debe existir 
@@ -404,6 +417,20 @@ class AdminModel extends ConexionBD{
 										FROM animal
 										WHERE nombre = '$nombre' AND albergue_id = '$albergue'");
 										//no se si sea necesario verificar el tamaño
+		return $validacion;
+	}
+
+    public function ValidarModificacionAnimal($nombre, $albergue, $id_animal){
+		//recibe nombre, raza, tamaño y albergue en el mismo albergue no debe existir 
+		//el mismo animal 
+		$nombre = mysqli_real_escape_string($this->conectar(), $nombre);
+		$albergue = mysqli_real_escape_string($this->conectar(), $albergue);
+        $id_animal = mysqli_real_escape_string($this->conectar(), $id_animal);
+		
+		$validacion = $this->obtenData("SELECT id_animal, nombre 
+										FROM animal
+										WHERE nombre = '$nombre' AND albergue_id = '$albergue'
+                                              AND id_animal <> '$id_animal'");
 		return $validacion;
 	}
 	
@@ -442,6 +469,21 @@ class AdminModel extends ConexionBD{
 
 	}
 
+    public function ValidarModificacionVeterinario($nombre, $id_veterinario){
+		//Recibe el nombre y su telefono
+		//no creo que se pueda tener el mismo telefono en 2 veterinarios
+		$nombre = mysqli_real_escape_string($this->conectar(), $nombre);
+        $id_veterinario = mysqli_real_escape_string($this->conectar(), $id_veterinario);
+	
+		$validacion = $this->obtenData("SELECT id_veterinario, nombre, tlf, direccion, 
+									    img, visible, usuario_Rveterinario
+										  FROM veterinario
+										  WHERE nombre = '$nombre' AND 
+                                          id_veterinario <> '$id_veterinario'");
+		return $validacion;
+
+	}
+
     public function ValidarAlbergue($nombre){
         $nombre = mysqli_real_escape_string($this->conectar(), $nombre);
 	
@@ -450,6 +492,17 @@ class AdminModel extends ConexionBD{
 										  WHERE nombre = '$nombre'");
 		return $validacion;
     }
+
+    public function ValidarModificacionAlbergue($nombre,$id_albergue){
+        $nombre = mysqli_real_escape_string($this->conectar(), $nombre);
+        $id_albergue = mysqli_real_escape_string($this->conectar(), $id_albergue);
+	
+		$validacion = $this->obtenData("SELECT id_albergue, nombre
+										  FROM albergue
+										  WHERE nombre = '$nombre' AND id_albergue <> '$id_albergue'");
+		return $validacion;
+    }
+
 
     public function registrarUsuario($tabla, $rif, $nombre, $rol, $direccion, 
                                     $contrasenia, $estado, $tlf, $usuario_ingresando){

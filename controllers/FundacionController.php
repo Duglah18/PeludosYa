@@ -159,22 +159,23 @@ class FundacionController extends GeneralController{
 			$_SESSION['Error'] = "Los datos introducidos no son validos";
 			return header("location: ".BASE_URL."admin/albergues");
 		}
-
-        $igualdad =$objAdmin->ValidarAlbergue($_POST['nombre']);
-
-        if($igualdad){
-            $_SESSION['Error'] = "Ya existe un Albergue con ese nombre.";
-            if($_SESSION['rol'] == "1"){
-                return header("location: ".BASE_URL."admin/albergues");
-            } 
-            return header("location: " .BASE_URL."fundacion/albergues");
-        }
 		
         if($_POST['accion'] == 'Modificar'){
 			if (!isset($_POST['identificador'])){
 				$_SESSION['Error'] = "No se envio un identificador de Albergue para modificar";
 				return header("location: ".BASE_URL."admin/albergues");
 			}
+
+            $igualdad =$objAdmin->ValidarModificacionAlbergue($_POST['nombre'], $_POST['identificador']);
+
+            if($igualdad){
+                $_SESSION['Error'] = "Ya existe un Albergue con ese nombre.";
+                if($_SESSION['rol'] == "1"){
+                    return header("location: ".BASE_URL."admin/albergues");
+                } 
+                return header("location: " .BASE_URL."fundacion/albergues");
+            }
+
             $id_albergue = $_POST['identificador'];
             $Nombre = $_POST['nombre'];
             $direccion = $_POST['direccion'];
@@ -191,6 +192,17 @@ class FundacionController extends GeneralController{
 			$_SESSION['Correct'] = "Se ha modificado el albergue con exito";
             header("location: ".BASE_URL."fundacion/albergues");
         } elseif ($_POST['accion'] == 'Agregar') {
+
+            $igualdad =$objAdmin->ValidarAlbergue($_POST['nombre']);
+
+            if($igualdad){
+                $_SESSION['Error'] = "Ya existe un Albergue con ese nombre.";
+                if($_SESSION['rol'] == "1"){
+                    return header("location: ".BASE_URL."admin/albergues");
+                } 
+                return header("location: " .BASE_URL."fundacion/albergues");
+            }
+
             $Nombre = $_POST['nombre'];
             $direccion = $_POST['direccion'];
             $cedula = $_POST['cedula_user'];
@@ -241,15 +253,16 @@ class FundacionController extends GeneralController{
 			$_SESSION['Error'] = "Ha ocurrido un error";
 			return header("location: ".BASE_URL."fundacion/animales");
 		}
-
-        $igualdad =$objAdmin->ValidarAnimal($_POST['nombre'],$_POST['albergue']);
-		
-        if($igualdad){
-            $_SESSION['Error'] = "Ya existe un Animal con ese nombre en ese albergue.";
-            return header("location: " .BASE_URL."fundacion/animales");
-        }
 		
         if ($_POST['accion'] == 'Agregar'){
+
+            $igualdad =$objAdmin->ValidarAnimal($_POST['nombre'],$_POST['albergue']);
+		
+            if($igualdad){
+                $_SESSION['Error'] = "Ya existe un Animal con ese nombre en ese albergue.";
+                return header("location: " .BASE_URL."fundacion/animales");
+            }
+
             $nombre = $_POST['nombre'];
             $fechanac= $_POST['fecha'];
             /*----------------------Empezamos el tratamiento de img----------------------------*/
@@ -274,6 +287,14 @@ class FundacionController extends GeneralController{
 			$_SESSION['Correct'] = "Se ha insertado el Peludo con exito";
             return header("location: ".BASE_URL."fundacion/animales");
         } elseif ($_POST['accion'] == 'Modificar') {
+
+            $igualdad =$objFund->ValidarModificacionAnimal($_POST['nombre'], $_POST['albergue'], $_POST['id_animal']);
+		
+            if($igualdad){
+                $_SESSION['Error'] = "Ya existe un animal con este nombre en el albergue seleccionado.";
+                return header("location: " .BASE_URL."admin/animales");
+            }
+
             $id_animal = $_POST['id_animal'];
             $nombre = $_POST['nombre'];
             $fechanac= $_POST['fecha'];

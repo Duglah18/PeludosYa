@@ -353,7 +353,7 @@ class SessionController extends GeneralController{
 	public function modificarmiUsuario(){
 		$this->ComprobarLogueo();
 		$objAdmin = $this->loadModel("AdminModel");
-		if(!isset($_POST['cedula']) || !isset($_POST['nombre']) || !isset($_POST['direccion']) || !isset($_POST['contrasenia']) || !isset($_POST['telefono'])){
+		if(!isset($_POST['nombre']) || !isset($_POST['direccion']) || !isset($_POST['contrasenia']) || !isset($_POST['telefono'])){
 			$_SESSION['Error'] = "Ocurrio un error.";
 			return header("location: ".BASE_URL);
 		}
@@ -362,7 +362,7 @@ class SessionController extends GeneralController{
 			return header("location: ".BASE_URL);
 		}
 
-		$igualdad =$objAdmin->ValidarUsuario($_POST['nombre'], $_POST['telefono']);
+		$igualdad =$objAdmin->ValidarModificacionUsuario($_POST['nombre'], $_POST['telefono']);
 
         if($igualdad){
             $_SESSION['Error'] = "Ya existe un Usuario con ese nombre o Telefono.";
