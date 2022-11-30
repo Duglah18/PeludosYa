@@ -1,14 +1,26 @@
-<?php
+<div class="row" style="padding-top: 5%; padding-bottom: 5%;">
+<div class="col s10 white offset-s1">
+<div class="row" style="padding-left: 15px; padding-right: 15px;">
+    <div class="card  col s3 black-text transparent z-depth-0">
+        <h3>Menu Principal</h3>
+        <hr style="border-top: 8px solid; border-radius: 5px;">
+        <ul>
+        <li><a href="<?= BASE_URL;?>admin/tipoAnimal">Tipos de Animales</a></li>
+          <li><a href="<?= BASE_URL;?>admin/razasAnimal">Razas de Animales</a></li>
+          <li><a href="<?= BASE_URL;?>admin/agregaVeterinarios">Veterinarios</a></li>
+          <li><a href="<?= BASE_URL;?>admin/animales">Peludos</a></li>
+          <li><a href="<?= BASE_URL;?>admin/mostrarData">Usuarios</a></li>
+          <li><a href="<?= BASE_URL;?>admin/albergues">Albergues</a></li>
+          <li><a href="<?= BASE_URL;?>admin/adopciones">Adopciones</a></li>
+          <li><a href="<?= BASE_URL;?>admin/Reportes">Reportes</a></li>
+        </ul>
+    </div>
 
-echo "Pagina para la toma de decision acerca de que tipo de reporte se quiere presentar";
+<div class="card col s9 black-text transparent z-depth-0">
+  <div class="card-title center-align"><h3>Registro de Usuarios</h3></div>
+  <hr style="border-top: 8px solid; border-radius: 5px;">
 
-?>
-<!--
-	Ahora modificar y que sean especificos osea con and en lugar de or y un catalogo de fundaciones
-	en el usuario normal 
--->
-<!--Podrias hacer que los reportes salgan en una ventana nueva para no tener que salir del sistema-->
-<div class="row">
+  <div class="row">
     <div class="col s12">
       <ul class="tabs">
         <li class="tab col s2"><a class="active" href="#Animales">Peludos</a></li>

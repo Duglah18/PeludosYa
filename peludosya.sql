@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 24-11-2022 a las 22:39:35
+-- Tiempo de generación: 30-11-2022 a las 22:55:29
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 8.1.6
 
@@ -51,8 +51,8 @@ INSERT INTO `adopcion` (`id_adopcion`, `fecha_adopcion`, `animal_id`, `cedula_us
 
 CREATE TABLE `albergue` (
   `id_albergue` int(11) NOT NULL,
-  `nombre` varchar(255) NOT NULL,
-  `direccion` varchar(255) NOT NULL,
+  `nombre` varchar(90) NOT NULL,
+  `direccion` varchar(100) NOT NULL,
   `cedula_usuario` varchar(9) NOT NULL,
   `activo` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -412,9 +412,9 @@ CREATE TABLE `usuarios` (
   `nombre` varchar(40) NOT NULL,
   `rol_id` int(11) NOT NULL,
   `direccion` varchar(255) NOT NULL,
-  `contrasenia` varchar(1000) NOT NULL,
+  `contrasenia` varchar(20) NOT NULL,
   `activo` int(1) NOT NULL,
-  `telefono` varchar(20) NOT NULL,
+  `telefono` varchar(12) NOT NULL,
   `detalles` varchar(255) NOT NULL DEFAULT 'Registro Usuario'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -457,8 +457,8 @@ INSERT INTO `usuarios` (`cedula`, `nombre`, `rol_id`, `direccion`, `contrasenia`
 
 CREATE TABLE `veterinario` (
   `id_veterinario` int(11) NOT NULL,
-  `nombre` varchar(255) NOT NULL,
-  `tlf` int(11) NOT NULL,
+  `nombre` varchar(40) NOT NULL,
+  `tlf` int(12) NOT NULL,
   `direccion` varchar(55) NOT NULL,
   `img` varchar(1000) NOT NULL,
   `visible` int(1) NOT NULL,

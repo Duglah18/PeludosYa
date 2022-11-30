@@ -1,44 +1,75 @@
+<div class="row" style="padding-top: 5%; padding-bottom: 5%;">
+<div class="col s10 white offset-s1">
+<div class="row" style="padding-left: 15px; padding-right: 15px;">
+    <div class="card  col s3 black-text transparent z-depth-0">
+        <h3>Menu Principal</h3>
+        <hr style="border-top: 8px solid; border-radius: 5px;">
+        <ul>
+        <li><a href="<?= BASE_URL;?>admin/tipoAnimal">Tipos de Animales</a></li>
+          <li><a href="<?= BASE_URL;?>admin/razasAnimal">Razas de Animales</a></li>
+          <li><a href="<?= BASE_URL;?>admin/agregaVeterinarios">Veterinarios</a></li>
+          <li><a href="<?= BASE_URL;?>admin/animales">Peludos</a></li>
+          <li><a href="<?= BASE_URL;?>admin/mostrarData">Usuarios</a></li>
+          <li><a href="<?= BASE_URL;?>admin/albergues">Albergues</a></li>
+          <li><a href="<?= BASE_URL;?>admin/adopciones">Adopciones</a></li>
+          <li><a href="<?= BASE_URL;?>admin/Reportes">Reportes</a></li>
+        </ul>
+    </div>
+
+
+<div class="card col s9 black-text transparent z-depth-0">
+<div class="card-title center-align"><h3>Gestión de Adopciones</h3></div>
+<hr style="border-top: 8px solid; border-radius: 5px;">
+
 <?php 
     $total_paginas = ceil($totalregistro / $por_pagina); 
     $seleccionado = isset($Busqueda)? $Busqueda : "0";
 ?>
-<form action="<?=BASE_URL?>admin/adopciones" method="POST">
-    <label for="">Filtra por albergue especifico</label>
-    <select name="AlbergueEsp" id="">
-        <option value="0">Seleccionar</option>
-        <?php foreach ($albergues as $key){ ?>
-        <option <?php if($seleccionado == $key['id_albergue']){echo "selected";} ?> value="<?=$key['id_albergue'];?>"><?=$key['nombre']?></option>
-        <?php }?>
-    </select>
-    <button>Buscar</button>
-</form>
 
+<div class="col s12">
+    <ul class="tabs">
+        <li class="tab col s6"><a class="indigo-text" href="#Albergue">Albergue</a></li>
+        <li class="tab col s6"><a class="indigo-text" href="#Estado">Estado</a></li>
+    </ul>
+</div>
 
-<!--Agregado el 16/11/20222 Para filtrar por estado de adopciones facilitar al admin-->
-<form action="<?=BASE_URL?>admin/adopciones" method="GET">
+<div class="col s12"  style="padding-bottom: 20px;">
+
+<div id="Albergue">
+    <div class="input-field col s6 offset-s3 tooltipped" data-position="top" data-tooltip="Ubicación de la persona o fundación">
+        <form action="<?=BASE_URL?>admin/adopciones" method="POST">
+            <label for="">Filtra por albergue especifico</label>
+            <select name="AlbergueEsp" id="">
+                <option value="0">Seleccionar</option>
+                <?php foreach ($albergues as $key){ ?>
+                <option <?php if($seleccionado == $key['id_albergue']){echo "selected";} ?> value="<?=$key['id_albergue'];?>"><?=$key['nombre']?></option>
+                <?php }?>
+            </select>
+            <button class="btn indigo">Buscar</button>
+        </form>
+    </div>
+</div>
+
+<div id="Estado">
+    <div class="input-field col s6 offset-s3 tooltipped" data-position="top" data-tooltip="Ubicación de la persona o fundación">
+    <form action="<?=BASE_URL?>admin/adopciones" method="GET">
     <label for="">Filtra por Estado</label>
-    <select name="filtro" id="">
-        <option <?php if($filtro == "0"){ echo "selected"; } ?> value="0">Todas</option>
-        <option <?php if($filtro == "1"){ echo "selected"; } ?> value="1">En Progreso</option>
-		<option <?php if($filtro == "2"){ echo "selected"; } ?> value="2">Cancelada</option>
-		<option  <?php if($filtro == "3"){ echo "selected"; } ?> value="3">Completada</option>
-    </select>
-    <button>Buscar</button>
-</form>
+        <select name="filtro" id="">
+            <option <?php if($filtro == "0"){ echo "selected"; } ?> value="0">Todas</option>
+            <option <?php if($filtro == "1"){ echo "selected"; } ?> value="1">En Progreso</option>
+            <option <?php if($filtro == "2"){ echo "selected"; } ?> value="2">Cancelada</option>
+            <option  <?php if($filtro == "3"){ echo "selected"; } ?> value="3">Completada</option>
+        </select>
+        <button class="btn indigo">Buscar</button>
+    </form>
+    </div>
+</div>
 
-<!--Busqueda por fecha de peticion-->
-<!-- <form action="<?=BASE_URL?>admin/adopciones" method="POST">
-    <label for="">Filtra por Fecha</label>
-		<label>En proceso</label>
-		<input type="date" class="" placeholder="Inicio"  name="desde"/>
-		
-		<input type="date" class="" placeholder="Final"  name="hasta"/>
-    <button>Buscar</button>
-</form> -->
+</div>
 
 <?php if($adopciones != false){ ?>
-<table>
-    <thead>
+    <table class="centered">
+        <thead class="card indigo white-text">
       <tr>
         <th>ID</th>
         <th>Fecha de Peticion</th>
@@ -61,7 +92,7 @@
         <?php } ?>
     </tbody>
 </table>
-<div class="col-md-12 center text-center cyan lighten-2"><!--Paginador-->
+<div class="col-md-12 center text-center"><!--Paginador-->
     <ul class="pagination">
         <?php if($pagina != 1){ ?>
             <li class="waves-effect blue-text"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=1<?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
@@ -76,7 +107,7 @@
         
         <?php for($i = 1; $i <= $total_paginas; $i++){ 
             if ($i == $pagina){ ?>
-                <li class="active"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$i?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><?=$i?></a></li>
+                <li class="active indigo"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$i?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><?=$i?></a></li>
            <?php } else { ?>
             <li class="waves-effect"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$i?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><?=$i?></a></li>
         <?php 
@@ -100,3 +131,8 @@
     <h1>Aun no Existen adopciones</h1>
 
 <?php } ?>
+
+</div> 
+</div>
+</div>
+</div>

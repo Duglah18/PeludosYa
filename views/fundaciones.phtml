@@ -2,44 +2,54 @@
     //paginador
     //Total Registro y por_pagina llegan por el controlador
     $total_paginas = ceil($totalregistro / $por_pagina);
+    if($fundaciones != false){
 ?>
-<!--Tipos de animal(), Razas()-->
-<br>
-<div class="container">
-    <div class="card-panel indigo darken-4 center-align" style="height: 150px; border-radius: 100px;">
-        <h3 class="container">Fundaciones que pueden nos acompañan</h3>
+<div class="row" style="padding-top: 5%; padding-bottom: 10px;">
+<div class="login-card col s10 offset-s1">
+    <div class="row" style="padding-left: 10px; padding-right: 10px;">
+    <?php foreach($fundaciones as $fundacion){ ?>
+    <div class="card small indigo col s3">
+        <div class="card-title align center-align" style="padding-top: 10px; padding-bottom: 10px;">
+        <i class="material-icons">label</i>
+        <span> Nombre: <?= $fundacion['nombre']; ?></span>
+        </div>
+        <div class="">
+
+            <div class="align">
+            <i class="material-icons">phone</i>
+            <span> Telefono de Contacto:</span>
+            </div>
+            <span><?= $fundacion['cedula']; ?></span>
+        
+            <div class="align">
+            <i class="material-icons">phone</i>
+            <span> Telefono de Contacto:</span>
+            </div>
+            <span><?= $fundacion['telefono']; ?></span>
+
+            <div class="align">
+            <i class="material-icons">home</i>
+            <span> Direccion de Consultorio:</span>
+            </div>
+            <?= $fundacion['direccion']; ?>
+
+            <div class="center-align" style="padding-top: 10px;">
+        </div>
+        </div>
+    </div>
+    <?php } ?>
     </div>
 </div>
-
-<?php if($fundaciones != false){ ?>
-    <table>
-        <thead>
-                <tr>
-                    <th>Rif</th>
-                    <th>Nombre</th>
-                    <th>Dirección</th>
-                    <th>Telefono</th>
-                </tr>
-        </thead>
-       <tbody>
-        <?php foreach($fundaciones as $fundacion){ ?>
-            <tr>
-                    <td><?= $fundacion['cedula']; ?></td>
-                    <td><?= $fundacion['nombre']; ?></td>
-                    <td><?= $fundacion['direccion']; ?></td>
-                    <td><?= $fundacion['telefono']; ?></td><!--quitar esto obviamente-->
-            </tr>
-        <?php } ?>
-       </tbody>
-</table>
-<div class="col-md-12 center text-center cyan lighten-2"><!--Paginador-->
+</div>
+<div class="div" style="padding-left: 20%; padding-right: 20%;">
+<div class="col-md-12 center text-center card"><!--Paginador-->
     <ul class="pagination">
         <?php if($pagina != 1){ ?>
             <!-- PA q sirve esto? <?= $fun ?> -->
             <li class="waves-effect blue-text"><a href="<?=BASE_URL?>session/catalogoFundaciones?pagina=1<?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
             <li class="waves-effect"><a href="<?=BASE_URL?>session/catalogoFundaciones?pagina=<?=$pagina - 1?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_left</i></a></li>
         <?php
-        }else{ ?>
+        } else { ?>
             <li class="disabled"><a href=""><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
             <li class="disabled"><a href=""><i class="material-icons">chevron_left</i></a></li>
     <?php
@@ -48,8 +58,8 @@
         
         <?php for($i = 1; $i <= $total_paginas; $i++){ 
             if ($i == $pagina){ ?>
-                <li class="active"><a href="<?=BASE_URL?>session/catalogoFundaciones?pagina=<?=$i?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><?=$i?></a></li>
-           <?php } else{
+                <li class="active indigo"><a href="<?=BASE_URL?>session/catalogoFundaciones?pagina=<?=$i?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><?=$i?></a></li>
+           <?php } else {
             ?>
             <li class="waves-effect"><a href="<?=BASE_URL?>session/catalogoFundaciones?pagina=<?=$i?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><?=$i?></a></li>
         <?php 
@@ -60,7 +70,7 @@
         <li class="waves-effect"><a href="<?=BASE_URL?>session/catalogoFundaciones?pagina=<?=$pagina + 1?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_right</i></a></li>
         <li class="waves-effect"><a href="<?=BASE_URL?>session/catalogoFundaciones?pagina=<?=$total_paginas?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
         <?php
-        }else{ ?>
+        } else { ?>
             <li class="disabled"><a href=""><i class="material-icons">chevron_right</i></a></li>
             <li class="disabled"><a href=""><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
     <?php
@@ -72,3 +82,5 @@
     <h1>Aun no se encuentran Peluditos para adoptar Disponibles</h1>
 
 <?php } ?>
+
+<!-- -------------------------------------------------------------------------------------------------------------------- -->

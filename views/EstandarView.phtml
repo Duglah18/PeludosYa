@@ -34,10 +34,10 @@ if (isset($_SESSION)){
       <?php } ?>
       <ul id="nav-mobile" class="right hide-on-med-and-down">
       <?php if($role != "1"){ ?>
-      <li><a href='<?= BASE_URL; ?>session/catalogoAnimales'>Peluditos</a></li>
+      <li><a href='<?= BASE_URL; ?>session/catalogoAnimales'><i class="material-icons">pets</i></a></li>
       <?php if($role != "3"){ ?>
-        <li><a href='<?= BASE_URL; ?>session/catalogoFundaciones'>Fundaciones</a></li>
-        <li><a href='<?= BASE_URL; ?>session/catalogoVeterinarios'> Veterinarios</a></li><?php } ?>
+        <li><a href='<?= BASE_URL; ?>session/catalogoFundaciones'><i class="material-icons">location_city</i></a></li>
+        <li><a href='<?= BASE_URL; ?>session/catalogoVeterinarios'><i class="material-icons">local_hospital</i></a></li><?php } ?>
       <?php } ?>
       <!-- Botones NavBar-->
         <?php if (isset($_SESSION)){ ?>
@@ -46,26 +46,13 @@ if (isset($_SESSION)){
           <?php if($role == "3"){ ?> 
             <li><a class='dropdown-trigger' href='#' data-target='dropdown2'>Fundacion</a></li> 
           <?php } ?>
-          <!--Aca irian los botones que le pertenecen al rol de tienda-->
-          <!--Esto hay que borrarlo-->
-          <?php if($role == "4"){ ?>
-            <li><a class='dropdown-trigger' href='#' data-target='dropdown3'>Tienda</a></li>
-          <?php } ?>
         <?php } ?>
 
-          <!--No creo que admin deba ver el catalogo ni a los veterinarios de la pag normal
-              pq literal ya tiene vistas para ver eso-->
-        <!-- Contenido de Dropdowns -->
-        <!--Admin-->
           <!--Fundacion-->
         <ul id='dropdown2' class='dropdown-content'>
           <li><a href="<?= BASE_URL;?>fundacion/verAdopciones">Peticiones de Adopcion</a></li>
           <li><a href="<?= BASE_URL;?>fundacion/albergues">Albergues</a></li>
           <li><a href="<?= BASE_URL;?>fundacion/animales">Animales</a></li>
-        </ul>
-          <!--Vendedores-->
-        <ul id='dropdown3' class='dropdown-content'>
-          <li><a href="#!">EN CONSTRUCCIÓN</a></li>
         </ul>
       </ul>
     </div>
@@ -126,11 +113,7 @@ if (isset($_SESSION)){
 		
   <?php } ?>
   
-  <div class="fixed-baton-btn"  style="  position: absolute;
-  right: 160px;
-  bottom: auto;
-  padding-top: 28px;
-  z-index: 997;">
+  <div class="fixed-baton-btn"  style=" position: absolute; right: 100px; bottom: auto; padding-top: 28px; z-index: 997;">
   <a class="btn-floating btn-large indigo">
     <i class="large material-icons">account_circle</i>
   </a>

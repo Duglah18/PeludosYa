@@ -1,6 +1,8 @@
 <?php
 //call main fpdf file
 require('./assets/fpdf/fpdf.php');
+
+date_default_timezone_set("America/Caracas");
 //http://www.fpdf.org/en/script/script9.php Para marca de agua
 //create new class extending fpdf class
 class PDF_MC_Table extends FPDF {
@@ -13,13 +15,15 @@ class PDF_MC_Table extends FPDF {
 
 		// Arial bold 12
 		$this->SetFont('Arial','B',12);
-
+		
 		//Fecha y usuario
 		$this->SetXY(135, 10);
 		$this->Cell(200, 10,'Usuario: ' . $_SESSION['usuario'], 0, 0, 'R');
 		$this->SetXY(235, 15);
 		$this->Cell(100, 10,'Fecha: '.date('d/m/Y'), 0, 0, 'R');
-		
+		$this->SetXY(235, 20);
+		$this->Cell(100,10,"Hora: ".date("h:i:s"),0,0,'R');
+
 		// Arial bold 18
 		$this->SetFont('Arial','B',18);
 		// Movernos a la derecha

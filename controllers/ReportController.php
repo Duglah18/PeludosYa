@@ -213,10 +213,10 @@ class ReportController extends GeneralController{
 	
 	/******************************************************************
 	*	Pertenece: ReportController
-	*	Nombre: Bitacora_Movimientos
-	*	Función: Mostrar Reporte Movimientos
+	*	Nombre: Bitacora_Adoptados
+	*	Función: Mostrar Reporte Peludos Adoptados
 	*	Entradas: Filtro de busqueda, columna a buscar, desde, hasta
-	*	Salidas: Reporte de Movimientos
+	*	Salidas: Reporte de Peludos Adoptados
 	******************************************************************/
 	public function Bitacora_Adoptados(){
 		$this->Combrueba();

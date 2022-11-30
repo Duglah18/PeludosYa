@@ -189,7 +189,7 @@ https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3D
 								FROM usuarios a
 								INNER JOIN rol b ON a.rol_id = b.id_rol
 								WHERE(
-										(cedula = CASE WHEN '$cedula' = '' THEN cedula ELSE '$cedula' END) AND 
+										(cedula LIKE CASE WHEN '$cedula' = '' THEN cedula ELSE '%$cedula%' END) AND 
 										(a.nombre LIKE CASE WHEN '$nombre' = '' THEN a.nombre ELSE '%$nombre%' END) AND 
 										(rol_id = CASE WHEN '$roles' = 0 THEN rol_id ELSE '$roles' END) AND 
 										(activo = CASE WHEN '$activos' = 2 THEN activo ELSE '$activos' END)
@@ -201,7 +201,7 @@ https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3D
 		return $this->ObtenData("SELECT COUNT(*) AS TotalUsuarios
 									FROM usuarios a
 									WHERE(
-											(cedula = CASE WHEN '$cedula' = '' THEN cedula ELSE '$cedula' END) AND 
+											(cedula LIKE CASE WHEN '$cedula' = '' THEN cedula ELSE '%$cedula%' END) AND 
 											(a.nombre LIKE CASE WHEN '$nombre' = '' THEN a.nombre ELSE '%$nombre%' END) AND 
 											(rol_id = CASE WHEN '$roles' = 0 THEN rol_id ELSE '$roles' END) AND 
 											(activo = CASE WHEN '$activos' = 2 THEN activo ELSE '$activos' END)
@@ -213,7 +213,7 @@ https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3D
 					FROM albergue
 					WHERE(
 							(nombre LIKE CASE WHEN '$nombre' = '' THEN nombre ELSE '%$nombre%' END) AND 
-							(cedula_usuario = CASE WHEN '$UsuarioProp' = '' THEN cedula_usuario ELSE '$UsuarioProp' END) AND
+							(cedula_usuario LIKE CASE WHEN '$UsuarioProp' = '' THEN cedula_usuario ELSE '%$UsuarioProp%' END) AND
 							(activo = CASE WHEN '$activo' = 2 THEN activo ELSE '$activo' END)
 						 )");
 	}
@@ -223,7 +223,7 @@ https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3D
 						FROM albergue
 						WHERE(
 							(nombre LIKE CASE WHEN '$nombre' = '' THEN nombre ELSE '%$nombre%' END) AND 
-							(cedula_usuario = CASE WHEN '$UsuarioProp' = '' THEN cedula_usuario ELSE '$UsuarioProp' END) AND
+							(cedula_usuario LIKE CASE WHEN '$UsuarioProp' = '' THEN cedula_usuario ELSE '%$UsuarioProp%' END) AND
 							(activo = CASE WHEN '$activo' = 2 THEN activo ELSE '$activo' END)
 							 )");
 	}
@@ -262,7 +262,7 @@ https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3D
 		return $this->ObtenData("SELECT id_bitacora, usuario_bit, modulo_afectado, accion_realizada, valor_anterior, valor_actual,fecha_accion
 						FROM bitacoras
 						WHERE(
-								(usuario_bit =CASE WHEN '$usuario' = '' THEN usuario_bit ELSE '$usuario' END) AND
+								(usuario_bit LIKE CASE WHEN '$usuario' = '' THEN usuario_bit ELSE '%$usuario%' END) AND
 								(modulo_afectado LIKE '%$modulo%') AND 
 								(accion_realizada LIKE CASE WHEN '$accion' = 'Todos' THEN accion_realizada ELSE '%$accion%' END) AND
 								(fecha_accion BETWEEN '$desde' AND '$hasta')
@@ -273,7 +273,7 @@ https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3D
 		return $this->ObtenData("SELECT COUNT(*) AS totalBitacora
 						FROM bitacoras
 						WHERE(
-								(usuario_bit =CASE WHEN '$usuario' = '' THEN usuario_bit ELSE '$usuario' END) AND
+								(usuario_bit LIKE CASE WHEN '$usuario' = '' THEN usuario_bit ELSE '%$usuario%' END) AND
 								(modulo_afectado LIKE '%$modulo%') AND 
 								(accion_realizada LIKE CASE WHEN '$accion' = 'Todos' THEN accion_realizada ELSE '%$accion%' END) AND
 								(fecha_accion BETWEEN '$desde' AND '$hasta')
@@ -287,7 +287,7 @@ https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3D
 								WHERE (
 										(nombre LIKE '%$nombre%') AND
 										(visible = CASE WHEN '$visibilidad' = 3 THEN visible ELSE '$visibilidad' END) AND 
-										(usuario_Rveterinario = CASE WHEN '$usuarioRegistro' = '' THEN usuario_Rveterinario ELSE '$usuarioRegistro' END)
+										(usuario_Rveterinario LIKE CASE WHEN '$usuarioRegistro' = '' THEN usuario_Rveterinario ELSE '%$usuarioRegistro%' END)
 									)");
 	}
 	//me parecio muy tonto buscar a un veterinario por su tlf 
@@ -298,79 +298,10 @@ https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3D
 										WHERE (
 											(nombre LIKE '%$nombre%') AND
 											(visible = CASE WHEN '$visibilidad' = 3 THEN visible ELSE '$visibilidad' END) AND 
-											(usuario_Rveterinario = CASE WHEN '$usuarioRegistro' = '' THEN usuario_Rveterinario ELSE '$usuarioRegistro' END)
+											(usuario_Rveterinario LIKE CASE WHEN '$usuarioRegistro' = '' THEN usuario_Rveterinario ELSE '%$usuarioRegistro%' END)
 											)");
 		return $resultados [0]['TotalVeterinarios'];
 	}
 	
-/*
-(@COLUMNA = 0 AND A1.IDNPP = CASE WHEN @TEXTO = '' THEN A1.IDNPP ELSE @TEXTO END) OR        
-					--(@COLUMNA = 1 AND A1.NOMCLI LIKE '%' + @TEXTO + '%') OR --NO EXISTE EL NOMBRE DE LA PROMOCION EN LA TABLA PROMOCION
-					(@COLUMNA = 2 AND A1.DCTO = CASE WHEN @COLUMNA <> 2 THEN A1.DCTO ELSE @TEXTO END) OR
-					(@COLUMNA = 3 AND A1.DIASMIN = CASE WHEN @COLUMNA <> 3 THEN A1.DIASMIN ELSE @TEXTO END) OR
-					(@COLUMNA = 4 AND A1.DIASMAX = CASE WHEN @COLUMNA <> 4 THEN A1.DIASMAX ELSE @TEXTO END) OR
-					(@COLUMNA = 5 AND A1.TIPOMONEDA = CASE WHEN @COLUMNA <> 5 THEN A1.TIPOMONEDA ELSE @TEXTO END) OR
-					(@COLUMNA = 6 AND A1.CODFORMAPAGO = CASE WHEN @COLUMNA <> 6 THEN A1.CODFORMAPAGO ELSE @TEXTO END) OR 
-					(@COLUMNA = 7 AND A1.TIPOCUENTA = CASE WHEN @COLUMNA <> 7 THEN A1.TIPOCUENTA ELSE @TEXTO END)
-					)
-					
-					
- SELECT IDNPP, FECHADEPDESDE, FECHADEPHASTA, DCTO, DIASMIN, DIASMAX, TIPOMONEDA, ESTATUS FROM (
-	SELECT DISTINCT CASE WHEN GETDATE() BETWEEN A.FECHADEPDESDE AND A.FECHADEPHASTA THEN 'VIGENTES'
-			WHEN GETDATE() > A.FECHADEPDESDE AND GETDATE() > A.FECHADEPHASTA THEN 'VENCIDAS'
-			WHEN GETDATE() < A.FECHADEPDESDE AND GETDATE() < A.FECHADEPHASTA THEN 'POR INICIAR'
-			ELSE ''
-			END AS ESTATUS, A.IDNPP, A.FECHADEPDESDE, A.FECHADEPHASTA, A.DCTO, A.DIASMIN, A.DIASMAX, A.TIPOMONEDA FROM COB_MAEPROMONOTAS A WITH(NOLOCK)
-	INNER JOIN COB_DETPROMONOTAS B WITH(NOLOCK) ON A.IDNPP = B.IDNPP
-	WHERE (A.FECHADEPDESDE BETWEEN  @DESDE AND @HASTA
-	 OR A.FECHADEPHASTA BETWEEN @DESDE AND @HASTA OR 
-	 (A.FECHADEPDESDE < @DESDE AND A.FECHADEPHASTA > @HASTA))
-	 --OR NOMPROMOCION LIKE '%' + @NOMBRE + '%'
-	 AND A.IDNPP = CASE WHEN @IDPROMO = 0 THEN A.IDNPP ELSE @IDPROMO END
-	 AND B.CODCLI LIKE CASE WHEN @CODCLI = '' THEN '%' + B.CODCLI + '%' ELSE '%' + @CODCLI+'%' END
-
-) A1 WHERE A1.ESTATUS = CASE WHEN @ESTATUS = 'TODAS' THEN A1.ESTATUS ELSE @ESTATUS END
-	
-
- public function consultarVeterinarios($id_veterinario, $pagina, $qty){
-        if($pagina <= 0){ $pagina = 1; }
-        $desde = ($pagina - 1) * $qty;
-        $resultado = $this->obtenData("SELECT id_veterinario, nombre, tlf, direccion, img, visible, usuario_Rveterinario
-                          FROM veterinario
-                          WHERE id_veterinario = CASE WHEN '$id_veterinario' = '' THEN id_veterinario ELSE '$id_veterinario' END
-                          LIMIT $desde, $qty");
-        return $resultado;
-    }
-	
-	INSERT INTO #NOTASISV (CODCLI, RECIBO, TIPOMOV, OPERFAC)  
-	SELECT A.CODCLI, A.RECIBO, A.TIPOMOV, E.NOMOPER
-	FROM MAECUENTA A WITH (NOLOCK)
-	INNER JOIN MAECLIENTE C WITH (NOLOCK) ON A.CODCLI = C.CODCLI
-	INNER JOIN V_REGIONXCLIENTE2 D WITH (NOLOCK) ON D.CODCLI = C.CODCLI AND D.CODZON = C.CODZON
-	INNER JOIN MAEOPERADOR E WITH(NOLOCK) ON C.OPERFAC = E.CODOPER
-	WHERE A.FACHAMOV < @HASTA + 1
-		  AND A.ESTATUS = 'PE' 
-		  --AND C.FORMAPAGO = 'VENCIMIENTO'
-		  AND A.TIPOMOV = 'ND' 
-		  AND A.CONCEPTO = 'ISV' 
-		  AND EXISTS (
-						SELECT * 
-						FROM MAECUENTA B WITH (NOLOCK) 
-						WHERE B.CODCLI = A.CODCLI 
-							  AND ESTATUS = 'PE' 
-							  AND TIPOMOV = 'FA' 
-							  AND A.RECIBO = '0' + B.RECIBO
-					)
-		  AND D.REGION = CASE WHEN @REGION IN ('-1', 'TODAS') THEN D.REGION ELSE @REGION END
-		  AND D.NOMDISTRITO = CASE WHEN @DISTRITO IN ('-1', 'TODAS') THEN D.NOMDISTRITO ELSE @DISTRITO END
-		  AND C.CODZON = CASE WHEN @ZONA IN ('-1', 'TODAS') THEN C.CODZON ELSE @ZONA END
-		  AND C.CADENA = CASE WHEN @CADENA IN ('-1', 'TODAS') THEN C.CADENA ELSE @CADENA END 
-		  AND C.CODCLI = CASE WHEN @CLIENTE IN ('-1', 'TODAS') THEN C.CODCLI ELSE @CLIENTE END
-		  AND C.CODZON NOT IN ('#','9','T') 
-		  AND C.CODZON NOT LIKE 'X%'   
-		  AND C.CADENA NOT IN ('DPTO.  LEGAL')
-		  AND C.OPERFAC = CASE WHEN @ANALISTA IN ('-1', '!') THEN C.OPERFAC ELSE @ANALISTA END
-		 
-*/
 }
 ?>
