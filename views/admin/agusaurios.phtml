@@ -55,7 +55,7 @@ $detalle = isset($usuario[0]['detalles'])? $usuario[0]['detalles']:"";
           <div class="input-field col s4 tooltipped" data-position="top" data-tooltip="Identificación de la persona o fundación">
             <i class="indigo-text material-icons prefix">contacts</i>
             <label for="">Nro° de Cedula/RIF</label>
-            <input class="validate" type="text" name="cedula" value="<?=$cedula?>" maxlength="11" pattern="[0-9]{8,9}" title="Debe contener  8 o 9 numeros de identificación." required >
+            <input class="validate" type="text" name="cedula" value="<?=$cedula?>" maxlength="11" pattern="[0-9]{8,9}" title="Debe contener  8 o 9 numeros de identificación." required readonly>
             <span class="helper-text black-text">Ejemplo: 123456789</span>
           </div>
 

@@ -689,7 +689,7 @@ class AdminController extends GeneralController{
             $image = $_FILES['img']['tmp_name'];
             move_uploaded_file($image,"./img/veterinarios/".$nombreArchivo);
 
-            $imagenEliminar = $objAdmin->consultarVeterinarios($id_veterinario);
+            $imagenEliminar = $objAdmin->listarVeterinarios($id_veterinario);
                 if($imagenEliminar[0]['img'] != $nombreArchivo){
                     if ($imagenEliminar[0]["img"]!="imagen.jpg"){//Se cumple?
                         if (file_exists("./img/veterinarios/".$imagenEliminar[0]["img"])) {

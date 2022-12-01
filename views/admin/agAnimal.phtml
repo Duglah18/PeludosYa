@@ -132,7 +132,9 @@ $visible = (isset($animales[0]['visible']))? $animales[0]['visible']:"";
         <div class="card-title center-align"><h5>¡Sin elegir tipo de animal primero, no se podra completar el registro!</h5></div>
         <br>
 
-        <!-- <label for="">Imagen Original: <?=$img?></label> <input type="hidden" value="<?=$img?>" name="imgmodificar">-->
+        <!-- <label for="">Imagen Original: <?=$img?></label>  -->
+        <!--Este input es importante porque se envia a modificar para comparar si la imagen se esta cambiando-->
+        <input type="hidden" value="<?=$img?>" name="imgmodificar">
 
         <!--No se mostrara si la adopcion se esta procesando porque esta no es su ventana-->
         <a href="<?= BASE_URL;?>admin/animales"><input class="btn indigo col s2" type="button" value="Volver"></a>

@@ -143,7 +143,6 @@ class FundacionController extends GeneralController{
 	*	Salidas: Ver albergues
 	*****************************************************************/
     public function registraFundacion(){//funciona 9/10/2022
-		$this->Comprobador();
         $objFund = $this->loadModel("FundacionModel");
         $objAdmin = $this->loadModel("AdminModel");
         if(!isset($_POST['accion'])){

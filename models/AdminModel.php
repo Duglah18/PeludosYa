@@ -88,6 +88,15 @@ class AdminModel extends ConexionBD{
         return $resultado[0]['TotalVeterinarios'];
     }
 
+    public function listarVeterinarios($id_veterinario){
+        $resultado = $this->obtenData("SELECT id_veterinario, nombre, tlf, direccion, 
+									    img, visible, usuario_Rveterinario
+									  FROM veterinario
+									  WHERE 
+									  (id_veterinario = CASE WHEN '$id_veterinario' = '' THEN id_veterinario ELSE '$id_veterinario' END)");
+        return $resultado;
+    }
+
     public function consultarAdmin($user, $contrasenia){
 		/*-----------------------------------------------------------------------------------/
 		/	Fecha de cambio: 
@@ -689,13 +698,12 @@ class AdminModel extends ConexionBD{
     #Region de Modificar
     public function modificaUsuario($idusuario,$nombre,$rol,$direccion,$contrasena,
                                     $activo,$telefono, $detalles, $usuario_modificando){
-		/*-----------------------------------------------------------------------------------/
-		/	Fecha de cambio: 
-		/	Razon:
-		/	Cambio: 
-		/-----------------------------------------------------------------------------------*/
+        
+        $idusuario = mysqli_real_escape_string($this->conectar(),$idusuario);
+
         $anterior = $this->obtenData("SELECT cedula, nombre, rol_id, direccion, activo, telefono, detalles
-                                        FROM usuarios WHERE cedula = '$idusuario'");
+                                      FROM usuarios WHERE cedula = '$idusuario'");
+
         $data['cedula'] = mysqli_real_escape_string($this->conectar(),$idusuario);
         $data['nombre'] = mysqli_real_escape_string($this->conectar(),$nombre);
         $data['rol_id'] = mysqli_real_escape_string($this->conectar(),$rol);
@@ -704,6 +712,7 @@ class AdminModel extends ConexionBD{
         $data['activo'] = mysqli_real_escape_string($this->conectar(),$activo);
         $data['telefono'] = mysqli_real_escape_string($this->conectar(),$telefono);
         $data['detalles'] = mysqli_real_escape_string($this->conectar(),$detalles);
+
         $modificaUsuario = $this->actualizaData("usuarios",$data,"cedula = '$idusuario'");
 
         $nuevo = $this->obtenData("SELECT cedula, nombre, rol_id, direccion, activo, telefono, detalles
@@ -711,6 +720,7 @@ class AdminModel extends ConexionBD{
         if(!$modificaUsuario){
             return false;
         }
+        
         $arra['usuario_bit'] = $usuario_modificando;
         $arra['modulo_afectado'] = 'Modifica Usuario';
         $arra['accion_realizada'] = $this->creaCadenaUpdate('usuarios',$data, "cedula = " . $idusuario);
