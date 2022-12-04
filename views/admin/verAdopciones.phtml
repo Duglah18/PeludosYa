@@ -1,39 +1,25 @@
 <div class="row" style="padding-top: 5%; padding-bottom: 5%;">
-<div class="col s10 white offset-s1">
-<div class="row" style="padding-left: 15px; padding-right: 15px;">
-    <div class="card  col s3 black-text transparent z-depth-0">
-        <h3>Menu Principal</h3>
-        <hr style="border-top: 8px solid; border-radius: 5px;">
-        <ul>
-        <li><a href="<?= BASE_URL;?>admin/tipoAnimal">Tipos de Animales</a></li>
-          <li><a href="<?= BASE_URL;?>admin/razasAnimal">Razas de Animales</a></li>
-          <li><a href="<?= BASE_URL;?>admin/agregaVeterinarios">Veterinarios</a></li>
-          <li><a href="<?= BASE_URL;?>admin/animales">Peludos</a></li>
-          <li><a href="<?= BASE_URL;?>admin/mostrarData">Usuarios</a></li>
-          <li><a href="<?= BASE_URL;?>admin/albergues">Albergues</a></li>
-          <li><a href="<?= BASE_URL;?>admin/adopciones">Adopciones</a></li>
-          <li><a href="<?= BASE_URL;?>admin/Reportes">Reportes</a></li>
-        </ul>
-    </div>
+    <div class="col s10 login-card white black-text offset-s1">
+        <div class="card-panel col s12 indigo white-text center" style="border-radius: 10px; padding-bottom: 20px;">
+            <h3>Gestión de Adopciones</h3>
+
+            <?php 
+                $total_paginas = ceil($totalregistro / $por_pagina); 
+                $seleccionado = isset($Busqueda)? $Busqueda : "0";
+            ?>
 
 
-<div class="card col s9 black-text transparent z-depth-0">
-<div class="card-title center-align"><h3>Gestión de Adopciones</h3></div>
-<hr style="border-top: 8px solid; border-radius: 5px;">
-
-<?php 
-    $total_paginas = ceil($totalregistro / $por_pagina); 
-    $seleccionado = isset($Busqueda)? $Busqueda : "0";
-?>
-
-<div class="col s12">
+            <div class="center-align col s12">
+                <h5 class="light">Registro de Adopciones</h5>
+                <a href="<?= BASE_URL;?>admin/agregaAlbergueAdmin"><input class="btn white indigo-text" type="button" value="Ir al Modulo"></a>
+                
+                <div class="col s12">
     <ul class="tabs">
         <li class="tab col s6"><a class="indigo-text" href="#Albergue">Albergue</a></li>
         <li class="tab col s6"><a class="indigo-text" href="#Estado">Estado</a></li>
     </ul>
-</div>
+    </div>
 
-<div class="col s12"  style="padding-bottom: 20px;">
 
 <div id="Albergue">
     <div class="input-field col s6 offset-s3 tooltipped" data-position="top" data-tooltip="Ubicación de la persona o fundación">
@@ -64,8 +50,25 @@
     </form>
     </div>
 </div>
+            </div>
 
-</div>
+        </div>
+
+        <div class="col s2 black-text">
+            <h4 class="card-panel indigo center white-text" style="border-radius: 10px;">Menú</h4>
+            <ul class="card-panel indigo" style="padding-left: 15px; border-radius: 10px;">
+                <li class="hover center"><a href="<?= BASE_URL;?>admin/tipoAnimal"><span class="white-text">Tipos de Animales</span></a></li>
+                <li class="hover center"><a href="<?= BASE_URL;?>admin/razasAnimal"><span class="white-text">Razas de Animales</span></a></li>
+                <li class="hover center"><a href="<?= BASE_URL;?>admin/agregaVeterinarios"><span class="white-text">Veterinarios</span></a></li>
+                <li class="hover center"><a href="<?= BASE_URL;?>admin/animales"><span class="white-text">Peludos</span></a></li>
+                <li class="hover center"><a href="<?= BASE_URL;?>admin/mostrarData"><span class="white-text">Usuarios</span></a></li>
+                <li class="hover center"><a href="<?= BASE_URL;?>admin/albergues"><span class="white-text">Albergues</span></a></li>
+                <li class="hover center"><a href="<?= BASE_URL;?>admin/adopciones"><span class="white-text">Adopciones</span></a></li>
+                <li class="hover center"><a href="<?= BASE_URL;?>admin/Reportes"><span class="white-text">Reportes</span></a></li>
+            </ul>
+        </div>
+
+        <div class="col s10">
 
 <?php if($adopciones != false){ ?>
     <table class="centered">
@@ -92,47 +95,39 @@
         <?php } ?>
     </tbody>
 </table>
-<div class="col-md-12 center text-center"><!--Paginador-->
-    <ul class="pagination">
-        <?php if($pagina != 1){ ?>
-            <li class="waves-effect blue-text"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=1<?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
-            <li class="waves-effect"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$pagina - 1?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_left</i></a></li>
-        <?php
-        }else{ ?>
-            <li class="disabled"><a href=""><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
-            <li class="disabled"><a href=""><i class="material-icons">chevron_left</i></a></li>
-    <?php
-        } ?>
-        
-        
-        <?php for($i = 1; $i <= $total_paginas; $i++){ 
-            if ($i == $pagina){ ?>
-                <li class="active indigo"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$i?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><?=$i?></a></li>
-           <?php } else { ?>
-            <li class="waves-effect"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$i?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><?=$i?></a></li>
-        <?php 
-            }
-        } ?>
+<ul class="pagination center">
 
-        <?php if($pagina != $total_paginas){ ?>
+<?php if($pagina != 1) { ?>
+    <li class="waves-effect blue-text "><a href="<?=BASE_URL?>admin/razasAnimal?pagina=1<?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
+    <li class="waves-effect"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$pagina - 1?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_left</i></a></li>
+<?php } else { ?>
+    <li class="disabled"><a href=""><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
+    <li class="disabled"><a href=""><i class="material-icons">chevron_left</i></a></li>
+<?php } ?>
+    
+<?php for($i = 1; $i <= $total_paginas; $i++){ 
+    if ($i == $pagina){ ?>
+        <li class="active indigo"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$i?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><?=$i?></a></li>
+    <?php } else { ?>
+        <li class="waves-effect"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$i?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><?=$i?></a></li>
+    <?php } } ?>
+
+    <?php if($pagina != $total_paginas){ ?>
         <li class="waves-effect"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$pagina + 1?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_right</i></a></li>
         <li class="waves-effect"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$total_paginas?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
-        <?php
-        }else{ ?>
-            <li class="disabled"><a href=""><i class="material-icons">chevron_right</i></a></li>
-            <li class="disabled"><a href=""><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
-    <?php
-        } ?>
-    </ul>
-</div>
+    <?php } else { ?>
+        <li class="disabled"><a href=""><i class="material-icons">chevron_right</i></a></li>
+        <li class="disabled"><a href=""><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
+<?php } ?>
+
+</ul>
 
 <?php } else { ?>
 
     <h1>Aun no Existen adopciones</h1>
 
 <?php } ?>
-
-</div> 
+</div>
 </div>
 </div>
 </div>

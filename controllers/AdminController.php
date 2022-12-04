@@ -49,7 +49,7 @@ class AdminController extends GeneralController{
         $objAdmin = $this->loadModel("AdminModel");//probar ya que modifique y ahora tambien existen estos metodos en adminModel
         $pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
         $pagina = $pagina < 0? 1: $pagina;
-        $qty = 10;
+        $qty = 5;
         $data['pagina'] = $pagina;
         $data['por_pagina'] = $qty;
         $data['totalregistro'] = $objAdmin->TotalConsultaAnimales('');
@@ -69,7 +69,7 @@ class AdminController extends GeneralController{
         $objAdmin = $this->loadModel("FundacionModel");
         $pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
         $pagina = $pagina < 0? 1: $pagina;
-        $qty = 10;
+        $qty = 5;
         $data['pagina'] = $pagina;
         $data['por_pagina'] = $qty;
         $data['totalregistro'] = $objAdmin->TotalconsultaAlbergues('');
@@ -90,7 +90,7 @@ class AdminController extends GeneralController{
 		$filtro = $filtro == "0"? "": $filtro;
         $pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
         $pagina = $pagina < 0? 1: $pagina;
-        $qty = 10;
+        $qty = 5;
 		$data['filtro'] = $filtro;
         $data['pagina'] = $pagina;
         $data['por_pagina'] = $qty;
@@ -172,7 +172,7 @@ class AdminController extends GeneralController{
         if (isset($_POST['accion']) && $_POST['accion'] == 'Modificar'){
             $pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
             $pagina = $pagina < 0? 1: $pagina;
-            $qty = 10;
+            $qty = 5;
             $data['pagina'] = $pagina;
             $data['por_pagina'] = $qty;
             $data['totalregistro'] = $objAdmin->TotalVeterinariosConsults();
@@ -182,7 +182,7 @@ class AdminController extends GeneralController{
         } else {
             $pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
             $pagina = $pagina < 0? 1: $pagina;
-            $qty = 10;
+            $qty = 5;
             $data['pagina'] = $pagina;
             $data['por_pagina'] = $qty;
             $data['totalregistro'] = $objAdmin->TotalVeterinariosConsults();
@@ -224,7 +224,7 @@ class AdminController extends GeneralController{
 		$filtro = isset($_GET['filtro'])?$_GET['filtro']: "";
         $pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
         $pagina = $pagina < 0? 1: $pagina;
-        $qty = 10;
+        $qty = 5;
 		$data['filtro'] = $filtro;
         $data['pagina'] = $pagina;
         $data['por_pagina'] = $qty;
@@ -246,7 +246,7 @@ class AdminController extends GeneralController{
         if (isset($_POST['accion']) && $_POST['accion'] == 'Modificar'){
 			$pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
 			$pagina = $pagina < 0? 1: $pagina;
-			$qty = 10;
+			$qty = 5;
 			$data['pagina'] = $pagina;
 			$data['por_pagina'] = $qty;
 			$data['totalregistro'] = $objAdmin->TotallistaTiposAnimal();
@@ -256,7 +256,7 @@ class AdminController extends GeneralController{
         }
 		$pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
         $pagina = $pagina < 0? 1: $pagina;
-        $qty = 10;
+        $qty = 5;
         $data['pagina'] = $pagina;
         $data['por_pagina'] = $qty;
         $data['totalregistro'] = $objAdmin->TotallistaTiposAnimal();
@@ -277,7 +277,7 @@ class AdminController extends GeneralController{
         $objFund = $this->loadModel("FundacionModel");
         $pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
         $pagina = $pagina < 0? 1: $pagina;
-        $qty = 10;
+        $qty = 5;
         if (isset($_POST['accion']) && $_POST['accion'] == 'Modificar'){
             $data['buscarazas'] = $objAdmin->listaRazas($_POST['modificacion'], $pagina, $qty);
             $data['pagina'] = $pagina;

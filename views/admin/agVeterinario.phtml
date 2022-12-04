@@ -1,51 +1,32 @@
 <div class="row" style="padding-top: 5%; padding-bottom: 5%;">
-<div class="col s10 white offset-s1">
-<div class="row" style="padding-left: 15px; padding-right: 15px;">
-    <div class="card  col s3 black-text transparent z-depth-0">
-        <h3>Menu Principal</h3>
-        <hr style="border-top: 8px solid; border-radius: 5px;">
-        <ul>
-        <li><a href="<?= BASE_URL;?>admin/tipoAnimal">Tipos de Animales</a></li>
-          <li><a href="<?= BASE_URL;?>admin/razasAnimal">Razas de Animales</a></li>
-          <li><a href="<?= BASE_URL;?>admin/agregaVeterinarios">Veterinarios</a></li>
-          <li><a href="<?= BASE_URL;?>admin/animales">Peludos</a></li>
-          <li><a href="<?= BASE_URL;?>admin/mostrarData">Usuarios</a></li>
-          <li><a href="<?= BASE_URL;?>admin/albergues">Albergues</a></li>
-          <li><a href="<?= BASE_URL;?>admin/adopciones">Adopciones</a></li>
-          <li><a href="<?= BASE_URL;?>admin/Reportes">Reportes</a></li>
-        </ul>
-    </div>
+    <div class="col s10 login-card white black-text offset-s1">
+        <div class="card-panel col s12 indigo white-text center" style="border-radius: 10px; padding-bottom: 20px;">
+            <h3>Gestión de Veterinarios</h3>
 
+            <?php 
+            if (isset($error)){
+                echo $error;
+            }
+            $identificador = isset($vtrModificar[0]['id_veterinario'])? $vtrModificar[0]['id_veterinario']: "";
+            $nombre = isset($vtrModificar[0]['nombre'])? $vtrModificar[0]['nombre']: "";
+            $telefono = isset($vtrModificar[0]['tlf'])? $vtrModificar[0]['tlf']: "";
+            $direccion = isset($vtrModificar[0]['direccion'])? $vtrModificar[0]['direccion']: "";
+            $img = isset($vtrModificar[0]['img'])? $vtrModificar[0]['img']: "";
+            $visible = isset($vtrModificar[0]['visible'])? $vtrModificar[0]['visible']: "";
 
-<div class="card col s9 black-text transparent z-depth-0">
-<div class="card-title center-align"><h3>Gestión de Razas</h3></div>
-<hr style="border-top: 8px solid; border-radius: 5px;">
-<?php 
-if (isset($error)){
-    echo $error;
-}
-$identificador = isset($vtrModificar[0]['id_veterinario'])? $vtrModificar[0]['id_veterinario']: "";
-$nombre = isset($vtrModificar[0]['nombre'])? $vtrModificar[0]['nombre']: "";
-$telefono = isset($vtrModificar[0]['tlf'])? $vtrModificar[0]['tlf']: "";
-$direccion = isset($vtrModificar[0]['direccion'])? $vtrModificar[0]['direccion']: "";
-$img = isset($vtrModificar[0]['img'])? $vtrModificar[0]['img']: "";
-$visible = isset($vtrModificar[0]['visible'])? $vtrModificar[0]['visible']: "";
+            $total_paginas = ceil($totalregistro / $por_pagina);
+            ?>
 
-$total_paginas = ceil($totalregistro / $por_pagina);
-?>
-
-<div class="text-center col s6 offset-s3"  style="padding-bottom: 20px;">
-
-    <div class="black-text center-align col s12" for="filtro">
+<form action="<?=BASE_URL;?>admin/registraVeterinario" method="post" enctype="multipart/form-data">
+<div class="text-center col s12">
+<div class="center-align col s12" for="filtro">
         <?php if(isset($_POST['accion'])=="Modificar"){ ?>
             <h5 class="light"> Modificar al veterinario: Nro° <?=$identificador?> </h5>
         <?php } else { ?>
             <h5 class="light"> Registrar veterinarios</h5>
         <?php } ?>
     </div>
-
-    <form action="<?=BASE_URL;?>admin/registraVeterinario" method="post" enctype="multipart/form-data">
-        
+<div class="card col s8 offset-s2"  style="border-radius: 10px; padding-bottom: 20px;">
         <input type="hidden" name="vetIdentificador" value="<?= $identificador?>">
 
         <div class="input-field tooltipped col s6" data-position="top" data-tooltip="Nombre del veterinario">
@@ -81,13 +62,29 @@ $total_paginas = ceil($totalregistro / $por_pagina);
         if ($visible != "") { ?>
         <input type="hidden" name="visible" value="<?=$visible?>">
         <?php } ?>
-
         <button class="tooltipped btn indigo col s2 offset-s5"  data-position="bottom" data-tooltip="Registrar" name="accion" value="<?php if(isset($_POST['accion'])=="Modificar"){ echo "Modificar"; } else {echo"Agregar";} ?>"><i class="large material-icons">send</i></button>
+        </div>
+        </div>
     </form>
 
-</div>
 
+        </div>
 
+        <div class="col s2 black-text">
+            <h4 class="card-panel indigo center white-text" style="border-radius: 10px;">Menú</h4>
+            <ul class="card-panel indigo" style="padding-left: 15px; border-radius: 10px;">
+                <li class="hover center"><a href="<?= BASE_URL;?>admin/tipoAnimal"><span class="white-text">Tipos de Animales</span></a></li>
+                <li class="hover center"><a href="<?= BASE_URL;?>admin/razasAnimal"><span class="white-text">Razas de Animales</span></a></li>
+                <li class="hover center"><a href="<?= BASE_URL;?>admin/agregaVeterinarios"><span class="white-text">Veterinarios</span></a></li>
+                <li class="hover center"><a href="<?= BASE_URL;?>admin/animales"><span class="white-text">Peludos</span></a></li>
+                <li class="hover center"><a href="<?= BASE_URL;?>admin/mostrarData"><span class="white-text">Usuarios</span></a></li>
+                <li class="hover center"><a href="<?= BASE_URL;?>admin/albergues"><span class="white-text">Albergues</span></a></li>
+                <li class="hover center"><a href="<?= BASE_URL;?>admin/adopciones"><span class="white-text">Adopciones</span></a></li>
+                <li class="hover center"><a href="<?= BASE_URL;?>admin/Reportes"><span class="white-text">Reportes</span></a></li>
+            </ul>
+        </div>
+
+        <div class="col s10">
 <table class="centered">
         <thead class="card indigo white-text">
             <tr>
@@ -117,20 +114,26 @@ $total_paginas = ceil($totalregistro / $por_pagina);
             <td><?= $activo = $Veterinarios[$i]['visible'] !=1? "No visible": "Visible" ?> </td>
             <td><?= $Veterinarios[$i]['usuario_Rveterinario']  ?> </td>
             <td>
-                <form action="<?=BASE_URL?>admin/agregaVeterinarios" method="POST">
-                    <input type="hidden" name="modificacion" value="<?=$Veterinarios[$i]['id_veterinario'] ?>">
-                    <button class="btn tooltipped blue" data-position="bottom" data-tooltip="Modificar Usuario" name="accion" value="Modificar">
-                        <i class="large material-icons">edit</i>
-                    </button>
-                </form>
-                <form action="<?=BASE_URL?>admin/inactivaVeterinario" method="POST">
-                    <input type="hidden" name="modificacion" value="<?=$Veterinarios[$i]['id_veterinario'] ?>">
-                    <input type="hidden" name="decision" value="<?=$Veterinarios[$i]['visible'] ?>">
-                    <button class="btn tooltipped red"  data-position="bottom" data-tooltip="Bloquear/Desbloquear Usuario" name="accion" <?= $Veterinarios[$i]['visible'] != 1? "value='Activar'": "value='Inactivar'" ?>>
-                        <?php if($Veterinarios[$i]['visible'] != 1) { ?> <i class="large material-icons">lock_open</i> 
-                        <?php } else { ?> <i class="large material-icons">lock</i> <?php }?>
-                    </button>
-                </form>
+                <div class="col s12">
+                    <div class="col s6">
+                        <form action="<?=BASE_URL?>admin/agregaVeterinarios" method="POST">
+                            <input type="hidden" name="modificacion" value="<?=$Veterinarios[$i]['id_veterinario'] ?>">
+                            <button class="btn tooltipped blue" data-position="bottom" data-tooltip="Modificar Usuario" name="accion" value="Modificar">
+                                <i class="large material-icons">edit</i>
+                            </button>
+                        </form>
+                    </div>                    
+                    <div class="col s6">
+                        <form action="<?=BASE_URL?>admin/inactivaVeterinario" method="POST">
+                            <input type="hidden" name="modificacion" value="<?=$Veterinarios[$i]['id_veterinario'] ?>">
+                            <input type="hidden" name="decision" value="<?=$Veterinarios[$i]['visible'] ?>">
+                            <button class="btn tooltipped red"  data-position="bottom" data-tooltip="Bloquear/Desbloquear Usuario" name="accion" <?= $Veterinarios[$i]['visible'] != 1? "value='Activar'": "value='Inactivar'" ?>>
+                                <?php if($Veterinarios[$i]['visible'] != 1) { ?> <i class="large material-icons">lock_open</i> 
+                                <?php } else { ?> <i class="large material-icons">lock</i> <?php }?>
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </td>
             </tr>
             <?php

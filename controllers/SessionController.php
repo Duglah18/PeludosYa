@@ -65,7 +65,7 @@ class SessionController extends GeneralController{
 		$filtro = $filtro == "0"? "": $filtro;
 		$pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
         $pagina = $pagina < 0? 1: $pagina;
-        $qty = 5;
+        $qty = 8;
         $data['filtro'] = $filtro;
         $data['pagina'] = $pagina;
         $data['por_pagina'] = $qty;
@@ -85,7 +85,7 @@ class SessionController extends GeneralController{
 		$objSess = $this->loadModel("SessionModel");
 		$pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
         $pagina = $pagina < 0? 1: $pagina;
-        $qty = 5;
+        $qty = 8;
         $data['pagina'] = $pagina;
         $data['por_pagina'] = $qty;
         $data['totalregistro'] = $objSess->TotalconsultaFundaciones();
@@ -104,7 +104,7 @@ class SessionController extends GeneralController{
         $objSess = $this->loadModel("SessionModel");
         $pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
         $pagina = $pagina < 0? 1 : $pagina;
-        $qty = 5;
+        $qty = 8;
         $data['pagina'] = $pagina;
         $data['por_pagina'] = $qty;
         $data['totalregistro'] = $objSess->TotalVeterinarios();

@@ -9,15 +9,14 @@
     <div class="row" style="padding-left: 10px; padding-right: 10px;">
     <?php foreach($fundaciones as $fundacion){ ?>
     <div class="card small indigo col s3">
-        <div class="card-title align center-align" style="padding-top: 10px; padding-bottom: 10px;">
-        <i class="material-icons">label</i>
-        <span> Nombre: <?= $fundacion['nombre']; ?></span>
+        <div class="card-title  center-align" style="padding-top: 10px; padding-bottom: 10px;">
+        <span>Fundación: <br> <?= $fundacion['nombre']; ?></span>
         </div>
-        <div class="">
+        <div class="card-action">
 
             <div class="align">
-            <i class="material-icons">phone</i>
-            <span> Telefono de Contacto:</span>
+            <i class="material-icons">person</i>
+            <span> RIF de Fundación:</span>
             </div>
             <span><?= $fundacion['cedula']; ?></span>
         
@@ -29,7 +28,7 @@
 
             <div class="align">
             <i class="material-icons">home</i>
-            <span> Direccion de Consultorio:</span>
+            <span> Direccion:</span>
             </div>
             <?= $fundacion['direccion']; ?>
 

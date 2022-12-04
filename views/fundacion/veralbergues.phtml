@@ -1,78 +1,105 @@
-<a href="<?= BASE_URL;?>fundacion/agregaAlberg"><input type="button" value="Agregar Albergue"></a>
+<div class="row" style="padding-top: 5%; padding-bottom: 5%;">
+    <div class="col s10 login-card white black-text offset-s1">
+        <div class="card-panel col s12 indigo white-text center" style="border-radius: 10px; padding-bottom: 20px;">
+            <h3>Gestión de Albergues</h3>
 
-<?php
+            <?php
+                $total_paginas = ceil($totalregistro / $por_pagina);
+            ?>  
+
+            <div class="center-align col s12">
+                <h5 class="light">Registro de Albergues</h5>
+                <a href="<?= BASE_URL;?>fundacion/agregaAlberg"><input class="btn white indigo-text" type="button" value="Ir al Modulo"></a>
+            </div>
+
+        </div>
+
+        <div class="col s2 black-text">
+            <h4 class="card-panel indigo center white-text" style="border-radius: 10px;">Menú</h4>
+            <ul class="card-panel indigo" style="padding-left: 15px; border-radius: 10px;">
+                <li class="hover center"><a href="<?= BASE_URL;?>fundacion/verAdopciones"><span class="white-text">Adopciones</span></a></li>
+                <li class="hover center"><a href="<?= BASE_URL;?>fundacion/albergues"><span class="white-text">Albergues</span></a></li>
+                <li class="hover center"><a href="<?= BASE_URL;?>fundacion/animales"><span class="white-text">Mascotas</span></a></li>
+            </ul>
+        </div>
+        <?php
 $total_paginas = ceil($totalregistro / $por_pagina);
 
 if($userfund == false){ ?>
     <h1>Aun no tiene Albergues</h1>
 <?php
 } else { ?>
-<table>
-    <thead>
+        <div class="col s10">
+<table class="centered">
+    <thead class="card indigo white-text">
         <tr>
-            <th>Identificador</th>
+            <th>ID de Albergue</th>
             <th>Nombre</th>
             <th>Direccion</th>
-            <th>Activo</th>
+            <th>Estado</th>
             <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
-        <?php foreach($userfund as $albergues){ ?>
+    <?php foreach($userfund as $albergues){ ?>
         <tr>
             <td><?= $albergues['id_albergue'] ?></td>
             <td><?= $albergues['nombre'] ?></td>
             <td><?= $albergues['direccion'] ?></td>
             <td><?= $visible = $albergues['activo'] != 1? "No visible": "Visible"?></td>
             <td>
-                <form action="<?=BASE_URL?>fundacion/agregaAlberg" method="POST">
-                    <input type="hidden" name="modificacion" value="<?=$albergues['id_albergue'] ?>">
-                    <button name="accion" value="Modificar">Modificar</button>
-                </form>
-                <form action="<?=BASE_URL?>fundacion/inactivaAlbergue" method="POST">
-                    <input type="hidden" name="modificacion" value="<?=$albergues['id_albergue'] ?>">
-                    <input type="hidden" name="decision" value="<?=$albergues['activo'] ?>">
-                    <button name="accion" <?= $albergues['activo'] != 1? "value='Activar'": "value='Inactivar'" ?>><?= $albergues['activo'] != 1? "Mostrar": "Ocultar" ?></button>
-                </form>
+                <div class="col s12">
+                            <div class="col s6">
+                                <form action="<?=BASE_URL?>fundacion/agregaAlberg" method="POST">
+                                    <input type="hidden" name="modificacion" value="<?=$albergues['id_albergue'] ?>">
+                                    <button class="btn tooltipped blue" data-position="bottom" data-tooltip="Modificar Usuario" name="accion" value="Modificar">
+                                        <i class="large material-icons">edit</i>
+                                    </button>
+                                </form>
+                            </div>
+                            <div class="col s6">
+                                <form action="<?=BASE_URL?>fundacion/inactivaAlbergue" method="POST">
+                                    <input type="hidden" name="modificacion" value="<?=$albergues['id_albergue'] ?>">
+                                    <input type="hidden" name="decision" value="<?=$albergues['activo'] ?>">
+                                    <button class="btn tooltipped red"  data-position="bottom" data-tooltip="Bloquear/Desbloquear Usuario" name="accion" <?= $albergues['activo'] != 1? "value='Activar'": "value='Inactivar'" ?>>
+                                        <?php if($albergues['activo'] != 1) { ?> <i class="large material-icons">lock_open</i> 
+                                        <?php } else { ?> <i class="large material-icons">lock</i> <?php }?>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
             </td>
         </tr>
         <?php } ?>
     </tbody>
 </table>
-
-<div class="col-md-12 center text-center cyan lighten-2"><!--Paginador-->
-    <ul class="pagination">
-        <?php if($pagina != 1){ ?>
-            <li class="waves-effect blue-text"><a href="<?=BASE_URL?>fundacion/albergues?pagina=1"><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
-            <li class="waves-effect"><a href="<?=BASE_URL?>fundacion/albergues?pagina=<?=$pagina - 1?>"><i class="material-icons">chevron_left</i></a></li>
-        <?php
-        }else{ ?>
-            <li class="disabled"><a href=""><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
-            <li class="disabled"><a href=""><i class="material-icons">chevron_left</i></a></li>
-    <?php
-        } ?>
-        
-        
-        <?php for($i = 1; $i <= $total_paginas; $i++){ 
-            if ($i == $pagina){ ?>
-                <li class="active"><a href="<?=BASE_URL?>fundacion/albergues?pagina=<?=$i?>"><?=$i?></a></li>
-           <?php } else{
-            ?>
-            <li class="waves-effect"><a href="<?=BASE_URL?>fundacion/albergues?pagina=<?=$i?>"><?=$i?></a></li>
-        <?php 
-            }
-        } ?>
-
-        <?php if($pagina != $total_paginas){ ?>
-        <li class="waves-effect"><a href="<?=BASE_URL?>fundacion/albergues?pagina=<?=$pagina + 1?>"><i class="material-icons">chevron_right</i></a></li>
-        <li class="waves-effect"><a href="<?=BASE_URL?>fundacion/albergues?pagina=<?=$total_paginas?>"><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
-        <?php
-        }else{ ?>
-            <li class="disabled"><a href=""><i class="material-icons">chevron_right</i></a></li>
-            <li class="disabled"><a href=""><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
-    <?php
-        } ?>
-    </ul>
-</div>
-
 <?php } ?>
+<ul class="pagination center">
+
+            <?php if($pagina != 1) { ?>
+                <li class="waves-effect blue-text"><a href="<?=BASE_URL?>fundacion/albergues?pagina=1"><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
+            <li class="waves-effect"><a href="<?=BASE_URL?>fundacion/albergues?pagina=<?=$pagina - 1?>"><i class="material-icons">chevron_left</i></a></li>
+            <?php } else { ?>
+                <li class="disabled"><a href=""><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
+                <li class="disabled"><a href=""><i class="material-icons">chevron_left</i></a></li>
+            <?php } ?>
+                
+            <?php for($i = 1; $i <= $total_paginas; $i++){ 
+                if ($i == $pagina){ ?>
+                    <li class="active indigo"><a href="<?=BASE_URL?>fundacion/albergues?pagina=<?=$i?>"><?=$i?></a></li>
+                <?php } else { ?>
+                    <li class="waves-effect"><a href="<?=BASE_URL?>fundacion/albergues?pagina=<?=$i?>"><?=$i?></a></li>
+                <?php } } ?>
+
+                <?php if($pagina != $total_paginas){ ?>
+                    <li class="waves-effect"><a href="<?=BASE_URL?>fundacion/albergues?pagina=<?=$pagina + 1?>"><i class="material-icons">chevron_right</i></a></li>
+                    <li class="waves-effect"><a href="<?=BASE_URL?>fundacion/albergues?pagina=<?=$total_paginas?>"><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
+                <?php } else { ?>
+                    <li class="disabled"><a href=""><i class="material-icons">chevron_right</i></a></li>
+            <li class="disabled"><a href=""><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
+            <?php } ?>
+
+            </ul>
+</div>
+</div>
+</div>

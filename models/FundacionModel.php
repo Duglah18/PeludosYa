@@ -128,7 +128,6 @@ class FundacionModel extends ConexionBD{
                                         INNER JOIN usuarios d ON d.cedula = e.cedula_usuario
 										LEFT JOIN adopcion f ON a.id_animal = f.animal_id
                                         WHERE (d.cedula = CASE WHEN '$cedula_user' = '' THEN d.cedula ELSE '$cedula_user' END)
-										AND a.visible = 1 
                                         ORDER BY a.id_animal DESC, a.visible ASC
                                         LIMIT $desde,$qty");
         /*Inciso: CASE ES COMO SWITCH O IF EN SQL (TRANSACT SQL) EN ESTE CASO SI LLEGA VACIO $cedula_user ENTONCES

@@ -1,17 +1,38 @@
-<?php
-$total_paginas = ceil($totalregistro / $por_pagina);
+<div class="row" style="padding-top: 5%; padding-bottom: 5%;">
+    <div class="col s10 login-card white black-text offset-s1">
+        <div class="card-panel col s12 indigo white-text center" style="border-radius: 10px; padding-bottom: 20px;">
+            <h3>Gestión de Mascotas</h3>
+
+            <?php 
+                $total_paginas = ceil($totalregistro / $por_pagina); 
+                $seleccionado = isset($Busqueda)? $Busqueda : "0";
+            ?>
+
+        </div>
+
+        <div class="col s2 black-text">
+            <h4 class="card-panel indigo center white-text" style="border-radius: 10px;">Menú</h4>
+            <ul class="card-panel indigo" style="padding-left: 15px; border-radius: 10px;">
+                <li class="hover center"><a href="<?= BASE_URL;?>fundacion/verAdopciones"><span class="white-text">Adopciones</span></a></li>
+                <li class="hover center"><a href="<?= BASE_URL;?>fundacion/albergues"><span class="white-text">Albergues</span></a></li>
+                <li class="hover center"><a href="<?= BASE_URL;?>fundacion/animales"><span class="white-text">Mascotas</span></a></li>
+            </ul>
+        </div>
+
+        <div class="col s10">
+        <?php   $total_paginas = ceil($totalregistro / $por_pagina);
 if($adopciones == false) { ?>
 
         <h1>Aun no tiene adopciones</h1>
 
 <?php } else { ?>
-<table>
-        <thead>
+    <table class="centered">
+        <thead class="card indigo white-text">
                 <tr>
                     <th>ID</th>
                     <th>Fecha de peticion</th>
-                    <th>Animal</th>
-                    <th>Usuario</th>
+                    <th>Mascota</th>
+                    <th>Adoptante</th>
 					<th>Historial</th><!--¿Han sido cancelada alguna vez una de sus peticiones de adopcion?-->
                     <th>Contacto</th>
                     <th>Albergue</th>
@@ -34,9 +55,9 @@ if($adopciones == false) { ?>
                         <form action="<?=BASE_URL?>fundacion/destinoAdopcion" method="GET">
                                 <input type="hidden" name="modificacion" value="<?=$adopcion['id_adopcion'] ?>">
                                 <input type="hidden" name="usuario" value="<?=$_SESSION['iduser'];?>">
-                                <button name="accion" value="Completada">Completada</button>
+                                <button class="btn blue" name="accion" value="Completada"><i class="large material-icons">edit</i></button>
                         </form>
-                                <button href="#idmodal<?=$adopcion['id_adopcion']?>" class='modal-trigger'>Cancelada</button>
+                                <button class="btn red" href="#idmodal<?=$adopcion['id_adopcion']?>" class='modal-trigger'><i class="large material-icons">block</i></button>
                 </td>
             </tr>
         <?php 
@@ -44,38 +65,35 @@ if($adopciones == false) { ?>
     } ?>
        </tbody>
 </table>
-<div class="col-md-12 center text-center cyan lighten-2"><!--Paginador-->
-    <ul class="pagination">
-        <?php if($pagina != 1){ ?>
-            <li class="waves-effect blue-text"><a href="<?=BASE_URL?>fundacion/verAdopciones?pagina=1"><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
-            <li class="waves-effect"><a href="<?=BASE_URL?>fundacion/verAdopciones?pagina=<?=$pagina - 1?>"><i class="material-icons">chevron_left</i></a></li>
-        <?php
-        }else{ ?>
-            <li class="disabled"><a href=""><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
-            <li class="disabled"><a href=""><i class="material-icons">chevron_left</i></a></li>
-    <?php
-        } ?>
-        
-        
-        <?php for($i = 1; $i <= $total_paginas; $i++){ 
-            if ($i == $pagina){ ?>
-                <li class="active"><a href="<?=BASE_URL?>fundacion/verAdopciones?pagina=<?=$i?>"><?=$i?></a></li>
-           <?php } else{
-            ?>
-            <li class="waves-effect"><a href="<?=BASE_URL?>fundacion/verAdopciones?pagina=<?=$i?>"><?=$i?></a></li>
-        <?php 
-            }
-        } ?>
+<ul class="pagination center">
 
-        <?php if($pagina != $total_paginas){ ?>
-        <li class="waves-effect"><a href="<?=BASE_URL?>fundacion/verAdopciones?pagina=<?=$pagina + 1?>"><i class="material-icons">chevron_right</i></a></li>
-        <li class="waves-effect"><a href="<?=BASE_URL?>fundacion/verAdopciones?pagina=<?=$total_paginas?>"><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
-        <?php
-        }else{ ?>
-            <li class="disabled"><a href=""><i class="material-icons">chevron_right</i></a></li>
-            <li class="disabled"><a href=""><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
-    <?php
-        } ?>
-    </ul>
-</div>
+<?php if($pagina != 1) { ?>
+    <li class="waves-effect blue-text "><a href="<?=BASE_URL?>admin/razasAnimal?pagina=1<?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
+    <li class="waves-effect"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$pagina - 1?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_left</i></a></li>
+<?php } else { ?>
+    <li class="disabled"><a href=""><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
+    <li class="disabled"><a href=""><i class="material-icons">chevron_left</i></a></li>
 <?php } ?>
+    
+<?php for($i = 1; $i <= $total_paginas; $i++){ 
+    if ($i == $pagina){ ?>
+        <li class="active indigo"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$i?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><?=$i?></a></li>
+    <?php } else { ?>
+        <li class="waves-effect"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$i?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><?=$i?></a></li>
+    <?php } } ?>
+
+    <?php if($pagina != $total_paginas){ ?>
+        <li class="waves-effect"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$pagina + 1?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_right</i></a></li>
+        <li class="waves-effect"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$total_paginas?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
+    <?php } else { ?>
+        <li class="disabled"><a href=""><i class="material-icons">chevron_right</i></a></li>
+        <li class="disabled"><a href=""><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
+<?php } ?>
+
+</ul>
+<?php } ?>
+</div>
+</div>
+</div>
+</div>
+

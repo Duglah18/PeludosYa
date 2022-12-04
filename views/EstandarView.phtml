@@ -17,6 +17,7 @@ if (isset($_SESSION)){
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <!--Importar Materialize-->
   <link type="text/css" rel="stylesheet" href="<?= URL_ASSETS; ?>/materialize/css/style.css"  media="screen,projection"/>  
+  <link type="text/css" rel="stylesheet" href="<?= URL_ASSETS; ?>/materialize/css/custom-styles.css"  media="screen,projection"/>  
   <link type="text/css" rel="stylesheet" href="<?= URL_ASSETS; ?>/materialize/css/materialize.css"  media="screen,projection"/>
 </head>
 <body style="background: url(<?= URL_ASSETS; ?>/wallpaper.jpg) no-repeat fixed">
@@ -30,37 +31,25 @@ if (isset($_SESSION)){
         <a <?php echo "href='". BASE_URL ."admin/mostrarData'"?> class="center brand-logo s1"><img style="padding-top: 15px; padding-bottom: 10px;  height: 60px;" class="responsive-img small" src="<?= URL_ASSETS; ?>/logo.png"></a>
         
         <?php } else { ?>
-      <a href="<?= BASE_URL; ?>" class="brand-logo s1"><img style="padding-top: 15px; padding-bottom: 10px;  height: 60px;" class="responsive-img small" src="<?= URL_ASSETS; ?>/logo.png"></a>
+      <a  class="center brand-logo s1" href="<?= BASE_URL; ?>"><img style="padding-top: 15px; padding-bottom: 10px;  height: 60px;" class="responsive-img small" src="<?= URL_ASSETS; ?>/logo.png"></a>
       <?php } ?>
       <ul id="nav-mobile" class="right hide-on-med-and-down">
-      <?php if($role != "1"){ ?>
+      <?php if(($role != "1") && ($role != "3")) { ?>
       <li><a href='<?= BASE_URL; ?>session/catalogoAnimales'><i class="material-icons">pets</i></a></li>
-      <?php if($role != "3"){ ?>
-        <li><a href='<?= BASE_URL; ?>session/catalogoFundaciones'><i class="material-icons">location_city</i></a></li>
-        <li><a href='<?= BASE_URL; ?>session/catalogoVeterinarios'><i class="material-icons">local_hospital</i></a></li><?php } ?>
+      <li><a href='<?= BASE_URL; ?>session/catalogoFundaciones'><i class="material-icons">location_city</i></a></li>
+      <li><a href='<?= BASE_URL; ?>session/catalogoVeterinarios'><i class="material-icons">local_hospital</i></a></li>
       <?php } ?>
-      <!-- Botones NavBar-->
-        <?php if (isset($_SESSION)){ ?>
-          
-          <!--Aca irian los botones que le pertecen a Fundacion-->
-          <?php if($role == "3"){ ?> 
-            <li><a class='dropdown-trigger' href='#' data-target='dropdown2'>Fundacion</a></li> 
-          <?php } ?>
-        <?php } ?>
-
-          <!--Fundacion-->
-        <ul id='dropdown2' class='dropdown-content'>
-          <li><a href="<?= BASE_URL;?>fundacion/verAdopciones">Peticiones de Adopcion</a></li>
-          <li><a href="<?= BASE_URL;?>fundacion/albergues">Albergues</a></li>
-          <li><a href="<?= BASE_URL;?>fundacion/animales">Animales</a></li>
-        </ul>
       </ul>
     </div>
     <?php if($role == "1"){ ?>
     <div class="nav-content">
     <h5 class="center-align" style="padding-bottom: 10px;">Modo Administrador</h5>
     </div>
-    <?php }?>
+    <?php } else if($role == "3"){ ?>
+    <div class="nav-content">
+    <h5 class="center-align" style="padding-bottom: 10px;">Modo Fundacion</h5>
+    </div>
+    <?php } ?>
   </nav>
 	<?php if(isset($_SESSION['Error']) && $_SESSION['Error'] != ""){
 		//http://iwokloco-appweb.blogspot.com/2014/03/php-borrar-una-variable-de-la-sesion.html
@@ -119,23 +108,36 @@ if (isset($_SESSION)){
   </a>
   <ul> 
   <?php
-   if(isset($_SESSION['usuario'])){
-   if($role == "1"){?>
+   if(isset($_SESSION['usuario'])){ ?>
+    
+    <?php if($role == "1") {?>
 
-  <li style="padding-bottom: 10px;">
-    <a class="btn-floating btn-large indigo darken-4"<?php echo "href='". BASE_URL ."home/destroy_session'"?>><i class="material-icons">exit_to_app</i></a>
-  </li>
+    <li style="padding-bottom: 10px;">
+      <a class="btn-floating btn-large indigo darken-3" <?php echo "href='". BASE_URL ."admin/mostrarData'"?>><i class="material-icons">edit</i></a>
+    </li>
 
-  <li style="padding-bottom: 10px;">
-    <a class="btn-floating btn-large indigo darken-3" <?php echo "href='". BASE_URL ."admin/mostrarData'"?>><i class="material-icons">edit</i></a>
-  </li>
+    <?php } else if($role == "3") { ?>   
 
-  <li style="padding-bottom: 10px;">
-    <a class="btn-floating btn-large indigo darken-2"<?php echo "href='".BASE_URL."session/verUsuario?id_user=".$id_user."'"?>><i class="material-icons">contacts</i></a>
-  </li>
+    <li style="padding-bottom: 10px;">
+      <a class="btn-floating btn-large indigo darken-3" <?php echo "href='". BASE_URL ."fundacion/animales'"?>><i class="material-icons">edit</i></a>
+    </li>
 
-  <?php} else {?> <?php } ?>
-  <?php } else{?>
+    <li style="padding-bottom: 10px;">
+      <a class="btn-floating btn-large indigo darken-3" <?php echo "href='". BASE_URL ."session/catalogoAnimales'"?>><i class="material-icons">pets</i></a>
+    </li>
+
+    <?php } ?>
+    
+    <li style="padding-bottom: 10px;">
+      <a class="btn-floating btn-large indigo darken-2"<?php echo "href='".BASE_URL."session/verUsuario?id_user=".$id_user."'"?>><i class="material-icons">contacts</i></a>
+    </li> 
+
+    <li style="padding-bottom: 10px;">
+      <a class="btn-floating btn-large indigo darken-4"<?php echo "href='". BASE_URL ."home/destroy_session'"?>><i class="material-icons">exit_to_app</i></a>
+    </li>
+
+
+  <?php } else {?>
   <li class="right-align" style="padding-bottom: 10px;">
     <a class="btn-floating btn-large indigo darken-4" href="<?= BASE_URL;?>session/register"><i class="material-icons">person_add</i></a>
   </li>
@@ -146,7 +148,7 @@ if (isset($_SESSION)){
   </ul>
 </div>
 
-  <!-- Contenido Pirncipal -->
+  <!-- Contenido Principal -->
     <main>
         <div class="white-text">
             <?php require_once 'views/' . $vista; ?>

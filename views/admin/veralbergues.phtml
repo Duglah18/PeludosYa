@@ -1,34 +1,34 @@
 <div class="row" style="padding-top: 5%; padding-bottom: 5%;">
-<div class="col s10 white offset-s1">
-<div class="row" style="padding-left: 15px; padding-right: 15px;">
-    <div class="card  col s3 black-text transparent z-depth-0">
-        <h3>Menu Principal</h3>
-        <hr style="border-top: 8px solid; border-radius: 5px;">
-        <ul>
-        <li><a href="<?= BASE_URL;?>admin/tipoAnimal">Tipos de Animales</a></li>
-          <li><a href="<?= BASE_URL;?>admin/razasAnimal">Razas de Animales</a></li>
-          <li><a href="<?= BASE_URL;?>admin/agregaVeterinarios">Veterinarios</a></li>
-          <li><a href="<?= BASE_URL;?>admin/animales">Peludos</a></li>
-          <li><a href="<?= BASE_URL;?>admin/mostrarData">Usuarios</a></li>
-          <li><a href="<?= BASE_URL;?>admin/albergues">Albergues</a></li>
-          <li><a href="<?= BASE_URL;?>admin/adopciones">Adopciones</a></li>
-          <li><a href="<?= BASE_URL;?>admin/Reportes">Reportes</a></li>
-        </ul>
-    </div>
+    <div class="col s10 login-card white black-text offset-s1">
+        <div class="card-panel col s12 indigo white-text center" style="border-radius: 10px; padding-bottom: 20px;">
+            <h3>Gestión de Mascotas</h3>
 
+            <?php
+                $total_paginas = ceil($totalregistro / $por_pagina);
+            ?>  
 
-<div class="card col s9 black-text transparent z-depth-0">
-<div class="card-title center-align"><h3>Gestión de Albergues</h3></div>
-<hr style="border-top: 8px solid; border-radius: 5px;">
-<?php $total_paginas = ceil($totalregistro / $por_pagina); ?>
+            <div class="center-align col s12">
+                <h5 class="light">Registro de Albergues</h5>
+                <a href="<?= BASE_URL;?>admin/agregaAlbergueAdmin"><input class="btn white indigo-text" type="button" value="Ir al Modulo"></a>
+            </div>
 
-<div class="col s12" style="padding-bottom: 20px;">
-    <div class="center-align">
-        <h5 class="light">Registro de Albergues</h5>
-        <a href="<?= BASE_URL;?>admin/agregaAlbergueAdmin"><input class="btn indigo" type="button" value="Ir al Modulo"></a>
-    </div>
-</div>   
+        </div>
 
+        <div class="col s2 black-text">
+            <h4 class="card-panel indigo center white-text" style="border-radius: 10px;">Menú</h4>
+            <ul class="card-panel indigo" style="padding-left: 15px; border-radius: 10px;">
+                <li class="hover center"><a href="<?= BASE_URL;?>admin/tipoAnimal"><span class="white-text">Tipos de Animales</span></a></li>
+                <li class="hover center"><a href="<?= BASE_URL;?>admin/razasAnimal"><span class="white-text">Razas de Animales</span></a></li>
+                <li class="hover center"><a href="<?= BASE_URL;?>admin/agregaVeterinarios"><span class="white-text">Veterinarios</span></a></li>
+                <li class="hover center"><a href="<?= BASE_URL;?>admin/animales"><span class="white-text">Peludos</span></a></li>
+                <li class="hover center"><a href="<?= BASE_URL;?>admin/mostrarData"><span class="white-text">Usuarios</span></a></li>
+                <li class="hover center"><a href="<?= BASE_URL;?>admin/albergues"><span class="white-text">Albergues</span></a></li>
+                <li class="hover center"><a href="<?= BASE_URL;?>admin/adopciones"><span class="white-text">Adopciones</span></a></li>
+                <li class="hover center"><a href="<?= BASE_URL;?>admin/Reportes"><span class="white-text">Reportes</span></a></li>
+            </ul>
+        </div>
+
+        <div class="col s10">
 <table class="centered">
     <thead class="card indigo white-text">
         <tr>
@@ -49,62 +49,57 @@
             <td><?= $albergues['nombreusuario']?></td>
             <td><?= $visible = $albergues['activo'] != 1? "No visible": "Visible"?></td>
             <td>
-                <form action="<?=BASE_URL?>admin/agregaAlbergueAdmin" method="POST">
-                    <input type="hidden" name="modificacion" value="<?=$albergues['id_albergue'] ?>">
-                    <button class="btn tooltipped blue" data-position="bottom" data-tooltip="Modificar Albergue" name="accion" value="Modificar">
-                        <i class="large material-icons">edit</i>
-                    </button>
-                </form>
-
-                <form action="<?=BASE_URL?>admin/inactivaAlbergue" method="POST">
-                    <input type="hidden" name="modificacion" value="<?=$albergues['id_albergue'] ?>">
-                    <input type="hidden" name="decision" value="<?=$albergues['activo'] ?>">
-                    <button class="btn tooltipped red"  data-position="bottom" data-tooltip="Ocultar/Mostrar Albergue" name="accion" <?= $albergues['activo'] != 1? "value='Activar'": "value='Inactivar'" ?>>
-                        <?php if($albergues['activo'] != 1) { ?> <i class="large material-icons">lock_open</i> 
-                        <?php } else { ?> <i class="large material-icons">lock</i> <?php }?>
-                    </button>
-                </form>
+                <div class="col s12">
+                            <div class="col s6">
+                                <form action="<?=BASE_URL?>admin/agregaAlbergueAdmin" method="POST">
+                                    <input type="hidden" name="modificacion" value="<?=$albergues['id_albergue'] ?>">
+                                    <button class="btn tooltipped blue" data-position="bottom" data-tooltip="Modificar Usuario" name="accion" value="Modificar">
+                                        <i class="large material-icons">edit</i>
+                                    </button>
+                                </form>
+                            </div>
+                            <div class="col s6">
+                                <form action="<?=BASE_URL?>admin/inactivaAlbergue" method="POST">
+                                    <input type="hidden" name="modificacion" value="<?=$albergues['id_albergue'] ?>">
+                                    <input type="hidden" name="decision" value="<?=$albergues['activo'] ?>">
+                                    <button class="btn tooltipped red"  data-position="bottom" data-tooltip="Bloquear/Desbloquear Usuario" name="accion" <?= $albergues['activo'] != 1? "value='Activar'": "value='Inactivar'" ?>>
+                                        <?php if($albergues['activo'] != 1) { ?> <i class="large material-icons">lock_open</i> 
+                                        <?php } else { ?> <i class="large material-icons">lock</i> <?php }?>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
             </td>
         </tr>
         <?php } ?>
     </tbody>
 </table>
+<ul class="pagination center">
 
-<div class="ccol-md-12 center text-center"><!--Paginador-->
-    <ul class="pagination">
-        <?php if($pagina != 1){ ?>
-            <li class="waves-effect blue-text"><a href="<?=BASE_URL?>admin/albergues?pagina=1"><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
+            <?php if($pagina != 1) { ?>
+                <li class="waves-effect blue-text"><a href="<?=BASE_URL?>admin/albergues?pagina=1"><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
             <li class="waves-effect"><a href="<?=BASE_URL?>admin/albergues?pagina=<?=$pagina - 1?>"><i class="material-icons">chevron_left</i></a></li>
-        <?php
-        }else{ ?>
-            <li class="disabled"><a href=""><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
-            <li class="disabled"><a href=""><i class="material-icons">chevron_left</i></a></li>
-    <?php
-        } ?>
-        
-        
-        <?php for($i = 1; $i <= $total_paginas; $i++){ 
-            if ($i == $pagina){ ?>
-                <li class="active indigo"><a href="<?=BASE_URL?>admin/albergues?pagina=<?=$i?>"><?=$i?></a></li>
-           <?php } else { ?>
-            <li class="waves-effect"><a href="<?=BASE_URL?>admin/albergues?pagina=<?=$i?>"><?=$i?></a></li>
-        <?php 
-            }
-        } ?>
+            <?php } else { ?>
+                <li class="disabled"><a href=""><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
+                <li class="disabled"><a href=""><i class="material-icons">chevron_left</i></a></li>
+            <?php } ?>
+                
+            <?php for($i = 1; $i <= $total_paginas; $i++){ 
+                if ($i == $pagina){ ?>
+                    <li class="active indigo"><a href="<?=BASE_URL?>admin/albergues?pagina=<?=$i?>"><?=$i?></a></li>
+                <?php } else { ?>
+                    <li class="waves-effect"><a href="<?=BASE_URL?>admin/albergues?pagina=<?=$i?>"><?=$i?></a></li>
+                <?php } } ?>
 
-        <?php if($pagina != $total_paginas){ ?>
-        <li class="waves-effect"><a href="<?=BASE_URL?>admin/albergues?pagina=<?=$pagina + 1?>"><i class="material-icons">chevron_right</i></a></li>
-        <li class="waves-effect"><a href="<?=BASE_URL?>admin/albergues?pagina=<?=$total_paginas?>"><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
-        <?php
-        }else{ ?>
-            <li class="disabled"><a href=""><i class="material-icons">chevron_right</i></a></li>
+                <?php if($pagina != $total_paginas){ ?>
+                    <li class="waves-effect"><a href="<?=BASE_URL?>admin/albergues?pagina=<?=$pagina + 1?>"><i class="material-icons">chevron_right</i></a></li>
+                    <li class="waves-effect"><a href="<?=BASE_URL?>admin/albergues?pagina=<?=$total_paginas?>"><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
+                <?php } else { ?>
+                    <li class="disabled"><a href=""><i class="material-icons">chevron_right</i></a></li>
             <li class="disabled"><a href=""><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
-    <?php
-        } ?>
-    </ul>
-</div>
+            <?php } ?>
 
-</div> 
+            </ul>
 </div>
 </div>
 </div>

@@ -74,7 +74,7 @@ class FundacionController extends GeneralController{
         $objFund = $this->loadModel("FundacionModel");
         $pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
         $pagina = $pagina < 0? 1: $pagina;
-        $qty = 10;
+        $qty = 25;
         $data['pagina'] = $pagina;
         $data['por_pagina'] = $qty;
         $data['totalregistro'] = $objFund->TotalConsultaAnimales($_SESSION['iduser']);
