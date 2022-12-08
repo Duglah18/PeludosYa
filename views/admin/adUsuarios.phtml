@@ -24,18 +24,18 @@
             
         </div>
 
-        <?php getDashboard("admin"); ?>
+        <?php getDashboard("admin") ?>
 
         <div class="col s10">
             <?php $total_paginas = ceil($totalregistro / $por_pagina); ?>
             <table class="centered">
                 <thead class="card indigo white-text">
                     <tr>
-                        <th>Identificacion</th>
+                        <th>N° de Identificacion</th>
                         <th>Nombre</th>
                         <th>Rol</th>
                         <th>Dirección</th>
-                        <th>Telefono</th>
+                        <th>Teléfono</th>
                         <th>Estado</th>
                         <th>Etiquetas</th>
                         <th>Acciones</th>
@@ -45,7 +45,8 @@
                 <?php $tamanio = count($dataAdmin);
                 for ($i = 0; $i < $tamanio; $i++){ ?>
                     <tr> 
-                        <td> <?= $dataAdmin[$i]['cedula'] ?> </td> 
+                        <td> 
+                        <?= $dataAdmin[$i]['cedula'] ?> </td> 
                         <td> <?= $dataAdmin[$i]['nombre'] ?> </td> 
                         <td> <?= $dataAdmin[$i]['nombrerol'] ?> </td> 
                         <td> <?= $dataAdmin[$i]['direccion'] ?> </td> 

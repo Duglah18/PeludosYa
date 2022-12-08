@@ -30,3 +30,7 @@
     background-size: 40% .1em;
     background-position: 10% 100%, 90% 100%;
   }
+
+  .p-down {
+    padding-bottom: 10px;
+  }

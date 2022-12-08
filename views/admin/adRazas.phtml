@@ -20,17 +20,18 @@
                 <div class="card col s8 offset-s2"  style="border-radius: 10px; padding-bottom: 20px;">
                     <div class="input-field tooltipped col s6" data-position="top" data-tooltip="Nombre del raza de animal">
                         <label class="black-text" for="">Nombre</label>
-                        <input class="validate" type="text" name="nombreRaza" value="<?= $nombre?>">
-                        <span class="helper-text black-text">ID: <?=$identificador?></span>
+                        <input maxlength="25" pattern= "[A-Z,a-z ^()/><\][\\\x22,;|]{1,25}" title="25 caracteres max. - Sin números o signos" required class="validate" type="text" name="nombreRaza" value="<?= $nombre?>">
+                        <span class="helper-text">25 caracteres max. - Sin números o signos</span>
                         <input type="hidden" name="identificador" value="<?=$identificador?>">
                     </div>
                     <div class="input-field tooltipped col s6" data-position="top" data-tooltip="Nombre del tipo de animal">
                         <select name="tipoanimal">
-                            <option value="0">Selecciona</option>
+                            <option value="0">Tipo de Animal</option>
                             <?php foreach ($tiposAnimales as $key) { ?>
                             <option <?php if($tipo == $key['id_tipo']){ echo"selected"; } ?> value="<?= $key['id_tipo']; ?>"><?= $key['nombre'] ?> </option>
                             <?php } ?>
                         </select>
+                        <span class="helper-text right">ID: <?=$identificador?></span> 
                     </div>
                     <div class="col s12">
                     <?php if(isset($_POST['accion']) == "Modificar") { ?>
@@ -38,7 +39,7 @@
                             <input class="btn indigo" type="button" value="Volver">
                         </a> 
                     <?php } ?>
-                        <button class="tooltipped btn indigo"  data-position="bottom" data-tooltip="Registrar" name="accion" value="<?php if(isset($_POST['accion'])=="Modificar"){ echo "Modificar"; } else {echo"Agregar";} ?>"><i class="large material-icons">chevron_right</i></button>
+                        <button class="tooltipped btn indigo"  data-position="bottom" data-tooltip="Registrar" name="accion" value="<?php if(isset($_POST['accion'])=="Modificar"){ echo "Modificar"; } else {echo"Agregar";} ?>"><i class="large material-icons">send</i></button>
                     </div>
                 </div>
             </div>
@@ -46,25 +47,13 @@
 
         </div>
 
-        <div class="col s2 black-text">
-            <h4 class="card-panel indigo center white-text" style="border-radius: 10px;">Menú</h4>
-            <ul class="card-panel indigo" style="padding-left: 15px; border-radius: 10px;">
-                <li class="hover center"><a href="<?= BASE_URL;?>admin/tipoAnimal"><span class="white-text">Tipos de Animales</span></a></li>
-                <li class="hover center"><a href="<?= BASE_URL;?>admin/razasAnimal"><span class="white-text">Razas de Animales</span></a></li>
-                <li class="hover center"><a href="<?= BASE_URL;?>admin/agregaVeterinarios"><span class="white-text">Veterinarios</span></a></li>
-                <li class="hover center"><a href="<?= BASE_URL;?>admin/animales"><span class="white-text">Peludos</span></a></li>
-                <li class="hover center"><a href="<?= BASE_URL;?>admin/mostrarData"><span class="white-text">Usuarios</span></a></li>
-                <li class="hover center"><a href="<?= BASE_URL;?>admin/albergues"><span class="white-text">Albergues</span></a></li>
-                <li class="hover center"><a href="<?= BASE_URL;?>admin/adopciones"><span class="white-text">Adopciones</span></a></li>
-                <li class="hover center"><a href="<?= BASE_URL;?>admin/Reportes"><span class="white-text">Reportes</span></a></li>
-            </ul>
-        </div>
+        <?php getDashboard("admin") ?>
 
         <div class="col s10">
         <table class="centered">
         <thead class="card indigo white-text">
             <tr>
-                <th scope="col">ID</th>
+                <th scope="col">N°</th>
                 <th scope="col">Nombre</th>
                 <th scope="col">Tipo Animal</th>
                 <th scope="col">Acciones</th>
@@ -82,7 +71,7 @@
                 <td>
                     <form action="<?=BASE_URL?>admin/razasAnimal" method="POST">
                     <input type="hidden" name="modificacion" value="<?=$dataRazas[$i]['id_raza'] ?>">
-                        <button class="btn tooltipped blue" data-position="bottom" data-tooltip="Modificar Usuario" name="accion" value="Modificar">
+                        <button class="btn tooltipped blue" data-position="bottom" data-tooltip="Modificar Raza" name="accion" value="Modificar">
                             <i class="large material-icons">edit</i>
                         </button>
                     </form>
@@ -94,28 +83,26 @@
         </div>
 
         <ul class="pagination center">
-            <?php if($pagina != 1) { ?>
-                <li class="waves-effect blue-text "><a href="<?=BASE_URL?>admin/razasAnimal?pagina=1<?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
-                <li class="waves-effect"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$pagina - 1?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_left</i></a></li>
-            <?php } else { ?>
-                <li class="disabled"><a href=""><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
-                <li class="disabled"><a href=""><i class="material-icons">chevron_left</i></a></li>
-            <?php } ?>
-                
-            <?php for($i = 1; $i <= $total_paginas; $i++){ 
-                if ($i == $pagina){ ?>
-                    <li class="active indigo"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$i?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><?=$i?></a></li>
-                <?php } else { ?>
-                    <li class="waves-effect"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$i?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><?=$i?></a></li>
-                <?php } } ?>
-
-                <?php if($pagina != $total_paginas){ ?>
-                    <li class="waves-effect"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$pagina + 1?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_right</i></a></li>
-                    <li class="waves-effect"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$total_paginas?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
-                <?php } else { ?>
-                    <li class="disabled"><a href=""><i class="material-icons">chevron_right</i></a></li>
-                    <li class="disabled"><a href=""><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
-            <?php } ?>
+        <?php if($pagina != 1){ ?>
+            <li class="waves-effect blue-text"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=1"><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
+            <li class="waves-effect"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$pagina - 1?>"><i class="material-icons">chevron_left</i></a></li>
+        <?php } else { ?>
+            <li class="disabled"><a href=""><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
+            <li class="disabled"><a href=""><i class="material-icons">chevron_left</i></a></li>
+        <?php } ?>
+        <?php for($i = 1; $i <= $total_paginas; $i++){ 
+        if ($i == $pagina){ ?>
+            <li class="active indigo"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$i?>"><?=$i?></a></li>
+        <?php } else { ?>
+            <li class="waves-effect"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$i?>"><?=$i?></a></li>
+        <?php } } ?>
+        <?php if($pagina != $total_paginas){ ?>
+            <li class="waves-effect"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$pagina + 1?>"><i class="material-icons">chevron_right</i></a></li>
+            <li class="waves-effect"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$total_paginas?>"><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
+        <?php } else { ?>
+            <li class="disabled"><a href=""><i class="material-icons">chevron_right</i></a></li>
+            <li class="disabled"><a href=""><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
+        <?php } ?>
         </ul>
         </div>
     </div>

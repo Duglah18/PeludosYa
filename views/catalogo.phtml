@@ -1,113 +1,130 @@
 <?php
-    //paginador //Total Registro y por_pagina llegan por el controlador
-    $total_paginas = ceil($totalregistro / $por_pagina);
-    if(isset($_GET['error'])){
-        echo "<h1>Ocurrio un error en la Adopcion</h1>";
-    }
-    if($animales != false){
+$total_paginas = ceil($totalregistro / $por_pagina);
+if(isset($_GET['error'])){
+echo "<h1>Ocurrio un error en la Adopcion</h1>";
+}
+if($animales != false){
 ?>
+
 
 <div class="row" style="padding-top: 5%; padding-bottom: 10px;">
 <div class="login-card col s10 offset-s1">
-    <div class="row" style="padding-left: 10px; padding-top: 10px;  padding-right: 10px;">
-    <div class="col s12">
+
+    <div class="card input-field indigo col s4 offset-s4 center-align" style="border-radius: 20px;" >
     <form action="<?=BASE_URL?>session/catalogoAnimales" method="GET">
-    <div class="card indigo col s4 offset-s4 center-align" style="padding-left: 10px; padding-top: 1px; padding-bottom: 10px; padding-right: 10px;" ><h5 class="light">Filtrado por tipo de animal</h5>
-		<select  name="filtro"> 
-			<option value="0">Todas</option>
-			<?php foreach($tiposDeAnimal as $tipos){ ?>
-					<option <?=$filtro == $tipos['id_tipo']? "Selected": "";?> value= "<?= $tipos['id_tipo']?>"><?=$tipos['nombre']?></option>
-			<?php } ?>
-		</select>
-        <button class="col s4 offset-s4 btn orange darken-3">Aceptar</button>
+        <h5 class="light">Filtrado por tipo de animal</h5>
+        <select name="filtro"> 
+            <option value="0">Todas</option>
+            <?php foreach($tiposDeAnimal as $tipos){ ?>
+                <option <?=$filtro == $tipos['id_tipo']? "Selected": "";?> value= "<?= $tipos['id_tipo']?>"><?=$tipos['nombre']?></option>
+            <?php } ?>
+        </select>
+        <div class="col s12" style="padding-bottom: 10px;">
+            <button class="btn orange darken-3">Aceptar</button>
         </div>
     </form>
     </div>
 
+<div class="col s12">
 
-    <?php foreach($animales as $animal){ ?>
-    <div class="card large indigo col s3">
-        <div class="card-title align center-align" style="padding-top: 10px; padding-bottom: 10px;">
-        <i class="material-icons">label</i>
-        <span> Nombre: <?= $animal['nombre']; ?></span>
-        </div>
-        <div class="card-image" style="padding-bottom: 5px;">
-        <img style="width: 100%; height: 300px;" class="responsive-img" src="<?=URL_BASE;?>img/animales/<?= $animal['img']?>" alt="Foto Animal">
-        </div>
-        <div class="card-action">
+    <?php  foreach($animales as $animal) { ?>
+    
+    <div class="col s4">
+    <div class="card indigo z-depth-2" style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px; border-radius: 20px;">
 
-            <div class="align">
-            <i class="material-icons">phone</i>
-            <span> Año de Nacimiento: <?= $animal['anio_nac']; ?></span>
-            </div>
+    <div class="card-title center-align" style="padding-bottom: 10px;">
+        <span class="center-align">Nombre: <?= $animal['nombre']; ?></span>
+    </div>
+    
+    <div class="card-image" style="padding-bottom: 5px;">
+        <img style="width: 100%; height: 300px; border-radius: 20px;" class="z-depth-2 responsive-img" src="<?=URL_BASE;?>img/animales/<?= $animal['img']?>" alt="Foto Animal">
+        <?php if($id_user != "") { ?>
+        <form method="POST" <?php if($id_user != ""){ echo "action='". BASE_URL ."session/adopcion_peticion'"; }?> >
+            <input type="hidden" value="<?= $animal['id_animal'];?>" name="idanimal">
+            <input type="hidden" value="<?= $id_user; ?>" name="usuario">
+            <button data-position="bottom" data-tooltip="Adoptar" class="tooltipped btn-floating btn-large halfway-fab waves-effect waves-light orange darken-3" <?php if($id_user == ""){ echo"href='#idmodal' class='btn modal-trigger' "; } ?>><i class="material-icons">pets</i></button>
+        </form>
+        <?php } ?>
+    </div>
 
-            <div class="align">
-            <i class="material-icons">home</i>
-            <span> Raza: <?= $animal['nomRaza']; ?></span>
-            </div>
-
-            <div class="align">
-            <i class="material-icons">home</i>
-            <span> Tamaño: <?= $animal['tamanio']; ?></span>
-            </div>
-
-            <div class="align">
-            <i class="material-icons">home</i>
-            <span> Albergue: <?= $animal['albergue']; ?></span>
-            </div>
-            
-            <div class="align">
-            <i class="material-icons">home</i>
-            <span> Fecha de ingreso: <?= $animal['fecha_ingreso']; ?></span>
-            </div>
-
-            <div class="center-align" style="padding-top: 10px;">
-            <a class="white-text btn orange darken-3" href="<?= BASE_URL?>session/mascota?idanimal=<?=$animal['id_animal']?>">Ver Animal</a>
-        </div>
+    <div id="idmodal" class="modal">
+    <div class="modal-content">
+        <p class="black-text">Usted no esta logueado asi que no puede adoptar ningún animal</p>
+        <div class="modal-footer">
+            <a href="#" class="btn modal-close">Cerrar</a>
         </div>
     </div>
-    <?php } ?>
     </div>
-</div>
-</div>
-<div class="div" style="padding-left: 20%; padding-right: 20%;">
-<div class="col-md-12 center text-center card" ><!--Paginador-->
-<ul class="pagination">
-        <?php if($pagina != 1){ ?>
-            <!-- PA q sirve esto? <?= $fun ?> -->
-            <li class="waves-effect blue-text"><a href="<?=BASE_URL?>session/catalogoAnimales?pagina=1<?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
-            <li class="waves-effect"><a href="<?=BASE_URL?>session/catalogoAnimales?pagina=<?=$pagina - 1?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_left</i></a></li>
-        <?php
-        }else{ ?>
-            <li class="disabled"><a href=""><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
-            <li class="disabled"><a href=""><i class="material-icons">chevron_left</i></a></li>
-    <?php
-        } ?>
-        
-        
-        <?php for($i = 1; $i <= $total_paginas; $i++){ 
-            if ($i == $pagina){ ?>
-                <li class="active indigo"><a href="<?=BASE_URL?>session/catalogoAnimales?pagina=<?=$i?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><?=$i?></a></li>
-           <?php } else{
-            ?>
-            <li class="waves-effect"><a href="<?=BASE_URL?>session/catalogoAnimales?pagina=<?=$i?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><?=$i?></a></li>
-        <?php 
-            }
-        } ?>
 
-        <?php if($pagina != $total_paginas){ ?>
-        <li class="waves-effect"><a href="<?=BASE_URL?>session/catalogoAnimales?pagina=<?=$pagina + 1?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_right</i></a></li>
-        <li class="waves-effect"><a href="<?=BASE_URL?>session/catalogoAnimales?pagina=<?=$total_paginas?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
-        <?php
-        }else{ ?>
-            <li class="disabled"><a href=""><i class="material-icons">chevron_right</i></a></li>
-            <li class="disabled"><a href=""><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
-    <?php
-        } ?>
-    </ul>
-</div>
-<?php } else { ?>
+    <div class="card-action z-depth-4" style="border-radius: 20px;">
 
-    <h1>Aun no se encuentran Peluditos para adoptar Disponibles</h1>
+    <div class="align">
+        <i class="material-icons">date_range</i>
+        <span> Año de Nacimiento: <?= $animal['anio_nac']; ?></span>
+    </div>
+    <div class="align">
+        <i class="material-icons">group_work</i>
+        <span> Raza: <?= $animal['nomRaza']; ?></span>
+    </div>
+    <div class="align">
+        <i class="material-icons">format_size</i>
+        <span> Tamaño: <?= $animal['tamanio']; ?></span>
+    </div>
+    <div class="align">
+        <i class="material-icons">home</i>
+        <span> Albergue: <?= $animal['albergue']; ?></span>
+    </div>
+    <div class="align">
+        <i class="material-icons">date_range</i>
+        <span> Fecha de ingreso: <?= $animal['fecha_ingreso']; ?></span>
+    </div>
+    <div class="center-align">
+        <span><?= $animal['descripcion']; ?></span>
+    </div>
+
+    <div class="center-align">
+    
+    </div>
+
+    </div>
+    
+    </div>
+    </div>
 
 <?php } ?>
+
+
+</div>
+
+    <div class="col s12 center">
+        <ul class="pagination">
+            <?php if($pagina != 1) { ?>
+                <li class="waves-effect blue-text"><a href="<?=BASE_URL?>session/catalogoAnimales?pagina=1<?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
+                <li class="waves-effect"><a href="<?=BASE_URL?>session/catalogoAnimales?pagina=<?=$pagina - 1?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_left</i></a></li>
+            <?php } else { ?>
+                <li class="disabled"><a href=""><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
+                <li class="disabled"><a href=""><i class="material-icons">chevron_left</i></a></li>
+            <?php } ?>
+            <?php for($i = 1; $i <= $total_paginas; $i++){ 
+                if ($i == $pagina){ ?>
+                    <li class="active indigo"><a href="<?=BASE_URL?>session/catalogoAnimales?pagina=<?=$i?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><?=$i?></a></li>
+                <?php } else { ?>
+                    <li class="waves-effect"><a href="<?=BASE_URL?>session/catalogoAnimales?pagina=<?=$i?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><?=$i?></a></li>
+                <?php } } ?>
+                <?php if($pagina != $total_paginas){ ?>
+                    <li class="waves-effect"><a href="<?=BASE_URL?>session/catalogoAnimales?pagina=<?=$pagina + 1?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_right</i></a></li>
+                    <li class="waves-effect"><a href="<?=BASE_URL?>session/catalogoAnimales?pagina=<?=$total_paginas?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
+                <?php } else { ?>
+                    <li class="disabled"><a href=""><i class="material-icons">chevron_right</i></a></li>
+                    <li class="disabled"><a href=""><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
+                <?php } ?>
+        </ul>
+    </div>
+
+</div>
+</div>
+
+<?php } else { ?>
+    <h1>Aun no se encuentran Peluditos para adoptar Disponibles</h1>
+<?php } ?>
+

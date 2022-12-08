@@ -1,0 +1,114 @@
+<div class="row" style="padding-top: 5%; padding-bottom: 5%;">
+<div class="col s10 login-card white black-text offset-s1">
+
+<?php 
+$total_paginas = ceil($totalregistro / $por_pagina); 
+$seleccionado = isset($Busqueda)? $Busqueda : "0";
+?>
+
+<div class="card-panel col s12 indigo white-text center" style="border-radius: 10px; padding-bottom: 20px;">
+    <h3>Gestión de Adopciones</h3>
+    <div class="center-align col s12" style="padding-bottom: 20px;">
+        <h5 class="light">Registro de Adopciones</h5>
+        <a href="<?= BASE_URL;?>admin/agregaAlbergueAdmin"><input class="btn white indigo-text" type="button" value="Ir al Modulo"></a>   
+    </div> 
+    <div class="col s12">
+        <ul class="tabs indigo">
+            <li class="tab col s6"><a class="white-text" href="#Albergue">Albergue</a></li>
+            <li class="tab col s6"><a class="white-text" href="#Estado">Estado</a></li>
+        </ul>
+    </div>
+    <div class="card col s4 offset-s4"  style="border-radius: 10px;">
+        <div id="Albergue">
+            <form action="<?=BASE_URL?>admin/adopciones" method="POST">
+                <div class="input-field col s12">
+                <select name="AlbergueEsp" id="">
+                <option value="0" disabled selected>Selecciona:</option>
+                    <?php foreach ($albergues as $key){ ?>
+                        <option <?php if($seleccionado == $key['id_albergue']){echo "selected";} ?> value="<?=$key['id_albergue'];?>"><?=$key['nombre']?></option>
+                    <?php }?>
+                </select>
+                <label for="">Filtra por albergue especifico</label>
+                <button class="btn indigo"><i class="large material-icons">search</i></button>
+                </div>
+            </form>
+        </div>
+        <div id="Estado">
+            <form action="<?=BASE_URL?>admin/adopciones" method="GET">
+            <div class="input-field col s12">
+                <select name="filtro" id="">
+                    <option <?php if($filtro == "0"){ echo "selected"; } ?> value="0">Todas</option>
+                    <option <?php if($filtro == "1"){ echo "selected"; } ?> value="1">En Progreso</option>
+                    <option <?php if($filtro == "2"){ echo "selected"; } ?> value="2">Cancelada</option>
+                    <option <?php if($filtro == "3"){ echo "selected"; } ?> value="3">Completada</option>
+                </select>
+                <label for="">Filtra por Estado</label>
+                <button class="btn indigo"><i class="large material-icons">search</i></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<?php getDashboard("admin") ?>
+        
+<div class="col s10">
+<?php if($adopciones != false){ ?>
+    <table class="centered">
+        <thead class="card indigo white-text">
+      <tr>
+        <th>ID</th>
+        <th>Fecha de Peticion</th>
+        <th>Animal</th>
+        <th>Usuario</th>
+        <th>Albergue</th>
+        <th>Estado</th>
+      </tr>  
+    </thead>
+    <tbody>
+    <?php foreach($adopciones as $adopcion){ ?>
+            <tr>
+                <td><?= $adopcion['id_adopcion']; ?></td>
+                <td><?= $fecha = date("d-m-Y",strtotime($adopcion['fecha_adopcion'])); ?></td><!--ORDENA LA FECHA -->
+                <td><?= $adopcion['nombreanimal']; ?></td>
+                <td><?= $adopcion['nombreusuario']; ?></td>
+                <td><?= $adopcion['nombrealbergue']; ?></td>
+                <td><?= $adopcion['nombre_estado']; ?></td>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>
+
+<ul class="pagination center">
+<?php if($pagina != 1) { ?>
+    <li class="waves-effect blue-text "><a href="<?=BASE_URL?>admin/razasAnimal?pagina=1<?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
+    <li class="waves-effect"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$pagina - 1?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_left</i></a></li>
+<?php } else { ?>
+    <li class="disabled"><a href=""><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
+    <li class="disabled"><a href=""><i class="material-icons">chevron_left</i></a></li>
+<?php } ?>
+    
+<?php for($i = 1; $i <= $total_paginas; $i++){ 
+    if ($i == $pagina){ ?>
+        <li class="active indigo"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$i?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><?=$i?></a></li>
+    <?php } else { ?>
+        <li class="waves-effect"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$i?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><?=$i?></a></li>
+    <?php } } ?>
+
+    <?php if($pagina != $total_paginas){ ?>
+        <li class="waves-effect"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$pagina + 1?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_right</i></a></li>
+        <li class="waves-effect"><a href="<?=BASE_URL?>admin/razasAnimal?pagina=<?=$total_paginas?><?=$filtro != ""? "&filtro=".$filtro: "";?>"><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
+    <?php } else { ?>
+        <li class="disabled"><a href=""><i class="material-icons">chevron_right</i></a></li>
+        <li class="disabled"><a href=""><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
+<?php } ?>
+
+</ul>
+
+<?php } else { ?>
+    <h1>Aun no Existen adopciones</h1>
+<?php } ?>
+</div>
+
+</div>
+</div>

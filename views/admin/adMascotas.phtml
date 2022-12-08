@@ -19,31 +19,19 @@
 
         </div>
 
-        <div class="col s2 black-text">
-            <h4 class="card-panel indigo center white-text" style="border-radius: 10px;">Menú</h4>
-            <ul class="card-panel indigo" style="padding-left: 15px; border-radius: 10px;">
-                <li class="hover center"><a href="<?= BASE_URL;?>admin/tipoAnimal"><span class="white-text">Tipos de Animales</span></a></li>
-                <li class="hover center"><a href="<?= BASE_URL;?>admin/razasAnimal"><span class="white-text">Razas de Animales</span></a></li>
-                <li class="hover center"><a href="<?= BASE_URL;?>admin/agregaVeterinarios"><span class="white-text">Veterinarios</span></a></li>
-                <li class="hover center"><a href="<?= BASE_URL;?>admin/animales"><span class="white-text">Peludos</span></a></li>
-                <li class="hover center"><a href="<?= BASE_URL;?>admin/mostrarData"><span class="white-text">Usuarios</span></a></li>
-                <li class="hover center"><a href="<?= BASE_URL;?>admin/albergues"><span class="white-text">Albergues</span></a></li>
-                <li class="hover center"><a href="<?= BASE_URL;?>admin/adopciones"><span class="white-text">Adopciones</span></a></li>
-                <li class="hover center"><a href="<?= BASE_URL;?>admin/Reportes"><span class="white-text">Reportes</span></a></li>
-            </ul>
-        </div>
+        <?php getDashboard("admin") ?>
 
         <div class="col s10">
 <table class="centered">
         <thead class="card indigo white-text">
         <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Año Nacimiento</th>
+            <th>N°</th>
             <th>Foto</th>
-            <th>Fecha Ingreso</th>
+            <th>Nombre</th>
+            <th>Año de Nacimiento</th>
+            <th>Fecha de Ingreso</th>
             <th>Raza</th>
-            <th>Tipo Animal</th>
+            <th>Tipo de Animal</th>
             <th>Albergue</th>
             <th>Fundacion Responsable</th>
             <th>Estado</th>
@@ -54,9 +42,9 @@
         <?php foreach($animalesAdmin as $animal){ ?>
         <tr>
             <td><?= $animal['id_animal'] ?></td>
+            <td><img class="circle" src="<?=URL_BASE?>img/animales/<?=$animal['img']?>" alt="Imagen Animal" width="50"></td>
             <td><?= $animal['nombre'] ?></td>
             <td><?= $animal['anio_nac'] ?></td>
-            <td><img class="circle" src="<?=URL_BASE?>img/animales/<?=$animal['img']?>" alt="Imagen Animal" width="50"></td>
             <td><?= $animal['fecha_ingreso'] = date("d-m-Y", strtotime($animal['fecha_ingreso'])); ?></td>
             <td><?= $animal['nomraza'] ?></td>
             <td><?= $animal['nomtipo'] ?></td>
@@ -69,7 +57,7 @@
                             <div class="col s6">
                                 <form action="<?=BASE_URL?>admin/agregaAnimales" method="POST">
                                     <input type="hidden" name="modificacion" value="<?=$animal['id_animal'] ?>">
-                                    <button class="btn tooltipped blue" data-position="bottom" data-tooltip="Modificar Usuario" name="accion" value="Modificar">
+                                    <button class="btn tooltipped blue" data-position="bottom" data-tooltip="Modificar Mascota" name="accion" value="Modificar">
                                         <i class="large material-icons">edit</i>
                                     </button>
                                 </form>
@@ -78,7 +66,9 @@
                                 <form action="<?=BASE_URL?>admin/inactivaPeludos" method="POST">
                                     <input type="hidden" name="modificacion" value="<?=$animal['id_animal'] ?>">
                                     <input type="hidden" name="decision" value="<?=$animal['visible'] ?>">
-                                    <button class="btn tooltipped red"  data-position="bottom" data-tooltip="Bloquear/Desbloquear Usuario" name="accion" <?= $animal['visible'] != 1? "value='Activar'": "value='Inactivar'" ?>>
+                                    <button class="btn tooltipped red"  data-position="bottom" 
+                                    <?php if($animal['visible'] != 1) { ?> data-tooltip="Habilitar Mascota" <?php } else { ?> data-tooltip="Deshabilitar Mascota" <?php }?>
+                                    name="accion" <?= $animal['visible'] != 1? "value='Activar'": "value='Inactivar'"?>>
                                         <?php if($animal['visible'] != 1) { ?> <i class="large material-icons">lock_open</i> 
                                         <?php } else { ?> <i class="large material-icons">lock</i> <?php }?>
                                     </button>

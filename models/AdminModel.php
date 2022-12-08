@@ -411,8 +411,20 @@ class AdminModel extends ConexionBD{
 
 		$verificar = $this->obtenData("SELECT cedula, nombre
 										FROM usuarios
-										WHERE nombre = '$nombre' OR telefono = '$telefono'
-                                        AND cedula <> '$cedula'");
+										WHERE cedula <> '$cedula' AND nombre = '$nombre' OR telefono = '$telefono'");
+		return $verificar;
+	}
+
+    public function ValidarModificacionPropiaUsuario($nombre, $telefono, $cedula){
+		//Recibe su cedula, nombre y telefono ninguno debe estar en  el sistema del nombre no estoy muy seguro
+		$nombre = mysqli_real_escape_string($this->conectar(), $nombre);
+		$telefono = mysqli_real_escape_string($this->conectar(), $telefono);
+		$cedula = mysqli_real_escape_string($this->conectar(), $cedula);
+
+		$verificar = $this->obtenData("SELECT cedula, nombre
+										FROM usuarios
+										WHERE cedula <> '$cedula' AND 
+                                        (nombre = '$nombre' OR telefono = '$telefono')");
 		return $verificar;
 	}
 	

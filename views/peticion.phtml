@@ -1,12 +1,14 @@
-<?php 
-
-    print_r($peticion);
-    
-
-?>
-
-<h1>Gracias por Pedir la adopcion <?= $peticion[0]['nombre']?></h1>
-<p>
-    En los proximos días nos comunicaremos con usted
-    para concretar la adopcion del animal via su numero de telefono: <?= $peticion[0]['telefono'];?>.
-</p>
+<div class="row" style="padding-top: 3%; padding-bottom: 3%;">
+<div class="card col s10 offset-s1 container indigo login-card">
+<div class="center-align">
+    <div class="card-title" style="padding-right: 5px; padding-left: 5px;">
+        <h4 class="light">¡Gracias por solicitar la adopción de tu nueva mascota!</h4>
+        <img class="small responsive-img" src="<?=URL_BASE;?>assets/dancing.gif" alt="Foto Animal">
+    </div>
+    <div class="card-action">
+        <h5 class="light">¡En la brevedad posible se le informara sobre su adopcion!: <br> Teléfono al que se le contactara: <?= $peticion[0]['telefono'];?></h5>
+        <a href='<?= BASE_URL; ?>session/catalogoAnimales' class="btn modal-close">Volver al Catalogo</a>
+    </div>    
+</div>
+</div>
+</div>

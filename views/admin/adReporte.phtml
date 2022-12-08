@@ -1,224 +1,393 @@
 <div class="row" style="padding-top: 5%; padding-bottom: 5%;">
-<div class="col s10 white offset-s1">
-<div class="row" style="padding-left: 15px; padding-right: 15px;">
-    <div class="card  col s3 black-text transparent z-depth-0">
-        <h3>Menu Principal</h3>
-        <hr style="border-top: 8px solid; border-radius: 5px;">
-        <ul>
-        <li><a href="<?= BASE_URL;?>admin/tipoAnimal">Tipos de Animales</a></li>
-          <li><a href="<?= BASE_URL;?>admin/razasAnimal">Razas de Animales</a></li>
-          <li><a href="<?= BASE_URL;?>admin/agregaVeterinarios">Veterinarios</a></li>
-          <li><a href="<?= BASE_URL;?>admin/animales">Peludos</a></li>
-          <li><a href="<?= BASE_URL;?>admin/mostrarData">Usuarios</a></li>
-          <li><a href="<?= BASE_URL;?>admin/albergues">Albergues</a></li>
-          <li><a href="<?= BASE_URL;?>admin/adopciones">Adopciones</a></li>
-          <li><a href="<?= BASE_URL;?>admin/Reportes">Reportes</a></li>
-        </ul>
-    </div>
+<div class="col s10 login-card white black-text offset-s1">
 
-<div class="card col s9 black-text transparent z-depth-0">
-  <div class="card-title center-align"><h3>Registro de Usuarios</h3></div>
-  <hr style="border-top: 8px solid; border-radius: 5px;">
-
-  <div class="row">
-    <div class="col s12">
-      <ul class="tabs">
-        <li class="tab col s2"><a class="active" href="#Animales">Peludos</a></li>
-		<li class="tab col s2"><a href="#Adoptados">Peludos Adoptados</a></li>
-        <li class="tab col s2"><a href="#Veterinarios">Veterinarios</a></li>
-        <li class="tab col s2"><a href="#Usuarios">Usuarios</a></li>
-        <li class="tab col s2"><a href="#Albergues">Albergues</a></li>
-        <li class="tab col s2"><a href="#General">Bitacoras</a></li>
-      </ul>
-    </div>
-
-    <div id="Animales" class="col s12">
-	<form action="<?=BASE_URL?>report/Bitacora_Animales" target="_blank" method="POST">
-			<label>Peludos</label><br>
-			<label for="">Nombre</label>
-			<input type="text" name="NombreAnimal" class="col s6">
-			<label for="">Año de Nacimiento</label>
-			<input name="Ano_nac" class="col s6"><br>
-			<label for="">Tipo Animal</label>
-			<select name="tipoanimal" id="">
-				<option value="0">Todos</option>
-				<?php foreach($tiposAni as $tipoani){ ?>
-					<option value="<?=$tipoani['id_tipo']?>"><?= $tipoani['nombre']?></option>
-				<?php } ?>
-			</select>
-			<label for="">Raza</label>
-			<select name="raza" id="">
-				<option value="0">Todos</option>
-				<?php foreach($Razas as $raza){ ?>
-					<option value="<?=$raza['id_raza']?>"><?= $raza['nombre']?></option>
-				<?php } ?>
-			</select>
-			<label for="">Tamaño</label>
-			<select name="tamano" id="">
-				<option value="0">Todos</option>
-				<?php foreach($tamanos as $tamano){ ?>
-					<option value="<?=$tamano['id_tamanio']?>"><?= $tamano['nombre']?></option>
-				<?php } ?>
-			</select>
-			<label for="">Albergue</label>
-			<select name="albergue" id="">
-				<option value="0">Todos</option>
-				<?php foreach($albergues as $albergue){ ?>
-					<option value="<?=$albergue['id_albergue']?>"><?= $albergue['nombre']?></option>
-				<?php } ?>
-			</select>
-			<label for="">Desde</label>
-			<input type="date" value="<?= date('Y-m-d'); ?>" name="Desde" class="col s6"> 
-			<br>
-			<label for="">Hasta</label>
-			<br>
-			<input type="date" value="<?= date('Y-m-d'); ?>" name="Hasta" class="col s6">
-			<select name="estatus" class="col s6">
-				<option value="0">Todos</option>
-				<option value="1">No adoptados</option>
-				<option value="3">Adoptados</option>
-			</select>
-			<button name="Reporte" value="Peludos">Generar Reporte</button>
-		</form>
+<div class="card-panel col s12 indigo white-text center" style="border-radius: 10px; padding-bottom: 20px;"> <!--BANNER INICIO-->
+	<h3>Gestión de Reportes</h3>
+	<div class="col s10 offset-s2"> <!--PESTAÑAS-->
+		<ul class="tabs indigo">
+			<li class="tab col s2"><a class="white-text" href="#Mascotas">Mascotas</a></li>
+			<li class="tab col s2"><a class="white-text" href="#Veterinarios">Veterinarios</a></li>
+			<li class="tab col s2"><a class="white-text" href="#Usuarios">Usuarios</a></li>
+			<li class="tab col s2"><a class="white-text" href="#Albergues">Albergues</a></li>
+			<li class="tab col s2"><a class="white-text active" href="#General">Bitacoras</a></li>
+		</ul>
 	</div>
+</div>
 
-	<div id="Adoptados" class="col s12">
-		<form action="<?=BASE_URL?>report/Bitacora_Adoptados" target="_blank" method="POST">
-			<label>Peludos Adoptados</label><br>
-			<label for="">Nombre Peludo</label><!--text-->
-			<input type="text" name="peludo">
-			<br>
-			<label for="">Raza</label><!--Select-->
-			<select name="raza">
-				<option value="0">Todos</option>
-				<?php foreach($Razas as $raza){ ?>
-					<option value="<?=$raza['id_raza']?>"><?= $raza['nombre']?></option>
-				<?php } ?>
-			</select>
-			<br>
-			<label for="">Tamaño</label><!--Select-->
-			<select name="tamano">
-				<option value="0">Todos</option>
-				<?php foreach($tamanos as $tamano){ ?>
-					<option value="<?=$tamano['id_tamanio']?>"><?= $tamano['nombre']?></option>
-				<?php } ?>
-			</select>
-			<br>
-			<label for="">Albergue</label><!--Select-->
-			<select name="albergue">
-				<option value="0">Todos</option>
-				<?php foreach($albergues as $albergue){ ?>
-					<option value="<?=$albergue['id_albergue']?>"><?= $albergue['nombre']?></option>
-				<?php } ?>
-			</select>
-			<br>
-			<label for="">Año Nacimiento</label> <!--text-->
-			<input type="text" name="ano_nac">
-			<br>
-			<label for="">Tipo de Animal</label> <!--Select-->
-			<select name="tipoanimal">
-				<option value="0">Todos</option>
-				<?php foreach($tiposAni as $tipoani){ ?>
-					<option value="<?=$tipoani['id_tipo']?>"><?= $tipoani['nombre']?></option>
-				<?php } ?>
-			</select>
-			<br>
-			<label for="">Desde</label>
-				<input type="date" value="<?= date('Y-m-d'); ?>" name="Desde" class="col s6"> 
-				<br>
-				<label for="">Hasta</label>
-				<br>
-				<input type="date" value="<?= date('Y-m-d'); ?>" name="Hasta" class="col s6">
-			<label for="">Estatus</label> <!--Select-->
-			<select name="estatus" class="col s6">
-				<option value="0">Todos</option>
-				<option value="1">No adoptados</option>
-				<option value="3">Adoptados</option>
-			</select>
-			<br>
-			<button name="Reporte" value="Peludos Adoptados">Generar Reporte</button>
-		</form>
-	</div>
+<?php getDashboard("admin") ?> <!--DASHBOARD-->
 
-    <div id="Veterinarios" class="col s12">
-		<form action="<?=BASE_URL?>report/Bitacora_Veterinarios" target="_blank" method="POST">
-			<label>Veterinarios</label><br>
+<div class="col s10 transparent"> <!--CONTENIDO DE LA PAGINA-->
+	<div class="row">
+
+	<div id="Mascotas" class="col s12">
+
+		<div class="col s12">
+		<ul class="tabs indigo">
+			<li class="tab col s6"><a class="white-text" href="#EnAdopcion">En Adopción</a></li>
+			<li class="tab col s6"><a class="white-text" href="#Adoptadas">Adoptadas</a></li>
+		</ul>
+		</div>
+
+		<div id="EnAdopcion" class="col s12">
+		<form action="<?=BASE_URL?>report/Bitacora_Animales" target="_blank" method="POST">
+
+			<div class="input-field col s3">
 				<label for="">Nombre</label>
-				<input type="text" name="nombre">
-				<label for="">Admin que lo Registro</label>
-				<input type="text" name="admin">
-				<label>Visibilidad veterinarios</label>
+				<input maxlength="50" pattern= "[A-Z,a-z ^()/><\][\\\x22,;|]{1,50}" title="Sin números o signos." class="validate" type="text" name="NombreAnimal">
+				<span class="helper-text">Sin números o signos.</span>	
+			</div>
+
+			<div class="input-field col s3">
+				<input maxlength="5" pattern= "[0-9 ^()/><\][\\\x22,;|]{1,5}" title="Solo números." class="validate" type="number" min="<?= date('Y')-30;?>" max="<?= date('Y'); ?>" name="Ano_nac">
+				<label for="">Año de Nacimiento</label>
+				<span class="helper-text">Solo números.</span>	
+			</div>
+
+			<div class="input-field col s3">
+				<select class="validate" name="tipoanimal" id="">
+				<option value="0" disabled selected>Selecciona:</option>
+				<option value="0">No aplica</option>
+						<?php foreach($tiposAni as $tipoani){ ?>
+						<option value="<?=$tipoani['id_tipo']?>"><?= $tipoani['nombre']?></option>
+						<?php } ?>
+				</select>
+				<label for="">Tipo de Animal</label>
+				<span class="helper-text">No combinar con raza incompatible.</span>	
+			</div>
+
+			<div class="input-field col s3">
+				<select class="validate" name="raza" id="">
+				<option value="0" disabled selected>Selecciona:</option>
+				<option value="0">No aplica</option>
+					<?php foreach($Razas as $raza){ ?>
+						<option value="<?=$raza['id_raza']?>"> <?= $raza['nombre']?> </option>
+					<?php } ?>
+				</select>
+				<label for="">Raza</label>
+				<span class="helper-text">No combinar con tipo incompatible.</span>	
+			</div>
+
+			<div class="input-field col s4">
+				<select class="validate" name="tamano" id="">
+				<option value="0" disabled selected>Selecciona:</option>
+				<option value="0">No aplica</option>
+						<?php foreach($tamanos as $tamano){ ?>
+						<option value="<?=$tamano['id_tamanio']?>"><?= $tamano['nombre']?></option>
+						<?php } ?>
+				</select>
+				<label for="">Tamaño</label>
+			</div>
+
+			<div class="input-field col s4">
+				<select class="validate" name="albergue" id="">
+				<option value="0" disabled selected>Selecciona:</option>
+				<option value="0">No aplica</option>	
+						<?php foreach($albergues as $albergue){ ?>
+						<option value="<?=$albergue['id_albergue']?>"> <?= $albergue['nombre']?> </option>
+						<?php } ?>
+				</select>
+				<label for="">Albergue</label>
+			</div>
+
+			<div class="input-field col s4">
+				<select class="validate" name="estatus">
+					<option value="0" disabled selected>Selecciona:</option>
+					<option value="0">No aplica</option>
+					<option value="3">Adoptado</option>
+					<option value="1">En Adopción</option>
+				</select>
+				<label for="">Estado de Adopción:</label>
+			</div>
+
+			<div class="input-field col s6">
+			<input class="validate" type="date" name="Desde">
+			<label for="">Desde</label>	
+			</div>
+
+			<div class="input-field col s6">
+			<label for="">Hasta</label>
+			<input class="validate" type="date" value="<?= date('Y-m-d'); ?>" max="<?= date('Y-m-d'); ?>" name="Hasta">	
+			</div>
+
+			<div class="input-field">
+			<button class="btn col s2 offset-s5 indigo white-text" name="Reporte" value="Peludos">Generar Reporte</button>
+			<span class="col s12 center helper-text" style="padding-top: 10px;">Nota: Si deja en blanco algún campo o elige la opción de "No Aplica", no se tomara en cuenta para el reporte</span>
+			<span class="col s12 center helper-text">Todos los reportes seran generados en un archivo .PDF que sera abierto en otra pestaña</span>	
+			</div>
+
+		</form>
+		</div>
+
+		<div id="Adoptadas" class="col s12">
+		<form action="<?=BASE_URL?>report/Bitacora_Adoptados" target="_blank" method="POST">
+
+		<div class="input-field col s3">
+				<label for="">Nombre</label>
+				<input maxlength="50" pattern= "[A-Z,a-z ^()/><\][\\\x22,;|]{1,50}" title="Sin números o signos." class="validate" type="text" name="NombreAnimal">
+				<span class="helper-text">Sin números o signos.</span>	
+			</div>
+
+			<div class="input-field col s3">
+				<input maxlength="5" pattern= "[0-9 ^()/><\][\\\x22,;|]{1,5}" title="Solo números."class="validate" type="number" min="<?= date('Y')-30;?>" max="<?= date('Y'); ?>" name="Ano_nac">
+				<label for="">Año de Nacimiento</label>
+				<span class="helper-text">Solo números.</span>	
+			</div>
+
+			<div class="input-field col s3">
+				<select class="validate" name="tipoanimal" id="">
+				<option value="0" disabled selected>Selecciona:</option>
+				<option value="0">No aplica</option>
+						<?php foreach($tiposAni as $tipoani){ ?>
+						<option value="<?=$tipoani['id_tipo']?>"><?= $tipoani['nombre']?></option>
+						<?php } ?>
+				</select>
+				<label for="">Tipo de Animal</label>
+				<span class="helper-text">No combinar con raza incompatible.</span>	
+			</div>
+
+			<div class="input-field col s3">
+				<select class="validate" name="raza" id="">
+				<option value="0" disabled selected>Selecciona:</option>
+				<option value="0">No aplica</option>
+					<?php foreach($Razas as $raza){ ?>
+						<option value="<?=$raza['id_raza']?>"> <?= $raza['nombre']?> </option>
+					<?php } ?>
+				</select>
+				<label for="">Raza</label>
+				<span class="helper-text">No combinar con tipo incompatible.</span>	
+			</div>
+
+			<div class="input-field col s4">
+				<select class="validate" name="tamano" id="">
+				<option value="0" disabled selected>Selecciona:</option>
+				<option value="0">No aplica</option>
+						<?php foreach($tamanos as $tamano){ ?>
+						<option value="<?=$tamano['id_tamanio']?>"><?= $tamano['nombre']?></option>
+						<?php } ?>
+				</select>
+				<label for="">Tamaño</label>
+			</div>
+
+			<div class="input-field col s4">
+				<select class="validate" name="albergue" id="">
+				<option value="0" disabled selected>Selecciona:</option>
+				<option value="0">No aplica</option>	
+						<?php foreach($albergues as $albergue){ ?>
+						<option value="<?=$albergue['id_albergue']?>"> <?= $albergue['nombre']?> </option>
+						<?php } ?>
+				</select>
+				<label for="">Albergue</label>
+			</div>
+
+			<div class="input-field col s4">
+				<select class="validate" name="estatus">
+					<option value="0" disabled selected>Selecciona:</option>
+					<option value="0">No aplica</option>
+					<option value="3">Adoptado</option>
+					<option value="1">En Adopción</option>
+				</select>
+				<label for="">Estado de Adopción:</label>
+			</div>
+
+			<div class="input-field col s6">
+			<input class="validate" type="date" name="Desde">
+			<label for="">Desde</label>	
+			</div>
+
+			<div class="input-field col s6">
+			<label for="">Hasta</label>
+			<input class="validate" type="date" value="<?= date('Y-m-d'); ?>" max="<?= date('Y-m-d'); ?>" name="Hasta">	
+			</div>
+
+			<div class="input-field">
+			<button class="btn col s2 offset-s5 indigo white-text" name="Reporte" value="Peludos Adoptados">Generar Reporte</button>
+			<span class="col s12 center helper-text" style="padding-top: 10px;">Nota: Si deja en blanco algún campo o elige la opción de "No Aplica", no se tomara en cuenta para el reporte</span>
+			<span class="col s12 center helper-text">Todos los reportes seran generados en un archivo .PDF que sera abierto en otra pestaña</span>	
+			</div>
+
+		</form>
+		</div>
+
+	</div>
+
+	<div id="Veterinarios" class="col s12">
+
+		<div class="col s12">
+		<ul class="tabs indigo">
+			<li class="tab col s12"><a class="white-text" href="#">Reportes de Veterinarios</a></li>
+		</ul>
+		</div>
+
+		<form action="<?=BASE_URL?>report/Bitacora_Veterinarios" target="_blank" method="POST">
+		
+			<div class="input-field col s12">
+			<label for="">Nombre</label>
+			<input maxlength="50" pattern="[A-Z,a-z ^()/><\][\\\x22,;|]{1,50}"  title="Sin números o signos." class="validate" class="validate" type="text" name="nombre">
+			<span class="helper-text">Sin números o signos.</span>		
+			</div>
+
+			<div class="input-field col s6">
+			<label for="">Cedula de Administrador Responsable</label>
+			<input maxlength="11" pattern= "[0-9 ^()/><\][\\\x22,;|]{1,5}"  title="Solo números." min="1000000" max="40000000" class="validate" type="text" name="admin">
+			<span class="helper-text">Solo números.</span>	
+			</div>
+
+			<div class="input-field col s6">
 			<select name="Visible">
-					<option value="3">Todos</option>
-					<option value="1">Visibles</option>
-					<option value="0">Ocultos</option>
+			<option value="3" disabled selected>Selecciona:</option>
+				<option value="3">No aplica</option>
+				<option value="1">Visibles</option>
+				<option value="0">Ocultos</option>
 			</select>
-				<button name="Reporte" value="Veterinarios">Generar Reporte</button>
+			<label>Visibilidad veterinarios</label>
+			</div>
+
+			<div class="input-field col s12">
+			<button class="btn col s2 offset-s5 indigo white-text" name="Reporte" value="Veterinarios">Generar Reporte</button>
+			<span class="col s12 center helper-text" style="padding-top: 10px;">Nota: Si deja en blanco algún campo o elige la opción de "No Aplica", no se tomara en cuenta para el reporte</span>
+			<span class="col s12 center helper-text">Todos los reportes seran generados en un archivo .PDF que sera abierto en otra pestaña</span>	
+			</div>
+
 		</form>
 	</div>
 
-    <div id="Usuarios" class="col s12">
-	<form action="<?=BASE_URL?>report/Bitacora_Usuarios" target="_blank" method="POST">
-			<label>Usuarios</label><br>
+	<div id="Usuarios" class="col s12">
+
+		<div class="col s12">
+		<ul class="tabs indigo">
+			<li class="tab col s12"><a class="white-text" href="#">Reportes de Usuarios</a></li>
+		</ul>
+		</div>
+
+		<form action="<?=BASE_URL?>report/Bitacora_Usuarios" target="_blank" method="POST">
+
+			<div class="input-field col s6">
 			<label for="">Cedula</label>
-			<input name="cedula">
+			<input maxlength="8" pattern= "[0-9 ^()/><\][\\\x22,;|]{7,8}" type="text" title="Solo números e identificaciones validas." min="1000000" max="40000000" class="validate" name="cedula">
+			<span class="helper-text">Solo números.</span>		
+			</div>
+
+			<div class="input-field col s6">
 			<label for="">Nombre</label>
-			<input name="nombre">
-			<label>Buscar por Rol</label>
+			<input maxlength="50" pattern="[A-Z,a-z ^()/><\][\\\x22,;|]{1,50}" type="text" title="Sin números o signos." class="validate" name="nombre">
+			<span class="helper-text">Sin números o signos.</span>	
+			</div>
+
+			<div class="input-field col s6">
 			<select name="busquedaRol">
-				<option value="0">Todos</option>
+			<option value="0" disabled selected>Selecciona:</option>
+				<option value="0">No aplica</option>
 			<?php foreach($roles as $rol){ ?>
 				<option value="<?= $rol['id_rol']?>"><?= $rol['nombre']?></option>
 			<?php } ?>
 			</select>
-			<br>
-			<label>Buscar por Activo</label>
+			<label>Buscar por Rol</label>
+			</div>
+
+			<div class="input-field col s6">
 			<select name="busquedaAct">
-				<option value="2">Todos</option>
+			<option value="2" disabled selected>Selecciona:</option>
+				<option value="2">No aplica</option>
 				<option value="1">Activos</option>
 				<option value="0">Bloqueados</option>
 			</select>
-				
-			<button name="Reporte" value="Usuarios">Generar Reporte</button>
+			<label>Buscar por Activo</label>
+			</div>
+
+			<div class="input-field col s12">
+			<button class="btn col s2 offset-s5 indigo white-text" name="Reporte" value="Usuarios">Generar Reporte</button>
+			<span class="col s12 center helper-text" style="padding-top: 10px;">Nota: Si deja en blanco algún campo o elige la opción de "No Aplica", no se tomara en cuenta para el reporte</span>
+			<span class="col s12 center helper-text">Todos los reportes seran generados en un archivo .PDF que sera abierto en otra pestaña</span>	
+			</div>
+
+		</form>
+	</div>
+
+	<div id="Albergues" class="col s12">
+
+		<div class="col s12">
+		<ul class="tabs indigo">
+			<li class="tab col s12"><a class="white-text" href="#">Reportes de Albergues</a></li>
+		</ul>
+		</div>
+
+		<form action="<?=BASE_URL?>report/Bitacora_Albergues" target="_blank" method="POST">
+
+			<div class="input-field col s5">
+			<label for="">Nombre</label>
+			<input maxlength="255" pattern="[A-Z,a-z ^()/><\][\\\x22,;|]{1,255}" type="text" title="Sin números o signos." class="validate"  type="text" name="nombre">
+			<span class="helper-text">Sin números o signos.</span>		
+			</div>
+
+			<div class="input-field col s5">
+			<label>RIF/Cedula de Fundacion Propietaria</label>
+			<input maxlength="11" pattern= "[0-9 ^()/><\][\\\x22,;|]{1,5}" type="text" title="Solo números." min="1000000" max="40000000" class="validate"  type="text" name="cedulaUser" id="">
+			<span class="helper-text">Solo números.</span>			
+			</div>
+
+			<div class="input-field col s2">
+			<select name="Activo" id="">
+			<option value="2" disabled selected>Selecciona:</option>
+				<option value="2">No aplica</option>
+				<option value="1">Activo</option>
+				<option value="0">Inactivo</option>
+			</select>
+			<label for="">Estado de Albergue:</label>
+			</div>
+
+			<div class="input-field col s12">
+			<button class="btn col s2 offset-s5 indigo white-text" name="Reporte" value="Albergues">Generar Reporte</button>
+			<span class="col s12 center helper-text" style="padding-top: 10px;">Nota: Si deja en blanco algún campo o elige la opción de "No Aplica", no se tomara en cuenta para el reporte</span>
+			<span class="col s12 center helper-text">Todos los reportes seran generados en un archivo .PDF que sera abierto en otra pestaña</span>	
+			</div>
 		</form>
 	</div>
 
 	<div id="General" class="col s12">
+
+		<div class="col s12">
+		<ul class="tabs indigo">
+			<li class="tab col s12"><a class="white-text" href="#">Reportes de Bitacoras</a></li>
+		</ul>
+		</div>
+
 		<form action="<?=BASE_URL?>report/Bitacora_General" target="_blank" method="POST">
-			<label>Bitacoras</label><br>
-				<label for="">Usuario Acciones</label>
-				<input type="text" name="usuario">
-				<label for="">Modulo Afectado</label>
-				<input type="text" name="modulo">
-				<label for="">Accion Realizada</label>
-				<input type="text" name="accion">
-				<label>Visibilidad veterinarios</label>
-				<label for="">Desde</label>
-				<input type="date" value="<?= date('Y-m-d'); ?>" name="Desde" class="col s6"> 
-				<br>
-				<label for="">Hasta</label>
-				<br>
-				<input type="date" value="<?= date('Y-m-d'); ?>" name="Hasta" class="col s6">
-				<button name="Reporte" value="Bitacora">Generar Reporte</button>
+		
+			<div class="input-field col s6">
+			<label for="">Usuario Acciones</label>
+			<input type="text" name="usuario">
+			</div>
+
+			<div class="input-field col s6">
+			<label for="">Modulo Afectado</label>
+			<input type="text" name="modulo">
+			</div>
+
+			<div class="input-field col s6">
+			<label for="">Accion Realizada</label>
+			<input type="text" name="accion">
+			</div>
+
+			<div class="input-field col s3">
+			<label for="">Desde</label>
+			<input type="date" value="<?= date('Y-m-d'); ?>" name="Desde"> 
+			</div>
+
+			<div class="input-field col s3">
+			<label for="">Hasta</label>
+			<input type="date" value="<?= date('Y-m-d'); ?>" name="Hasta">
+			</div>
+
+			<div class="input-field col s12">
+			<button class="btn col s2 offset-s5 indigo white-text" name="Reporte" value="Bitacora">Generar Reporte</button>
+			<span class="col s12 center helper-text" style="padding-top: 10px;">Nota: Si deja en blanco algún campo o elige la opción de "No Aplica", no se tomara en cuenta para el reporte</span>
+			<span class="col s12 center helper-text">Todos los reportes seran generados en un archivo .PDF que sera abierto en otra pestaña</span>	
+			</div>
 		</form>
 	</div>
 
-    <div id="Albergues" class="col s12">
-		<form action="<?=BASE_URL?>report/Bitacora_Albergues" target="_blank" method="POST">
-			<label>Albergues</label><br>
-			<label for="">Nombre</label>
-			<input type="text" name="nombre">
-			<br>
-			<label>Fundacion propietario</label>
-			<input type="text" name="cedulaUser" id="">
-			<select name="Activo" id="">
-				<option value="2">Todos</option>
-				<option value="1">Activo</option>
-				<option value="0">Inactivo</option>
-			</select>
-			<button name="Reporte" value="Albergues">Generar Reporte</button>
-		</form>
 	</div>
-	
-	
-  </div>
+</div>
+
+</div>
+</div>

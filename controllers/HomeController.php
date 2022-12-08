@@ -9,7 +9,7 @@ class HomeController extends GeneralController{
 	******************************************************************/
 	public function home()
     {
-      $this->loadView("home.phtml","Inicio");
+      $this->loadView("home.phtml","Peludos Ya");
     }
 	
 	/******************************************************************
@@ -24,9 +24,9 @@ class HomeController extends GeneralController{
         $objAdmin->registraCierraSesion($_SESSION['iduser']);
         session_destroy();
         header("refresh: ". 0);
-        $this->loadView("home.phtml","inicio");
+        $this->loadView("home.phtml","Peludos Ya");
       }
-      $this->loadView("home.phtml","inicio");
+      $this->loadView("home.phtml","Peludos Ya");
     }
 }
 

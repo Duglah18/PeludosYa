@@ -31,22 +31,26 @@
 
         <div class="input-field tooltipped col s6" data-position="top" data-tooltip="Nombre del veterinario">
         <i class="indigo-text material-icons prefix">person</i>
-        <label for="">Nombre Veterinario</label>
-        <input type="text" name="nombre" value="<?=$nombre?>">
+        <label class="black-text" for="">Nombre Veterinario</label>
+        <input maxlength="50" pattern= "[A-Z,a-z ^()/><\][\\\x22,;|]{1,50}" title="50 caracteres max. - Sin números o signos" required class="validate" type="text" name="nombre" value="<?=$nombre?>">
+        <span class="helper-text">50 caracteres max. - Sin números o signos.</span>
         </div>
 
-        <div class="input-field tooltipped col s6" data-position="top" data-tooltip="Nro° de telefono del veterinario">
+        <div class="input-field tooltipped col s6" data-position="top" data-tooltip="N° de Teléfono">
         <i class="indigo-text material-icons prefix">phone</i>
-        <label for="">Telefono</label>
-        <input type="tel" name="telefono" value="<?=$telefono?>">
-        </div>
-        <input type="hidden" value="<?=$img?>" name="imgmodificar">
-        <div class="input-field tooltipped col s6" data-position="top" data-tooltip="Dirección del consultorio del veterinario">
-        <i class="indigo-text material-icons prefix">home</i>
-        <label for="">Direccion</label >
-        <input type="text" name="direccion" value="<?=$direccion?>">
+        <label class="black-text" for="">Teléfono</label>
+        <input maxlength="11" pattern= "[0-9 ^()/><\][\\\x22,;|]{11}" title="11 caracteres requeridos - Sin letras o signos" required class="validate" type="tel" name="telefono" value="<?=$telefono?>">
+        <span class="helper-text">11 caracteres requeridos - Sin letras o signos.</span>
         </div>
 
+        <div class="input-field tooltipped col s6" data-position="top" data-tooltip="Dirección de consultorio">
+        <i class="indigo-text material-icons prefix">home</i>
+        <label class="black-text" for="">Dirección</label>
+        <input maxlength="100" pattern="[a-z,A-Z]{1,100}" type="text" class="validate" name="direccion" value="<?=$direccion?>">
+        <span class="helper-text">100 caracteres max.</span>
+        </div>
+
+        <input type="hidden" value="<?=$img?>" name="imgmodificar">
         <div class="file-field input-field tooltipped col s6" data-position="top" data-tooltip="Foto del veterinario">
             <div class="btn indigo">
                 <span>Buscar..</span>
@@ -54,6 +58,7 @@
             </div>
             <div class="file-path-wrapper">
             <input class="file-path validate" type="text">
+            <span class="helper-text">Resolución recomendada de 400x300</span>
             </div>
         </div>
 
@@ -70,29 +75,17 @@
 
         </div>
 
-        <div class="col s2 black-text">
-            <h4 class="card-panel indigo center white-text" style="border-radius: 10px;">Menú</h4>
-            <ul class="card-panel indigo" style="padding-left: 15px; border-radius: 10px;">
-                <li class="hover center"><a href="<?= BASE_URL;?>admin/tipoAnimal"><span class="white-text">Tipos de Animales</span></a></li>
-                <li class="hover center"><a href="<?= BASE_URL;?>admin/razasAnimal"><span class="white-text">Razas de Animales</span></a></li>
-                <li class="hover center"><a href="<?= BASE_URL;?>admin/agregaVeterinarios"><span class="white-text">Veterinarios</span></a></li>
-                <li class="hover center"><a href="<?= BASE_URL;?>admin/animales"><span class="white-text">Peludos</span></a></li>
-                <li class="hover center"><a href="<?= BASE_URL;?>admin/mostrarData"><span class="white-text">Usuarios</span></a></li>
-                <li class="hover center"><a href="<?= BASE_URL;?>admin/albergues"><span class="white-text">Albergues</span></a></li>
-                <li class="hover center"><a href="<?= BASE_URL;?>admin/adopciones"><span class="white-text">Adopciones</span></a></li>
-                <li class="hover center"><a href="<?= BASE_URL;?>admin/Reportes"><span class="white-text">Reportes</span></a></li>
-            </ul>
-        </div>
+        <?php getDashboard("admin") ?>
 
         <div class="col s10">
 <table class="centered">
         <thead class="card indigo white-text">
             <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Nombre</th>
-                <th scope="col">Telefono</th>
-                <th scope="col">Direccion</th>
+                <th scope="col">N°</th>
                 <th scope="col">Imagen</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Teléfono</th>
+                <th scope="col">Dirección</th>
                 <th scope="col">Estado</th>
                 <th scope="col">Registrado por</th>
                 <th scope="col">Acciones</th>
@@ -105,12 +98,13 @@
         for ($i = 0; $i < $tamanio; $i++){ ?>
             <tr>
             <td><?= $Veterinarios[$i]['id_veterinario'] ?></td>
-            <td><?= $Veterinarios[$i]['nombre'] ?></td>
-            <td><?= $Veterinarios[$i]['tlf'] ?></td>
-            <td><?= $Veterinarios[$i]['direccion'] ?></td>
             <td> 
                 <img src='<?= URL_BASE . "img/veterinarios/".$Veterinarios[$i]['img'];?>' width='50' alt='Foto Veterinario'>
             </td>
+            <td><?= $Veterinarios[$i]['nombre'] ?></td>
+            <td><?= $Veterinarios[$i]['tlf'] ?></td>
+            <td><?= $Veterinarios[$i]['direccion'] ?></td>
+
             <td><?= $activo = $Veterinarios[$i]['visible'] !=1? "No visible": "Visible" ?> </td>
             <td><?= $Veterinarios[$i]['usuario_Rveterinario']  ?> </td>
             <td>
@@ -118,7 +112,7 @@
                     <div class="col s6">
                         <form action="<?=BASE_URL?>admin/agregaVeterinarios" method="POST">
                             <input type="hidden" name="modificacion" value="<?=$Veterinarios[$i]['id_veterinario'] ?>">
-                            <button class="btn tooltipped blue" data-position="bottom" data-tooltip="Modificar Usuario" name="accion" value="Modificar">
+                            <button class="btn tooltipped blue" data-position="bottom" data-tooltip="Modificar Veterinario" name="accion" value="Modificar">
                                 <i class="large material-icons">edit</i>
                             </button>
                         </form>
@@ -127,7 +121,9 @@
                         <form action="<?=BASE_URL?>admin/inactivaVeterinario" method="POST">
                             <input type="hidden" name="modificacion" value="<?=$Veterinarios[$i]['id_veterinario'] ?>">
                             <input type="hidden" name="decision" value="<?=$Veterinarios[$i]['visible'] ?>">
-                            <button class="btn tooltipped red"  data-position="bottom" data-tooltip="Bloquear/Desbloquear Usuario" name="accion" <?= $Veterinarios[$i]['visible'] != 1? "value='Activar'": "value='Inactivar'" ?>>
+                            <button class="btn tooltipped red"  data-position="bottom" 
+                            <?php if($Veterinarios[$i]['visible'] != 1) { ?> data-tooltip="Desbloquear Veterinario" <?php } else { ?> data-tooltip="Bloquear Veterinario" <?php }?>
+                            name="accion" <?= $Veterinarios[$i]['visible'] != 1? "value='Activar'": "value='Inactivar'"?>>
                                 <?php if($Veterinarios[$i]['visible'] != 1) { ?> <i class="large material-icons">lock_open</i> 
                                 <?php } else { ?> <i class="large material-icons">lock</i> <?php }?>
                             </button>

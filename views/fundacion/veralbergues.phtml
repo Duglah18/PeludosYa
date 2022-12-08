@@ -77,8 +77,8 @@ if($userfund == false){ ?>
 <ul class="pagination center">
 
             <?php if($pagina != 1) { ?>
-                <li class="waves-effect blue-text"><a href="<?=BASE_URL?>fundacion/albergues?pagina=1"><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
-            <li class="waves-effect"><a href="<?=BASE_URL?>fundacion/albergues?pagina=<?=$pagina - 1?>"><i class="material-icons">chevron_left</i></a></li>
+                <li class="waves-effect blue-text"><a href="<?=BASE_URL?>admin/albergues?pagina=1"><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
+            <li class="waves-effect"><a href="<?=BASE_URL?>admin/albergues?pagina=<?=$pagina - 1?>"><i class="material-icons">chevron_left</i></a></li>
             <?php } else { ?>
                 <li class="disabled"><a href=""><i class="material-icons">chevron_left</i><i class="material-icons">chevron_left</i></a></li>
                 <li class="disabled"><a href=""><i class="material-icons">chevron_left</i></a></li>
@@ -86,14 +86,14 @@ if($userfund == false){ ?>
                 
             <?php for($i = 1; $i <= $total_paginas; $i++){ 
                 if ($i == $pagina){ ?>
-                    <li class="active indigo"><a href="<?=BASE_URL?>fundacion/albergues?pagina=<?=$i?>"><?=$i?></a></li>
+                    <li class="active indigo"><a href="<?=BASE_URL?>admin/albergues?pagina=<?=$i?>"><?=$i?></a></li>
                 <?php } else { ?>
-                    <li class="waves-effect"><a href="<?=BASE_URL?>fundacion/albergues?pagina=<?=$i?>"><?=$i?></a></li>
+                    <li class="waves-effect"><a href="<?=BASE_URL?>admin/albergues?pagina=<?=$i?>"><?=$i?></a></li>
                 <?php } } ?>
 
                 <?php if($pagina != $total_paginas){ ?>
-                    <li class="waves-effect"><a href="<?=BASE_URL?>fundacion/albergues?pagina=<?=$pagina + 1?>"><i class="material-icons">chevron_right</i></a></li>
-                    <li class="waves-effect"><a href="<?=BASE_URL?>fundacion/albergues?pagina=<?=$total_paginas?>"><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
+                    <li class="waves-effect"><a href="<?=BASE_URL?>admin/albergues?pagina=<?=$pagina + 1?>"><i class="material-icons">chevron_right</i></a></li>
+                    <li class="waves-effect"><a href="<?=BASE_URL?>admin/albergues?pagina=<?=$total_paginas?>"><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>
                 <?php } else { ?>
                     <li class="disabled"><a href=""><i class="material-icons">chevron_right</i></a></li>
             <li class="disabled"><a href=""><i class="material-icons">chevron_right</i><i class="material-icons">chevron_right</i></a></li>

@@ -357,7 +357,7 @@ class ReportController extends GeneralController{
 		$pdf->SetFont('Times','',12);
 		
 		//Colocar el tamaño de las columnas de las celdas de la tabla (10)
-		$pdf->SetWidths(Array(35,70,70,75,45));
+		$pdf->SetWidths(Array(35,85,90,75,45));
 		
 		///Colocar la altura de la linea
 		$pdf->SetLineHeight(5);

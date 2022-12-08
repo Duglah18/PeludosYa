@@ -43,7 +43,7 @@ class SessionModel extends ConexionBD{
     }
 
     public function TotalAnimalesCatalogoSess($filtro =""){
-        $numTotal = $this->ObtenData("SELECT COUNT(*) AS TotalAnimales
+        $numTotal = $this->ObtenData("SELECT COUNT(DISTINCT a.id_animal) AS TotalAnimales
                                         FROM animal a
                                         INNER JOIN raza b ON a.raza_id = b.id_raza
                                         INNER JOIN tamanio c ON a.tamanio_id = c.id_tamanio
@@ -121,7 +121,6 @@ class SessionModel extends ConexionBD{
         }
     }
 
-//falta telefono usuario
     public function registerUser($ced,$nombre,$direcc,$contra,$telefono){
         $data['cedula'] = mysqli_real_escape_string($this->conectar(),$ced); //rif del usuario 
         $data['nombre'] = mysqli_real_escape_string($this->conectar(),$nombre); // nombre del usuario
@@ -174,11 +173,14 @@ class SessionModel extends ConexionBD{
 	}
 
     
-//esto de que sirve?
-//es para verificar si existe un animal
     public function verificaExistencia($idAnimal, $iduser){
+        $idAnimal = mysqli_real_escape_string($this->conectar(),$idAnimal);
+        $iduser = mysqli_real_escape_string($this->conectar(),$iduser);
         $resultado = $this->obtenData("SELECT animal_id, cedula_usuario, estado
-                                        FROM adopcion");
+                                        FROM adopcion
+                                        WHERE animal_id = '$idAnimal' AND 
+                                              cedula_usuario = '$iduser' AND 
+                                              estado = 1 OR estado = 2");
         return $resultado;
     }
 
@@ -236,8 +238,8 @@ class SessionModel extends ConexionBD{
 
         $nuevo = $this->obtenData("SELECT cedula, nombre, rol_id, direccion, activo, telefono
                                     FROM usuarios WHERE cedula = '$idusuario'");
-        if(!$modificaUsuario){
-            return false;
+        if(is_bool($modificaUsuario) && $modificaUsuario == false){
+            return "false";
         }
         $arra['usuario_bit'] = $idusuario;
         $arra['modulo_afectado'] = 'Modifica Usuario Propio';

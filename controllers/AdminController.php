@@ -22,24 +22,6 @@ class AdminController extends GeneralController{
 
 	/*****************************************************************
 	*	Pertenece: AdminController
-	*	Nombre: index
-	*	Función: Mostrar Vista
-	*	Salidas: Vista login Admin
-	*****************************************************************/
-    public function index(){
-        if (isset($_SESSION['usuario'])){
-            $objAdmin = $this->loadModel("AdminModel");
-            $objAdmin->registraCierraSesion($_SESSION['iduser']);
-            session_destroy();
-            header("refresh: " . 0);
-            $this->loadView("admin/admin.phtml","Administrador | Login");
-        } else {
-        $this->loadView("admin/admin.phtml","Administrador | Login");
-        }
-    }
-
-	/*****************************************************************
-	*	Pertenece: AdminController
 	*	Nombre: animales
 	*	Función: Mostrar Vista
 	*	Salidas: Vista Animales
@@ -55,7 +37,7 @@ class AdminController extends GeneralController{
         $data['totalregistro'] = $objAdmin->TotalConsultaAnimales('');
         $data['animalesAdmin'] = $objAdmin->consultaAnimales('',$pagina,$qty);
         //atras envie nada para que me arroje todo
-        $this->loadView("admin/veranimales.phtml","Administrador | Ver Animales",$data);
+        $this->loadView("admin/adMascotas.phtml","Gestión de Mascotas",$data);
     }
 
 	/*****************************************************************
@@ -74,7 +56,7 @@ class AdminController extends GeneralController{
         $data['por_pagina'] = $qty;
         $data['totalregistro'] = $objAdmin->TotalconsultaAlbergues('');
         $data['alberguesAdmin'] = $objAdmin->consultaAlbergue('', $pagina, $qty);
-        $this->loadView("admin/veralbergues.phtml","Administrador | Ver Albergues",$data);
+        $this->loadView("admin/adAlbergues.phtml","Gestión de Albergues",$data);
     }
 	
 	/*****************************************************************
@@ -98,13 +80,13 @@ class AdminController extends GeneralController{
             $data['totalregistro'] = $objAdmin->TotalconsultaAdopciones('',$filtro);
             $data['adopciones'] = $objAdmin->consultaAdopciones('',$pagina, $qty, $filtro);
             $data['albergues'] = $objAdmin->consultaAlbergues();
-            $this->loadView("admin/verAdopciones.phtml","Ver adopciones",$data);
+            $this->loadView("admin/adAdopciones.phtml","Ver adopciones",$data);
         } elseif(isset($_POST['AlbergueEsp']) && $_POST['AlbergueEsp'] != "0") {
             $data['Busqueda'] = $_POST['AlbergueEsp'];
             $data['totalregistro'] = $objAdmin->TotalconsultaAdopciones($_POST['AlbergueEsp'],$filtro);
             $data['adopciones'] = $objAdmin->consultaAdopciones($_POST['AlbergueEsp'],$pagina, $qty, $filtro);
             $data['albergues'] = $objAdmin->consultaAlbergues();
-            $this->loadView("admin/verAdopciones.phtml","Administrador | Ver adopciones",$data);
+            $this->loadView("admin/adAdopciones.phtml","Gestión de Adopciones",$data);
         }
         
     }
@@ -126,7 +108,7 @@ class AdminController extends GeneralController{
             $data['albergues'] = $objAdmin->consultaAlbergues();
             $ammodificar = (isset($_POST['modificacion']))? $_POST['modificacion']: "";
             $data['animales'] = $objAdmin->consultarAnimal($ammodificar);
-            $this->loadView("admin/agAnimal.phtml","Administrador | Modifica el Animal", $data);
+            $this->loadView("admin/agAnimal.phtml","Editar Mascota", $data);
         }else {
             $data['tipoanimal'] = $objAdmin->consultaTipoAnimal();
             if(isset($_POST['tipoanimal'])){
@@ -135,7 +117,7 @@ class AdminController extends GeneralController{
             }
             $data['tamano'] = $objAdmin->consultaTamanoAnimal();
             $data['albergues'] = $objAdmin->consultaAlbergues();
-            $this->loadView("admin/agAnimal.phtml","Administrador | Agregar Animal",$data);
+            $this->loadView("admin/agAnimal.phtml","Registrar Mascota",$data);
         }
     }
     
@@ -152,10 +134,10 @@ class AdminController extends GeneralController{
         if(isset($_POST['accion']) && $_POST['accion'] == 'Modificar'){
             $data['usuario'] = $objAdmin->consultaUsuario($_POST['modificacion']);
             $data['dataRoles'] = $objAdmin->ConsultaRoles();
-            $this->loadView("admin/agusaurios.phtml","Administrador | Modifica el usuario", $data);
+            $this->loadView("admin/agUsuarios.phtml","Editar Usuario", $data);
         } else {
         $data['dataRoles'] = $objAdmin->ConsultaRoles();
-        $this->loadView("admin/agusaurios.phtml","Administrador | Agrega usuarios", $data);
+        $this->loadView("admin/agUsuarios.phtml","Registrar Usuario", $data);
         }
     }
 	
@@ -178,7 +160,7 @@ class AdminController extends GeneralController{
             $data['totalregistro'] = $objAdmin->TotalVeterinariosConsults();
             $data['Veterinarios'] = $objAdmin->consultarVeterinarios('',$pagina,$qty);
             $data['vtrModificar'] = $objAdmin->consultarVeterinarios($_POST['modificacion'],$pagina,$qty);
-            $this->loadView("admin/agVeterinario.phtml", "Administrador | Modifica Veterinario como Admin",$data);
+            $this->loadView("admin/agVeterinario.phtml", "Editar Veterinario",$data);
         } else {
             $pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
             $pagina = $pagina < 0? 1: $pagina;
@@ -187,7 +169,7 @@ class AdminController extends GeneralController{
             $data['por_pagina'] = $qty;
             $data['totalregistro'] = $objAdmin->TotalVeterinariosConsults();
             $data['Veterinarios'] = $objAdmin->consultarVeterinarios('',$pagina,$qty);
-            $this->loadView("admin/agVeterinario.phtml", "Administrador | Agrega Veterinarios como Admin",$data);
+            $this->loadView("admin/agVeterinario.phtml", "Gestión de Veterinarios",$data);
         }
     }
 	
@@ -205,10 +187,10 @@ class AdminController extends GeneralController{
         if(isset($_POST['accion']) && $_POST['accion'] == 'Modificar'){
             $data['userfund'] = $objFund->consultaUser();
             $data['albergue'] = $objFund->consultaAlberguePorID($_POST['modificacion']);
-            $this->loadView("admin/agalbergue.phtml","Administrador | Modificar Albergue",$data);
+            $this->loadView("admin/agalbergue.phtml","Editar Albergue",$data);
         } else {
             $data['userfund'] = $objFund->consultaUser();
-            $this->loadView("admin/agalbergue.phtml","Administrador | Agregar Albergue",$data);
+            $this->loadView("admin/agalbergue.phtml","Registrar Albergue",$data);
         }
     }
 	
@@ -230,7 +212,7 @@ class AdminController extends GeneralController{
         $data['por_pagina'] = $qty;
         $data['totalregistro'] = $objAdmin->TotalUsuarios($filtro);
         $data['dataAdmin'] = $objAdmin->listar($pagina, $qty, $filtro);
-        $this->loadView("admin/adIndex.phtml", "Administrador | Ver Usuarios",$data);
+        $this->loadView("admin/adUsuarios.phtml", "Gestión de Usuarios",$data);
     }
 
     /*****************************************************************
@@ -252,7 +234,7 @@ class AdminController extends GeneralController{
 			$data['totalregistro'] = $objAdmin->TotallistaTiposAnimal();
             $data['tAnimal'] = $objAdmin->listaTiposAnimal($_POST['modificacion'],$pagina, $qty);
             $data['dataTipos'] = $objAdmin->listaTiposAnimal('',$pagina, $qty);
-            return $this->loadView("admin/adTAnimal.phtml", "Administrador | Modifica el Tipo de Animal", $data);
+            return $this->loadView("admin/adTAnimal.phtml", "Editar Tipo de Animal", $data);
         }
 		$pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
         $pagina = $pagina < 0? 1: $pagina;
@@ -261,7 +243,7 @@ class AdminController extends GeneralController{
         $data['por_pagina'] = $qty;
         $data['totalregistro'] = $objAdmin->TotallistaTiposAnimal();
         $data['dataTipos'] = $objAdmin->listaTiposAnimal('',$pagina, $qty);
-        $this->loadView("admin/adTAnimal.phtml", "Administrador | Tipos de Animal", $data);
+        $this->loadView("admin/adTAnimal.phtml", "Gestión de Tipos de Animales", $data);
     }
 
 	/*****************************************************************
@@ -285,14 +267,14 @@ class AdminController extends GeneralController{
             $data['totalregistro'] = $objAdmin->TotallistaRazas();
             $data['dataRazas'] = $objAdmin->listaRazas('',$pagina, $qty);
             $data['tiposAnimales'] = $objFund->consultaTipoAnimal();
-            return $this->loadView("admin/adRazas.phtml", "Administrador | Modifica la Raza de Animal", $data);
+            return $this->loadView("admin/adRazas.phtml", "Editar Raza", $data);
         }
         $data['pagina'] = $pagina;
         $data['por_pagina'] = $qty;
         $data['totalregistro'] = $objAdmin->TotallistaRazas();
         $data['dataRazas'] = $objAdmin->listaRazas('',$pagina, $qty);
         $data['tiposAnimales'] = $objFund->consultaTipoAnimal();
-        $this->loadView("admin/adRazas.phtml", "Administrador | Razas de Animal", $data);
+        $this->loadView("admin/adRazas.phtml", "Gestión de Razas", $data);
     }
 	
 	/*****************************************************************
@@ -325,7 +307,7 @@ class AdminController extends GeneralController{
 
         /*------Bitacora-----*/
 		//Cargar literalmente todos los modelos porque hay selects pero hasta para regalar
-		$this->loadView("admin/adReporte.phtml","Administrador | Reportes del Sistema",$data);
+		$this->loadView("admin/adReporte.phtml","Gestión de Reportes",$data);
 	}
     #endregion
 
@@ -556,14 +538,13 @@ class AdminController extends GeneralController{
 		}
         
 		/*Validacion del año de nacimiento del peludo*/
-		if ($_POST['fecha'] < 2009 || $_POST['fecha'] > intval(date('Y'))){
+		if ($_POST['fecha'] < (intval(date('Y')) - 30) || $_POST['fecha'] > intval(date('Y'))){
 			$_SESSION['Error'] = "Año de Nacimiento Incorrecto";
 			return header("location: ".BASE_URL."admin/animales");
 			
 		}
         
         if (isset($_POST['accion']) && $_POST['accion'] == 'Agregar'){
-            
             $igualdad =$objFund->ValidarAnimal($_POST['nombre'], $_POST['albergue']);
 		
             if($igualdad){

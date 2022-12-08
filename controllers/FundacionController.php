@@ -74,7 +74,7 @@ class FundacionController extends GeneralController{
         $objFund = $this->loadModel("FundacionModel");
         $pagina = isset($_GET['pagina'])? intval($_GET['pagina']): 1;
         $pagina = $pagina < 0? 1: $pagina;
-        $qty = 25;
+        $qty = 10;
         $data['pagina'] = $pagina;
         $data['por_pagina'] = $qty;
         $data['totalregistro'] = $objFund->TotalConsultaAnimales($_SESSION['iduser']);
@@ -130,7 +130,7 @@ class FundacionController extends GeneralController{
         $data['por_pagina'] = $qty;
         $data['totalregistro'] = $objFund->TotalconsultaAdopciones($_SESSION['iduser']);
         $data['adopciones'] = $objFund->consultaAdopciones($_SESSION['iduser'],$pagina,$qty);
-        $this->loadView("fundacion/adopciones.phtml","Ver Adopciones",$data);
+        $this->loadView("fundacion/funAdopciones.phtml","Ver Adopciones",$data);
     }
     #endregion
 	
@@ -241,7 +241,7 @@ class FundacionController extends GeneralController{
 		//y tampoco pudo haber nacido un año en el futuro
 		//Hacer que la fecha sea entero
 		/*Validacion del año de nacimiento del peludo*/
-		if ($_POST['fecha'] < 0 || $_POST['fecha'] < 2009 || $_POST['fecha'] > intval(date('Y'))){
+		if ($_POST['fecha'] < 0 || $_POST['fecha'] < 1992|| $_POST['fecha'] > intval(date('Y'))){
 			$Error = "Año de Nacimiento Incorrecto";
 			$_SESSION['Error'] = "Año de Nacimiento Incorrecto";
 			return header("location: ".BASE_URL."fundacion/animales?error=".$Error);

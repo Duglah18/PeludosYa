@@ -1,8 +1,0 @@
-Lista de Falta del Sistema (Back-End):
-
--Reportes(Estoy en ello simplemente falta que todo funcione correctamente creo que ya estan las peticiones)
-
--Algunas Validaciones (Las realizare despues de realizar Reportes que son mucho mas importantes).
-
--Filtros (La neta no se si de verdad hacer esto, podria hacerle almenos un filtro a fundacion q creo q no tiene)
-Aunque para los filtros tendria q meterle mas mano a las pantallas 

@@ -229,9 +229,8 @@ class SessionController extends GeneralController{
         if ($validar[0]['activo'] < 1){//verifica si no esta baneado
             //aca deberia regresarte al login y decirte:
             //tu cuenta se encuentra bloqueada
-            $Error = "Usuario Bloqueado.";
 			$_SESSION['Error'] = "Su usuario se encuentra bloqueado";
-            return header("location: ".BASE_URL."?error=". $Error);
+            return header("location: ".BASE_URL);
         } 
         switch($validar[0]['rol_id']){
             //se verifica el rol si es admin el q introduces ps te manda a loguearte como admin
@@ -317,15 +316,29 @@ class SessionController extends GeneralController{
 	*****************************************************************/
     public function adopcion_peticion(){
 		$this->ComprobarLogueo();
-        if(!isset($_POST['usuario']) || !isset($_POST['idanimal']) || $_POST['usuario'] == "" || $_POST['idanimal'] == ""){
+        $objSess = $this->loadModel("SessionModel");
+
+		if(!isset($_POST['usuario']) || !isset($_POST['idanimal']) || $_POST['usuario'] == "" || $_POST['idanimal'] == ""){
         //si usuario no existe o esta vacio ps xD
 			$_SESSION['Error'] = "Ocurrio un Error.";
-            return header("location: ".BASE_URL."session/catalogoAnimales?error");
+            return header("location: ".BASE_URL."session/catalogoAnimales");
         //aca se cargaria otra vista enviando mensaje de error
         } else {
+
+			$validarSitieneAdopcion = $objSess->verificaExistencia($_POST['idanimal'], $_POST['usuario']);
+
+			if ($validarSitieneAdopcion){
+				
+				$_SESSION['Error'] = "Ya posee una peticion de adopcion vigente por 
+										este animal o usted fue rechazado con anterioridad en adoptar este animal
+										por favor espere que nos comuniquemos con usted.";
+				return header("location: " .BASE_URL."session/catalogoAnimales");
+				
+			}
+
             $usuario = $_POST['usuario'];
             $idAnimal = $_POST['idanimal'];
-            $objSess = $this->loadModel("SessionModel");
+            
             //en teoria esto ya funciona
             $resultado = $objSess->registraPeticionAdopcion($idAnimal, $usuario);
 			if($resultado == "Este Animal Ya fue adoptado"){//validacion de si ese animal ya esta adoptado
@@ -335,7 +348,7 @@ class SessionController extends GeneralController{
             if ($resultado){  
 			//aqui creo q si vuelves a recargar pag si se va a registrar de nuevo la peticion
                 $data['peticion'] = $objSess->retornaResponsable($usuario);
-                return $this->loadView("peticion.phtml","Peticion Realizada",$data);
+				return $this->loadView("peticion.phtml","Peticion Realizada",$data);
             } else {
 				$_SESSION['Error'] = "Ocurrio un error Intentelo de nuevo mas tarde";
 				return header("location: ".BASE_URL);
@@ -353,6 +366,7 @@ class SessionController extends GeneralController{
 	public function modificarmiUsuario(){
 		$this->ComprobarLogueo();
 		$objAdmin = $this->loadModel("AdminModel");
+
 		if(!isset($_POST['nombre']) || !isset($_POST['direccion']) || !isset($_POST['contrasenia']) || !isset($_POST['telefono'])){
 			$_SESSION['Error'] = "Ocurrio un error.";
 			return header("location: ".BASE_URL);
@@ -360,13 +374,14 @@ class SessionController extends GeneralController{
 		if($_POST['nombre'] == "" ||$_POST['direccion'] == "" || $_POST['contrasenia'] == "" || $_POST['telefono'] == ""){
 			$_SESSION['Error'] = "No se enviaron datos para modificar";
 			return header("location: ".BASE_URL);
+			
 		}
 
-		$igualdad =$objAdmin->ValidarModificacionUsuario($_POST['nombre'], $_POST['telefono']);
+		$igualdad =$objAdmin->ValidarModificacionPropiaUsuario($_POST['nombre'], $_POST['telefono'], $_POST['cedula']);
 
         if($igualdad){
             $_SESSION['Error'] = "Ya existe un Usuario con ese nombre o Telefono.";
-            return header("location: " .BASE_URL."session/register");
+            return header("location: " .BASE_URL);
         }
 
         $objSess = $this->loadModel("SessionModel");

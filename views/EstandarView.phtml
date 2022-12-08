@@ -1,63 +1,57 @@
 <?php
-if (isset($_SESSION)){
+if (isset($_SESSION)) {
   $role = (isset($_SESSION['rol']))?$_SESSION['rol']:"";
   $id_user = (isset($_SESSION['iduser']))?$_SESSION['iduser'] :"";
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-      <?= $titulo; ?>
-    </title>
+    <title> <?= $titulo; ?> </title>
 <head>
   <!--Importar Iconos-->
+  <link rel="icon" type="image/x-icon" href="<?= URL_ASSETS; ?>/favicon.png">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <!--Importar Materialize-->
   <link type="text/css" rel="stylesheet" href="<?= URL_ASSETS; ?>/materialize/css/style.css"  media="screen,projection"/>  
   <link type="text/css" rel="stylesheet" href="<?= URL_ASSETS; ?>/materialize/css/custom-styles.css"  media="screen,projection"/>  
   <link type="text/css" rel="stylesheet" href="<?= URL_ASSETS; ?>/materialize/css/materialize.css"  media="screen,projection"/>
 </head>
-<body style="background: url(<?= URL_ASSETS; ?>/wallpaper.jpg) no-repeat fixed">
-<br>
-<nav class="nav-extended indigo z-depth-4 nav-extended container" style="border-radius: 25px; padding-left: 20px; padding-right: 10px;">
-
+<body style="background: url(<?= URL_ASSETS; ?>/wallpaper.jpg) no-repeat fixed"> <br>
+<!-- Barra de Navegación -->
+  <nav class="nav-extended indigo z-depth-4 nav-extended container" style="border-radius: 25px; padding-left: 20px; padding-right: 10px;">
     <div class="nav-wrapper">
-      <!--El nav se solapa con el titulo pq creo que estan en el mismo div-->
-      <!--Creo q si estas en admin no deberia llevarte a la pag pero bueh-->
       <?php if($role == "1"){ ?>
         <a <?php echo "href='". BASE_URL ."admin/mostrarData'"?> class="center brand-logo s1"><img style="padding-top: 15px; padding-bottom: 10px;  height: 60px;" class="responsive-img small" src="<?= URL_ASSETS; ?>/logo.png"></a>
-        
-        <?php } else { ?>
-      <a  class="center brand-logo s1" href="<?= BASE_URL; ?>"><img style="padding-top: 15px; padding-bottom: 10px;  height: 60px;" class="responsive-img small" src="<?= URL_ASSETS; ?>/logo.png"></a>
+      <?php } else { ?>
+        <a class="center brand-logo s1" href="<?= BASE_URL; ?>"><img style="padding-top: 15px; padding-bottom: 10px;  height: 60px;" class="responsive-img small" src="<?= URL_ASSETS; ?>/logo.png"></a>
       <?php } ?>
-      <ul id="nav-mobile" class="right hide-on-med-and-down">
-      <?php if(($role != "1") && ($role != "3")) { ?>
-      <li><a href='<?= BASE_URL; ?>session/catalogoAnimales'><i class="material-icons">pets</i></a></li>
-      <li><a href='<?= BASE_URL; ?>session/catalogoFundaciones'><i class="material-icons">location_city</i></a></li>
-      <li><a href='<?= BASE_URL; ?>session/catalogoVeterinarios'><i class="material-icons">local_hospital</i></a></li>
-      <?php } ?>
-      </ul>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+          <?php if(($role != "1") && ($role != "3")) { ?>
+            <li><a class="tooltipped" data-position="down" data-tooltip="Mascotas" href='<?= BASE_URL; ?>session/catalogoAnimales'><i class="material-icons">pets</i></a></li>
+            <li><a class="tooltipped" data-position="down" data-tooltip="Fundaciones" href='<?= BASE_URL; ?>session/catalogoFundaciones'><i class="material-icons">location_city</i></a></li>
+            <li><a class="tooltipped" data-position="down" data-tooltip="Veterinarios" href='<?= BASE_URL; ?>session/catalogoVeterinarios'><i class="material-icons">local_hospital</i></a></li>
+          <?php } ?>
+        </ul>
     </div>
     <?php if($role == "1"){ ?>
-    <div class="nav-content">
-    <h5 class="center-align" style="padding-bottom: 10px;">Modo Administrador</h5>
-    </div>
+      <div class="nav-content">
+        <h5 class="center-align" style="padding-bottom: 10px;">Modo Administrador</h5>
+      </div>
     <?php } else if($role == "3"){ ?>
-    <div class="nav-content">
-    <h5 class="center-align" style="padding-bottom: 10px;">Modo Fundacion</h5>
-    </div>
+      <div class="nav-content">
+        <h5 class="center-align" style="padding-bottom: 10px;">Modo Fundacion</h5>
+      </div>
     <?php } ?>
   </nav>
-	<?php if(isset($_SESSION['Error']) && $_SESSION['Error'] != ""){
-		//http://iwokloco-appweb.blogspot.com/2014/03/php-borrar-una-variable-de-la-sesion.html
-		//si esto funciona ojala
+<!-- Función de Alerta 1 -->
+  <?php if(isset($_SESSION['Error']) && $_SESSION['Error'] != ""){
 		$error = $_SESSION['Error'];
 		unset($_SESSION['Error']);
-		//$_SESSION['Error'] = "";
-		?>
+	?>
   <div class="row border-radius: 25px;" id="alert_box">
   <div class="col s12 m12 border-radius: 25px;">
     <div class="card red darken-1">
@@ -73,16 +67,13 @@ if (isset($_SESSION)){
     </div>
    </div>
   </div>
-</div>
-		
-	<?php } ?>
-
-  <?php if(isset($_SESSION['Correct']) && $_SESSION['Correct'] != ""){
-		//http://iwokloco-appweb.blogspot.com/2014/03/php-borrar-una-variable-de-la-sesion.html
-		//si esto funciona ojala
-		$correct = $_SESSION['Correct'];
-		unset($_SESSION['Correct']);
-		?>
+  </div>
+  <?php } ?>
+<!-- Función de Alerta 2 -->
+  <?php if(isset($_SESSION['Correct']) && $_SESSION['Correct'] != "") {
+      $correct = $_SESSION['Correct'];
+      unset($_SESSION['Correct']);
+  ?>
   <div class="row border-radius: 25px;" id="alert_box">
   <div class="col s12 m12 border-radius: 25px;">
     <div class="card green accent-4">
@@ -99,71 +90,56 @@ if (isset($_SESSION)){
    </div>
   </div>
 </div>
-		
-  <?php } ?>
-  
-  <div class="fixed-baton-btn"  style=" position: absolute; right: 100px; bottom: auto; padding-top: 28px; z-index: 997;">
-  <a class="btn-floating btn-large indigo">
-    <i class="large material-icons">account_circle</i>
-  </a>
-  <ul> 
-  <?php
-   if(isset($_SESSION['usuario'])){ ?>
-    
-    <?php if($role == "1") {?>
-
-    <li style="padding-bottom: 10px;">
-      <a class="btn-floating btn-large indigo darken-3" <?php echo "href='". BASE_URL ."admin/mostrarData'"?>><i class="material-icons">edit</i></a>
-    </li>
-
-    <?php } else if($role == "3") { ?>   
-
-    <li style="padding-bottom: 10px;">
-      <a class="btn-floating btn-large indigo darken-3" <?php echo "href='". BASE_URL ."fundacion/animales'"?>><i class="material-icons">edit</i></a>
-    </li>
-
-    <li style="padding-bottom: 10px;">
-      <a class="btn-floating btn-large indigo darken-3" <?php echo "href='". BASE_URL ."session/catalogoAnimales'"?>><i class="material-icons">pets</i></a>
-    </li>
-
-    <?php } ?>
-    
-    <li style="padding-bottom: 10px;">
-      <a class="btn-floating btn-large indigo darken-2"<?php echo "href='".BASE_URL."session/verUsuario?id_user=".$id_user."'"?>><i class="material-icons">contacts</i></a>
-    </li> 
-
-    <li style="padding-bottom: 10px;">
-      <a class="btn-floating btn-large indigo darken-4"<?php echo "href='". BASE_URL ."home/destroy_session'"?>><i class="material-icons">exit_to_app</i></a>
-    </li>
-
-
-  <?php } else {?>
-  <li class="right-align" style="padding-bottom: 10px;">
-    <a class="btn-floating btn-large indigo darken-4" href="<?= BASE_URL;?>session/register"><i class="material-icons">person_add</i></a>
-  </li>
-  <li class="right-align" style=" padding-top: 15px; padding-bottom: 10px;">
-    <a class="btn-floating btn-large indigo darken-3" href="<?= BASE_URL;?>session/login"><i class="material-icons">send</i></a>
-  </li>
-  <?php } ?>
-  </ul>
-</div>
-
-  <!-- Contenido Principal -->
-    <main>
-        <div class="white-text">
-            <?php require_once 'views/' . $vista; ?>
-        </div>
-    </main>
-   <!-- Footer --> 
-    <footer class="page-footer indigo">
-            <div class="container center-align">
-            © 2022 IsanJeru & Duglah
-            </div>
-            <br>
-        </footer>
-
-
-  <!--Funciones JavaScript-->
+<?php } ?>
+<!-- Botón de Usuario -->
+  <div class="fixed-baton-btn user-btn"  style="position: absolute; right: 100px; bottom: auto; padding-top: 28px; z-index: 997;">
+    <a class="btn-floating btn-large indigo">
+      <i class="large material-icons">account_circle</i>
+    </a>
+    <ul> 
+      <?php if(isset($_SESSION['usuario'])) { ?>
+        <?php if($role == "1") {?>
+        <li style="padding-bottom: 10px;">
+          <a data-position="left" data-tooltip="Menú de Gestión" class="btn-floating btn-large indigo darken-3 tooltipped" <?php echo "href='". BASE_URL ."admin/mostrarData'"?>><i class="material-icons">edit</i></a>
+        </li>
+        <?php } else if($role == "3") { ?>   
+        <li style="padding-bottom: 10px;">
+          <a data-position="left" data-tooltip="Menú de Gestión" class="btn-floating btn-large indigo darken-3 tooltipped" <?php echo "href='". BASE_URL ."fundacion/animales'"?>><i class="material-icons">edit</i></a>
+        </li>
+        <li style="padding-bottom: 10px;">
+          <a data-position="left" data-tooltip="Catalógo de Mascotas" class="btn-floating btn-large indigo darken-3 tooltipped" <?php echo "href='". BASE_URL ."session/catalogoAnimales'"?>><i class="material-icons">pets</i></a>
+        </li>
+        <?php } ?>
+        <li style="padding-bottom: 10px;">
+          <a data-position="left" data-tooltip="Ver Perfil" class="btn-floating btn-large indigo darken-2 tooltipped"<?php echo "href='".BASE_URL."session/verUsuario?id_user=".$id_user."'"?>><i class="material-icons">contacts</i></a>
+        </li> 
+        <li style="padding-bottom: 10px;">
+          <a data-position="left" data-tooltip="Cerrar Sesión" class="btn-floating btn-large indigo darken-4 tooltipped"<?php echo "href='". BASE_URL ."home/destroy_session'"?>><i class="material-icons">exit_to_app</i></a>
+        </li>
+      <?php } else { ?>
+      <li class="right-align" style="padding-bottom: 10px;">
+        <a data-position="left" data-tooltip="Registro de Usuarios" class="btn-floating btn-large indigo darken-4 tooltipped" href="<?= BASE_URL;?>session/register"><i class="material-icons">person_add</i></a>
+      </li>
+      <li class="right-align" style=" padding-top: 15px; padding-bottom: 10px;">
+        <a data-position="left" data-tooltip="Inicio de Sesión" class="btn-floating btn-large indigo darken-3 tooltipped" href="<?= BASE_URL;?>session/login"><i class="material-icons">send</i></a>
+      </li>
+      <?php } ?>
+    </ul>
+  </div>
+<!-- Contenido Principal -->
+  <main>
+    <div class="white-text">
+      <?php require_once 'views/'.$vista; ?>
+    </div>
+  </main>
+<!-- Footer --> 
+  <footer class="page-footer indigo">
+    <div class="container center-align">
+      © 2022 IsanJeru & Duglah
+    </div>
+  <br>
+  </footer>
+<!--Funciones JavaScript-->
   <script type="text/javascript" src="<?= URL_ASSETS; ?>/materialize/js/materialize.min.js"></script>
   <script> 
   document.addEventListener('DOMContentLoaded', function() {
