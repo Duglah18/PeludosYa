@@ -8,11 +8,12 @@
 <div class="login-card col s10 offset-s1">
     <div class="row" style="padding-left: 10px; padding-right: 10px;">
     <?php foreach($fundaciones as $fundacion){ ?>
-    <div class="card small indigo col s3">
+        <div class="col s3">
+    <div class="card indigo z-depth-2"  style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px; border-radius: 20px;">
         <div class="card-title  center-align" style="padding-top: 10px; padding-bottom: 10px;">
         <span>Fundación: <br> <?= $fundacion['nombre']; ?></span>
         </div>
-        <div class="card-action">
+        <div class="card-action z-depth-4" style="border-radius: 20px;">
 
             <div class="align">
             <i class="material-icons">person</i>
@@ -36,12 +37,12 @@
         </div>
         </div>
     </div>
+    </div>
     <?php } ?>
     </div>
-</div>
-</div>
-<div class="div" style="padding-left: 20%; padding-right: 20%;">
-<div class="col-md-12 center text-center card"><!--Paginador-->
+
+
+<div class="center-align">
     <ul class="pagination">
         <?php if($pagina != 1){ ?>
             <!-- PA q sirve esto? <?= $fun ?> -->
@@ -75,6 +76,8 @@
     <?php
         } ?>
     </ul>
+</div>
+</div>
 </div>
 <?php } else { ?>
 

@@ -283,7 +283,7 @@ class FundacionController extends GeneralController{
             $objFund->registraAnimal('animal', $nombre, $fechanac, $nombreArchivo, $descrip, 
                                         $fecha_ing, $raza_id,$tamanio_id, $albergue_id, 
                                         $visible, $_SESSION['iduser']);
-			$_SESSION['Correct'] = "Se ha insertado el Peludo con exito";
+			$_SESSION['Correct'] = "Se ha insertado la mascota con exito";
             return header("location: ".BASE_URL."fundacion/animales");
         } elseif ($_POST['accion'] == 'Modificar') {
 
@@ -325,7 +325,7 @@ class FundacionController extends GeneralController{
             $objAdmin->modificaAnimal('animal', $id_animal,$nombre, $fechanac, 
                                         $nombreArchivo, $descrip, $raza_id,$tamanio_id, $albergue_id,
                                          $visible, $_SESSION['iduser']);
-			$_SESSION['Correct'] = "Se ha Modificado al Peludo con exito";
+			$_SESSION['Correct'] = "Se ha Modificado a la mascota con exito";
             return header("location: ".BASE_URL."fundacion/animales");
         }
     }

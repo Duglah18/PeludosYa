@@ -4,25 +4,59 @@ if (!isset($usuario)){
   header("location: ".BASE_URL);
 }
  ?>
- 
- <div class="card text-center">
-      <div class="card-body">
-        <h4 class="card-title">Title</h4>
-        <p class="card-text">Modifica tu usuario</p>
-        <form action="<?= BASE_URL;?>session/modificarmiUsuario" method="post">
-        <label for="">Cedula</label>
-        <input type="text" name="cedula" value="<?=$usuario[0]?>" required readonly>
-        <label for="">Nombre</label>
-        <input type="text" name="nombre" value="<?=$usuario[1]?>"required><br>
-        <label for="">Dirección</label>
-        <input type="text" name="direccion" value="<?=$usuario[2]?>" required><br><!--textarea-->
-        <label for="">Contraseña</label>
-        <input type="text" name="contrasenia" value="<?= $usuario[3]?>" required>
-        <br>
-        <label for="">Telefono</label>
-        <input type="tel" name="telefono" value="<?= $usuario[4]?>" required>
-        <br>
-        <button name="Modificar">Aceptar</button>
-        </form>
-      </div>
-    </div>
+<div class="row" style="padding-top: 5%; padding-bottom: 5%;">
+<div class="col s10 login-card white black-text offset-s1">
+
+
+<div class="card-panel col s12 indigo white-text center" style="border-radius: 10px; padding-bottom: 20px;"> <!--BANNER INICIO-->
+	<h3>Modifica tus Datos Personales</h3>
+</div>
+
+<div class="col s12">
+  <form action="<?= BASE_URL;?>session/modificarmiUsuario" method="post">
+
+  <div class="input-field col s6">
+    <i class="indigo-text material-icons prefix">account_circle</i>
+    <label for="nombre">Nombre</label>
+    <input type="text" name="nombre" value="<?=$usuario[1]?>" maxlength="50" pattern= "[A-Z,a-z ^()/><\][\\\x22,;|]{1,50}" title="Sin números o signos." class="validate" required><br>
+    <span class="helper-text">Sin números o signos.</span>	
+  </div>  
+
+  <div class="input-field col s6">
+    <i class="indigo-text material-icons prefix">https</i>
+    <label for="contrasenia">Contraseña</label>
+    <input class="validate" type="password" name="contrasenia" value="<?= $usuario[3]?>" maxlength="20" pattern="[a-z,0-9  ^()/><\][\\\x22,;|]{8,20}" title="Entre 8 y 20 caracteres - Sin signos." required>
+    <span class="helper-text">Entre 8 y 20 caracteres - Sin signos.</span>
+  </div>
+
+  <div class="input-field col s6">
+    <i class="indigo-text material-icons prefix">contacts</i>
+    <label for="">Nro° de Cedula/RIF</label>
+    <input class="validate" type="text" name="cedula" value="<?=$usuario[0]?>" maxlength="8" pattern= "[0-9 ^()/><\][\\\x22,;|]{7,8}" type="text" title="Solo números e identificaciones validas." min="1000000" max="40000000" required>
+    <span class="helper-text">Solo números e identificaciones validas.</span>
+  </div>
+
+  <div class="input-field col s6">
+    <i class="indigo-text material-icons prefix">phone_android</i>
+    <label for="telefono">Telefono</label>
+    <input class="validate" type="tel" name="telefono" value="<?= $usuario[4]?>" maxlength="11" pattern= "[0-9 ^()/><\][\\\x22,;|]{11}" title="11 caracteres requeridos - Sin letras o signos" required>
+    <span class="helper-text">11 caracteres requeridos - Sin letras o signos.</span>
+  </div>
+
+  <div class="input-field col s12">
+    <i class="indigo-text material-icons prefix">home</i>
+    <label for="direccion">Dirección</label>
+    <input class="validate" type="text" name="direccion" value="<?=$usuario[2]?>" maxlength="255" pattern="{5,255}" title="Debe contener un minimo de 5 caracteres y un maximo 255 caracteres." required>
+    <span class="helper-text">5 caracteres requeridos como minimo.</span>
+  </div>
+
+  <div class="input-field col s12">
+    <a <?php echo "href='".BASE_URL."session/verUsuario?id_user=".$id_user."'"?>><input class="btn indigo col s2" type="button" value="Volver"></a>
+    <button class="col s2 offset-s8 btn indigo" name="Modificar">Aceptar</button>
+  </div>
+         
+  </form>
+</div>
+
+</div>
+</div>

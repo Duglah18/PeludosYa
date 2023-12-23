@@ -8,10 +8,6 @@ $seleccionado = isset($Busqueda)? $Busqueda : "0";
 
 <div class="card-panel col s12 indigo white-text center" style="border-radius: 10px; padding-bottom: 20px;">
     <h3>Gestión de Adopciones</h3>
-    <div class="center-align col s12" style="padding-bottom: 20px;">
-        <h5 class="light">Registro de Adopciones</h5>
-        <a href="<?= BASE_URL;?>admin/agregaAlbergueAdmin"><input class="btn white indigo-text" type="button" value="Ir al Modulo"></a>   
-    </div> 
     <div class="col s12">
         <ul class="tabs indigo">
             <li class="tab col s6"><a class="white-text" href="#Albergue">Albergue</a></li>
@@ -106,9 +102,12 @@ $seleccionado = isset($Busqueda)? $Busqueda : "0";
 </ul>
 
 <?php } else { ?>
-    <h1>Aun no Existen adopciones</h1>
-<?php } ?>
+    
+<div class="card-panel col s12 indigo white-text center" style="border-radius: 10px; padding-bottom: 20px;">
+    <h3>Aun no Existen adopciones</h3>
 </div>
+<?php } ?>
+
 
 </div>
 </div>

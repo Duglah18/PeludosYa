@@ -1,3 +1,6 @@
+<div class="row" style="padding-top: 5%; padding-bottom: 5%;">
+<div class="col s10 login-card white black-text offset-s1">
+
 <?php
 $idAlbergue = isset($albergue[0]['id_albergue'])? $albergue[0]['id_albergue']:"";
 $nombre =  isset($albergue[0]['nombre'])? $albergue[0]['nombre']:"";
@@ -7,38 +10,48 @@ $activo =  isset($albergue[0]['activo'])? $albergue[0]['activo']:"";
 
 ?>
 
-<div class="card text-center">
-      <div class="card-body">
-        <h4 class="card-title">Title</h4>
-        <p class="card-text">Pagina para registrar/Modificar Albergues</p>
-        <form action="<?=BASE_URL;?>fundacion/registraFundacion" method="post">
-        <input type="hidden" name="identificador" value="<?= $idAlbergue?>">
-        <label for="">Nombre Albergue</label>
-        <input type="text" name="nombre" value="<?=$nombre?>" required >
-        <label for="">Direccion</label>
-        <input type="text" name="direccion" value="<?= $direccion?>"required><br>
-        <label for="">Ced_usuario</label>
-        <select name="cedula_user" id="">
-          <option value="0">Seleccionar</option>
-          <!--=============================================
-            Este es el usuario de fundacion al que se le 
-            añadira el albergue nuevo
-          ==============================================-->
-        <?php 
-          foreach ($userfund as $key) {?>
-          <option <?php if($usuario == $key['cedula']){ echo"selected"; } ?> value="<?= $key['cedula']; ?>"><?= $key['nombre']; ?></option>
-          <?php
-          }
-        ?>
-        </select>
-        <br>
-        <?php
-          if(isset($_POST['accion'])=="Modificar"){?>
-            <input type="hidden" value="<?= $activo;?>" name="activo">
-            <?php
-          }
-        ?>
-        <button name="accion" value="<?php if(isset($_POST['accion'])=="Modificar"){ echo "Modificar"; } else {echo"Agregar";} ?>">Aceptar</button>
-        </form>
-      </div>
+<div class="card-panel col s12 indigo white-text center" style="border-radius: 10px; padding-bottom: 20px;"> <!--BANNER INICIO-->
+	<h3>Registro de Albergues</h3>
+</div>
+
+<div class="col s12">
+  <form action="<?=BASE_URL;?>fundacion/registraFundacion" method="post">
+
+    <input type="hidden" name="identificador" value="<?= $idAlbergue?>">
+
+    <div class="input-field col s4">
+      <label for="">Nombre de Albergue</label>
+      <input maxlength="255" pattern="[A-Z,a-z ^()/><\][\\\x22,;|]{1,255}" type="text" title="Sin números o signos." class="validate" name="nombre" value="<?=$nombre?>" required>
+      <span class="helper-text">Sin números o signos.</span>	
     </div>
+
+    <div class="input-field col s4">
+      <label for="">Dirección</label>
+      <input class="validate" type="text" name="direccion" maxlength="255" pattern="{5,255}" title="Debe contener un minimo de 5 caracteres y un maximo 255 caracteres." value="<?= $direccion?>" required>
+      <span class="helper-text">5 caracteres requeridos como minimo.</span>
+    </div>
+
+    <div class="input-field col s4">
+      <select name="cedula_user" id="">
+      <option value="0">Seleccionar</option>
+      <?php foreach ($userfund as $key) {?>
+        <option <?php if($usuario == $key['cedula']){ echo"selected"; } ?> value="<?= $key['cedula']; ?>"><?= $key['nombre']; ?></option>
+      <?php } ?>
+      </select>
+      <label for="">Fundación Responsable</label>
+      <?php if(isset($_POST['accion'])=="Modificar") { ?>
+        <input type="hidden" value="<?= $activo;?>" name="activo">
+      <?php } ?>
+    </div>
+
+    <div class="input-field col s12">
+      <a href="<?= BASE_URL;?>admin/albergues"><input class="btn indigo col s2" type="button" value="Volver"></a>
+      <button class="col s2 offset-s8 btn indigo" name="accion" value="<?php if(isset($_POST['accion'])=="Modificar"){ echo "Modificar"; } else {echo"Agregar";} ?>">Aceptar</button>
+    </div>
+
+  </form>
+</div>
+
+</div>
+</div>
+

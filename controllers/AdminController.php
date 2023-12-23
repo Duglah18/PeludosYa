@@ -15,7 +15,7 @@ class AdminController extends GeneralController{
 	*****************************************************************/
     public function Comprobador(){
         if(!isset($_SESSION['usuario']) || $_SESSION['rol'] != "1"){
-            $_SESSION['Error'] = "Usted no posee el nivel suficiente para entrar aquí";
+            $_SESSION['Error'] = "No tiene los permisos para acceder a este módulo.";
 			return header("location: ".BASE_URL);
         }
     }
@@ -350,17 +350,17 @@ class AdminController extends GeneralController{
         $objAdmin = $this->loadModel("AdminModel");
 		if(!isset($_POST['rol']) || $_POST['rol'] == "0"){
 			//se podrian almacenar en Session y en estandar view se monta eso y que sea una paginita
-			$_SESSION['Error'] = "Error no selecciono un Rol adecuado";
+			$_SESSION['Error'] = "Ese rol no esta permitido.";
 			header("location: ".BASE_URL. "admin/agregaUsuarios");
 		}
 		
 		if(!isset($_POST['cedula']) || !isset($_POST['nombre']) || !isset($_POST['direccion']) || !isset($_POST['contrasenia']) ||!isset($_POST['telefono'])){
-			$_SESSION['Error'] = "Error no se han enviado datos a ingresar";
+			$_SESSION['Error'] = "No se han enviado los datos.";
 			header("location: ".BASE_URL. "admin/agregaUsuarios");
 		}
 		
 		if($_POST['cedula'] == "" || $_POST['nombre'] == "" || $_POST['rol'] == "" || $_POST['direccion'] == "" || $_POST['telefono'] == "" || $_POST['contrasenia'] == ""){
-			$_SESSION['Error'] = "Error no se han enviado datos a ingresar";
+			$_SESSION['Error'] = "No se han enviado los datos.";
 			header("location: ".BASE_URL. "admin/agregaUsuarios");
 		}
 
@@ -388,14 +388,14 @@ class AdminController extends GeneralController{
                 return header("location: ".BASE_URL. "admin/mostrarData?error=".$error);
             }
             //mientras carga mostrarData agregar una pantalla de carga
-			$_SESSION['Correct'] = "Se realizo agrego al usuario con exito";
+			$_SESSION['Correct'] = "Se registro al usuario con exito.";
             return header("location: ".BASE_URL. "admin/mostrarData");//solucion a recargar la pagina !!!!
         } elseif (isset($_POST['Modificar'])){//usa redireccionamiento header
 
             $igualdad =$objAdmin->ValidarModificacionUsuario($_POST['nombre'],$_POST['telefono'], $_POST['cedula']);
 		
             if($igualdad){
-                $_SESSION['Error'] = "Ya existe un usuario que ya posee ese nombre exacto o telefono.";
+                $_SESSION['Error'] = "Ya existe un usuario que posee ese nombre exacto o telefono.";
                 return header("location: " .BASE_URL."admin/agregaUsuarios");
             }
 
@@ -409,7 +409,7 @@ class AdminController extends GeneralController{
             $detalles = $_POST['detalle'];
             $objAdmin->modificaUsuario($cedula,$nombre,$rol,$direccion,$contrasenia,
                                         $activo,$tlf, $detalles,$_SESSION['iduser']);
-			$_SESSION['Correct'] = "Se realizo la modificacion del usuario con exito";
+			$_SESSION['Correct'] = "Se realizo la modificacion del usuario con exito.";
             return header("location: ".BASE_URL. "admin/mostrarData");
         }
     }
@@ -446,15 +446,15 @@ class AdminController extends GeneralController{
             $nombre = $_POST['nombreTipo'];
             $objAdmin->modificaTipoAnimal($identificador,$nombre, $_SESSION['iduser']);
             $_POST['accion'] = "";//Esto creo que se puede quitar
-			$_SESSION['Correct'] = "Se realizo la modificacion del tipo de peludo con exito";
+			$_SESSION['Correct'] = "Se realizo la modificacion del Tipo de Animal con exito.";
             return header("location: ".BASE_URL."admin/tipoAnimal");
         } elseif(isset($_POST['accion']) && $_POST['accion'] == 'Agregar') {
             $nombre = $_POST['nombreTipo'];
             $objAdmin->registraTipoAnimal('tipo_animal',$nombre, $_SESSION['iduser']);
-			$_SESSION['Correct'] = "Se realizo agrego el tipo de peludo con exito";
+			$_SESSION['Correct'] = "Se agrego el Tipo de Animal con exito.";
             return header("location: ".BASE_URL."admin/tipoAnimal");
         }
-		$_SESSION['Error'] = "Ocurrio un Error al intentar agregar la Tipo de Animal";
+		$_SESSION['Error'] = "Ocurrio un Error al intentar agregar el Tipo de Animal";
 		return header("location: ".BASE_URL."admin/tipoAnimal");
     }
 	
@@ -501,7 +501,7 @@ class AdminController extends GeneralController{
             $nombre = $_POST['nombreRaza'];
             $TipoAnimal = $_POST['tipoanimal'];
             $objAdmin->registraRazaAnimal('raza', $nombre, $TipoAnimal, $_SESSION['iduser']);
-			$_SESSION['Correct'] = "Se realizo agrego la Raza con exito";
+			$_SESSION['Correct'] = "Se realizo agrego la Raza con exito.";
 			return header("location: ".BASE_URL."admin/razasAnimal");
         }
 		//esto es un por si acaso.
@@ -522,7 +522,7 @@ class AdminController extends GeneralController{
 		//hacer una consulta para ver si la raza existe o no
         $objFund = $this->loadModel("AdminModel");
 		if($_POST['raza'] == "0"){
-			$Error = "No selecciono una raza valida";//quitar
+			$Error = "No selecciono una raza valida.";//quitar
 			$_SESSION['Error'] = "No selecciono una raza valida";
 			return header("location: " .BASE_URL."admin/animales?error=".$Error);//quitar el if
 		}
@@ -573,7 +573,7 @@ class AdminController extends GeneralController{
             $objFund->registraAnimal('animal', $nombre, $fechanac, $nombreArchivo, $descrip, 
                                     $fecha_ing, $raza_id,$tamanio_id, $albergue_id, $visible,
                                     $_SESSION['iduser']);
-			$_SESSION['Correct'] = "Se realizo agrego al Peludo con exito";
+			$_SESSION['Correct'] = "Se agrego a la mascota con exito";
             return header("location: ".BASE_URL."admin/animales");
         } elseif (isset($_POST['accion']) && $_POST['accion'] == 'Modificar'){
 
@@ -614,7 +614,7 @@ class AdminController extends GeneralController{
             $objFund->modificaAnimal('animal', $id_animal,$nombre, $fechanac, $nombreArchivo, 
                                     $descrip, $raza_id,$tamanio_id, $albergue_id, $visible,
                                     $_SESSION['iduser']);
-            $_SESSION['Correct'] = "Se realizo la modificacion del Peludo con exito";
+            $_SESSION['Correct'] = "Se realizo la modificacion de la mascota con exito";
 			return header("location: ".BASE_URL."admin/animales");
         }
     }
